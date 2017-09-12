@@ -1,0 +1,10 @@
+version: '2'
+services:
+  node:
+    image: "343docker/alpine-node"
+    environment:
+      - NODE_ENV=NODE_ENV=development
+    volumes:
+      - ./:/usr/src/app
+    expose:
+      - "8080"
