@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 
 app.get('/', function (req, res) {
-  res.send('Hello from Express app!')
+  res.sendFile('public/testpage.html' , { root : __dirname});
 })
 
 app.listen(8080, function () {
