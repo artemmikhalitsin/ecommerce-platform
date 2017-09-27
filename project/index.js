@@ -13,6 +13,10 @@ app.get('/database', function (req, res) {
   res.sendFile('public/database.html' , { root : __dirname});
 })
 
+app.get('/admin', function (req, res) {
+  res.sendFile('public/admin.html' , { root : __dirname});
+})
+
 app.listen(8080, function () {
   console.log('Example app listening on port 8080!')
 })
