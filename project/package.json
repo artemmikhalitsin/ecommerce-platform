@@ -10,9 +10,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "eslint-config-google": "^0.9.1",
     "express": "^4.15.4",
-    "mysql": "^2.14.1",
-    "knex": "^0.13.0"
+    "knex": "^0.13.0",
+    "mysql": "^2.14.1"
   },
   "dependencies": {},
   "description": ""
