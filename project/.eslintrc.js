@@ -7,3 +7,4 @@ module.exports = {
         "linebreak-style": ["error", "windows"]
     }
 };
+
