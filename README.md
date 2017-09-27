@@ -5,5 +5,8 @@ docker run -v /c/your/path/to/this/repo/343-project/project:/usr/src/project -p 
 
 If you're on Linux, just run the dev.sh
 
-ALSO (for Linux), in ./project/.eslintrc.js delete this line:
+ALSO (if you are on Linux AND using ESLint), 
+
+in ./project/.eslintrc.js delete this line:
+
         "linebreak-style": ["error", "windows"]
