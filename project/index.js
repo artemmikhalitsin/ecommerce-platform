@@ -9,6 +9,14 @@ app.get('/login', function (req, res) {
   res.sendFile('public/login.html' , { root : __dirname});
 })
 
+app.get('/registration', function (req, res) {
+  res.sendFile('public/registration.html' , { root : __dirname});
+})
+
+app.get('/inventory', function (req, res) {
+  res.sendFile('public/inventory.html' , { root : __dirname});
+})
+
 app.get('/database', function (req, res) {
   res.sendFile('public/database.html' , { root : __dirname});
 })
