@@ -1,6 +1,10 @@
 const express = require('express');
 const app = express();
 
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('./knexfile')[environment];
+const database = require('knex')(configuration);
+
 var path = require('path');
 app.use(express.static(path.join(__dirname, 'public'))); //allows use of static pages 
 
@@ -31,6 +35,38 @@ app.get('/database', function(req, res) {
 app.get('/admin', function(req, res) {
   res.sendFile('public/admin.html', {root: __dirname});
 });
+
+
+//Random test, accesses data from database
+app.get('/test', function(req, res) {
+  database('customers').select()
+    .then((customer) => {
+        res.status(200).json(customer);
+        res.data(customer);
+    })
+    .catch((error) => {
+        res.status(500).json({error});
+        return res.send();
+    })
+});
+
+app.get('/makeAdminAccount', function(req, res){
+  database('admin').where('user', req.registrationData.email).select()
+    .then((adminAcct) => {
+        if (adminAcct.length){
+            response.status.json(adminAcct);
+            res.status(500); //need to make new account
+        } else { //if it doesn't exist. make account
+            //insert into database here
+            res.send();
+        }
+    })
+    .catch((error) => {
+        res.status(500).json({error});
+        return res.send();
+    })
+})
+
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');
