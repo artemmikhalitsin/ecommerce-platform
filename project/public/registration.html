@@ -7,6 +7,7 @@
   <title>Registration Page</title>
 
   <link rel="stylesheet" href="">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script type="text/javascript" src="/js/registration.js"></script>
 
 </head>
@@ -18,21 +19,21 @@
 	<h1>Registration</h1>
 	</header>
 	<content>
-		<form action="">
+		<form action="" name="registration_form">
 		  First name:<br>
-		  <input type="text" name="firstname">
+		  <input type="text" name="firstname" id="first_name">
 		  <br>
 		  Last name:<br>
 		  <input type="text" name="lastname">
 		  <br>
 		  Email:<br>
-		  <input type="text" name="email">
+		  <input type="email" name="email">
 		  <br>
 		  Password: <br>
 		  <input type="password" name="password"><br>
 		  Confirm password: <br>
 		  <input type="password" name="confirmPassword"><br><br>
-		  <input type="submit" value="Submit">
+		  <input type="button" value="Submit" onclick="submitRegistration()">
 		</form> 
 	</content>
 	<footer>
