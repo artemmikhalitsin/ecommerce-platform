@@ -3,26 +3,19 @@ const LAST_NAME = "lastname";
 const EMAIL = "email";
 const PASSWORD = "password";
 const CONFIRM_PASSWORD = "confirmPassword";
-let thing = () => {
-    // From http://test.com
-    $.ajax({
-      url: 'http://localhost:8080/test',
-      data: 'JSON',
-      success: function(data){
-        console.log(data);
-      }
-    });
-};
 
-let makeAdminAccount = (registrationData) => {
+let registrationRequest = (registrationData) => {
     $.ajax({
-        url: 'http://localhost:8080/makeAdminAccount',
+        url: 'http://localhost:8080/registrationRequest',
         type: 'POST',
         data: registrationData,
-        success: function(){
-            alert("success!")
+        success: function(data){
+            alert("success!");
+            console.log(data);
         },
-        error: function
+        error: function(error){
+            console.log(error);
+        }
     })
 }
 
@@ -31,12 +24,12 @@ let submitRegistration = () => {
         obj[registration.name] = registration.value;
         return obj;
     }, {});
+    registrationData['is_admin'] = 1;
     if (registrationData[PASSWORD] !== registrationData[CONFIRM_PASSWORD]){
         window.alert("Passwords don't match!");
     } else {
-        //thing();
-        makeAdminAccount(registrationData);
-        //submit registrationData
+        delete registrationData[CONFIRM_PASSWORD];
+        registrationRequest(registrationData);
     }
 }
 

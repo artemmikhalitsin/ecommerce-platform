@@ -5,6 +5,12 @@ const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
+var bodyParser = require('body-parser')
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
+
 var path = require('path');
 app.use(express.static(path.join(__dirname, 'public'))); //allows use of static pages 
 
@@ -37,9 +43,9 @@ app.get('/admin', function(req, res) {
 });
 
 
-//Random test, accesses data from database
+//Use  access data from database
 app.get('/test', function(req, res) {
-  database('customers').select()
+  database('User').select(  )
     .then((customer) => {
         res.status(200).json(customer);
         res.data(customer);
@@ -50,21 +56,19 @@ app.get('/test', function(req, res) {
     })
 });
 
-app.get('/makeAdminAccount', function(req, res){
-  database('admin').where('user', req.registrationData.email).select()
-    .then((adminAcct) => {
-        if (adminAcct.length){
-            response.status.json(adminAcct);
-            res.status(500); //need to make new account
-        } else { //if it doesn't exist. make account
-            //insert into database here
-            res.send();
-        }
-    })
-    .catch((error) => {
+//MOVE TO CONTROLLER WHEN IT'S THERE
+app.post('/registrationRequest', function(req, res){
+    let userData = req.body;
+    //temporary: call repo to post this information
+    database('User').insert(userData)
+      .then(user => {
+        res.status(200).json(userData)
+        return res.send(userData);
+      })
+      .catch(error => {
         res.status(500).json({error});
-        return res.send();
-    })
+        return res.send(userData);
+      });
 })
 
 
