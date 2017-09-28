@@ -20,7 +20,7 @@ app.get('/inventory', function(req, res) {
   res.sendFile('public/inventory.html', {root: __dirname});
 });
 
-app.get('/addItem', function(req, res) {
+app.get('/addItem', function(req, res) { 
   res.sendFile('public/addItem.html', {root: __dirname});
 });
 
