@@ -24,7 +24,7 @@ let submitRegistration = () => {
         obj[registration.name] = registration.value;
         return obj;
     }, {});
-    registrationData['is_admin'] = 1;
+    registrationData['is_admin'] = $('#adminBoolean').is(':checked') ? 1 : 0;
     if (registrationData[PASSWORD] !== registrationData[CONFIRM_PASSWORD]){
         window.alert("Passwords don't match!");
     } else {
