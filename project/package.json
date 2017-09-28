@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "docker run -v $(pwd):/usr/src/app -p 8080:8080 -it 343docker/express"
+    "dev": "docker run -v $(pwd):/usr/src/app -p 8080:8080 -it 343docker/express",
+    "migrate": " knex migrate:latest"
   },
   "keywords": [],
   "author": "",

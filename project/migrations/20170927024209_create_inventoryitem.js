@@ -9,7 +9,8 @@ exports.up = function(knex, Promise) {
       table.increments('id').unsigned().primary()
       table.decimal('price').notNullable()
       table.decimal('weight').notNullable()
-      table.boolean('is_available').notNullable()
+      table.string('brand_name').notNullable()
+      table.boolean('is_available').notNullable().defaultTo(true)
     }
   })
 }

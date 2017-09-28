@@ -10,8 +10,8 @@ exports.up = function(knex, Promise) {
       table.increments('id').unsigned().primary()
       /*NOTE: I altered the design here. Only clients can make
       purchases (As per specifications)*/
-      table.integer('client').unsigned().notNullable()
-      table.foreign('client').references('Client.id')
+      //table.integer('client').unsigned().notNullable()
+      //table.foreign('client').references('Client.id')
       table.integer('inventory_item').unsigned().notNullable()
       table.foreign('inventory_item').references('InventoryItem.id')
     }
