@@ -1,0 +1,261 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Add an Item</title>
+
+  <link rel="stylesheet" href="">
+
+</head>
+
+<body>
+  <script src=""> $("select").change(function () {
+    // hide all optional elements
+    $('.optional').css('display','none');
+
+    $("select option:selected").each(function () {
+        if($(this).val() == "Referral") {
+            $('.referral').css('display','block');
+        } else if($(this).val() == "Other") {
+            $('.other').css('display','block');
+        }
+    });
+});
+</script>
+  
+	<header>
+	<h1>Add an Item</h1>
+	</header>
+	<content>
+
+
+<script type="text/javascript">
+function ChangeDropdowns(value){
+	    var allCategoryForm = document.getElementsByClassName("categoryForm")
+    	var i;
+    if(value=="Desktop"){
+		for (i = 0; i < allCategoryForm.length; i++) {
+		    allCategoryForm[i].style.display = "none";
+		}
+        document.getElementById('add_desktop').style.display='block';
+    }else if(value=="Monitor"){
+    	for (i = 0; i < allCategoryForm.length; i++) {
+		    allCategoryForm[i].style.display = "none";
+		}
+        document.getElementById('add_monitor').style.display='block';
+    }else if(value=="Television"){
+    	for (i = 0; i < allCategoryForm.length; i++) {
+		    allCategoryForm[i].style.display = "none";
+		}
+        document.getElementById('add_television').style.display='block';
+    }else if(value=="Laptop"){
+    	for (i = 0; i < allCategoryForm.length; i++) {
+		    allCategoryForm[i].style.display = "none";
+		}
+        document.getElementById('add_laptop').style.display='block';
+    }else if(value=="Tablet"){
+    	for (i = 0; i < allCategoryForm.length; i++) {
+		    allCategoryForm[i].style.display = "none";
+		}
+        document.getElementById('add_tablet').style.display='block';
+    }
+}
+</script>
+		<p>Please select the category of the item: </p>
+		<select id="categoryOptions" onchange="ChangeDropdowns(this.value);">
+			 <option disabled selected value> -- select an option -- </option>
+			<option value="Laptop">Laptop</option>
+			<option value="Desktop" >Desktop</option>
+			<option value="Monitor" >Monitor</option>
+			<option value="Television" >Television</option>
+			<option value="Tablet" >Tablet</option>
+		</select>
+
+		<div class="categoryForm" id="add_desktop" style="display:none">
+			<br><h3>Desktop</h3><br>
+			<form action="">
+			  Brand Name:<br>
+			  <input type="text" name="brandName">
+			  <br>
+			  Model Number:<br>
+			  <input type="text" name="modelNumber">
+			  <br>
+			  Dimensions:<br>
+			  <input type="text" name="dimensions">
+			  <br>
+			  Processor Type:<br>
+			  <input type="text" name="processorType">
+			  <br>
+			  RAM Size:<br>
+			  <input type="text" name="ramSize">
+			  <br>
+			  Weight:<br>
+			  <input type="text" name="weight">
+			  <br>
+			  Number of CPU cores:<br>
+			  <input type="text" name="numCPU">
+			  <br>
+			  Hard drive Size:<br>
+			  <input type="text" name="hdSize">
+			  <br>
+			  Price:<br>
+			  <input type="text" name="price">
+			  <br><br>
+			  <input type="submit" value="Submit">
+			</form> 
+		</div>
+		<div class="categoryForm" id="add_laptop" style="display:none">
+			<br><h3>Laptop</h3><br>
+			<form action="">
+			  Brand Name:<br>
+			  <input type="text" name="brandName">
+			  <br>
+			  Model Number:<br>
+			  <input type="text" name="modelNumber">
+			  <br>
+			  Display Size:<br>
+			  <input type="text" name="displaySize">
+			  <br>
+			  Processor Type:<br>
+			  <input type="text" name="processorType">
+			  <br>
+			  RAM Size:<br>
+			  <input type="text" name="ramSize">
+			  <br>
+			  Weight:<br>
+			  <input type="text" name="weight">
+			  <br>
+			  Number of CPU cores:<br>
+			  <input type="text" name="numCPU">
+			  <br>
+			  Hard drive Size:<br>
+			  <input type="text" name="hdSize">
+			  <br>
+			  Battery Information:<br>
+			  <input type="text" name="batteryInfo">
+			  <br>
+			  Built-in Operating System:<br>
+			  <input type="text" name="opSystem">
+			  <br>
+			  Price:<br>
+			  <input type="text" name="price">
+			  <br>
+			  Camera:<br>
+			  <select id="cameraOptions";">
+				   <option value="noCamera">No</option>
+				   <option value="yesCamera">Yes</option>
+			  </select>
+			  <br>
+			  Touch-Screen:<br>
+			  <select id="touchOptions";">
+				   <option value="noTouch">No</option>
+				   <option value="yesTouch">Yes</option>
+			  </select>
+			  <br>
+			  <br><br>
+			  <br><br>
+			  <input type="submit" value="Submit">
+			</form> 
+		</div>
+		<div class="categoryForm" id="add_monitor" style="display:none">
+			<br><h3>Monitor</h3><br>
+			<form action="">
+			  Brand Name:<br>
+			  <input type="text" name="brandName">
+			  <br>
+			  Model Number:<br>
+			  <input type="text" name="modelNumer">
+			  <br>
+			  Size:<br>
+			  <input type="text" name="size">
+			  <br>
+			  Weight:<br>
+			  <input type="text" name="weight">
+			  <br>
+			  Price:<br>
+			  <input type="text" name="price">
+			  <br><br>
+			  <input type="submit" value="Submit">
+			</form> 
+		</div> 
+		<div class="categoryForm" id="add_television" style="display:none">
+			<br><h3>Television</h3><br>
+			<form action="">
+			  Brand Name:<br>
+			  <input type="text" name="brandName">
+			  <br>
+			  Model Number:<br>
+			  <input type="text" name="modelNumer">
+			  <br>
+			  Dimensions:<br>
+			  <input type="text" name="dimensions">
+			  <br>
+			  Weight:<br>
+			  <input type="text" name="weight">
+			  <br>
+			  Price:<br>
+			  <input type="text" name="price">
+			  <br><br>
+			  <input type="submit" value="Submit">
+			</form> 
+		</div>
+		<div class="categoryForm" id="add_tablet" style="display:none">
+			<br><h3>Tablet</h3><br>
+			<form action="">
+			  Brand Name:<br>
+			  <input type="text" name="brandName">
+			  <br>
+			  Model Number:<br>
+			  <input type="text" name="modelNumer">
+			  <br>
+			  Display Size:<br>
+			  <input type="text" name="displaySize">
+			  <br>
+			  Dimensions:<br>
+			  <input type="text" name="dimensions">
+			  <br>
+			  RAM Size:<br>
+			  <input type="text" name="ramSize">
+			  <br>
+			  Battery Information:<br>
+			  <input type="text" name="batteryInformation">
+			  <br>
+			  Processor Type:<br>
+			  <input type="text" name="processorType">
+			  <br>
+			  RAM Size:<br>
+			  <input type="text" name="ramSize">
+			  <br>
+			  Weight:<br>
+			  <input type="text" name="weight">
+			  <br>
+			  Number of CPU cores:<br>
+			  <input type="text" name="numCPU">
+			  <br>
+			  Hard drive Size:<br>
+			  <input type="text" name="hdSize">
+			  <br>
+			  Battery Information:<br>
+			  <input type="text" name="batteryInfo">
+			  <br>
+			  Built-in Operating System:<br>
+			  <input type="text" name="opSystem">
+			  <br>
+			  Camera Information:<br>
+			  <input type="text" name="cameraInfo">
+			  <br>
+			  Price:<br>
+			  <input type="text" name="price">
+			  <br><br>
+			  <input type="submit" value="Submit">
+			</form> 
+		</div>
+	</content>
+	<footer>
+	</footer>
+	
+
+</body>
+</html>
