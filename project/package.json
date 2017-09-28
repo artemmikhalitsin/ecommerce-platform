@@ -7,7 +7,9 @@
     "dev": "docker run -v $(pwd):/usr/src/app -p 8080:8080 -it 343docker/express",
     "make-migration": "knex migrate:make",
     "migrate": "knex migrate:latest",
-    "rollback": "knex migrate:rollback"
+    "rollback": "knex migrate:rollback",
+    "seed": "knex seed:run",
+    "make-seed": "knex seed:make"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +20,8 @@
     "knex": "^0.13.0",
     "mysql": "^2.14.1"
   },
-  "dependencies": {},
+  "dependencies": {
+    "body-parser": "^1.18.2"
+  },
   "description": ""
 }
