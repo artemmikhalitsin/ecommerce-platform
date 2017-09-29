@@ -27,7 +27,7 @@ const user = {
   last_name: 'Wai',
   password: 'password',
   full_address: '123 Main',
-  is_admin: true,
+  is_administrator: true,
   phone_number: 123123123
 }
 
