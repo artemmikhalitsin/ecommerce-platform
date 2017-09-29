@@ -82,7 +82,7 @@ app.get('/getAllInventoryItems', function(req, res){
   const tvRepo = require(rootPath + '/DataSource/Repository/TVRepository.js');
 
   let laptopItems = laptopRepo.get('*')
-  //let desktopItems = desktopRepo.get('*');
+  let desktopItems = desktopRepo.get('*');
   let monitorItems = monitorRepo.get('*');
   let tabletItems = tabletRepo.get('*');
   let tvItems = tvRepo.get('*');

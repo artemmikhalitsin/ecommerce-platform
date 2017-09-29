@@ -18,7 +18,11 @@ function save(inventoryItem){
     });
 };
 
+function get(args){
+  return database('inventoryItem').select('*')
+}
 
 module.exports = {
-  save: save
+  save: save,
+  get: get
 }

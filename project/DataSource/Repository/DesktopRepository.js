@@ -19,6 +19,11 @@ function save(desktop){
     });
 };
 
+function get(args){
+  return database('Desktop').select('*')
+}
+
 module.exports = {
-  save: save
+  save: save,
+  get: get
 }
