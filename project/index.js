@@ -1,4 +1,8 @@
 const express = require('express');
+const path = require('path');
+const hbs = require('express-handlebars');
+
+
 const app = express();
 var router = express.Router();
 const environment = process.env.NODE_ENV || 'development';
@@ -15,20 +19,32 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 var path = require('path');
 app.use(express.static(path.join(__dirname, 'public'))); //allows use of static pages
 
+app.engine('hbs', hbs({extname: 'hbs'}));
+app.set('views', path.join(__dirname, 'public'));
+app.set('view engine', 'hbs');
+
 app.get('/', function(req, res) {
-  res.sendFile('public/testpage.html', {root: __dirname});
+  res.render('testpage');
 });
 
+app.get('/example', function(req, res) {
+  res.render('example', { text: "What's popping?"});
+})
+
+app.get('/test', function(req, res) {
+  res.render('hbs_test', {body: "Nice bod, bro"})
+})
+
 app.get('/login', function(req, res) {
-  res.sendFile('public/login.html', {root: __dirname});
+  res.render('login');
 });
 
 app.get('/registration', function(req, res) {
-  res.sendFile('public/registration.html', {root: __dirname});
+  res.render('registration');
 });
 
 app.get('/inventory', function(req, res) {
-  res.sendFile('public/inventory.html', {root: __dirname});
+  res.render('inventory');
 });
 
 app.get('/addItem', function(req, res) {
@@ -36,11 +52,11 @@ app.get('/addItem', function(req, res) {
 });
 
 app.get('/database', function(req, res) {
-  res.sendFile('public/database.html', {root: __dirname});
+  res.render('database');
 });
 
 app.get('/admin', function(req, res) {
-  res.sendFile('public/admin.html', {root: __dirname});
+  res.render('admin');
 });
 
 
