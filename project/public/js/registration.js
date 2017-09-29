@@ -3,15 +3,15 @@ let registrationRequest = (registrationData) => {
         url: 'http://localhost:8080/registrationRequest',
         type: 'POST',
         data: registrationData,
-        success: function(data){
-            alert("success!");
+        success: function(data) {
+            alert('success!');
             console.log(data);
         },
-        error: function(error){
+        error: function(error) {
             console.log(error);
-        }
-    })
-}
+        },
+    });
+};
 
 let submitRegistration = () => {
     let registrationData = $('form').serializeArray().reduce((obj, registration) => {
@@ -26,4 +26,4 @@ let submitRegistration = () => {
         delete registrationData['confirmPassword'];
         registrationRequest(registrationData);
     }
-}
+};
