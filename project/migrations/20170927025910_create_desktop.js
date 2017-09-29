@@ -11,14 +11,14 @@ exports.up = function(knex, Promise) {
       table.string('model_number').primary().notNullable()
       table.string('brand_name').notNullable()
       table.decimal('price').notNullable()
-      table.decimal('weigh').notNullable()
-      table.boolean('is_available').defaultTo(True)
+      table.decimal('weight').notNullable()
+      table.boolean('is_available').defaultTo(true)
 
       //Computer attributes
       table.string('processor_type').notNullable()
-      table.int('ram_size').notNullable()
-      table.int('number_cpu_cores').notNullable()
-      table.int('harddrive_size').notNullable()
+      table.integer('ram_size').notNullable()
+      table.integer('number_cpu_cores').notNullable()
+      table.integer('harddrive_size').notNullable()
 
       //Dimsneions attributes
       table.decimal('depth').notNullable()

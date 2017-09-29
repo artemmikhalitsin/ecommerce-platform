@@ -16,6 +16,7 @@ exports.up = function(knex, Promise) {
 
       //Monitor attributes
       table.decimal('display_size').notNullable()
+    }
   })
 }
 
