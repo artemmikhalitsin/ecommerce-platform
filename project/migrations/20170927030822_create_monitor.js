@@ -10,6 +10,7 @@ exports.up = function(knex, Promise) {
       table.decimal('display_size').notNullable()
       table.decimal('price').notNullable()
       table.decimal('weight').notNullable()
+      table.string('brand_name').notNullable()
       table.boolean('is_available').notNullable().defaultTo(true)
       }
   })
