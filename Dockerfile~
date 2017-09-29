@@ -1,0 +1,7 @@
+FROM 343docker/express
+WORKDIR /usr/src/project
+<<<<<<< HEAD
+CMD apt-get update && find /var/lib/mysql/mysql -exec touch -c -a {} + && service mysql start && cd /usr/src/project && npm install --no-bin-links && npm install -g knex && npm run migrate && node index.js
+=======
+CMD apt-get update && find /var/lib/mysql/mysql -exec touch -c -a {} + && service mysql start && cd /usr/src/project && npm install --no-bin-links && npm run migrate && node index.js
+>>>>>>> 13e8e54a5d684c8f64b5e767173beca261fcf44a

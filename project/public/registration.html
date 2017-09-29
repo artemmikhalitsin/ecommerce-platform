@@ -7,6 +7,7 @@
   <title>Registration Page</title>
 
   <link rel="stylesheet" href="">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script type="text/javascript" src="/js/registration.js"></script>
 
 </head>
@@ -16,26 +17,34 @@
 	<h1>Registration</h1>
 	</header>
 	<content>
-		<form action="">
+		<form action="" name="registration_form">
 		  First name:<br>
-		  <input type="text" name="firstname">
-		  <br>
+		  <input type="text" name="first_name">
+		  <br><br>
 		  Last name:<br>
-		  <input type="text" name="lastname">
-		  <br>
+		  <input type="text" name="last_name">
+		  <br><br>
 		  Email:<br>
-		  <input type="text" name="email">
-		  <br>
+		  <input type="email" name="email">
+		  <br><br>
+		  Full Address: <br>
+		  <input type="text" name="full_address">
+		  <br/><br/>
+		  Phone Number: <br>
+		  <input type="number" name="phone_number">
+		  <br/><br/>
 		  Password: <br>
-		  <input type="password" name="password"><br>
+		  <input type="password" name="password"><br><br>
 		  Confirm password: <br>
 		  <input type="password" name="confirmPassword"><br><br>
-		  <input type="submit" value="Submit">
-		</form> 
+		  <input type="button" value="Submit" onclick="submitRegistration()">
+		  Make this an admin account &nbsp; <input type="checkbox" name="yesAdmin" id="adminBoolean">
+		  <br><br>
+		</form>
 	</content>
 	<footer>
 	</footer>
-	
+
 
 </body>
 </html>
