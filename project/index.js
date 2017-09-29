@@ -90,6 +90,15 @@ app.post('/postDesktop', function(req,res){
   console.log(desktop);
 });
 
+app.post('/loginRequest', function(req, res){
+  let data = req.body;
+  console.log(data);
+  knex('User').where({
+    'email': data.email,
+    'password': data.pa
+  })
+});
+
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');

@@ -11,7 +11,7 @@
       <div class="main">
         <h2>Welcome Users!</h2>
 
-        <form id="form_login" method="post" name="login.form">
+        <form id="form_login" method="POST" name="login.form" action="/loginRequest">
 
           <label>Email :</label>
           <input type="text" name="email" placeholder="Email" id="username"/>
@@ -25,7 +25,7 @@
           <br>
           <br>
 
-          <input type="button" value="Login" id="submit" onclick="validate()"/>
+          <input type="submit" value="Login" id="submit">
 
         </form>
       </div>
