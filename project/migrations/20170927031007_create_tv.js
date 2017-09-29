@@ -7,10 +7,12 @@ exports.up = function(knex, Promise) {
     }
     else {
       table.increments('id').unsigned().primary()
-      table.integer('dimensions').unsigned().notNullable()
-      table.foreign('dimensions').references('Dimension.id')
+      table.integer('dimension_id').unsigned().notNullable()
+      table.string('inventory_id').notNullable()
       //NOTE: I really think this should be an enum (Artem)
       table.string('category_name').notNullable()
+      table.foreign('dimension_id').references('Dimension.id')
+      table.foreign('inventory_id').references('InventoryItem.model_number')
     }
   })
 }
