@@ -1,4 +1,4 @@
-const tablename='Admin'
+const tablename='ActiveUser'
 
 exports.up = function(knex, Promise) {
   return knex.schema.createTable(tablename, (table) => {
@@ -7,9 +7,12 @@ exports.up = function(knex, Promise) {
     }
     else {
       table.increments('id').unsigned().primary()
+      table.integer('user_id').unsigned().notNullable()
+      table.timestamp('logged_at').defaultTo(knex.fn.now())
+      table.foreign('user_id').references('User.id')
       //NOTE: I added a foreign key not reflected in the DOM here (Artem)
-      table.string('user').notNullable()
-      table.foreign('user').references('User.email')
+      //table.integer('purchase_id').unsigned().notNullable()
+      //table.foreign('purchase_id').references('Purchase.id')
     }
   })
 }

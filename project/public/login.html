@@ -2,23 +2,33 @@
 
 <html>
   <head>
+    <title> Login </title>
+    <script src = "js/login.js"></script>
   </head>
 
   <body>
-    <h1> Welcome User! </h1>
-    <div class = "login container">
-        <label> <b> Email</b></label>
-        <input type="text" placeholder="Email" name="email" required>
+    <div class="container">
+      <div class="main">
+        <h2>Welcome Users!</h2>
 
-        <br>
-        <br>
+        <form id="form_login" method="post" name="login.form">
 
-        <label> <b> Password</b></label>
-        <input type="password" placeholder="Password" name="pass" required>
+          <label>Email :</label>
+          <input type="text" name="email" placeholder="Email" id="username"/>
 
-        <br>
-        <br>
+          <br>
+          <br>
 
-        <button type="submit"> Login </button>
+          <label>Password :</label>
+          <input type="password" name="password" placeholder="password" id="password"/>
+
+          <br>
+          <br>
+
+          <input type="button" value="Login" id="submit" onclick="validate()"/>
+
+        </form>
+      </div>
     </div>
+
   </body>
