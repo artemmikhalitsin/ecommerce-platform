@@ -1,22 +1,24 @@
 'use strict';
-var TVRepository = function(){
-  const express = require('express');
-  const app = express();
+const rootPath = require('app-root-dir').get();
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require(rootPath + '/knexfile')[environment];
+const database = require('knex')(configuration);
 
-  const environment = process.env.NODE_ENV || 'development';
-  const configuration = require('./knexfile')[environment];
-  const database = require('knex')(configuration);
-
-};
-TVRepository.prototype.save = function(tv){
-
+function save(tv){
   database('TV').insert(tv)
     .then(tv => {
-      res.status(200).json(tv)
-      return res.send(tv);
+      return true;
     })
     .catch(error => {
-      res.status(500).json({error});
-      return res.send(tv);
+      return false;
     });
 };
+
+function get(args){
+  return database('TV').select('*')
+}
+
+module.exports = {
+  save: save,
+  get: get
+}

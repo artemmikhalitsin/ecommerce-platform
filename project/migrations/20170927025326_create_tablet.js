@@ -19,7 +19,6 @@ exports.up = function(knex, Promise) {
       table.integer('number_cpu_cores').unsigned().notNullable()
       table.integer('harddrive_size').unsigned().notNullable()
 
-
       //Tablet attributes
       table.decimal('display_size').notNullable()
       table.string('battery_info').nullable()
