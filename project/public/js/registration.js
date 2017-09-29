@@ -1,4 +1,4 @@
-let registrationRequest = (registrationData) => {
+/*let registrationRequest = (registrationData) => {
     $.ajax({
         url: 'http://localhost:8080/registrationRequest',
         type: 'POST',
@@ -12,8 +12,8 @@ let registrationRequest = (registrationData) => {
         },
     });
 };
-
-let submitRegistration = () => {
+*/
+let validateRegistration = () => {
     let registrationData = $('form').serializeArray().reduce((obj, registration) => {
         obj[registration.name] = registration.value;
         return obj;
@@ -23,7 +23,8 @@ let submitRegistration = () => {
         window.alert("Passwords don't match!");
         return false;
     } else {
-        delete registrationData['confirmPassword'];
-        registrationRequest(registrationData);
+        /*delete registrationData['confirmPassword'];
+        registrationRequest(registrationData);*/
+        return true;
     }
 };

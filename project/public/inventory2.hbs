@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <title>Inventory Page</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="inventory_tables">
+    </div>
+  </body>
+  <script>
+  var inventoryItems = JSON.parse('{{{items}}}');
+
+  for (let itemType in mock){
+    //make table with itemType
+    $('#inventory_tables').append('<table id="table_' + itemType + '"><thead></thead><tbody></table>')
+	   for (let values in mock[itemType]){
+       $('#inventory_tables thead').append('<tr><th>' + values + '</th></tr>')
+    	for (let attributes in mock[itemType][values]){
+        	console.log(attributes); //attributes
+		  }
+      break;
+    }
+  }
+
+
+    /*
+    allItems{
+      desktops: {
+        brand: jdfjdf
+        whatever: ijsdfihds
+      }
+    }
+
+
+
+    */
+  </script>
+</html>
