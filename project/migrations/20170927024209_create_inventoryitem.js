@@ -6,10 +6,11 @@ exports.up = function(knex, Promise) {
       throw new Error('Error creating table ' + tablename)
     }
     else {
-      table.increments('id').unsigned().primary()
+      table.string('model_number').primary()
       table.decimal('price').notNullable()
       table.decimal('weight').notNullable()
-      table.boolean('is_available').notNullable()
+      table.string('brand_name').notNullable()
+      table.boolean('is_available').notNullable().defaultTo(true)
     }
   })
 }

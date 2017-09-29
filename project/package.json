@@ -4,20 +4,27 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "docker run -v $(pwd):/usr/src/ -p 8080:8080 -it 343docker/express",
+    "dev": "docker run -v $(pwd):/usr/src/project -p 8080:8080 -it 343docker/express",
     "make-migration": "knex migrate:make",
     "migrate": "knex migrate:latest",
-    "rollback": "knex migrate:rollback"
+    "rollback": "knex migrate:rollback",
+    "seed": "knex seed:run",
+    "make-seed": "knex seed:make"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "cookie-parser": "^1.4.3",
+    "eslint": "^4.7.2",
     "eslint-config-google": "^0.9.1",
     "express": "^4.15.4",
+    "express-handlebars": "^3.0.0",
     "knex": "^0.13.0",
     "mysql": "^2.14.1"
   },
-  "dependencies": {},
+  "dependencies": {
+    "body-parser": "^1.18.2"
+  },
   "description": ""
 }

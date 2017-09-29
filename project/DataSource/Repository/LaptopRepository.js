@@ -8,7 +8,6 @@ const configuration = require('./knexfile.js')[environment];
 const database = require('knex')(configuration);
 
 function save(laptop){
-
       database('Laptop').insert(laptop)
         .then(laptop => {
           res.status(200).json(laptop)

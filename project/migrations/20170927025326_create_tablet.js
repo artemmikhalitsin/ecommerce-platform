@@ -7,12 +7,16 @@ exports.up = function(knex, Promise) {
     }
     else {
       table.increments('id').unsigned().primary()
-      table.integer('dimensions').unsigned().notNullable()
-      table.foreign('dimensions').references('Dimension.id')
+      table.integer('computer_id').unsigned().notNullable()
+      table.string('inventory_id').notNullable()
+      table.integer('dimension_id').unsigned().notNullable()
       table.decimal('display_size').notNullable()
       table.string('battery_info').nullable()
       table.string('os').notNullable()
       table.string('camera_info').nullable()
+      table.foreign('dimension_id').references('Dimension.id')
+      table.foreign('computer_id').references('Computer.id')
+      table.foreign('inventory_id').references('InventoryItem.model_number')
     }
   })
 }
