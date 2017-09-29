@@ -15,6 +15,16 @@ function save(user){
         });
     };
 
+function authenticate(user){
+  database('User').select(user).then(user => {
+    console.log('works');
+    return true;
+  }).catch(error => {
+    console.log('not working');
+    return false;
+  });
+}
+
 module.exports = {
   save: save
 }

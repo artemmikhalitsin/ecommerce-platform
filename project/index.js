@@ -122,10 +122,8 @@ app.post('/postDesktop', function(req,res){
 app.post('/loginRequest', function(req, res){
   let data = req.body;
   console.log(data);
-  knex('User').where({
-    'email': data.email,
-    'password': data.pa
-  })
+  const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
+  userRepo.authenticate(data);
 });
 
 
