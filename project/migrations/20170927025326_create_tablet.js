@@ -25,11 +25,6 @@ exports.up = function(knex, Promise) {
       table.string('battery_info').nullable()
       table.string('os').notNullable()
       table.string('camera_info').nullable()
-
-      //Dimension attributes
-      table.decimal('depth').notNullable()
-      table.decimal('height').notNullable()
-      table.decimal('width').notNullable()
     }
   })
 }
