@@ -28,9 +28,6 @@ app.get('/', function(req, res) {
   res.render('testpage');
 });
 
-app.get('/example', function(req, res) {
-  res.render('example', { text: "What's popping?"});
-})
 
 app.get('/login', function(req, res) {
   res.render('login');
