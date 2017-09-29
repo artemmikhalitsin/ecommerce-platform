@@ -72,7 +72,8 @@ app.post('/registrationRequest', function(req, res){
 });
 app.post('/Controller/AdministratorController', function(req,res){
   let desktop = req.body;
-  
+  var adminController = new AdministratorController();
+  adminController.save(desktop);
 });
 
 
