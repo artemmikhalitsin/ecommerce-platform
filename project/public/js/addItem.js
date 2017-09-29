@@ -13,10 +13,11 @@ let postDesktop = (desktopData) => {
     })
 }
 let addDesktop = () => {
-    console.log("in add method");
+    alert("in add method");
     let desktopData = $('form').serializeArray().reduce((obj, desktop) => {
         obj[desktop.name] = desktop.value;
         return obj;
     }, {});
+    alert("in add desktop");
         postDesktop(desktopData);
 }
