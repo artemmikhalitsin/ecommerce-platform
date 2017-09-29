@@ -30,10 +30,6 @@ app.get('/example', function(req, res) {
   res.render('example', { text: "What's popping?"});
 })
 
-app.get('/test', function(req, res) {
-  res.render('hbs_test', {body: "Nice bod, bro"})
-})
-
 app.get('/login', function(req, res) {
   res.render('login');
 });
@@ -60,11 +56,11 @@ app.get('/admin', function(req, res) {
 
 
 //Use  access data from database
-app.get('/test', function(req, res) {
+app.get('/testdb', function(req, res) {
   database('User').select(  )
     .then((customer) => {
-        res.status(200).json(customer);
-        res.data(customer);
+      customer = JSON.stringify(customer);
+      res.render('hbs_test', {body: customer});
     })
     .catch((error) => {
         res.status(500).json({error});
