@@ -1,6 +1,16 @@
 const express = require('express');
 const app = express();
 
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('./knexfile')[environment];
+const database = require('knex')(configuration);
+
+var bodyParser = require('body-parser')
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
+
 var path = require('path');
 app.use(express.static(path.join(__dirname, 'public'))); //allows use of static pages 
 
@@ -31,6 +41,36 @@ app.get('/database', function(req, res) {
 app.get('/admin', function(req, res) {
   res.sendFile('public/admin.html', {root: __dirname});
 });
+
+
+//Use  access data from database
+app.get('/test', function(req, res) {
+  database('User').select(  )
+    .then((customer) => {
+        res.status(200).json(customer);
+        res.data(customer);
+    })
+    .catch((error) => {
+        res.status(500).json({error});
+        return res.send();
+    })
+});
+
+//MOVE TO CONTROLLER WHEN IT'S THERE
+app.post('/registrationRequest', function(req, res){
+    let userData = req.body;
+    //temporary: call repo to post this information
+    database('User').insert(userData)
+      .then(user => {
+        res.status(200).json(userData)
+        return res.send(userData);
+      })
+      .catch(error => {
+        res.status(500).json({error});
+        return res.send(userData);
+      });
+})
+
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');
