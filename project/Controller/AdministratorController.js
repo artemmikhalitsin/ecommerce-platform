@@ -5,5 +5,6 @@ var AdministratorController = function(){
 };
 
 AdministratorController.prototype.save = function(desktop){
+    console.log("Im alive");
     deskTopRepo.save(desktop);
 }
