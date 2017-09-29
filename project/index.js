@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
 
+const rootPath = require('app-root-dir').get();
 
 const app = express();
 var router = express.Router();
@@ -10,7 +11,6 @@ const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 var cookieParser = require('cookie-parser');
 
-const rootPath = require('app-root-dir').get();
 
 var bodyParser = require('body-parser')
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -78,31 +78,36 @@ userRepo (use the appropriate functions )
 */
 
 app.get('/getAllInventoryItems', function(req, res){
-  const desktopRepo = require(rootPath + '/DataSource/DesktopRepository.js');
-  const laptopRepo = require(rootPath + '/DataSources/LaptopRepository.js');
-  const monitorRepo = require(rootPath + '/DataSources/MonitorRepository.js');
-  const tabletRepo = require(rootPath + '/DataSources/TabletRepository.js');
-  const tvRepo = require(rootPath + '/DataSources/TVRepository.js');
+  const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
+  const laptopRepo = require(rootPath + '/DataSource/Repository/LaptopRepository.js');
+  const monitorRepo = require(rootPath + '/DataSource/Repository/MonitorRepository.js');
+  const tabletRepo = require(rootPath + '/DataSource/Repository/TabletRepository.js');
+  const tvRepo = require(rootPath + '/DataSource/Repository/TVRepository.js');
 
-  let desktopItems = desktopRepo.get('*');
-  let laptopItems = laptopRepo.get('*')
-  let monitorItems = monitorRepo.get('*');
-  let tabletItems = tabletRepo.get('*');
-  let tvItems = tvRepo.get('*');
-  let allItems = {
-    desktops: desktopItems,
-    laptops: laptopItems,
-    monitors: monitorItems,
-    tablets: tabletItems,
-    tvs: tvItems
-  }
-  allItems = JSON.stringify(allItems);
-  res.render('inventory', {items: allItems})
+  //let laptopItems = laptopRepo.get('*')
+  //let desktopItems = desktopRepo.get('*');
+  //let monitorItems = monitorRepo.get('*');
+  //let tabletItems = tabletRepo.get('*');
+  tvRepo.get('*').then((tvs) => {
+    console.log(tvs)
+    let allItems = {
+      //desktops: desktopItems,
+      //laptops: laptopItems,
+      //monitors: monitorItems,
+      //tablets: tabletItems,
+      tvs: tvs
+    }
+    allItems = JSON.stringify(allItems);
+    console.log(allItems);
+    res.render('inventory2', {items: allItems})
+  })
+  .catch((error) => {
+    return error;
+  })
 })
 
 //MOVE TO CONTROLLER WHEN IT'S THERE
 app.post('/registrationRequest', function(req, res){
-
     let userData = req.body;
     delete userData['confirmPassword'];
     console.log(userData);
