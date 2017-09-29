@@ -16,9 +16,9 @@ exports.up = function(knex, Promise) {
 
       //Computer attributes
       table.string('processor_type').notNullable()
-      table.int('ram_size').unsigned().notNullable()
-      table.int('number_cpu_cores').unsigned().notNullable()
-      table.int('harddrive_size').unsigned().notNullable()
+      table.integer('ram_size').unsigned().notNullable()
+      table.integer('number_cpu_cores').unsigned().notNullable()
+      table.integer('harddrive_size').unsigned().notNullable()
 
       //Dimsneions attributes
       table.decimal('depth').notNullable()

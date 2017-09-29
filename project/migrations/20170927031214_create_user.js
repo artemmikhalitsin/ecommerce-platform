@@ -13,7 +13,7 @@ exports.up = function(knex, Promise) {
       table.string('password').notNullable()
       table.string('full_address').notNullable()
       table.integer('phone_number').unsigned().notNullable()
-      table.boolean('is_administrator').notNullable()
+      table.boolean('is_admin').notNullable()
     }
   })
 }
