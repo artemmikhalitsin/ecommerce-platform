@@ -7,7 +7,8 @@ exports.up = function(knex, Promise) {
     }
     else {
       //InventoryItem attributes
-      table.increments('id').unsigned().primary()
+      table.string('model_number').primary()
+      table.string('brand_name').notNullable()
       table.decimal('price').notNullable()
       table.decimal('weight').notNullable()
       table.boolean('is_availble').notNullable().defaultTo(false)
