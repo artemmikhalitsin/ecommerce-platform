@@ -7,7 +7,9 @@ exports.up = function(knex, Promise) {
     }
     else {
       table.increments('id').unsigned().primary()
+      table.string('inventory_id').notNullable()
       table.decimal('display_size').notNullable()
+      table.foreign('inventory_id').references('InventoryItem.model_number')
     }
   })
 }

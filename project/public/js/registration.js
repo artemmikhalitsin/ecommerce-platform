@@ -1,9 +1,3 @@
-const FIRST_NAME = "firstname";
-const LAST_NAME = "lastname";
-const EMAIL = "email";
-const PASSWORD = "password";
-const CONFIRM_PASSWORD = "confirmPassword";
-
 let registrationRequest = (registrationData) => {
     $.ajax({
         url: 'http://localhost:8080/registrationRequest',
@@ -24,12 +18,12 @@ let submitRegistration = () => {
         obj[registration.name] = registration.value;
         return obj;
     }, {});
-    registrationData['is_admin'] = $('#adminBoolean').is(':checked') ? 1 : 0;
-    if (registrationData[PASSWORD] !== registrationData[CONFIRM_PASSWORD]){
+    registrationData['is_administrator'] = $('#adminBoolean').is(':checked') ? 1 : 0;
+    if (registrationData['password'] !== registrationData['confirmPassword']){
         window.alert("Passwords don't match!");
+        return false;
     } else {
-        delete registrationData[CONFIRM_PASSWORD];
+        delete registrationData['confirmPassword'];
         registrationRequest(registrationData);
     }
 }
-
