@@ -11,8 +11,8 @@ exports.up = function(knex, Promise) {
       table.string('model_number').primary().notNullable()
       table.string('brand_name').notNullable()
       table.decimal('price').notNullable()
-      table.decimal('weigh').notNullable()
-      table.boolean('is_available').defaultTo(True)
+      table.decimal('weight').notNullable()
+      table.boolean('is_available').defaultTo(true)
 
       //Computer attributes
       table.string('processor_type').notNullable()

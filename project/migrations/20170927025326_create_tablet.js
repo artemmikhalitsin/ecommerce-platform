@@ -15,9 +15,9 @@ exports.up = function(knex, Promise) {
 
       //Computer attributes
       table.string('processor_type').notNullable()
-      table.int('ram_size').unsigned().notNullable()
-      table.int('number_cpu_cores').unsigned().notNullable()
-      table.int('harddrive_size').unsigned().notNullable()
+      table.integer('ram_size').unsigned().notNullable()
+      table.integer('number_cpu_cores').unsigned().notNullable()
+      table.integer('harddrive_size').unsigned().notNullable()
 
 
       //Tablet attributes
@@ -25,6 +25,11 @@ exports.up = function(knex, Promise) {
       table.string('battery_info').nullable()
       table.string('os').notNullable()
       table.string('camera_info').nullable()
+
+      //Dimension attributes
+      table.decimal('depth').notNullable()
+      table.decimal('height').notNullable()
+      table.decimal('width').notNullable()
     }
   })
 }
