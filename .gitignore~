@@ -1,5 +1,5 @@
 *.un~
 node_modules/
-package-lock.json
+package-json.lock
 .eslintrc.js
 .DS_Store
