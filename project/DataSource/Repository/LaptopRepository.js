@@ -1,16 +1,13 @@
 'use strict';
-var LaptopRepository = function(){
-  const express = require('express');
-  const app = express();
 
-  const environment = process.env.NODE_ENV || 'development';
-  const configuration = require('./knexfile')[environment];
-  const database = require('knex')(configuration);
+const express = require('express');
+const app = express();
 
-  
-};
-LaptopRepository.prototype.save = function(laptop){
-  
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('./knexfile.js')[environment];
+const database = require('knex')(configuration);
+
+function save(laptop){
       database('Laptop').insert(laptop)
         .then(laptop => {
           res.status(200).json(laptop)
@@ -21,3 +18,7 @@ LaptopRepository.prototype.save = function(laptop){
           return res.send(laptop);
         });
     };
+
+module.exports = {
+  save: save
+}

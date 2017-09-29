@@ -7,9 +7,7 @@
   <title>Add an Item</title>
 
   <link rel="stylesheet" href="">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script type="text/javascript" src="/js/addItem.js"></script>
-  <script type="text/javascript" src="index.js"></script>
+
 </head>
 
 <body>
@@ -26,7 +24,7 @@
     });
 });
 </script>
-  
+
 	<header>
 	<h1>Add an Item</h1>
 	</header>
@@ -77,39 +75,6 @@ function ChangeDropdowns(value){
 
 		<div class="categoryForm" id="add_desktop" style="display:none">
 			<br><h3>Desktop</h3><br>
-			<form action="postDesktop" method="POST">
-			  Brand Name:<br>
-			  <input type="text" name="brandName">
-			  <br>
-			  Model Number:<br>
-			  <input type="text" name="modelNumber">
-			  <br>
-			  Dimensions:<br>
-			  <input type="text" name="dimensions">
-			  <br>
-			  Processor Type:<br>
-			  <input type="text" name="processorType">
-			  <br>
-			  RAM Size:<br>
-			  <input type="text" name="ramSize">
-			  <br>
-			  Weight:<br>
-			  <input type="text" name="weight">
-			  <br>
-			  Number of CPU cores:<br>
-			  <input type="text" name="numCPU">
-			  <br>
-			  Hard drive Size:<br>
-			  <input type="text" name="hdSize">
-			  <br>
-			  Price:<br>
-			  <input type="text" name="price">
-			  <br><br>
-			  <input type="submit" value="Submit">
-			</form> 
-		</div>
-		<div class="categoryForm" id="add_laptop" style="display:none">
-			<br><h3>Laptop</h3><br>
 			<form action="">
 			  Brand Name:<br>
 			  <input type="text" name="brandName">
@@ -117,17 +82,17 @@ function ChangeDropdowns(value){
 			  Model Number:<br>
 			  <input type="text" name="modelNumber">
 			  <br>
-			  Display Size:<br>
-			  <input type="text" name="displaySize">
+        Weight:<br>
+			  <input type="text" name="weight">
 			  <br>
 			  Processor Type:<br>
 			  <input type="text" name="processorType">
 			  <br>
+        Price:<br>
+			  <input type="text" name="price">
+			  <br>
 			  RAM Size:<br>
 			  <input type="text" name="ramSize">
-			  <br>
-			  Weight:<br>
-			  <input type="text" name="weight">
 			  <br>
 			  Number of CPU cores:<br>
 			  <input type="text" name="numCPU">
@@ -135,23 +100,56 @@ function ChangeDropdowns(value){
 			  Hard drive Size:<br>
 			  <input type="text" name="hdSize">
 			  <br>
-			  Battery Information:<br>
-			  <input type="text" name="batteryInfo">
+			  Depth:<br>
+			  <input type="text" name="depth">
 			  <br>
-			  Built-in Operating System:<br>
-			  <input type="text" name="opSystem">
+        Height:<br>
+			  <input type="text" name="height">
 			  <br>
-			  Price:<br>
+        Width:<br>
+        <input type="text" name="width">
+        <br>
+
+        <br>
+			  <input type="submit" value="Submit">
+			</form>
+		</div>
+		<div class="categoryForm" id="add_laptop" style="display:none">
+			<br><h3>Laptop</h3><br>
+			<form action="">
+        Brand Name:<br>
+			  <input type="text" name="brandName">
+			  <br>
+			  Model Number:<br>
+			  <input type="text" name="modelNumber">
+			  <br>
+        Weight:<br>
+			  <input type="text" name="weight">
+			  <br>
+			  Processor Type:<br>
+			  <input type="text" name="processorType">
+			  <br>
+        Price:<br>
 			  <input type="text" name="price">
 			  <br>
+			  RAM Size:<br>
+			  <input type="text" name="ramSize">
+			  <br>
+			  Number of CPU cores:<br>
+			  <input type="text" name="numCPU">
+			  <br>
+			  Hard drive Size:<br>
+			  <input type="text" name="hdSize">
+			  <br>
+
 			  Camera:<br>
-			  <select id="cameraOptions">
+			  <select id="cameraOptions";">
 				   <option value="noCamera">No</option>
 				   <option value="yesCamera">Yes</option>
 			  </select>
 			  <br>
 			  Touch-Screen:<br>
-			  <select id="touchOptions">
+			  <select id="touchOptions";">
 				   <option value="noTouch">No</option>
 				   <option value="yesTouch">Yes</option>
 			  </select>
@@ -159,105 +157,131 @@ function ChangeDropdowns(value){
 			  <br><br>
 			  <br><br>
 			  <input type="submit" value="Submit">
-			</form> 
+			</form>
 		</div>
+
 		<div class="categoryForm" id="add_monitor" style="display:none">
 			<br><h3>Monitor</h3><br>
 			<form action="">
-			  Brand Name:<br>
+        Brand Name:<br>
 			  <input type="text" name="brandName">
 			  <br>
 			  Model Number:<br>
-			  <input type="text" name="modelNumer">
+			  <input type="text" name="modelNumber">
 			  <br>
-			  Size:<br>
-			  <input type="text" name="size">
-			  <br>
-			  Weight:<br>
+        Weight:<br>
 			  <input type="text" name="weight">
 			  <br>
-			  Price:<br>
+        Price:<br>
 			  <input type="text" name="price">
-			  <br><br>
-			  <input type="submit" value="Submit">
-			</form> 
-		</div> 
-		<div class="categoryForm" id="add_television" style="display:none">
-			<br><h3>Television</h3><br>
-			<form action="">
-			  Brand Name:<br>
-			  <input type="text" name="brandName">
-			  <br>
-			  Model Number:<br>
-			  <input type="text" name="modelNumer">
-			  <br>
-			  Dimensions:<br>
-			  <input type="text" name="dimensions">
-			  <br>
-			  Weight:<br>
-			  <input type="text" name="weight">
-			  <br>
-			  Price:<br>
-			  <input type="text" name="price">
-			  <br><br>
-			  <input type="submit" value="Submit">
-			</form> 
-		</div>
-		<div class="categoryForm" id="add_tablet" style="display:none">
-			<br><h3>Tablet</h3><br>
-			<form action="">
-			  Brand Name:<br>
-			  <input type="text" name="brandName">
-			  <br>
-			  Model Number:<br>
-			  <input type="text" name="modelNumer">
 			  <br>
 			  Display Size:<br>
 			  <input type="text" name="displaySize">
 			  <br>
-			  Dimensions:<br>
-			  <input type="text" name="dimensions">
+
+        <br>
+			  <input type="submit" value="Submit">
+			</form>
+		</div>
+
+		<div class="categoryForm" id="add_television" style="display:none">
+			<br><h3>Television</h3><br>
+			<form action="">
+        Brand Name:<br>
+			  <input type="text" name="brandName">
 			  <br>
-			  RAM Size:<br>
-			  <input type="text" name="ramSize">
+			  Model Number:<br>
+			  <input type="text" name="modelNumber">
 			  <br>
-			  Battery Information:<br>
-			  <input type="text" name="batteryInformation">
+        Weight:<br>
+			  <input type="text" name="weight">
+			  <br>
+        Price:<br>
+			  <input type="text" name="price">
+			  <br>
+			  Category Name:<br>
+			  <input type="text" name="categoryName">
+			  <br>
+        Depth:<br>
+       <input type="text" name="depth">
+       <br>
+        Height:<br>
+       <input type="text" name="height">
+       <br>
+        Width:<br>
+        <input type="text" name="width">
+        <br>
+
+        <br>
+			  <input type="submit" value="Submit">
+			</form>
+		</div>
+
+		<div class="categoryForm" id="add_tablet" style="display:none">
+			<br><h3>Tablet</h3><br>
+			<form action="">
+        Brand Name:<br>
+			  <input type="text" name="brandName">
+			  <br>
+			  Model Number:<br>
+			  <input type="text" name="modelNumber">
+			  <br>
+        Weight:<br>
+			  <input type="text" name="weight">
 			  <br>
 			  Processor Type:<br>
 			  <input type="text" name="processorType">
 			  <br>
+        Price:<br>
+			  <input type="text" name="price">
+			  <br>
 			  RAM Size:<br>
 			  <input type="text" name="ramSize">
 			  <br>
-			  Weight:<br>
-			  <input type="text" name="weight">
-			  <br>
 			  Number of CPU cores:<br>
 			  <input type="text" name="numCPU">
-			  <br> 
+			  <br>
 			  Hard drive Size:<br>
 			  <input type="text" name="hdSize">
 			  <br>
-			  Battery Information:<br>
+        Display Size:<br>
+			  <input type="text" name="displaySize">
+			  <br>
+        Battery Info:<br>
 			  <input type="text" name="batteryInfo">
 			  <br>
-			  Built-in Operating System:<br>
-			  <input type="text" name="opSystem">
+        OS:<br>
+			  <input type="text" name="os">
 			  <br>
-			  Camera Information:<br>
-			  <input type="text" name="cameraInfo">
+        Camera:<br>
+       <select id="cameraOptions";">
+          <option value="noCamera">No</option>
+          <option value="yesCamera">Yes</option>
+       </select>
+       <br>
+       Touch-Screen:<br>
+       <select id="touchOptions";">
+          <option value="noTouch">No</option>
+          <option value="yesTouch">Yes</option>
+       </select>
+       <br>
+			  Depth:<br>
+			  <input type="text" name="depth">
 			  <br>
-			  Price:<br>
-			  <input type="text" name="price">
-			  <br><br>
+        Height:<br>
+			  <input type="text" name="height">
+			  <br>
+        Width:<br>
+        <input type="text" name="width">
+        <br>
+        <br>
 			  <input type="submit" value="Submit">
-			</form> 
+			</form>
 		</div>
 	</content>
 	<footer>
 	</footer>
-	
+
 
 </body>
 </html>

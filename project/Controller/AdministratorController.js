@@ -1,7 +1,7 @@
 var AdministratorController = function(){
 
-    var deskTopRepo = new DesktopRepository(); 
-    
+    var deskTopRepo = new DesktopRepository();
+
 };
 
 AdministratorController.prototype.save = function(desktop){

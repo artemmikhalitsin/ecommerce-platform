@@ -1,15 +1,12 @@
 'use strict';
-var DesktopRepository = function (){
-  const express = require('express');
-  const app = express();
+const express = require('express');
+const app = express();
 
-  const environment = process.env.NODE_ENV || 'development';
-  const configuration = require('./knexfile')[environment];
-  const database = require('knex')(configuration);
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('./knexfile')[environment];
+const database = require('knex')(configuration);
 
-};
-DesktopRepository.prototype.save = function(desktop){
-
+function save(desktop){
   database('Desktop').insert(desktop)
     .then(desktop => {
       res.status(200).json(desktop)
@@ -20,3 +17,7 @@ DesktopRepository.prototype.save = function(desktop){
       return res.send(desktop);
     });
 };
+
+module.exports = {
+  save: save
+}
