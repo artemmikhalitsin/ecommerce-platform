@@ -16,7 +16,6 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: false
 }));
 
-var path = require('path');
 app.use(express.static(path.join(__dirname, 'public'))); //allows use of static pages
 
 app.engine('hbs', hbs({extname: 'hbs'}));
