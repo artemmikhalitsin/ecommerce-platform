@@ -5,23 +5,36 @@
   </head>
   <body>
     <div id="inventory_tables">
-      {{items}}
+
     </div>
+    {{items}}
   </body>
   <script>
-/*
+
+  let mock = JSON.parse('{{{items}}}');
   for (let itemType in mock){
     //make table with itemType
     $('#inventory_tables').append('<table id="table_' + itemType + '"><thead></thead><tbody></table>')
-	   for (let values in mock[itemType]){
-       $('#inventory_tables thead').append('<tr><th>' + values + '</th></tr>')
-    	for (let attributes in mock[itemType][values]){
-        	console.log(attributes); //attributes
-		  }
-      break;
-    }
   }
-*/
+  for (let itemType in mock){
+	   for (let item in mock[itemType]){
+       for (let attributes in mock[itemType][item]){
+         $('#table_' + itemType +' thead').append('<th>' + attributes + '</th></tr>')
+        }
+        break;
+      }
+  }
+  let values = '';
+  for (let itemType in mock){
+     for (let item in mock[itemType]){
+       $('#table_' + itemType +' tbody').append('<tr>')
+       for (let attributes in mock[itemType][item]){
+         values = mock[itemType][item][attributes]
+         $('#table_' + itemType +' tbody').append('<td>' + values + '</td>');
+        }
+        $('#table_' + itemType +' tbody').append('</tr>')
+      }
+  }
 
     /*
     allItems{
