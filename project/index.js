@@ -42,7 +42,7 @@ app.get('/inventory', function(req, res) {
 });
 
 app.get('/addItem', function(req, res) {
-  res.sendFile('public/addItem.html', {root: __dirname});
+  res.render('addItem');
 });
 
 app.get('/database', function(req, res) {
@@ -121,9 +121,20 @@ app.post('/registrationRequest', function(req, res){
 app.post('/postDesktop', function(req,res){
   console.log("starting");
   let desktop = req.body;
- // var adminController = new AdministratorController();
-  //adminController.save(desktop);
-  console.log(desktop);
+  const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
+  console.log('fetching data...')
+  desktopRepo.save(desktop).then(result => {
+    //("Success")
+    console.log('success')
+    app.render('addItem');
+  })
+  .catch(err => {
+    //alert("Failure")
+    app.render('addItem')
+    console.log('error')
+    console.log(err);
+  })
+  
 });
 
 app.post('/loginRequest', function(req, res){
