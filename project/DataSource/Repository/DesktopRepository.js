@@ -1,4 +1,4 @@
-'use strict';
+
 
 const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get()
@@ -10,6 +10,11 @@ function save(desktop){
   return database('Desktop').insert(desktop);
 };
 
+function get(args){
+  return database('Desktop').select('*')
+}
+
 module.exports = {
-  save: save
+  save: save,
+  get: get
 }
