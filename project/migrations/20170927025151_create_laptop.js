@@ -19,7 +19,7 @@ exports.up = function(knex, Promise) {
       table.string('inventory_id').notNullable()
       table.decimal('price').notNullable()
       table.decimal('weight').notNullable()
-      table.boolean('is_available').notNullable()
+      table.boolean('is_available').notNullable().defaultTo(true)
     }
   })
 }
