@@ -69,7 +69,11 @@ app.post('/registrationRequest', function(req, res){
         res.status(500).json({error});
         return res.send(userData);
       });
-})
+});
+app.post('/Controller/AdministratorController', function(req,res){
+  let desktop = req.body;
+  
+});
 
 
 app.listen(8080, function() {
