@@ -83,8 +83,8 @@ app.get('/getAllInventoryItems', function(req, res){
 
   let laptopItems = laptopRepo.get('*')
   //let desktopItems = desktopRepo.get('*');
-  //let monitorItems = monitorRepo.get('*');
-  //let tabletItems = tabletRepo.get('*');
+  let monitorItems = monitorRepo.get('*');
+  let tabletItems = tabletRepo.get('*');
   let tvItems = tvRepo.get('*');
   Promise.all([laptopItems, tvItems]).then((values) => {
     let allItems = {

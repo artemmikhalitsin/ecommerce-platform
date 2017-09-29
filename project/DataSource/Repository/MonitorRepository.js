@@ -1,23 +1,24 @@
 'use strict';
-var MonitorRepository = function(){
-  const express = require('express');
-  const app = express();
 const rootPath = require('app-root-dir').get();
-  const environment = process.env.NODE_ENV || 'development';
-  const configuration = require(rootPath + '/knexfile')[environment];
-  const database = require('knex')(configuration);
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require(rootPath + '/knexfile')[environment];
+const database = require('knex')(configuration);
 
+  function save(monitor){
+    database('Monitor').insert(monitor)
+      .then(tv => {
+        return true;
+      })
+      .catch(error => {
+        return false;
+      });
+  };
 
-};
-MonitorRepository.prototype.save = function(monitor){
+  function get(args){
+    return database('Monitor').select('*')
+  }
 
-      database('Monitor').insert(tv)
-        .then(monitor => {
-          res.status(200).json(tv)
-          return res.send(tv);
-        })
-        .catch(error => {
-          res.status(500).json({error});
-          return res.send(tv);
-        });
-    };
+  module.exports = {
+    save: save,
+    get: get
+  }
