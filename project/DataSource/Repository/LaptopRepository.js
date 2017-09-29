@@ -1,7 +1,4 @@
 'use strict';
-
-const express = require('express');
-const app = express();
 const rootPath = require('app-root-dir').get();
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require(rootPath + '/knexfile')[environment];

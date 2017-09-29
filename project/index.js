@@ -81,27 +81,19 @@ app.get('/getAllInventoryItems', function(req, res){
   const tabletRepo = require(rootPath + '/DataSource/Repository/TabletRepository.js');
   const tvRepo = require(rootPath + '/DataSource/Repository/TVRepository.js');
 
-  //let laptopItems = laptopRepo.get('*')
+  let laptopItems = laptopRepo.get('*')
   //let desktopItems = desktopRepo.get('*');
   //let monitorItems = monitorRepo.get('*');
   //let tabletItems = tabletRepo.get('*');
-  //let tvItems = tvRepo.get('*');
-  laptopRepo.get('*').then((laptops) => {
-    console.log(laptops)
+  let tvItems = tvRepo.get('*');
+  Promise.all([laptopItems, tvItems]).then((values) => {
     let allItems = {
-      //desktops: desktopItems,
-      //laptops: laptopItems,
-      //monitors: monitorItems,
-      //tablets: tabletItems,
-      laptops: laptops
+      laptops: values[0],
+      tvs: values[1]
     }
-    allItems = JSON.stringify(allItems);
-    console.log(allItems);
-    res.render('inventory2', {items: allItems})
-  })
-  .catch((error) => {
-    return error;
-  })
+    let items = JSON.stringify(allItems)
+    res.render('inventory2', {items: items})
+  }).catch((error) => { console.log(error) })
 })
 
 //MOVE TO CONTROLLER WHEN IT'S THERE
