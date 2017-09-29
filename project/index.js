@@ -97,6 +97,18 @@ app.get('/getAllInventoryItems', function(req, res){
   res.render('inventory', {items: allItems})
 })
 
+app.get('/users', function(req, res) {
+  const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js')
+  userRepo.get().then(users => {
+    console.log(users)
+    res.render('users', {users:users})
+  })
+  .catch(err => {
+    console.log(err)
+    res.send(err)
+  })
+})
+
 //MOVE TO CONTROLLER WHEN IT'S THERE
 app.post('/registrationRequest', function(req, res){
 
@@ -120,7 +132,25 @@ app.post('/loginRequest', function(req, res){
   let data = req.body;
   console.log(data);
   const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
-  userRepo.authenticate(data);
+  userRepo.authenticate(data).then(result => {
+    if(result == []){
+      //Note: maybe make a space for an error message
+      res.redirect('/login')
+    }
+    else if(result.length > 1) {
+      console.log('Duplicate users detected')
+      res.redirect('/login')
+    }
+    else if(result[0].is_admin == false)
+    {
+      console.log('Not an admin')
+      res.redirect('/')
+    }
+    else {
+      console.log('displaying items');
+      res.redirect('/getAllInventoryItems')
+    }
+  })
 });
 
 
