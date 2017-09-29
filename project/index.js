@@ -13,6 +13,10 @@ app.get('/', function(req, res) {
   res.render('testpage');
 });
 
+app.get('/example', function(req, res) {
+  res.render('example', { text: "What's popping?"});
+})
+
 app.get('/test', function(req, res) {
   res.render('hbs_test', {body: "Nice bod, bro"})
 })
