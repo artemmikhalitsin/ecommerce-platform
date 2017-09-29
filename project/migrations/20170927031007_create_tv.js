@@ -12,6 +12,9 @@ exports.up = function(knex, Promise) {
       table.decimal('weight').notNullable()
       table.boolean('is_available').notNullable()
       table.string('brand_name').notNullable()
+      table.decimal('depth').notNullable()
+      table.decimal('height').notNullable()
+      table.decimal('width').notNullable()
     }
   })
 }
