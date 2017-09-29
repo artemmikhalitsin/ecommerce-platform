@@ -1,14 +1,15 @@
 const express = require('express');
 const app = express();
-
+var router = express.Router();
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
+var cookieParser = require('cookie-parser');
 
 var bodyParser = require('body-parser')
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
+  extended: false
 }));
 
 var path = require('path');
@@ -69,7 +70,14 @@ app.post('/registrationRequest', function(req, res){
         res.status(500).json({error});
         return res.send(userData);
       });
-})
+});
+app.post('/postDesktop', function(req,res){
+  console.log("starting");
+  let desktop = req.body;
+ // var adminController = new AdministratorController();
+  //adminController.save(desktop);
+  console.log(desktop);
+});
 
 
 app.listen(8080, function() {

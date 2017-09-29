@@ -7,7 +7,9 @@
   <title>Add an Item</title>
 
   <link rel="stylesheet" href="">
-
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="/js/addItem.js"></script>
+  <script type="text/javascript" src="index.js"></script>
 </head>
 
 <body>
@@ -75,7 +77,7 @@ function ChangeDropdowns(value){
 
 		<div class="categoryForm" id="add_desktop" style="display:none">
 			<br><h3>Desktop</h3><br>
-			<form action="">
+			<form action="postDesktop" method="POST">
 			  Brand Name:<br>
 			  <input type="text" name="brandName">
 			  <br>
@@ -143,13 +145,13 @@ function ChangeDropdowns(value){
 			  <input type="text" name="price">
 			  <br>
 			  Camera:<br>
-			  <select id="cameraOptions";">
+			  <select id="cameraOptions">
 				   <option value="noCamera">No</option>
 				   <option value="yesCamera">Yes</option>
 			  </select>
 			  <br>
 			  Touch-Screen:<br>
-			  <select id="touchOptions";">
+			  <select id="touchOptions">
 				   <option value="noTouch">No</option>
 				   <option value="yesTouch">Yes</option>
 			  </select>
