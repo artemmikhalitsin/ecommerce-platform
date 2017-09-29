@@ -10,6 +10,8 @@ exports.up = function(knex, Promise) {
       table.decimal('display_size').notNullable()
       table.string('battery_info').notNullable()
       table.string('os').notNullable()
+      table.boolean('camera').notNullable().defaultTo(false)
+      table.boolean('touch_screen').notNullable().defaultTo(false)
       table.integer('computer_id').unsigned().notNullable()
       table.string('inventory_id').notNullable()
       table.foreign('computer_id').references('Computer.id')
