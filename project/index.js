@@ -68,6 +68,36 @@ app.get('/testdb', function(req, res) {
     })
 });
 
+/*
+repos: right ones : w/  modules.export
+import functions
+const userRepo = require('/path/to/userrepo.js')
+userRepo (use the appropriate functions )
+*/
+
+app.get('/getAllInventoryItems', function(req, res){
+  const desktopRepo = require('/DataSources/DesktopRepository.js');
+  const laptopRepo = require('/DataSources/LaptopRepository.js');
+  const monitorRepo = require('/DataSources/MonitorRepository.js');
+  const tabletRepo = require('/DataSources/TabletRepository.js');
+  const tvRepo = require('/DataSources/TVRepository.js');
+
+  let deskTopItems = desktopRepo.get('*');
+  let laptopItems = laptopRepo.get('*')
+  let monitorItems = monitorRepo.get('*');
+  let tabletItems = tabletRepo.get('*');
+  let tvItems = tvRepo.get('*');
+  let allItems = {
+    desktops: deskTopItems,
+    laptops: laptopItems,
+    monitors: monitorItems,
+    tablets: tabletItems,
+    tvs: tvItems
+  }
+  allItems = JSON.stringify(allItems);
+  res.render('inventory2', {items: allItems})
+})
+
 //MOVE TO CONTROLLER WHEN IT'S THERE
 app.post('/registrationRequest', function(req, res){
     let userData = req.body;
