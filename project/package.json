@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "cookie-parser": "^1.4.3",
     "eslint": "^4.7.2",
     "eslint-config-google": "^0.9.1",
     "express": "^4.15.4",
