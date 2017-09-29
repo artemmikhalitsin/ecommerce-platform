@@ -6,24 +6,24 @@ exports.up = function(knex, Promise) {
       throw new Error('Error creating table ' + tablename)
     }
     else {
+
+      //InventoryItem attributes
       table.string('model_number').primary().notNullable()
-    //  table.integer('dimension_id').unsigned().notNullable()
-    //  table.string('inventory_id').notNullable()
-    //  table.integer('computer_id').unsigned().notNullable()
-    //  table.foreign('dimension_id').references('Dimension.id')
-    //  table.foreign('inventory_id').references('InventoryItem.model_number')
-    //  table.foreign('computer_id').references('Computer.id')
-      table.decimal('price').notNullable()
       table.string('brand_name').notNullable()
+      table.decimal('price').notNullable()
       table.decimal('weigh').notNullable()
+      table.boolean('is_available').defaultTo(True)
+
+      //Computer attributes
       table.string('processor_type').notNullable()
-      table.int('ram_size').notNullable()
-      table.int('number_cpu_cores').notNullable()
-      table.int('harddrive_size').notNullable()
+      table.int('ram_size').unsigned().notNullable()
+      table.int('number_cpu_cores').unsigned().notNullable()
+      table.int('harddrive_size').unsigned().notNullable()
+
+      //Dimsneions attributes
       table.decimal('depth').notNullable()
       table.decimal('height').notNullable()
       table.decimal('width').notNullable()
-      table.boolean('is_available').defaultTo(True)
     }
   })
 }

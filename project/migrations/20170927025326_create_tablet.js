@@ -6,17 +6,25 @@ exports.up = function(knex, Promise) {
       throw new Error('Error creating table ' + tablename)
     }
     else {
-      table.increments('id').unsigned().primary()
-      table.integer('computer_id').unsigned().notNullable()
-      table.string('inventory_id').notNullable()
-      table.integer('dimension_id').unsigned().notNullable()
+      //InventoryItem attributes
+      table.string('model_number').primary()
+      table.string('brand_name').notNullable()
+      table.decimal('price').notNullable()
+      table.decimal('weight').notNullable()
+      table.boolean('is_availble').notNullable().defaultTo(true)
+
+      //Computer attributes
+      table.string('processor_type').notNullable()
+      table.int('ram_size').unsigned().notNullable()
+      table.int('number_cpu_cores').unsigned().notNullable()
+      table.int('harddrive_size').unsigned().notNullable()
+
+
+      //Tablet attributes
       table.decimal('display_size').notNullable()
       table.string('battery_info').nullable()
       table.string('os').notNullable()
       table.string('camera_info').nullable()
-      table.foreign('dimension_id').references('Dimension.id')
-      table.foreign('computer_id').references('Computer.id')
-      table.foreign('inventory_id').references('InventoryItem.model_number')
     }
   })
 }
