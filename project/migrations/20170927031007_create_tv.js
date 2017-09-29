@@ -6,13 +6,12 @@ exports.up = function(knex, Promise) {
       throw new Error('Error creating table ' + tablename)
     }
     else {
-      table.increments('id').unsigned().primary()
-      table.integer('dimension_id').unsigned().notNullable()
-      table.string('inventory_id').notNullable()
-      //NOTE: I really think this should be an enum (Artem)
+      table.string('model_number').primary().notNullable()
       table.string('category_name').notNullable()
-      table.foreign('dimension_id').references('Dimension.id')
-      table.foreign('inventory_id').references('InventoryItem.model_number')
+      table.decimal('price').notNullable()
+      table.decimal('weight').notNullable()
+      table.boolean('is_available').notNullable()
+      table.string('brand_name').notNullable()
     }
   })
 }
