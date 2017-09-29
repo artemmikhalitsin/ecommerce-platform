@@ -85,14 +85,15 @@ app.get('/getAllInventoryItems', function(req, res){
   //let desktopItems = desktopRepo.get('*');
   //let monitorItems = monitorRepo.get('*');
   //let tabletItems = tabletRepo.get('*');
-  tvRepo.get('*').then((tvs) => {
-    console.log(tvs)
+  //let tvItems = tvRepo.get('*');
+  laptopRepo.get('*').then((laptops) => {
+    console.log(laptops)
     let allItems = {
       //desktops: desktopItems,
       //laptops: laptopItems,
       //monitors: monitorItems,
       //tablets: tabletItems,
-      tvs: tvs
+      laptops: laptops
     }
     allItems = JSON.stringify(allItems);
     console.log(allItems);
