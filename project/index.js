@@ -10,6 +10,8 @@ const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 var cookieParser = require('cookie-parser');
 
+const rootPath = require('app-root-dir').get();
+
 var bodyParser = require('body-parser')
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -26,9 +28,6 @@ app.get('/', function(req, res) {
   res.render('testpage');
 });
 
-app.get('/example', function(req, res) {
-  res.render('example', { text: "What's popping?"});
-})
 
 app.get('/login', function(req, res) {
   res.render('login');
@@ -68,20 +67,47 @@ app.get('/testdb', function(req, res) {
     })
 });
 
+/*
+repos: right ones : w/  modules.export
+import functions
+const userRepo = require('/path/to/userrepo.js')
+userRepo (use the appropriate functions )
+*/
+
+app.get('/getAllInventoryItems', function(req, res){
+  const desktopRepo = require(rootPath + '/DataSource/DesktopRepository.js');
+  const laptopRepo = require(rootPath + '/DataSources/LaptopRepository.js');
+  const monitorRepo = require(rootPath + '/DataSources/MonitorRepository.js');
+  const tabletRepo = require(rootPath + '/DataSources/TabletRepository.js');
+  const tvRepo = require(rootPath + '/DataSources/TVRepository.js');
+
+  let desktopItems = desktopRepo.get('*');
+  let laptopItems = laptopRepo.get('*')
+  let monitorItems = monitorRepo.get('*');
+  let tabletItems = tabletRepo.get('*');
+  let tvItems = tvRepo.get('*');
+  let allItems = {
+    desktops: desktopItems,
+    laptops: laptopItems,
+    monitors: monitorItems,
+    tablets: tabletItems,
+    tvs: tvItems
+  }
+  allItems = JSON.stringify(allItems);
+  res.render('inventory', {items: allItems})
+})
+
 //MOVE TO CONTROLLER WHEN IT'S THERE
 app.post('/registrationRequest', function(req, res){
+
     let userData = req.body;
-    //temporary: call repo to post this information
-    database('User').insert(userData)
-      .then(user => {
-        res.status(200).json(userData)
-        return res.send(userData);
-      })
-      .catch(error => {
-        res.status(500).json({error});
-        return res.send(userData);
-      });
+    delete userData['confirmPassword'];
+    console.log(userData);
+
+    const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
+    userRepo.save(userData);
 });
+
 app.post('/postDesktop', function(req,res){
   console.log("starting");
   let desktop = req.body;
