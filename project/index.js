@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
 
-var path = require('path');
-app.use(express.static(path.join(__dirname, 'public'))); //allows use of static pages 
+let path = require('path');
+app.use(express.static(path.join(__dirname, 'public')));
+// allows use of static pages
 
 app.get('/', function(req, res) {
   res.sendFile('public/testpage.html', {root: __dirname});
@@ -20,7 +21,7 @@ app.get('/inventory', function(req, res) {
   res.sendFile('public/inventory.html', {root: __dirname});
 });
 
-app.get('/addItem', function(req, res) { 
+app.get('/addItem', function(req, res) {
   res.sendFile('public/addItem.html', {root: __dirname});
 });
 
