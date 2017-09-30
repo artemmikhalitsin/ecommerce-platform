@@ -5,10 +5,10 @@ const options = {
        user: 'root',
        password: '343docker',
        database: '343DB',
-  }
-}
+  },
+};
 
-const knex =  require('knex')(options)
+const knex = require('knex')(options);
 
 /*
 table.increments('id').unsigned().primary()
@@ -28,9 +28,9 @@ const user = {
   password: 'password',
   full_address: '123 Main',
   is_administrator: true,
-  phone_number: 123123123
-}
+  phone_number: 123123123,
+};
 
 knex('User').select('*').then( (result) => {
-  console.log(result)
-})
+  console.log(result);
+});

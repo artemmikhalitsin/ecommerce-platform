@@ -4,21 +4,21 @@ const environment = process.env.NODE_ENV || 'development';
 const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
 
-function save(laptop){
+function save(laptop) {
   database('Laptop').insert(laptop)
-    .then(tv => {
+    .then((tv) => {
       return true;
     })
-    .catch(error => {
+    .catch((error) => {
       return false;
     });
 };
 
-function get(args){
-  return database('Laptop').select('*')
+function get(args) {
+  return database('Laptop').select('*');
 }
 
 module.exports = {
   save: save,
-  get: get
-}
+  get: get,
+};

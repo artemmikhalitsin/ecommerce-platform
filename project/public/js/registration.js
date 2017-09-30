@@ -1,4 +1,4 @@
-/*let registrationRequest = (registrationData) => {
+/* let registrationRequest = (registrationData) => {
     $.ajax({
         url: 'http://localhost:8080/registrationRequest',
         type: 'POST',
@@ -19,11 +19,11 @@ let validateRegistration = () => {
         return obj;
     }, {});
     registrationData['is_administrator'] = $('#adminBoolean').is(':checked') ? 1 : 0;
-    if (registrationData['password'] !== registrationData['confirmPassword']){
-        window.alert("Passwords don't match!");
+    if (registrationData['password'] !== registrationData['confirmPassword']) {
+        window.alert('Passwords don\'t match!');
         return false;
     } else {
-        /*delete registrationData['confirmPassword'];
+        /* delete registrationData['confirmPassword'];
         registrationRequest(registrationData);*/
         return true;
     }

@@ -31,7 +31,7 @@ let getAllInventoryItems = () => {
   })
 }
 
-
+/*
 let populateInventory = (inventory) => {
     let id = "laptopTable";
     let table = $('#laptopTable');
@@ -41,3 +41,4 @@ let populateInventory = (inventory) => {
 
 
 }
+*/
