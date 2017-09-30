@@ -86,10 +86,12 @@ app.get('/getAllInventoryItems', function(req, res){
   let monitorItems = monitorRepo.get('*');
   let tabletItems = tabletRepo.get('*');
   let tvItems = tvRepo.get('*');
-  Promise.all([laptopItems, tvItems]).then((values) => {
+  Promise.all([laptopItems, tvItems, monitorItems, tabletItems]).then((values) => {
     let allItems = {
       laptops: values[0],
-      tvs: values[1]
+      tvs: values[1],
+      mons: values[2],
+      tabs: values[3]
     }
     let items = JSON.stringify(allItems)
     res.render('inventory2', {items: items})
