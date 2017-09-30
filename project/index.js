@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
 
+const rootPath = require('app-root-dir').get();
 
 const app = express();
 var router = express.Router();
@@ -10,7 +11,6 @@ const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 var cookieParser = require('cookie-parser');
 
-const rootPath = require('app-root-dir').get();
 
 var bodyParser = require('body-parser')
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -28,9 +28,6 @@ app.get('/', function(req, res) {
   res.render('testpage');
 });
 
-app.get('/example', function(req, res) {
-  res.render('example', { text: "What's popping?"});
-})
 
 app.get('/login', function(req, res) {
   res.render('login');
@@ -45,7 +42,7 @@ app.get('/inventory', function(req, res) {
 });
 
 app.get('/addItem', function(req, res) {
-  res.sendFile('public/addItem.html', {root: __dirname});
+  res.render('addItem');
 });
 
 app.get('/database', function(req, res) {
@@ -78,31 +75,41 @@ userRepo (use the appropriate functions )
 */
 
 app.get('/getAllInventoryItems', function(req, res){
-  const desktopRepo = require(rootPath + '/DataSource/DesktopRepository.js');
-  const laptopRepo = require(rootPath + '/DataSources/LaptopRepository.js');
-  const monitorRepo = require(rootPath + '/DataSources/MonitorRepository.js');
-  const tabletRepo = require(rootPath + '/DataSources/TabletRepository.js');
-  const tvRepo = require(rootPath + '/DataSources/TVRepository.js');
+  const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
+  const laptopRepo = require(rootPath + '/DataSource/Repository/LaptopRepository.js');
+  const monitorRepo = require(rootPath + '/DataSource/Repository/MonitorRepository.js');
+  const tabletRepo = require(rootPath + '/DataSource/Repository/TabletRepository.js');
+  const tvRepo = require(rootPath + '/DataSource/Repository/TVRepository.js');
 
-  let desktopItems = desktopRepo.get('*');
   let laptopItems = laptopRepo.get('*')
+  let desktopItems = desktopRepo.get('*');
   let monitorItems = monitorRepo.get('*');
   let tabletItems = tabletRepo.get('*');
   let tvItems = tvRepo.get('*');
-  let allItems = {
-    desktops: desktopItems,
-    laptops: laptopItems,
-    monitors: monitorItems,
-    tablets: tabletItems,
-    tvs: tvItems
-  }
-  allItems = JSON.stringify(allItems);
-  res.render('inventory', {items: allItems})
+  Promise.all([laptopItems, tvItems]).then((values) => {
+    let allItems = {
+      laptops: values[0],
+      tvs: values[1]
+    }
+    let items = JSON.stringify(allItems)
+    res.render('inventory2', {items: items})
+  }).catch((error) => { console.log(error) })
+})
+
+app.get('/users', function(req, res) {
+  const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js')
+  userRepo.get().then(users => {
+    console.log(users)
+    res.render('users', {users:users})
+  })
+  .catch(err => {
+    console.log(err)
+    res.send(err)
+  })
 })
 
 //MOVE TO CONTROLLER WHEN IT'S THERE
 app.post('/registrationRequest', function(req, res){
-
     let userData = req.body;
     delete userData['confirmPassword'];
     console.log(userData);
@@ -114,9 +121,45 @@ app.post('/registrationRequest', function(req, res){
 app.post('/postDesktop', function(req,res){
   console.log("starting");
   let desktop = req.body;
- // var adminController = new AdministratorController();
-  //adminController.save(desktop);
-  console.log(desktop);
+  const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
+  console.log('fetching data...')
+  desktopRepo.save(desktop).then(result => {
+    //("Success")
+    console.log('success')
+    app.render('addItem');
+  })
+  .catch(err => {
+    //alert("Failure")
+    app.render('addItem')
+    console.log('error')
+    console.log(err);
+  })
+  
+});
+
+app.post('/loginRequest', function(req, res){
+  let data = req.body;
+  console.log(data);
+  const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
+  userRepo.authenticate(data).then(result => {
+    if(result == []){
+      //Note: maybe make a space for an error message
+      res.redirect('/login')
+    }
+    else if(result.length > 1) {
+      console.log('Duplicate users detected')
+      res.redirect('/login')
+    }
+    else if(result[0].is_admin == false)
+    {
+      console.log('Not an admin')
+      res.redirect('/')
+    }
+    else {
+      console.log('displaying items');
+      res.redirect('/getAllInventoryItems')
+    }
+  })
 });
 
 
