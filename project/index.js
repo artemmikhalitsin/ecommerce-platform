@@ -119,7 +119,14 @@ app.post('/registrationRequest', function(req, res) {
     console.log(userData);
 
     const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
-    userRepo.save(userData);
+    userRepo.save(userData).then((result) => {
+      console.log("Successfully registered");
+      res.send("You've successfully registered!");
+    })
+    .catch((err) => {
+      res.send("Error registering");
+      console.log(err);
+    });
 });
 
 app.post('/postDesktop', function(req, res) {
