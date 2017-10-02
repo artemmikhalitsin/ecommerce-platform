@@ -115,11 +115,48 @@ app.get('/users', function(req, res) {
 // MOVE TO CONTROLLER WHEN IT'S THERE
 app.post('/registrationRequest', function(req, res) {
     let userData = req.body;
-    delete userData['confirmPassword'];
-    console.log(userData);
+    let password = userData['password'];
+    let confirmPassword = userData['confirmPassword'];
 
-    const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
-    userRepo.save(userData);
+    if (password != confirmPassword) {
+      console.log('password confirmation failed. try again...');
+      res.render('registration');
+    }else {
+      delete userData['confirmPassword'];
+
+      let email = userData['email'];
+
+      const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
+      userRepo.verifyEmail(email).then( (result) => {
+        console.log(result);
+        if (result.length == 0) {
+          console.log('adding new user');
+          if (userData['is_admin'] == 'on') {
+            userData['is_admin'] = true;
+          }else {
+            userData['is_admin'] = false;
+          }
+          console.log(userData);
+          userRepo.save(userData).then( (result) => {
+            console.log('success: ' + result);
+            res.render('login');
+          })
+          .catch( (err) => {
+            console.log('failed: ' + err);
+            res.render('registration');
+          });
+        }else {
+          console.log('Email already exists');
+          res.render('registration');
+        }
+      })
+      .catch( (err) => {
+        console.log('something bad happened');
+      });
+    }
+
+
+    //console.log(asd);
 });
 
 app.post('/postDesktop', function(req, res) {
