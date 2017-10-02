@@ -119,7 +119,7 @@ app.post('/registrationRequest', function(req, res) {
 
     if (password != confirmPassword) {
       console.log('password confirmation failed. try again...');
-      res.render('registration');
+      res.redirect('/registration');
     }else {
       delete userData['confirmPassword'];
 
@@ -138,15 +138,15 @@ app.post('/registrationRequest', function(req, res) {
           console.log(userData);
           userRepo.save(userData).then( (result) => {
             console.log('success: ' + result);
-            res.render('login');
+            res.redirect('/login');
           })
           .catch( (err) => {
             console.log('failed: ' + err);
-            res.render('registration');
+            res.redirect('/registration');
           });
         }else {
           console.log('Email already exists');
-          res.render('registration');
+          res.redirect('/registration');
         }
       })
       .catch( (err) => {
