@@ -6,9 +6,7 @@ const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
 
 function save(desktop) {
-  return database('Desktop').insert(desktop) .then( function (result) {
-    result.json({ success: true, message: 'ok' });     // respond back to request
- });
+  return database('Desktop').insert(desktop);
 };
 
 function get(args) {

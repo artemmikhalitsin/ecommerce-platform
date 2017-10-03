@@ -126,9 +126,14 @@ app.post('/postDesktop', function(req, res) {
   let desktop = req.body;
   const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
   console.log('fetching data...');
-  desktopRepo.save(desktop).then((result) => {
-    res.redirect('/login');
-  });
+  desktopRepo.save(desktop)
+             .then((result) => {
+              res.redirect('/addItem');
+           })
+            .catch(function(e){
+              console.log ("error inserting to Database");
+              res.redirect('/login');
+            });
 });
 
 app.post('/loginRequest', function(req, res) {
