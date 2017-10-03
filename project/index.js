@@ -5,7 +5,6 @@ const hbs = require('express-handlebars');
 const rootPath = require('app-root-dir').get();
 
 const app = express();
-let router = express.Router();
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
@@ -137,16 +136,14 @@ app.post('/loginRequest', function(req, res) {
   console.log(data);
   const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
   userRepo.authenticate(data).then((result) => {
-    if (result == []) {
-      // Note: maybe make a space for an error message
+    console.log('type of '+ result + ' is ' + typeof(result));
+    if (result.length <= 0) {
+      console.log('Invalid username or password.');
       res.redirect('/login');
     } else if (result.length > 1) {
       console.log('Duplicate users detected');
       res.redirect('/login');
-    } else if (result[0].is_admin == false) {
-      console.log('Not an admin');
-      res.redirect('/');
-    } else {
+    } else if (result.length == 1) {
       console.log('displaying items');
       res.redirect('/getAllInventoryItems');
     }
