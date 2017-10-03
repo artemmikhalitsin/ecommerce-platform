@@ -24,7 +24,7 @@ app.set('views', path.join(__dirname, 'public'));
 app.set('view engine', 'hbs');
 
 app.get('/', function(req, res) {
-  res.render('login');
+  res.render('home');
 });
 
 app.get('/login', function(req, res) {
@@ -36,7 +36,7 @@ app.get('/registration', function(req, res) {
 });
 
 app.get('/inventory', function(req, res) {
-  res.render('inventory');
+  res.render('inventory2');
 });
 
 app.get('/addItem', function(req, res) {
@@ -128,15 +128,7 @@ app.post('/postDesktop', function(req, res) {
   const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
   console.log('fetching data...');
   desktopRepo.save(desktop).then((result) => {
-    // ("Success")
-    console.log('success');
-    app.render('addItem');
-  })
-  .catch((err) => {
-    // alert("Failure")
-    app.render('addItem');
-    console.log('error');
-    console.log(err);
+    res.redirect('/login');
   });
 });
 
