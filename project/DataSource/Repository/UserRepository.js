@@ -6,12 +6,14 @@ const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
 
 function save(user) {
-      return database('User').insert(user);
-    };
+  //console.log(user);
+  return database('User').insert(user);
+};
 
 function get() {
       return database('User').select('*');
 }
+
 function authenticate(user) {
   return database('User').where({
     email: user.email,
@@ -19,8 +21,15 @@ function authenticate(user) {
   });
 }
 
+function verifyEmail(email){
+  return database('User').where({
+    email: email
+  });
+}
+
 module.exports = {
   save: save,
   get: get,
   authenticate: authenticate,
+  verifyEmail: verifyEmail,
 };
