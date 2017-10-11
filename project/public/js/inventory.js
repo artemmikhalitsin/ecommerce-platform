@@ -1,7 +1,7 @@
 
 
 // Function used to populate the child rows
-function format ( data ) {
+function format( data ) {
   return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
       '<tr>'+
           '<td>Processor Type:</td>'+
@@ -46,29 +46,28 @@ $(document).ready(function() {
       data: mock.laptops,
       columns: [
         {
-            "className":      'details-control',
-            "orderable":      false,
-            "data":           null,
-            "defaultContent": ''
+            'className': 'details-control',
+            'orderable': false,
+            'data': null,
+            'defaultContent': '',
         },
-        { 'data': 'model_number'},
-        { 'data': 'brand_name'},
-        { 'data': 'price'},
-        { 'data': 'weight'},
-        { 'data': 'is_available'},
-      ]
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'is_available'},
+      ],
     });
     // Add event listener for opening and closing details
-    $('#table_laptops tbody').on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = table.row( tr );
+    $('#table_laptops tbody').on('click', 'td.details-control', function() {
+        let tr = $(this).closest('tr');
+        let row = table.row( tr );
 
         if ( row.child.isShown() ) {
             // This row is already open - close it
             row.child.hide();
             tr.removeClass('shown');
-        }
-        else {
+        } else {
             // Open this row
             row.child( format(row.data()) ).show();
             tr.addClass('shown');
@@ -77,66 +76,66 @@ $(document).ready(function() {
     $('#table_desktops').DataTable({
       data: mock.desks,
       columns: [
-        { 'data': 'model_number'},
-        { 'data': 'brand_name'},
-        { 'data': 'price'},
-        { 'data': 'weight'},
-        { 'data': 'is_available'},
-        { 'data': 'processor_type'},
-        { 'data': 'ram_size'},
-        { 'data': 'number_cpu_cores'},
-        { 'data': 'harddrive_size'},
-        { 'data': 'height'},
-        { 'data': 'width'},
-        { 'data': 'depth'},
-      ]
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'is_available'},
+        {'data': 'processor_type'},
+        {'data': 'ram_size'},
+        {'data': 'number_cpu_cores'},
+        {'data': 'harddrive_size'},
+        {'data': 'height'},
+        {'data': 'width'},
+        {'data': 'depth'},
+      ],
     });
     $('#table_tvs').DataTable({
       data: mock.tvs,
       columns: [
-        { 'data': 'model_number'},
-        { 'data': 'brand_name'},
-        { 'data': 'price'},
-        { 'data': 'weight'},
-        { 'data': 'category_name'},
-        { 'data': 'is_available'},
-        { 'data': 'height'},
-        { 'data': 'width'},
-        { 'data': 'depth'},
-      ]
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'category_name'},
+        {'data': 'is_available'},
+        {'data': 'height'},
+        {'data': 'width'},
+        {'data': 'depth'},
+      ],
     });
     $('#table_monitors').DataTable({
       data: mock.mons,
       columns: [
-        { 'data': 'model_number'},
-        { 'data': 'brand_name'},
-        { 'data': 'price'},
-        { 'data': 'weight'},
-        { 'data': 'is_available'},
-        { 'data': 'height'},
-        { 'data': 'width'},
-        { 'data': 'depth'},
-      ]
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'is_available'},
+        {'data': 'height'},
+        {'data': 'width'},
+        {'data': 'depth'},
+      ],
     });
     $('#table_tablets').DataTable({
       data: mock.tabs,
       columns: [
-        { 'data': 'model_number'},
-        { 'data': 'brand_name'},
-        { 'data': 'price'},
-        { 'data': 'weight'},
-        { 'data': 'is_availble'},
-        { 'data': 'processor_type'},
-        { 'data': 'ram_size'},
-        { 'data': 'number_cpu_cores'},
-        { 'data': 'harddrive_size'},
-        { 'data': 'display_size'},
-        { 'data': 'battery_info'},
-        { 'data': 'os'},
-        { 'data': 'height'},
-        { 'data': 'width'},
-        { 'data': 'depth'},
-        { 'data': 'camera_info'},
-      ]
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'is_availble'},
+        {'data': 'processor_type'},
+        {'data': 'ram_size'},
+        {'data': 'number_cpu_cores'},
+        {'data': 'harddrive_size'},
+        {'data': 'display_size'},
+        {'data': 'battery_info'},
+        {'data': 'os'},
+        {'data': 'height'},
+        {'data': 'width'},
+        {'data': 'depth'},
+        {'data': 'camera_info'},
+      ],
     });
 });
