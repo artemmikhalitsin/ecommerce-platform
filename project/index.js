@@ -8,7 +8,7 @@ const app = express();
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
-let cookieParser = require('cookie-parser');
+// let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 app.use( bodyParser.json() ); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 }));
 
 const Controller = require(rootPath + '/Controllers/controller');
+let controller = new Controller();
 
 // allows use of static pages
 app.use(express.static(path.join(__dirname, 'public')));
@@ -74,11 +75,16 @@ userRepo (use the appropriate functions )
 */
 
 app.get('/getAllInventoryItems', function(req, res) {
-  const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
-  const laptopRepo = require(rootPath + '/DataSource/Repository/LaptopRepository.js');
-  const monitorRepo = require(rootPath + '/DataSource/Repository/MonitorRepository.js');
-  const tabletRepo = require(rootPath + '/DataSource/Repository/TabletRepository.js');
-  const tvRepo = require(rootPath + '/DataSource/Repository/TVRepository.js');
+  const desktopRepo = require(rootPath +
+    '/DataSource/Repository/DesktopRepository.js');
+  const laptopRepo = require(rootPath +
+    '/DataSource/Repository/LaptopRepository.js');
+  const monitorRepo = require(rootPath +
+    '/DataSource/Repository/MonitorRepository.js');
+  const tabletRepo = require(rootPath +
+    '/DataSource/Repository/TabletRepository.js');
+  const tvRepo = require(rootPath +
+    '/DataSource/Repository/TVRepository.js');
 
   let laptopItems = laptopRepo.get('*');
   let desktopItems = desktopRepo.get('*');
@@ -102,7 +108,8 @@ app.get('/getAllInventoryItems', function(req, res) {
 });
 
 app.get('/users', function(req, res) {
-  const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
+  const userRepo = require(rootPath +
+    '/DataSource/Repository/UserRepository.js');
   userRepo.get().then((users) => {
     console.log(users);
     res.render('users', {users: users});
@@ -115,14 +122,14 @@ app.get('/users', function(req, res) {
 
 // MOVE TO CONTROLLER WHEN IT'S THERE
 app.post('/registrationRequest', function(req, res) {
-  let controller = new Controller();
   controller.processRegistration(req, res);
 });
 
 app.post('/postDesktop', function(req, res) {
   console.log('starting');
   let desktop = req.body;
-  const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
+  const desktopRepo = require(rootPath +
+    '/DataSource/Repository/DesktopRepository.js');
   console.log('fetching data...');
   desktopRepo.save(desktop)
              .then((result) => {
@@ -137,7 +144,8 @@ app.post('/postDesktop', function(req, res) {
 app.post('/loginRequest', function(req, res) {
   let data = req.body;
   console.log(data);
-  const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
+  const userRepo = require(rootPath +
+    '/DataSource/Repository/UserRepository.js');
   userRepo.authenticate(data).then((result) => {
     console.log('type of '+ result + ' is ' + typeof(result));
     if (result.length <= 0) {
