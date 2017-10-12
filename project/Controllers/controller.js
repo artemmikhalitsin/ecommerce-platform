@@ -36,7 +36,7 @@ class Controller {
             userData['is_admin'] = false;
           }
           console.log(userData);
-          userRepo.save(userData).then( (result) => {
+          this.userRepo.save(userData).then( (result) => {
             console.log('success: ' + result);
             res.redirect('/login');
           })
@@ -50,6 +50,7 @@ class Controller {
         }
       })
       .catch( (err) => {
+        console.log(err);
         console.log('something bad happened');
       });
     }
@@ -80,9 +81,7 @@ class Controller {
   loginRequest(req, res) {
     let data = req.body;
     console.log(data);
-    const userRepo = require(this.rootPath +
-      '/DataSource/Repository/UserRepository.js');
-    userRepo.authenticate(data).then((result) => {
+    this.userRepo.authenticate(data).then((result) => {
       console.log('type of '+ result + ' is ' + typeof(result));
       if (result.length <= 0) {
         console.log('Invalid username or password.');
@@ -92,7 +91,7 @@ class Controller {
         res.redirect('/login');
       } else if (result.length == 1) {
         console.log('logging in');
-        res.app.session.exist=true;
+        res.app.session.exists=true;
         console.log('displaying items');
         res.redirect('/getAllInventoryItems');
       }
