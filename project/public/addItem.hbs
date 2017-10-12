@@ -8,13 +8,13 @@
 
   <link rel="stylesheet" href="">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-  <script type="text/javascript" src="/js/addItem.js"></script>
+  <!--<script type="text/javascript" src="/js/addItem.js"></script>-->
 
 </head>
 
 <body>
 	<header>
-	<h1>Registration</h1>
+	<h1>Add Item</h1>
 	</header>
 	<content>
 		<form method="POST" action="/postDesktop" name="desktop_form">
@@ -25,30 +25,31 @@
 		  <input type="text" name="brand_name">
 		  <br><br>
 		  price:<br>
-		  <input type="text" name="price">
+		  <input type="number" name="price">
 		  <br><br>
-		  weigth: <br>
-		  <input type="text" name="weigth">
+		  weight: <br>
+		  <input type="number" name="weight">
 		  <br/><br/>
           number_cpu_cores: <br>
-		  <input type="text" name="number_cpu_cores">
+		  <input type="number" name="number_cpu_cores">
 		  <br/><br/>
           harddrive_size: <br>
-		  <input type="text" name="harddrive_size">
+		  <input type="number" name="harddrive_size">
 		  <br/><br/>
           depth: <br>
-		  <input type="text" name="depth">
+		  <input type="number" name="depth">
 		  <br/><br/>
           height: <br>
-		  <input type="text" name="height">
+		  <input type="number" name="height">
 		  <br/><br/>
           width: <br>
-		  <input type="text" name="width">
+		  <input type="number" name="width">
 		  <br/><br/>
 		  processor_type: <br>
 		  <input type="text" name="processor_type"><br><br>
 		  ram_size: <br>
-		  <input type="text" name="ram_size"><br><br>
+		  <input type="number" name="ram_size"><br><br>
+		  
 		  <input type="submit" value="Submit">
 		</form>
 	</content>

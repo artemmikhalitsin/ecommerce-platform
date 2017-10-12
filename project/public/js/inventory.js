@@ -1,44 +1,141 @@
-const INVENTORY_ITEM = 'InventoryItem';
-const COMPUTER = 'Computer';
-const TABLET = 'Tablet';
-const DESKTOP = 'Desktop';
-const MONITOR = 'Monitor';
-const TV = 'TV';
 
-let mockComputerData = [{"id":1,"computer_id":1,"inventory_id":1,"display_size":80,"battery_info":"76-723-9622","os":"Y-Solowarm","camera":true,"touch_screen":false},
-{"id":2,"computer_id":2,"inventory_id":2,"display_size":41,"battery_info":"92-627-0519","os":"Flexidy","camera":false,"touch_screen":false},
-{"id":3,"computer_id":3,"inventory_id":3,"display_size":76,"battery_info":"74-441-4660","os":"Otcom","camera":true,"touch_screen":false},
-{"id":4,"computer_id":4,"inventory_id":4,"display_size":60,"battery_info":"83-946-5471","os":"Lotlux","camera":false,"touch_screen":true},
-{"id":5,"computer_id":5,"inventory_id":5,"display_size":30,"battery_info":"29-684-3504","os":"Tin","camera":true,"touch_screen":false},
-{"id":6,"computer_id":6,"inventory_id":6,"display_size":6,"battery_info":"33-714-7601","os":"Ventosanzap","camera":true,"touch_screen":false},
-{"id":7,"computer_id":7,"inventory_id":7,"display_size":80,"battery_info":"49-068-3796","os":"Keylex","camera":false,"touch_screen":true},
-{"id":8,"computer_id":8,"inventory_id":8,"display_size":48,"battery_info":"69-508-0469","os":"Quo Lux","camera":true,"touch_screen":true},
-{"id":9,"computer_id":9,"inventory_id":9,"display_size":23,"battery_info":"18-312-1892","os":"Viva","camera":true,"touch_screen":false},
-{"id":10,"computer_id":10,"inventory_id":10,"display_size":74,"battery_info":"25-425-9085","os":"Cardguard","camera":true,"touch_screen":true}]
 
-let getAllInventoryItems = () => {
-  $.ajax({
-      url: 'http://localhost:8080/getAllInventoryItems',
-      type: 'GET',
-      success: function(data){
-          alert("success!");
-          console.log(data);
-          //populateInventory(data);
-      },
-      error: function(error){
-          console.log(error);
-      }
-  })
+// Function used to populate the child rows
+function format( data ) {
+  return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+      '<tr>'+
+          '<td>Processor Type:</td>'+
+          '<td>'+data.processor_type+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>RAM size:</td>'+
+          '<td>'+data.ram_size+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td># of CPU cores:</td>'+
+          '<td>'+data.number_cpu_cores+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Hard Drive size:</td>'+
+          '<td>'+data.harddrive_size+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Display size:</td>'+
+          '<td>'+data.display_size+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Battery Info:</td>'+
+          '<td>'+data.battery_info+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>OS:</td>'+
+          '<td>'+data.os+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Camera:</td>'+
+          '<td>'+data.camera+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Touch Screen:</td>'+
+          '<td>'+data.touch_screen+'</td>'+
+      '</tr>'+
+  '</table>';
 }
+$(document).ready(function() {
+    let table = $('#table_laptops').DataTable({
+      data: mock.laptops,
+      columns: [
+        {
+            'className': 'details-control',
+            'orderable': false,
+            'data': null,
+            'defaultContent': '',
+        },
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'is_available'},
+      ],
+    });
+    // Add event listener for opening and closing details
+    $('#table_laptops tbody').on('click', 'td.details-control', function() {
+        let tr = $(this).closest('tr');
+        let row = table.row( tr );
 
-/*
-let populateInventory = (inventory) => {
-    let id = "laptopTable";
-    let table = $('#laptopTable');
-    $.each(inventory, (index, object){
-      object.
-    })
-
-
-}
-*/
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        } else {
+            // Open this row
+            row.child( format(row.data()) ).show();
+            tr.addClass('shown');
+        }
+    } );
+    $('#table_desktops').DataTable({
+      data: mock.desks,
+      columns: [
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'is_available'},
+        {'data': 'processor_type'},
+        {'data': 'ram_size'},
+        {'data': 'number_cpu_cores'},
+        {'data': 'harddrive_size'},
+        {'data': 'height'},
+        {'data': 'width'},
+        {'data': 'depth'},
+      ],
+    });
+    $('#table_tvs').DataTable({
+      data: mock.tvs,
+      columns: [
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'category_name'},
+        {'data': 'is_available'},
+        {'data': 'height'},
+        {'data': 'width'},
+        {'data': 'depth'},
+      ],
+    });
+    $('#table_monitors').DataTable({
+      data: mock.mons,
+      columns: [
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'is_available'},
+        {'data': 'height'},
+        {'data': 'width'},
+        {'data': 'depth'},
+      ],
+    });
+    $('#table_tablets').DataTable({
+      data: mock.tabs,
+      columns: [
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'is_availble'},
+        {'data': 'processor_type'},
+        {'data': 'ram_size'},
+        {'data': 'number_cpu_cores'},
+        {'data': 'harddrive_size'},
+        {'data': 'display_size'},
+        {'data': 'battery_info'},
+        {'data': 'os'},
+        {'data': 'height'},
+        {'data': 'width'},
+        {'data': 'depth'},
+        {'data': 'camera_info'},
+      ],
+    });
+});

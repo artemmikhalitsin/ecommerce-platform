@@ -5,7 +5,6 @@ const hbs = require('express-handlebars');
 const rootPath = require('app-root-dir').get();
 
 const app = express();
-let router = express.Router();
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
@@ -24,7 +23,7 @@ app.set('views', path.join(__dirname, 'public'));
 app.set('view engine', 'hbs');
 
 app.get('/', function(req, res) {
-  res.render('login');
+  res.render('home');
 });
 
 app.get('/login', function(req, res) {
@@ -36,7 +35,7 @@ app.get('/registration', function(req, res) {
 });
 
 app.get('/inventory', function(req, res) {
-  res.render('inventory');
+  res.render('inventory2');
 });
 
 app.get('/addItem', function(req, res) {
@@ -115,8 +114,45 @@ app.get('/users', function(req, res) {
 // MOVE TO CONTROLLER WHEN IT'S THERE
 app.post('/registrationRequest', function(req, res) {
     let userData = req.body;
-    delete userData['confirmPassword'];
-    console.log(userData);
+    let password = userData['password'];
+    let confirmPassword = userData['confirmPassword'];
+
+    if (password != confirmPassword) {
+      console.log('password confirmation failed. try again...');
+      res.redirect('/registration');
+    }else {
+      delete userData['confirmPassword'];
+
+      let email = userData['email'];
+
+      const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
+      userRepo.verifyEmail(email).then( (result) => {
+        console.log(result);
+        if (result.length == 0) {
+          console.log('adding new user');
+          if (userData['is_admin'] == 'on') {
+            userData['is_admin'] = true;
+          }else {
+            userData['is_admin'] = false;
+          }
+          console.log(userData);
+          userRepo.save(userData).then( (result) => {
+            console.log('success: ' + result);
+            res.redirect('/login');
+          })
+          .catch( (err) => {
+            console.log('failed: ' + err);
+            res.redirect('/registration');
+          });
+        }else {
+          console.log('Email already exists');
+          res.redirect('/registration');
+        }
+      })
+      .catch( (err) => {
+        console.log('something bad happened');
+      });
+    }
 
     const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
     userRepo.save(userData).then((result) => {
@@ -127,6 +163,10 @@ app.post('/registrationRequest', function(req, res) {
       res.send("Error registering");
       console.log(err);
     });
+
+
+    //console.log(asd);
+// 17b6e203b3697149eaffc868d2e5f83e9a5ac751
 });
 
 app.post('/postDesktop', function(req, res) {
@@ -134,17 +174,14 @@ app.post('/postDesktop', function(req, res) {
   let desktop = req.body;
   const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
   console.log('fetching data...');
-  desktopRepo.save(desktop).then((result) => {
-    // ("Success")
-    console.log('success');
-    app.render('addItem');
-  })
-  .catch((err) => {
-    // alert("Failure")
-    app.render('addItem');
-    console.log('error');
-    console.log(err);
-  });
+  desktopRepo.save(desktop)
+             .then((result) => {
+              res.redirect('/addItem');
+           })
+            .catch(function(e){
+              console.log ("error inserting to Database");
+              res.redirect('/login');
+            });
 });
 
 app.post('/loginRequest', function(req, res) {
@@ -152,16 +189,14 @@ app.post('/loginRequest', function(req, res) {
   console.log(data);
   const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
   userRepo.authenticate(data).then((result) => {
-    if (result == []) {
-      // Note: maybe make a space for an error message
+    console.log('type of '+ result + ' is ' + typeof(result));
+    if (result.length <= 0) {
+      console.log('Invalid username or password.');
       res.redirect('/login');
     } else if (result.length > 1) {
       console.log('Duplicate users detected');
       res.redirect('/login');
-    } else if (result[0].is_admin == false) {
-      console.log('Not an admin');
-      res.redirect('/');
-    } else {
+    } else if (result.length == 1) {
       console.log('displaying items');
       res.redirect('/getAllInventoryItems');
     }
