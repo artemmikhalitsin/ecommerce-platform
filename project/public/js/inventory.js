@@ -11,18 +11,7 @@ function openCloseDetails(table_id, tableObject){
       }
       else {
           // Open this row
-          switch (table_id) {
-            case 'table_laptops':
-              row.child( formatlaptopsTable(row.data()) ).show();break;
-            case 'table_desktops':
-              row.child( formatDesktopsTable(row.data()) ).show();break;
-            case 'table_tvs':
-            case 'table_monitors':
-              row.child( formatTVsAndMonitorsTable(row.data()) ).show();break;
-            case 'table_tablets':
-              row.child( formatTabletsTable(row.data()) ).show();break;
-            default:
-          }
+          row.child( formatlaptopsTable(row.data()) ).show();
           tr.addClass('shown');
       }
   });

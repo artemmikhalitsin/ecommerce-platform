@@ -50,9 +50,12 @@ app.get('/admin', function(req, res) {
   res.render('admin');
 });
 
+app.get('/addproduct', function(req, res) {
+  res.render('inventory/new-product')
+})
 
 // Use  access data from database
-app.get('/testdb', function(req, res) {
+app.get('/testdb', function(req,res) {
   database('User').select( )
     .then((customer) => {
       customer = JSON.stringify(customer);
