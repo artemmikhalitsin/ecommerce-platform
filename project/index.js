@@ -163,6 +163,8 @@ app.post('/postDesktop', function(req, res) {
   let desktop = req.body;
   const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
   console.log('fetching data...');
+  const uow = require(rootPath + '/DataSource/UnitOfWork.js');
+  desktopRepo.constructor(uow);
   desktopRepo.save(desktop)
              .then((result) => {
               res.redirect('/addItem');

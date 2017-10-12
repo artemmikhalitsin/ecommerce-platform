@@ -4,9 +4,15 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
+var uow = require(rootPath + '/DataSource/UnitOfWork.js');
+
+function constructor(uow){
+  this.uow = uow;
+}
 
 function save(desktop) {
-  return database('Desktop').insert(desktop);
+  //return database('Desktop').insert(desktop);
+  return uow.commit(desktop, 'Desktop');
 };
 
 function get(args) {
@@ -14,6 +20,7 @@ function get(args) {
 }
 
 module.exports = {
+  constructor: constructor,
   save: save,
   get: get,
 };
