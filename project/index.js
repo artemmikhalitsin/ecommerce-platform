@@ -75,36 +75,7 @@ userRepo (use the appropriate functions )
 */
 
 app.get('/getAllInventoryItems', function(req, res) {
-  const desktopRepo = require(rootPath +
-    '/DataSource/Repository/DesktopRepository.js');
-  const laptopRepo = require(rootPath +
-    '/DataSource/Repository/LaptopRepository.js');
-  const monitorRepo = require(rootPath +
-    '/DataSource/Repository/MonitorRepository.js');
-  const tabletRepo = require(rootPath +
-    '/DataSource/Repository/TabletRepository.js');
-  const tvRepo = require(rootPath +
-    '/DataSource/Repository/TVRepository.js');
-
-  let laptopItems = laptopRepo.get('*');
-  let desktopItems = desktopRepo.get('*');
-  let monitorItems = monitorRepo.get('*');
-  let tabletItems = tabletRepo.get('*');
-  let tvItems = tvRepo.get('*');
-  Promise.all([laptopItems, tvItems, monitorItems, tabletItems, desktopItems])
-  .then((values) => {
-    let allItems = {
-      laptops: values[0],
-      tvs: values[1],
-      mons: values[2],
-      tabs: values[3],
-      desks: values[4],
-    };
-    let items = JSON.stringify(allItems);
-    res.render('inventory2', {items: items});
-  }).catch((error) => {
- console.log(error);
-});
+  controller.getAllInventoryItems(req, res);
 });
 
 app.get('/users', function(req, res) {
