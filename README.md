@@ -1,6 +1,6 @@
-#Welcome to SOEN 343-Project
+# Welcome to SOEN 343-Project
 
-##How To Use Docker
+## How To Use Docker
 
 docker run -v /c/your/path/to/this/repo/343-project/project:/usr/src/project -p 80:8080 -it --name 343 343docker/express
 
@@ -12,7 +12,7 @@ in ./project/.eslintrc.js delete this line:
 
         "linebreak-style": ["error", "windows"]
 
-##Useful Links
+## Useful Links
 
 Google Drive: https://drive.google.com/open?id=0B_hjt_bmSSqKcTBGU0VCSC15RDA
 
@@ -20,7 +20,7 @@ Google Drive: https://drive.google.com/open?id=0B_hjt_bmSSqKcTBGU0VCSC15RDA
 
 Trello: https://trello.com/b/dUVUReAA/soen-343
 
-##Members
+## Members
 **Names and IDs**
 
 Ajmer Singh Gadreh           
