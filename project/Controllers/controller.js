@@ -1,7 +1,19 @@
-const rootPath = require('app-root-dir').get();
-
 class Controller {
-  constructor() {}
+  constructor() {
+    this.rootPath = require('app-root-dir').get();
+    this.desktopRepo = require( this.rootPath +
+      '/DataSource/Repository/DesktopRepository.js');
+    this.laptopRepo = require( this.rootPath +
+      '/DataSource/Repository/LaptopRepository.js');
+    this.monitorRepo = require( this.rootPath +
+      '/DataSource/Repository/MonitorRepository.js');
+    this.tabletRepo = require( this.rootPath +
+      '/DataSource/Repository/TabletRepository.js');
+    this.tvRepo = require( this.rootPath +
+      '/DataSource/Repository/TVRepository.js');
+    this.userRepo = require(this.rootPath +
+      '/DataSource/Repository/UserRepository.js');
+  }
   processRegistration(req, res) {
     let userData = req.body;
     let password = userData['password'];
@@ -13,9 +25,7 @@ class Controller {
     } else {
       delete userData['confirmPassword'];
       let email = userData['email'];
-      const userRepo = require(rootPath +
-        '/DataSource/Repository/UserRepository.js');
-      userRepo.verifyEmail(email).then( (result) => {
+      this.userRepo.verifyEmail(email).then( (result) => {
         console.log(result);
         if (result.length == 0) {
           console.log('adding new user');
@@ -43,22 +53,12 @@ class Controller {
       });
     }
   }
-  getAllInventoryItems(req, res){
-    const desktopRepo = require( rootPath +
-      '/DataSource/Repository/DesktopRepository.js');
-    const laptopRepo = require( rootPath +
-      '/DataSource/Repository/LaptopRepository.js');
-    const monitorRepo = require( rootPath +
-      '/DataSource/Repository/MonitorRepository.js');
-    const tabletRepo = require( rootPath +
-      '/DataSource/Repository/TabletRepository.js');
-    const tvRepo = require( rootPath +
-      '/DataSource/Repository/TVRepository.js');
-    let laptopItems = laptopRepo.get('*');
-    let desktopItems = desktopRepo.get('*');
-    let monitorItems = monitorRepo.get('*');
-    let tabletItems = tabletRepo.get('*');
-    let tvItems = tvRepo.get('*');
+  getAllInventoryItems(req, res) {
+    let laptopItems = this.laptopRepo.get('*');
+    let desktopItems = this.desktopRepo.get('*');
+    let monitorItems = this.monitorRepo.get('*');
+    let tabletItems = this.tabletRepo.get('*');
+    let tvItems = this.tvRepo.get('*');
     Promise.all([laptopItems, tvItems, monitorItems, tabletItems, desktopItems])
     .then((values) => {
       let allItems = {
