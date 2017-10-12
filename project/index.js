@@ -15,11 +15,14 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 }));
 
 const Controller = require(rootPath + '/Controllers/controller');
-let sess; 
 let controller = new Controller();
 
 // allows use of static pages
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'top',
+  exists: false,
+}));
 
 app.engine('hbs', hbs({extname: 'hbs'}));
 app.set('views', path.join(__dirname, 'public'));
@@ -136,8 +139,6 @@ app.post('/postDesktop', function(req, res) {
 });
 
 app.post('/loginRequest', function(req, res) {
-  sess = req.session;
-
   let data = req.body;
   console.log(data);
   const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');

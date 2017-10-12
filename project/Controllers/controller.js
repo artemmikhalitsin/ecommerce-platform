@@ -91,6 +91,8 @@ class Controller {
         console.log('Duplicate users detected');
         res.redirect('/login');
       } else if (result.length == 1) {
+        console.log('logging in');
+        res.app.session.exist=true;
         console.log('displaying items');
         res.redirect('/getAllInventoryItems');
       }
