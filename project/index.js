@@ -7,7 +7,7 @@ const app = express();
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
-// let cookieParser = require('cookie-parser');
+let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 app.use( bodyParser.json() ); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
@@ -15,11 +15,8 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 }));
 
 const Controller = require(rootPath + '/Controllers/controller');
-<<<<<<< HEAD
 let sess; 
-=======
 let controller = new Controller();
->>>>>>> cf98c4add754baef19e89c2072b9d146fea2e9e6
 
 // allows use of static pages
 app.use(express.static(path.join(__dirname, 'public')));
@@ -56,18 +53,110 @@ app.get('/admin', function(req, res) {
   res.render('admin');
 });
 
+
+// Use  access data from database
+app.get('/testdb', function(req, res) {
+  database('User').select( )
+    .then((customer) => {
+      customer = JSON.stringify(customer);
+      res.render('hbs_test', {body: customer});
+    })
+    .catch((error) => {
+        res.status(500).json({error});
+        return res.send();
+    });
+});
+
+/*
+repos: right ones : w/  modules.export
+import functions
+const userRepo = require('/path/to/userrepo.js')
+userRepo (use the appropriate functions )
+*/
+
 app.get('/getAllInventoryItems', function(req, res) {
-  controller.getAllInventoryItems(req, res);
+  const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
+  const laptopRepo = require(rootPath + '/DataSource/Repository/LaptopRepository.js');
+  const monitorRepo = require(rootPath + '/DataSource/Repository/MonitorRepository.js');
+  const tabletRepo = require(rootPath + '/DataSource/Repository/TabletRepository.js');
+  const tvRepo = require(rootPath + '/DataSource/Repository/TVRepository.js');
+
+  let laptopItems = laptopRepo.get('*');
+  let desktopItems = desktopRepo.get('*');
+  let monitorItems = monitorRepo.get('*');
+  let tabletItems = tabletRepo.get('*');
+  let tvItems = tvRepo.get('*');
+  Promise.all([laptopItems, tvItems, monitorItems, tabletItems, desktopItems])
+  .then((values) => {
+    let allItems = {
+      laptops: values[0],
+      tvs: values[1],
+      mons: values[2],
+      tabs: values[3],
+      desks: values[4],
+    };
+    let items = JSON.stringify(allItems);
+    res.render('inventory2', {items: items});
+  }).catch((error) => {
+ console.log(error);
+});
+});
+
+app.get('/users', function(req, res) {
+  const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
+  userRepo.get().then((users) => {
+    console.log(users);
+    res.render('users', {users: users});
+  })
+  .catch((err) => {
+    console.log(err);
+    res.send(err);
+  });
 });
 
 // MOVE TO CONTROLLER WHEN IT'S THERE
 app.post('/registrationRequest', function(req, res) {
-  controller.registrationRequest(req, res);
+  let controller = new Controller();
+  controller.processRegistration(req, res);
+});
+
+app.post('/postDesktop', function(req, res) {
+  console.log('starting');
+  let desktop = req.body;
+  const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
+  console.log('fetching data...');
+  desktopRepo.save(desktop)
+             .then((result) => {
+              res.redirect('/addItem');
+           })
+            .catch(function(e) {
+              console.log('error inserting to Database');
+              res.redirect('/login');
+            });
 });
 
 app.post('/loginRequest', function(req, res) {
-  controller.loginRequest(req, res);
+  sess = req.session;
+
+  let data = req.body;
+  console.log(data);
+  const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
+  userRepo.authenticate(data).then((result) => {
+    console.log('type of '+ result + ' is ' + typeof(result));
+    if (result.length <= 0) {
+      console.log('Invalid username or password.');
+      res.redirect('/login');
+    } else if (result.length > 1) {
+      console.log('Duplicate users detected');
+      res.redirect('/login');
+    } else if (result.length == 1) {
+      sess.email = data.email;
+      console.log('displaying items');
+      res.redirect('/getAllInventoryItems');
+    }
+  });
 });
+
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');
