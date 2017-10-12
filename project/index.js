@@ -22,6 +22,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'top',
   exists: false,
+  resave: true,
+  saveUninitialized: true,
 }));
 
 app.engine('hbs', hbs({extname: 'hbs'}));
@@ -78,86 +80,17 @@ userRepo (use the appropriate functions )
 */
 
 app.get('/getAllInventoryItems', function(req, res) {
-  const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
-  const laptopRepo = require(rootPath + '/DataSource/Repository/LaptopRepository.js');
-  const monitorRepo = require(rootPath + '/DataSource/Repository/MonitorRepository.js');
-  const tabletRepo = require(rootPath + '/DataSource/Repository/TabletRepository.js');
-  const tvRepo = require(rootPath + '/DataSource/Repository/TVRepository.js');
-
-  let laptopItems = laptopRepo.get('*');
-  let desktopItems = desktopRepo.get('*');
-  let monitorItems = monitorRepo.get('*');
-  let tabletItems = tabletRepo.get('*');
-  let tvItems = tvRepo.get('*');
-  Promise.all([laptopItems, tvItems, monitorItems, tabletItems, desktopItems])
-  .then((values) => {
-    let allItems = {
-      laptops: values[0],
-      tvs: values[1],
-      mons: values[2],
-      tabs: values[3],
-      desks: values[4],
-    };
-    let items = JSON.stringify(allItems);
-    res.render('inventory2', {items: items});
-  }).catch((error) => {
- console.log(error);
-});
-});
-
-app.get('/users', function(req, res) {
-  const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
-  userRepo.get().then((users) => {
-    console.log(users);
-    res.render('users', {users: users});
-  })
-  .catch((err) => {
-    console.log(err);
-    res.send(err);
-  });
+  controller.getAllInventoryItems(req, res);
 });
 
 // MOVE TO CONTROLLER WHEN IT'S THERE
 app.post('/registrationRequest', function(req, res) {
-  let controller = new Controller();
-  controller.processRegistration(req, res);
-});
-
-app.post('/postDesktop', function(req, res) {
-  console.log('starting');
-  let desktop = req.body;
-  const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
-  console.log('fetching data...');
-  desktopRepo.save(desktop)
-             .then((result) => {
-              res.redirect('/addItem');
-           })
-            .catch(function(e) {
-              console.log('error inserting to Database');
-              res.redirect('/login');
-            });
+  controller.registrationRequest(req, res);
 });
 
 app.post('/loginRequest', function(req, res) {
-  let data = req.body;
-  console.log(data);
-  const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
-  userRepo.authenticate(data).then((result) => {
-    console.log('type of '+ result + ' is ' + typeof(result));
-    if (result.length <= 0) {
-      console.log('Invalid username or password.');
-      res.redirect('/login');
-    } else if (result.length > 1) {
-      console.log('Duplicate users detected');
-      res.redirect('/login');
-    } else if (result.length == 1) {
-      sess.email = data.email;
-      console.log('displaying items');
-      res.redirect('/getAllInventoryItems');
-    }
-  });
+  controller.loginRequest(req, res);
 });
-
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');
