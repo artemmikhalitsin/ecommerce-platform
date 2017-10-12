@@ -10,7 +10,7 @@
     "rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
     "make-seed": "knex seed:make",
-    "start": "nodemon index.js"
+    "start": "nodemon -L index.js"
   },
   "keywords": [],
   "author": "",
