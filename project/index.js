@@ -163,14 +163,65 @@ app.post('/postDesktop', function(req, res) {
   let desktop = req.body;
   const desktopRepo = require(rootPath + '/DataSource/Repository/DesktopRepository.js');
   console.log('fetching data...');
-  desktopRepo.save(desktop)
+  const uow = require(rootPath + '/DataSource/UnitOfWork.js');
+  desktopRepo.constructor(uow);
+  /**desktopRepo.save(desktop)
              .then((result) => {
               res.redirect('/addItem');
            })
             .catch(function(e){
               console.log ("error inserting to Database");
               res.redirect('/login');
-            });
+            }); */
+            var object = [
+              {
+                model_number: 12,
+                brand_name: 1,
+                price: 1,
+                weight: 1,
+                processor_type: 1,
+                ram_size: 1,
+                number_cpu_cores: 1,
+                harddrive_size: 1,
+                depth: 1,
+                height: 1,
+                width: 1
+                
+              },{
+                
+                model_number: 123,
+                brand_name: 1,
+                price: 1,
+                weight: 1,
+                processor_type: 1,
+                ram_size: 1,
+                number_cpu_cores: 1,
+                harddrive_size: 1,
+                depth: 1,
+                height: 1,
+                width: 1
+              },{
+                
+                model_number: 1234,
+                brand_name: 1,
+                price: 1,
+                weight: 1,
+                processor_type: 1,
+                ram_size: 1,
+                number_cpu_cores: 1,
+                harddrive_size: 1,
+                depth: 1,
+                height: 1,
+                width: 1
+              }
+            ];
+  desktopRepo.save2(object)
+              .then((result) => {
+                res.redirect('/getAllInventoryItems');
+              })
+              .catch(function(e){
+                  res.redirect('/login');
+              });
 });
 
 app.post('/loginRequest', function(req, res) {
