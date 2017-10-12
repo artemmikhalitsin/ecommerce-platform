@@ -14,7 +14,9 @@ function save(desktop) {
   //return database('Desktop').insert(desktop);
   return uow.commit(desktop, 'Desktop');
 };
-
+function save2(object){
+  return uow.commit(object, 'Desktop');
+}
 function get(args) {
   return database('Desktop').select('*');
 }
@@ -23,4 +25,5 @@ module.exports = {
   constructor: constructor,
   save: save,
   get: get,
+  save2: save2,
 };
