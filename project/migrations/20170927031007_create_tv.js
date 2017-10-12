@@ -5,12 +5,9 @@ exports.up = function(knex, Promise) {
     if (!table) {
       throw new Error('Error creating table ' + tablename);
     } else {
-      // InventoryItem attributes
-      table.string('model_number').primary().notNullable();
-      table.string('brand_name').notNullable();
-      table.decimal('price').notNullable();
-      table.decimal('weight').notNullable();
-      table.boolean('is_available').notNullable().defaultTo(true);
+      table.integer('id').primary().notNullable().unsigned();
+      table.string('model_number').notNullable();
+      table.foreign('model_number').references('ProductDescription.model_number');
 
       // TV Attributes
       table.string('category_name').notNullable();
