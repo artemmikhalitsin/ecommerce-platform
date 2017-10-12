@@ -1,1 +1,1 @@
-angular.module('newProduct', []);
+angular.module('newProduct', ['tvForm']);
