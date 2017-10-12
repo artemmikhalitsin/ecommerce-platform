@@ -176,17 +176,17 @@ $(document).ready(function() {
       data: mock.laptops,
       columns: [
         {
-            "className":      'details-control',
-            "orderable":      false,
-            "data":           null,
-            "defaultContent": ''
+            'className': 'details-control',
+            'orderable': false,
+            'data': null,
+            'defaultContent': '',
         },
-        { 'data': 'model_number'},
-        { 'data': 'brand_name'},
-        { 'data': 'price'},
-        { 'data': 'weight'},
-        { 'data': 'is_available'},
-      ]
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'is_available'},
+      ],
     });
     openCloseDetails('table_laptops', laptops_table);
 

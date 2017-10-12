@@ -9,7 +9,8 @@
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
-    "make-seed": "knex seed:make"
+    "make-seed": "knex seed:make",
+    "start": "nodemon -L index.js"
   },
   "keywords": [],
   "author": "",
@@ -22,7 +23,8 @@
     "express": "^4.15.4",
     "express-handlebars": "^3.0.0",
     "knex": "^0.13.0",
-    "mysql": "^2.14.1"
+    "mysql": "^2.14.1",
+    "nodemon": "^1.12.1"
   },
   "dependencies": {
     "body-parser": "^1.18.2"
