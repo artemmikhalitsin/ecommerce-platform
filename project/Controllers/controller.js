@@ -14,7 +14,8 @@ class Controller {
     this.userRepo = require(this.rootPath +
       '/DataSource/Repository/UserRepository.js');
   }
-  processRegistration(req, res) {
+
+  registrationRequest(req, res) {
     let userData = req.body;
     let password = userData['password'];
     let confirmPassword = userData['confirmPassword'];
@@ -53,6 +54,7 @@ class Controller {
       });
     }
   }
+
   getAllInventoryItems(req, res) {
     let laptopItems = this.laptopRepo.get('*');
     let desktopItems = this.desktopRepo.get('*');
@@ -72,6 +74,26 @@ class Controller {
       res.render('inventory2', {items: items});
     }).catch((error) => {
       console.log(error);
+    });
+  }
+
+  loginRequest(req, res) {
+    let data = req.body;
+    console.log(data);
+    const userRepo = require(this.rootPath +
+      '/DataSource/Repository/UserRepository.js');
+    userRepo.authenticate(data).then((result) => {
+      console.log('type of '+ result + ' is ' + typeof(result));
+      if (result.length <= 0) {
+        console.log('Invalid username or password.');
+        res.redirect('/login');
+      } else if (result.length > 1) {
+        console.log('Duplicate users detected');
+        res.redirect('/login');
+      } else if (result.length == 1) {
+        console.log('displaying items');
+        res.redirect('/getAllInventoryItems');
+      }
     });
   }
 }
