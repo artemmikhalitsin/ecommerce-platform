@@ -3,7 +3,6 @@ const path = require('path');
 const hbs = require('express-handlebars');
 const session = require('express-session');
 const rootPath = require('app-root-dir').get();
-
 const app = express();
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
@@ -16,6 +15,7 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 }));
 
 const Controller = require(rootPath + '/Controllers/controller');
+let sess; 
 
 // allows use of static pages
 app.use(express.static(path.join(__dirname, 'public')));
@@ -115,54 +115,8 @@ app.get('/users', function(req, res) {
 
 // MOVE TO CONTROLLER WHEN IT'S THERE
 app.post('/registrationRequest', function(req, res) {
-<<<<<<< HEAD
-    let userData = req.body;
-    let password = userData['password'];
-    let confirmPassword = userData['confirmPassword'];
-
-    if (password != confirmPassword) {
-      console.log('password confirmation failed. try again...');
-      res.redirect('/registration');
-    } else {
-      delete userData['confirmPassword'];
-
-      let email = userData['email'];
-
-      const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
-      userRepo.verifyEmail(email).then( (result) => {
-        console.log(result);
-        if (result.length == 0) {
-          console.log('adding new user');
-          if (userData['is_admin'] == 'on') {
-            userData['is_admin'] = true;
-          } else {
-            userData['is_admin'] = false;
-          }
-          console.log(userData);
-          userRepo.save(userData).then( (result) => {
-            console.log('success: ' + result);
-            res.redirect('/login');
-          })
-          .catch( (err) => {
-            console.log('failed: ' + err);
-            res.redirect('/registration');
-          });
-        } else {
-          console.log('Email already exists');
-          res.redirect('/registration');
-        }
-      })
-      .catch( (err) => {
-        console.log('something bad happened');
-      });
-    }
-
-
-    // console.log(asd);
-=======
   let controller = new Controller();
   controller.processRegistration(req, res);
->>>>>>> 60514f7b10f57702f7f49e3e5b828641a4f67a82
 });
 
 app.post('/postDesktop', function(req, res) {
