@@ -15,6 +15,8 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
   extended: false,
 }));
 
+const Controller = require(rootPath + '/Controllers/controller');
+
 // allows use of static pages
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -113,6 +115,7 @@ app.get('/users', function(req, res) {
 
 // MOVE TO CONTROLLER WHEN IT'S THERE
 app.post('/registrationRequest', function(req, res) {
+<<<<<<< HEAD
     let userData = req.body;
     let password = userData['password'];
     let confirmPassword = userData['confirmPassword'];
@@ -156,6 +159,10 @@ app.post('/registrationRequest', function(req, res) {
 
 
     // console.log(asd);
+=======
+  let controller = new Controller();
+  controller.processRegistration(req, res);
+>>>>>>> 60514f7b10f57702f7f49e3e5b828641a4f67a82
 });
 
 app.post('/postDesktop', function(req, res) {
