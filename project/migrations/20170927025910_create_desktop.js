@@ -11,10 +11,9 @@ exports.up = function(knex, Promise) {
       table.foreign('comp_id').references('Computer.comp_id');
       table.string('model_number').notNullable();
       table.foreign('model_number').references('ProductDescription.model_number');
-      // Dimsneions attributes
-      table.decimal('depth').notNullable();
-      table.decimal('height').notNullable();
-      table.decimal('width').notNullable();
+      table.integer('dimension_id').notNullable().unsigned();
+      table.foreign('dimension_id').references('Dimensions.dimension_id');
+
     }
   });
 };
