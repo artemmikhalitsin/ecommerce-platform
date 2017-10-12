@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
-
+const session = require('express-session');
 const rootPath = require('app-root-dir').get();
 
 const app = express();
@@ -120,7 +120,7 @@ app.post('/registrationRequest', function(req, res) {
     if (password != confirmPassword) {
       console.log('password confirmation failed. try again...');
       res.redirect('/registration');
-    }else {
+    } else {
       delete userData['confirmPassword'];
 
       let email = userData['email'];
@@ -132,7 +132,7 @@ app.post('/registrationRequest', function(req, res) {
           console.log('adding new user');
           if (userData['is_admin'] == 'on') {
             userData['is_admin'] = true;
-          }else {
+          } else {
             userData['is_admin'] = false;
           }
           console.log(userData);
@@ -144,7 +144,7 @@ app.post('/registrationRequest', function(req, res) {
             console.log('failed: ' + err);
             res.redirect('/registration');
           });
-        }else {
+        } else {
           console.log('Email already exists');
           res.redirect('/registration');
         }
@@ -155,7 +155,7 @@ app.post('/registrationRequest', function(req, res) {
     }
 
 
-    //console.log(asd);
+    // console.log(asd);
 });
 
 app.post('/postDesktop', function(req, res) {
@@ -167,8 +167,8 @@ app.post('/postDesktop', function(req, res) {
              .then((result) => {
               res.redirect('/addItem');
            })
-            .catch(function(e){
-              console.log ("error inserting to Database");
+            .catch(function(e) {
+              console.log('error inserting to Database');
               res.redirect('/login');
             });
 });
