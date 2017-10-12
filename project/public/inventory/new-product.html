@@ -1,0 +1,24 @@
+<html ng-app="newProduct">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js" crossorigin="anonymous"></script>
+    <script src="new-product.module.js"></script>
+
+    <script src="product-forms/tv-form.component.js"></script>
+  </head>
+  <body>
+    <h1>Add a product</h1>
+    <label> Product type:
+      <select>
+        <option value="tv">TV</option>
+        <option value="monitor">Monitor</option>
+        <option value="laptop">Laptop</option>
+        <option value="desktop">Desktop</option>
+        <option value="tablet">Tablet</option>
+      </select>
+      <tv-form></tv-form>
+      <p>Here we'll have input fields</p>
+      <ng-outlet></ng-outlet>
+      <p>Here we'll have a list of products added</p>
+    </label>
+  </body>
+</html>
