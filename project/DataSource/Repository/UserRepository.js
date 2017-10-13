@@ -6,7 +6,7 @@ const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
 
 function save(user) {
-  //console.log(user);
+  // console.log(user);
   return database('User').insert(user);
 };
 
@@ -21,9 +21,9 @@ function authenticate(user) {
   });
 }
 
-function verifyEmail(email){
+function verifyEmail(email) {
   return database('User').where({
-    email: email
+    email: email,
   });
 }
 
