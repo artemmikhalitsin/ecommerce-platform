@@ -1,4 +1,4 @@
-const tvs = [{
+const tvs = [/*{
   'model_number': '357426916-1',
   'brand_name': 'lacus at turpis donec posuere metus vitae ipsum aliquam non mauris morbi non lectus aliquam sit amet',
   'price': '$4.34',
@@ -118,7 +118,7 @@ const tvs = [{
   'depth': 40,
   'height': 24,
   'width': 7,
-}];
+}*/];
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
   return knex('TV').del()

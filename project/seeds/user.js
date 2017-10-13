@@ -1,4 +1,4 @@
-const users = [{
+const users = [/*{
   'first_name': 'Giavani',
   'last_name': 'Linfitt',
   'email': 'glinfitt0@ihg.com',
@@ -237,7 +237,8 @@ const users = [{
   'full_address': '41 Arkansas Junction',
   'is_admin': false,
   'phone_number': '5869943678',
-}];
+}
+*/];
 
 
 exports.seed = function(knex, Promise) {

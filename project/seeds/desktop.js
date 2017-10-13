@@ -1,4 +1,4 @@
-const desktops = [{
+const desktops = [/*{
   'model_number': '221872712-9',
   'brand_name': 'sit amet eros',
   'price': 112.34,
@@ -118,7 +118,8 @@ const desktops = [{
   'depth': 127,
   'height': 226,
   'width': 284,
-}];
+}
+*/];
 
 
 exports.seed = function(knex, Promise) {
