@@ -5,7 +5,11 @@
     <script type="text/javascript" src="inventory/new-product.module.js"></script>
 
     <script type="text/javascript" src="inventory/product-forms/tv-form.module.js"></script>
-    <script type="text/javascript" src="inventory/product-forms/tv-form.component.js"></script>
+    <script type="text/javascript" src="inventory/product-forms/monitor-form.module.js"></script>
+    <script type="text/javascript" src="inventory/product-forms/laptop-form.module.js"></script>
+    <script type="text/javascript" src="inventory/product-forms/desktop-form.module.js"></script>
+    <script type="text/javascript" src="inventory/product-forms/tablet-form.module.js"></script>
+
   </head>
   <body ng-controller="FormController">
     <h1>Add a product</h1>
@@ -20,7 +24,14 @@
       </select>
     </label>
 
-    <tv-form ng-show="selected=='tv'"></tv-form>
-    <p>Here we'll have a list of products added</p>
+    <form ng-model="formData">
+      <laptop-form ng-show="selected=='laptop'"></laptop-form>
+      <tablet-form ng-show="selected=='tablet'"></tablet-form>
+      <desktop-form ng-show="selected=='desktop'"></desktop-form>
+      <tv-form ng-show="selected=='tv'"></tv-form>
+      <monitor-form ng-show="selected=='monitor'"></monitor-form>
+    </form>
+
+    <button type="button" ng-click="submit()">Click</button>
   </body>
 </html>
