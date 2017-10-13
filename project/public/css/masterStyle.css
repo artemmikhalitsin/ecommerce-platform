@@ -103,13 +103,13 @@ h1 small{ font-size: 24px; display: block; color: #636363; }
   width: 400px;
   background: #edeff1;
   margin: 0px auto;
-  padding:15px 30px;
+  padding:50px;
   border-radius: 10px;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
 }
 
-input[type="text"], input[type="number"]{
+input[type="text"], input[type="number"], input[type="email"], input[type="password"]{
   display: block;
   width: 250px;
   height: 20px;
@@ -154,4 +154,10 @@ input[type="submit"]:hover{
 	font: 14px "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;
 	color: orange; 
 	padding:70px;
+}
+
+.pageFooter{
+	background-image: url(../images/building.png); 
+	height:250px; 
+	width:100%;
 }
