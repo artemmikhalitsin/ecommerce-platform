@@ -101,6 +101,11 @@ app.post('/loginRequest', function(req, res) {
    controller.loginRequest(req, res);
   });
 
+  app.get('/admin', function(req, res) {
+    res.render('admin');
+  });
+
+
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');
 });
