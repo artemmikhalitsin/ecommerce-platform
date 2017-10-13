@@ -1,3 +1,5 @@
+"use strict";
+
 Class User{
     constructor(email, name, address, password, isAdmin){
         this.email = email;
