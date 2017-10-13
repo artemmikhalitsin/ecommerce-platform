@@ -10,12 +10,8 @@ function constructor(uow){
   this.uow = uow;
 }
 
-function save(desktop) {
-  //return database('Desktop').insert(desktop);
-  return uow.commit(desktop, 'Desktop');
-};
-function save2(object){
-  return uow.commitAll(object);
+function save(object){
+  return uow.commit(object);
 }
 function get(args) {
   return database('Desktop').select('*');
@@ -25,5 +21,4 @@ module.exports = {
   constructor: constructor,
   save: save,
   get: get,
-  save2: save2,
 };
