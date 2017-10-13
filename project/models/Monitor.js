@@ -1,4 +1,4 @@
-Class Monitor extends InventoryItem{
+Class Monitor extends ProductDescription{
     constructor(display_size, touchescreen, price, weight, brand_name, model_number){
 		super(price, weight, brand_name, model_number);
         this.display_size = display_size;

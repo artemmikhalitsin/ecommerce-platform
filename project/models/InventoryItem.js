@@ -1,38 +1,30 @@
-Class InventoryItem{
-    constructor(price, weight, brand_name, model_number){
-        this.price = price;
-        this.weight = weight;
-		this.brand_name = brand_name;
-		this.model_number = model_number;
+Class Dimensions{
+    constructor(depth, height, width){
+        this.depth = depth;
+        this.height = height;
+		this.width = width;
     }
 }
 
-get_price(){
-  return this.price;
+get_depth(){
+  return this.depth;
 }
-get_weight(){
-   return this.weight;
+get_height(){
+   return this.height;
 }
-get_brand_name(){
-  return this.brand_name;
-}
-get_model_number(){
-  return this.model_number;
+get_width(){
+   return this.width;
 }
 
 
-set_price(price){
-  this.price = price;
+set_depth(depth){
+  this.depth= depth;
 }
-set_weight(weight){
-  this.weight = weight;
+set_height(){
+  this.height = height;
 }
-set_brand_name(brand_name){
-  this.brand_name = brand_name;
-}
-set_model_number(model_number){
-  this.model_number = model_number;
+set_width(){
+  this.width = width;
 }
 
-
-module.exports = InventoryItem;
+module.exports = Dimensions;

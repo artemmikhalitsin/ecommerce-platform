@@ -50,6 +50,10 @@ app.get('/admin', function(req, res) {
   res.render('admin');
 });
 
+app.get('/navbar_test', function(req, res) {
+  res.render('navbar_test');
+});
+
 
 // Use  access data from database
 app.get('/testdb', function(req, res) {

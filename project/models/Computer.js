@@ -1,4 +1,4 @@
-Class Computer extends InventoryItem{
+Class Computer extends ProductDescription{
     constructor(processor_type, ram_size, number_cpu_cores, harddrive_size, price, weight, brand_name, model_number){
 		super(price, weight, brand_name, model_number);
         this.processor_type = processor_type;

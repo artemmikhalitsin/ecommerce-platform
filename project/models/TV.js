@@ -1,4 +1,4 @@
-Class TV extends InventoryItem{
+Class TV extends ProductDescription{
     constructor(dimensions, category_name, price, weight, brand_name, model_number){
 		super(price, weight, brand_name, model_number);
         this.dimensions = dimensions;
