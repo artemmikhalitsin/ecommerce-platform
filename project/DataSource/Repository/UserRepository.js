@@ -27,15 +27,6 @@ function verifyEmail(email) {
   });
 }
 
-
-function getAdmin(user) {
-  return database('User').select(
-  'is_admin'
-  ).where({
-    email: user.email,
-  });
-}
-
 module.exports = {
   save: save,
   get: get,
