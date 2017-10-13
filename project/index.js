@@ -1,13 +1,12 @@
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
-
 const rootPath = require('app-root-dir').get();
-
 const app = express();
-const environment = process.env.NODE_ENV || 'development';
-const configuration = require('./knexfile')[environment];
-const database = require('knex')(configuration);
+
+// const environment = process.env.NODE_ENV || 'development';
+// const configuration = require('./knexfile')[environment];
+// const database = require('knex')(configuration);
 // let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 app.use( bodyParser.json() ); // to support JSON-encoded bodies
