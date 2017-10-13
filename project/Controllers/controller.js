@@ -56,8 +56,8 @@ class Controller {
     }
   }
 
-  getAllInventoryItems(req, res) {
-    console.log(req.session.exists);
+  getAllInventoryItems(req, res, done) {
+    // console.log(req.session.exists);
     let laptopItems = this.laptopRepo.get('*');
     let desktopItems = this.desktopRepo.get('*');
     let monitorItems = this.monitorRepo.get('*');
@@ -73,7 +73,7 @@ class Controller {
         desks: values[4],
       };
       let items = JSON.stringify(allItems);
-      //res.sess 
+      // res.sess 
       res.render('inventory2', {items: items});
     }).catch((error) => {
       console.log(error);
@@ -96,7 +96,7 @@ class Controller {
       } else if (result.length == 1) {
         console.log('logging in');
         req.session.exists=true;
-        console.log(req.session.exists);
+        // console.log(req.session.exists);
         console.log('displaying items');
         req.session.save(function(err) {
             if (err) console.error(err);
