@@ -1,4 +1,5 @@
-const tablets = [{
+const tablets = [
+  /*{
   'model_number': '296354675-0',
   'brand_name': 'in magna bibendum',
   'price': 480.97,
@@ -158,7 +159,8 @@ const tablets = [{
   'depth': 270,
   'height': 217,
   'width': 222,
-}];
+}
+*/];
 
 
 exports.seed = function(knex, Promise) {
