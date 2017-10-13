@@ -3,23 +3,35 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js" crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="inventory/new-product.module.js"></script>
+
     <script type="text/javascript" src="inventory/product-forms/tv-form.module.js"></script>
-    <script type="text/javascript" src="inventory/product-forms/tv-form.component.js"></script>
+    <script type="text/javascript" src="inventory/product-forms/monitor-form.module.js"></script>
+    <script type="text/javascript" src="inventory/product-forms/laptop-form.module.js"></script>
+    <script type="text/javascript" src="inventory/product-forms/desktop-form.module.js"></script>
+    <script type="text/javascript" src="inventory/product-forms/tablet-form.module.js"></script>
+
   </head>
-  <body>
+  <body ng-controller="FormController">
     <h1>Add a product</h1>
+
     <label> Product type:
-      <select>
+      <select ng-model="selected">
         <option value="tv">TV</option>
         <option value="monitor">Monitor</option>
         <option value="laptop">Laptop</option>
         <option value="desktop">Desktop</option>
         <option value="tablet">Tablet</option>
       </select>
-      <tv-form></tv-form>
-      <p>Here we'll have input fields</p>
-      <ng-outlet></ng-outlet>
-      <p>Here we'll have a list of products added</p>
     </label>
+
+    <form ng-model="formData">
+      <laptop-form ng-show="selected=='laptop'"></laptop-form>
+      <tablet-form ng-show="selected=='tablet'"></tablet-form>
+      <desktop-form ng-show="selected=='desktop'"></desktop-form>
+      <tv-form ng-show="selected=='tv'"></tv-form>
+      <monitor-form ng-show="selected=='monitor'"></monitor-form>
+    </form>
+
+    <button type="button" ng-click="submit()">Click</button>
   </body>
 </html>

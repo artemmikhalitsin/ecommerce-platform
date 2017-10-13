@@ -5,7 +5,6 @@ exports.up = function(knex, Promise) {
     if (!table) {
       throw new Error('Error creating table ' + tablename);
     } else {
-
       table.increments('comp_id').primary().notNullable().unsigned();
 //      table.dropForeign('productdescription_id', productdescription_id);
       // Computer attributes
@@ -13,7 +12,6 @@ exports.up = function(knex, Promise) {
       table.integer('ram_size').unsigned().notNullable();
       table.integer('number_cpu_cores').unsigned().notNullable();
       table.integer('harddrive_size').unsigned().notNullable();
-
     }
   });
 };

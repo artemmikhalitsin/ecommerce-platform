@@ -1,15 +1,14 @@
 // Event listener for opening and closing details of a row
-function openCloseDetails(table_id, tableObject){
-  $('#' + table_id + ' tbody').on('click', 'td.details-control', function () {
-      var tr = $(this).closest('tr');
-      var row = tableObject.row( tr );
+function openCloseDetails(table_id, tableObject) {
+  $('#' + table_id + ' tbody').on('click', 'td.details-control', function() {
+      let tr = $(this).closest('tr');
+      let row = tableObject.row( tr );
 
       if ( row.child.isShown() ) {
           // This row is already open - close it
           row.child.hide();
           tr.removeClass('shown');
-      }
-      else {
+      } else {
           // Open this row
           row.child( formatlaptopsTable(row.data()) ).show();
           tr.addClass('shown');
@@ -18,7 +17,7 @@ function openCloseDetails(table_id, tableObject){
 }
 
 // Function used to populate the child rows for laptops table
-function formatlaptopsTable ( data ) {
+function formatlaptopsTable( data ) {
   return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
       '<tr>'+
           '<td>Processor Type:</td>'+
@@ -60,7 +59,7 @@ function formatlaptopsTable ( data ) {
 }
 
 // Function used to populate the child rows for desktop table
-function formatDesktopsTable ( data ) {
+function formatDesktopsTable( data ) {
   return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
       '<tr>'+
           '<td>Processor Type:</td>'+
@@ -94,7 +93,7 @@ function formatDesktopsTable ( data ) {
 }
 
 // Function used to populate the child rows for TVs and monitors tables
-function formatTVsAndMonitorsTable ( data ) {
+function formatTVsAndMonitorsTable( data ) {
   return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
       '<tr>'+
           '<td>Height:</td>'+
@@ -112,7 +111,7 @@ function formatTVsAndMonitorsTable ( data ) {
 }
 
 // Function used to populate the child rows for tablets table
-function formatTabletsTable ( data ) {
+function formatTabletsTable( data ) {
   return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
       '<tr>'+
           '<td>Processor Type:</td>'+
@@ -183,17 +182,17 @@ $(document).ready(function() {
       data: mock.desks,
       columns: [
         {
-            "className":      'details-control',
-            "orderable":      false,
-            "data":           null,
-            "defaultContent": ''
+            'className': 'details-control',
+            'orderable': false,
+            'data': null,
+            'defaultContent': '',
         },
-        { 'data': 'model_number'},
-        { 'data': 'brand_name'},
-        { 'data': 'price'},
-        { 'data': 'weight'},
-        { 'data': 'is_available'},
-      ]
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'is_available'},
+      ],
     });
     openCloseDetails('table_desktops', desktops_table);
 
@@ -201,18 +200,18 @@ $(document).ready(function() {
       data: mock.tvs,
       columns: [
         {
-            "className":      'details-control',
-            "orderable":      false,
-            "data":           null,
-            "defaultContent": ''
+            'className': 'details-control',
+            'orderable': false,
+            'data': null,
+            'defaultContent': '',
         },
-        { 'data': 'model_number'},
-        { 'data': 'brand_name'},
-        { 'data': 'price'},
-        { 'data': 'weight'},
-        { 'data': 'category_name'},
-        { 'data': 'is_available'},
-      ]
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'category_name'},
+        {'data': 'is_available'},
+      ],
     });
     openCloseDetails('table_tvs', tvs_table);
 
@@ -220,17 +219,17 @@ $(document).ready(function() {
       data: mock.mons,
       columns: [
         {
-            "className":      'details-control',
-            "orderable":      false,
-            "data":           null,
-            "defaultContent": ''
+            'className': 'details-control',
+            'orderable': false,
+            'data': null,
+            'defaultContent': '',
         },
-        { 'data': 'model_number'},
-        { 'data': 'brand_name'},
-        { 'data': 'price'},
-        { 'data': 'weight'},
-        { 'data': 'is_available'},
-      ]
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'is_available'},
+      ],
     });
     openCloseDetails('table_monitors', monitors_table);
 
@@ -238,17 +237,17 @@ $(document).ready(function() {
       data: mock.tabs,
       columns: [
         {
-            "className":      'details-control',
-            "orderable":      false,
-            "data":           null,
-            "defaultContent": ''
+            'className': 'details-control',
+            'orderable': false,
+            'data': null,
+            'defaultContent': '',
         },
-        { 'data': 'model_number'},
-        { 'data': 'brand_name'},
-        { 'data': 'price'},
-        { 'data': 'weight'},
-        { 'data': 'is_availble'},
-      ]
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
+        {'data': 'price'},
+        {'data': 'weight'},
+        {'data': 'is_availble'},
+      ],
     });
     openCloseDetails('table_tablets', tablets_table);
 });

@@ -10,7 +10,8 @@
     "rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
     "make-seed": "knex seed:make",
-    "start": "nodemon -L index.js"
+    "start": "nodemon -L index.js",
+    "conc": "node node_modules/concurrently/src/main.js -c \"bgBlue,bgRed\" -n \"Express,ESLint\" \"nodemon -L index.js\" \"nodemon -L node_modules/eslint/bin/eslint.js .\""
   },
   "keywords": [],
   "author": "",
@@ -28,7 +29,11 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
+<<<<<<< HEAD
     "express-session": "^1.15.6"
+=======
+    "concurrently": "^3.5.0"
+>>>>>>> 54c00cf894df0546cf280031018f1ced6fb023eb
   },
   "description": ""
 }
