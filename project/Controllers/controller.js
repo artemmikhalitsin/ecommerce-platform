@@ -36,7 +36,7 @@ class Controller {
             userData['is_admin'] = false;
           }
           console.log(userData);
-          userRepo.save(userData).then( (result) => {
+          this.userRepo.save(userData).then( (result) => {
             console.log('success: ' + result);
             res.redirect('/login');
           })
@@ -50,12 +50,14 @@ class Controller {
         }
       })
       .catch( (err) => {
+        console.log(err);
         console.log('something bad happened');
       });
     }
   }
 
-  getAllInventoryItems(req, res) {
+  getAllInventoryItems(req, res, done) {
+    // console.log(req.session.exists);
     let laptopItems = this.laptopRepo.get('*');
     let desktopItems = this.desktopRepo.get('*');
     let monitorItems = this.monitorRepo.get('*');
@@ -71,6 +73,7 @@ class Controller {
         desks: values[4],
       };
       let items = JSON.stringify(allItems);
+      // res.sess 
       res.render('inventory2', {items: items});
     }).catch((error) => {
       console.log(error);
@@ -91,8 +94,14 @@ class Controller {
         console.log('Duplicate users detected');
         res.redirect('/login');
       } else if (result.length == 1) {
+        console.log('logging in');
+        req.session.exists=true;
+        // console.log(req.session.exists);
         console.log('displaying items');
-        res.redirect('/getAllInventoryItems');
+        req.session.save(function(err) {
+            if (err) console.error(err);
+            res.redirect('/getAllInventoryItems');
+        });
       }
     });
   }
