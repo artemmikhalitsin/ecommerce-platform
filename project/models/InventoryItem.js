@@ -1,30 +1,29 @@
-Class Dimensions{
-    constructor(depth, height, width){
+class Dimensions {
+    constructor(depth, height, width) {
         this.depth = depth;
         this.height = height;
-		this.width = width;
+        this.width = width;
     }
-}
 
-get_depth(){
-  return this.depth;
-}
-get_height(){
-   return this.height;
-}
-get_width(){
-   return this.width;
-}
+    getDepth() {
+      return this.depth;
+    }
+    getHeight() {
+       return this.height;
+    }
+    getWidth() {
+       return this.width;
+    }
 
-
-set_depth(depth){
-  this.depth= depth;
-}
-set_height(){
-  this.height = height;
-}
-set_width(){
-  this.width = width;
+    setDepth(depth) {
+      this.depth= depth;
+    }
+    setHeight() {
+      this.height = height;
+    }
+    setWidth() {
+      this.width = width;
+    }
 }
 
 module.exports = Dimensions;
