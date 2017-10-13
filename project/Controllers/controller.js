@@ -83,9 +83,7 @@ class Controller {
   loginRequest(req, res) {
     let data = req.body;
     console.log(data);
-    const userRepo = require(this.rootPath +
-      '/DataSource/Repository/UserRepository.js');
-    userRepo.authenticate(data).then((result) => {
+    this.userRepo.authenticate(data).then((result) => {
       console.log('type of '+ result + ' is ' + typeof(result));
       if (result.length <= 0) {
         console.log('Invalid username or password.');
@@ -94,8 +92,14 @@ class Controller {
         console.log('Duplicate users detected');
         res.redirect('/login');
       } else if (result.length == 1) {
-        console.log('logging in');
+        console.log(result);
         req.session.exists=true;
+        if (this.userRepo.getAdmin(data)) {
+          console.log('You an admin broo');
+          req.session.isAdmin=true;
+        } else {
+          console.log('user not admin');
+        }
         // console.log(req.session.exists);
         console.log('displaying items');
         req.session.save(function(err) {
