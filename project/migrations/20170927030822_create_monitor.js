@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
       throw new Error('Error creating table ' + tablename);
     } else {
 
-      table.integer('id').primary().notNullable().unsigned();
+      table.increments('id').primary().notNullable().unsigned();
       table.string('model_number').notNullable();
       table.foreign('model_number').references('ProductDescription.model_number');
 

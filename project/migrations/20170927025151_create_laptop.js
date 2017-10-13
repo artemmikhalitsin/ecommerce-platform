@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
       throw new Error('Error creating table ' + tablename);
     } else {
       // InventoryItem attributes
-      table.integer('id').primary().notNullable().unsigned();
+      table.increments('id').primary().notNullable().unsigned();
       table.integer('comp_id').notNullable().unsigned();
       table.foreign('comp_id').references('Computer.comp_id');
       table.string('model_number').notNullable();

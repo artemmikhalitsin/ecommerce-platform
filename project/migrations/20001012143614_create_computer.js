@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
       throw new Error('Error creating table ' + tablename);
     } else {
 
-      table.integer('comp_id').primary().notNullable().unsigned();
+      table.increments('comp_id').primary().notNullable().unsigned();
 //      table.dropForeign('productdescription_id', productdescription_id);
       // Computer attributes
       table.string('processor_type').notNullable();

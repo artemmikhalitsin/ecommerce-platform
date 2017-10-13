@@ -220,6 +220,7 @@ app.post('/postDesktop', function(req, res) {
                 res.redirect('/getAllInventoryItems');
               })
               .catch(function(e){
+                console.log(e);
                   res.redirect('/login');
               });
 });
