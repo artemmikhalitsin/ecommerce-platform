@@ -79,6 +79,10 @@ app.get('/logout', function(req, res) {
   }
 });
 
+app.get('/navbar_test', function(req, res) {
+  res.render('navbar_test');
+});
+
 app.get('/getAllInventoryItems', function(req, res) {
   if (req.session.exists) {
     controller.getAllInventoryItems(req, res);

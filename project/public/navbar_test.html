@@ -1,0 +1,138 @@
+<html>
+<head>
+<style>
+
+
+
+/* html elements */
+h1 { font-family:"Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif; text-align: center; color: #000; font-size:60px; letter-spacing:-1px; }
+h1 small{ font-size: 24px; display: block; color: #636363; }
+
+/*classes*/
+.break { clear:both; }
+
+/* wapper */
+#wrapper { width:980px; margin:40px auto; }
+
+/* content */
+#content { margin-top:50px; }
+#content p { font: 14px "Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif; color:#333333; line-height:18px; margin:15px auto; width:800px; }
+#content p a { color:#0088CC; text-decoration:none; }
+#content p a:hover { text-decoration:underline; }
+
+/* navbar */
+#menuNav { 
+	padding:0px;
+	margin:60px 0; 
+	list-style:none;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
+	letter-spacing:-0.5px; 
+	font-size:13px;
+    text-shadow: 0 -1px 3px #202020;
+    width:980px; 
+    height:34px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    border-radius:4px;
+    -moz-box-shadow: 0px 3px 3px #cecece;
+    -webkit-box-shadow: 0px 3px 3px #cecece;
+    box-shadow: 0 3px 4px #8b8b8b;
+}
+
+#menuNav li { display:block; float:left; border-right:1px solid #5d5d5d; border-left:1px solid #929292; width: 161.67px; height:34px; border-bottom:1px solid #575757; border-top:1px solid #797979;
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #787878), 
+    	color-stop(0.5, #5E5E5E), color-stop(0.51, #707070), color-stop(1, #838383));
+    background-image: -moz-linear-gradient(center bottom, #787878 0%, #5E5E5E 50%, #707070 51%, #838383 100%);
+    background-color:#5f5f5f;
+}
+
+#menuNav li:hover {
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #3F3F3F), color-stop(0.5, #383838), color-stop(0.51, #434343), color-stop(1, #555555));
+    background-image: -moz-linear-gradient(center bottom, #3F3F3F 0%, #383838 50%, #434343 51%, #555555 100% );
+    background-color:#383838;
+    -moz-box-shadow: inset 0 0 5px 5px #535353;
+    -webkit-box-shadow: inset 0 0 5px 5px #535353;
+    box-shadow: inset 0 0 5px 5px #535353;
+}
+
+#menuNav li:active {
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #3F3F3F), color-stop(0.5, #383838), color-stop(0.51, #434343), color-stop(1, #555555));
+    background-image: -moz-linear-gradient(center bottom, #3F3F3F 0%, #383838 50%, #434343 51%, #555555 100% );
+    background-color:#383838;
+    -moz-box-shadow: inset 0 1px 2px 2px #000;
+    -webkit-box-shadow: inset 0 1px 2px 2px #000;
+    box-shadow: inset 0 1px 2px 2px #000;
+}
+
+#menuNav li a { 
+	color:white; 
+	text-decoration:none; 
+	text-align:center; 
+	display:block; 
+	line-height:34px; 
+	outline:none; 
+}
+
+#menuNav li:first-child {
+    -moz-border-radius:4px 0 0 4px;
+    -webkit-border-radius:4px 0 0 4px;
+    border-radius:4px 0 0 4px;  
+    border-left:none;
+}
+
+#menuNav li:last-child {
+    -moz-border-radius:0px 4px 4px 0;
+    -webkit-border-radius:0px 4px 4px 0;
+    border-radius:0px 4px 4px 0;  
+    border-left:none;
+}
+
+/* logo on Navbar */
+#menuNav li:first-child a img {
+   vertical-align:middle; margin-top:-2px;
+}
+
+/* Fade in animation */
+@-webkit-keyframes showMenu {
+    from { opacity: 0; top:-20px; }
+    to   { opacity: 1; }
+}
+
+#menuNav {
+     -webkit-animation: showMenu 1.5s; position:relative;
+}
+
+</style>
+
+</head>
+
+<body>
+ <div id="wrapper">
+    <h1>The really cool system.<small>The really cool navigation Bar.</small></h1>
+    <div id="content">
+        <nav>
+            <ul id="menuNav">
+                <li><a href="http://192.168.99.100" title="Home">Home</a></li>
+                <li><a href="http://192.168.99.100/getAllInventoryItems" title="inventory"> View Inventory</a></li>
+                <li><a href="http://192.168.99.100/addItem" title="modify_inventory">Modify Inventory</a></li>
+                <li><a href="#" title="delete_item">Delete Item</a></li>
+                <li><a href="#" title="modify_item">Modify Item</a></li>
+                 <li><a href="#" title="add_admin_account">Add Admin Account</a></li>
+            </ul>
+        </nav>
+		
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque semper, orci vel aliquam consectetur, risus justo interdum nunc, quis vestibulum sapien diam ut tortor. Praesent sed leo elementum, euismod velit eget, accumsan nisi. Phasellus lacinia aliquet tellus nec dapibus. Sed eget sapien non tellus cursus sodales eu sit amet orci. Duis elementum convallis eros non mattis. Quisque nec dui vitae sapien vulputate tempus vitae ac dui. Pellentesque odio ante, convallis eget tellus ut, suscipit pharetra nibh. In tempor faucibus consectetur. Maecenas venenatis erat blandit, sagittis nisl ut, dapibus urna. Aenean ultricies posuere mauris dignissim faucibus. Integer ac tincidunt nunc. Praesent ut tincidunt turpis.
+
+Nunc at est nibh. Pellentesque ac velit sollicitudin, hendrerit velit quis, dictum risus. Donec suscipit, purus sed cursus ullamcorper, lacus enim ultricies neque, ut ullamcorper nibh erat at justo. Vestibulum feugiat augue nec orci feugiat aliquam. Etiam a efficitur libero. Suspendisse pharetra pellentesque ipsum, in porta quam pretium in. Cras a ipsum nec mi ultricies sodales posuere ac neque. Sed scelerisque mauris nisi, ut malesuada metus molestie eu. In at massa eu lacus bibendum convallis. Integer eu arcu non leo iaculis accumsan. Donec vehicula elementum ante sed maximus. Aliquam fringilla nisl turpis, ut porta tellus tempus id. In id viverra justo. Suspendisse vitae mi a lacus laoreet aliquam quis eu nulla. Donec vitae est ultricies, aliquam nisi at, maximus orci. In eget lorem sit amet mi aliquet rutrum vitae et lacus.
+
+Nam a nibh lacus. Vivamus consectetur nibh sit amet tincidunt luctus. Curabitur aliquam diam vitae ex semper, quis scelerisque eros vehicula. Cras arcu turpis, mattis quis orci ac, viverra congue arcu. Suspendisse faucibus ut erat eget bibendum. Mauris placerat nisl velit, eu mollis erat aliquam sagittis. Phasellus ornare augue at rhoncus vestibulum. Nullam finibus aliquam nunc, ut pharetra quam efficitur in. Sed sem nisi, tincidunt ut mattis vel, congue ut lectus. Proin vitae ornare nulla. Proin congue massa id scelerisque posuere. Maecenas tellus erat, sollicitudin vitae auctor vel, laoreet et erat. Aliquam erat volutpat. Sed mi eros, aliquam pretium rutrum a, cursus sed elit. Cras placerat, libero et hendrerit scelerisque, orci neque vestibulum risus, eu elementum augue ex non erat.
+
+Nulla vitae maximus justo. Fusce purus ex, pretium ut ante quis, posuere accumsan ipsum. Vivamus rutrum bl</p>
+		
+    </div>
+</div>
+<footer style="background-image: url(images/building.png); height:250px; width:100%;">
+<div style = "color: grey; padding:70px;">All rights reserved | The Really Cool Team</div>
+	</footer>
+</body>
+</html>
