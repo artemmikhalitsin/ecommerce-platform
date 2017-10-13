@@ -1,7 +1,24 @@
+// Event listener for opening and closing details of a row
+function openCloseDetails(table_id, tableObject){
+  $('#' + table_id + ' tbody').on('click', 'td.details-control', function () {
+      var tr = $(this).closest('tr');
+      var row = tableObject.row( tr );
 
+      if ( row.child.isShown() ) {
+          // This row is already open - close it
+          row.child.hide();
+          tr.removeClass('shown');
+      }
+      else {
+          // Open this row
+          row.child( formatlaptopsTable(row.data()) ).show();
+          tr.addClass('shown');
+      }
+  });
+}
 
-// Function used to populate the child rows
-function format( data ) {
+// Function used to populate the child rows for laptops table
+function formatlaptopsTable ( data ) {
   return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
       '<tr>'+
           '<td>Processor Type:</td>'+
@@ -41,8 +58,110 @@ function format( data ) {
       '</tr>'+
   '</table>';
 }
+
+// Function used to populate the child rows for desktop table
+function formatDesktopsTable ( data ) {
+  return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+      '<tr>'+
+          '<td>Processor Type:</td>'+
+          '<td>'+data.processor_type+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>RAM size:</td>'+
+          '<td>'+data.ram_size+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td># of CPU cores:</td>'+
+          '<td>'+data.number_cpu_cores+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Hard Drive size:</td>'+
+          '<td>'+data.harddrive_size+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Height:</td>'+
+          '<td>'+data.height+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Width:</td>'+
+          '<td>'+data.width+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Depth:</td>'+
+          '<td>'+data.depth+'</td>'+
+      '</tr>'+
+  '</table>';
+}
+
+// Function used to populate the child rows for TVs and monitors tables
+function formatTVsAndMonitorsTable ( data ) {
+  return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+      '<tr>'+
+          '<td>Height:</td>'+
+          '<td>'+data.height+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Width:</td>'+
+          '<td>'+data.width+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Depth:</td>'+
+          '<td>'+data.depth+'</td>'+
+      '</tr>'+
+  '</table>';
+}
+
+// Function used to populate the child rows for tablets table
+function formatTabletsTable ( data ) {
+  return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+      '<tr>'+
+          '<td>Processor Type:</td>'+
+          '<td>'+data.processor_type+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>RAM size:</td>'+
+          '<td>'+data.ram_size+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td># of CPU cores:</td>'+
+          '<td>'+data.number_cpu_cores+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Hard Drive size:</td>'+
+          '<td>'+data.harddrive_size+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Display size:</td>'+
+          '<td>'+data.display_size+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Battery Info:</td>'+
+          '<td>'+data.battery_info+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>OS:</td>'+
+          '<td>'+data.os+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Height:</td>'+
+          '<td>'+data.height+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Width:</td>'+
+          '<td>'+data.width+'</td>'+
+      '</tr>'+
+      '<tr>'+
+          '<td>Depth:</td>'+
+          '<td>'+data.depth+'</td>'+
+      '</tr>'+
+          '<td>Camera:</td>'+
+          '<td>'+data.camera_info+'</td>'+
+      '</tr>'+
+  '</table>';
+}
+
 $(document).ready(function() {
-    let table = $('#table_laptops').DataTable({
+    let laptops_table = $('#table_laptops').DataTable({
       data: mock.laptops,
       columns: [
         {
@@ -58,84 +177,78 @@ $(document).ready(function() {
         {'data': 'is_available'},
       ],
     });
-    // Add event listener for opening and closing details
-    $('#table_laptops tbody').on('click', 'td.details-control', function() {
-        let tr = $(this).closest('tr');
-        let row = table.row( tr );
+    openCloseDetails('table_laptops', laptops_table);
 
-        if ( row.child.isShown() ) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
-        } else {
-            // Open this row
-            row.child( format(row.data()) ).show();
-            tr.addClass('shown');
-        }
-    } );
-    $('#table_desktops').DataTable({
+    let desktops_table = $('#table_desktops').DataTable({
       data: mock.desks,
       columns: [
-        {'data': 'model_number'},
-        {'data': 'brand_name'},
-        {'data': 'price'},
-        {'data': 'weight'},
-        {'data': 'is_available'},
-        {'data': 'processor_type'},
-        {'data': 'ram_size'},
-        {'data': 'number_cpu_cores'},
-        {'data': 'harddrive_size'},
-        {'data': 'height'},
-        {'data': 'width'},
-        {'data': 'depth'},
-      ],
+        {
+            "className":      'details-control',
+            "orderable":      false,
+            "data":           null,
+            "defaultContent": ''
+        },
+        { 'data': 'model_number'},
+        { 'data': 'brand_name'},
+        { 'data': 'price'},
+        { 'data': 'weight'},
+        { 'data': 'is_available'},
+      ]
     });
-    $('#table_tvs').DataTable({
+    openCloseDetails('table_desktops', desktops_table);
+
+    let tvs_table = $('#table_tvs').DataTable({
       data: mock.tvs,
       columns: [
-        {'data': 'model_number'},
-        {'data': 'brand_name'},
-        {'data': 'price'},
-        {'data': 'weight'},
-        {'data': 'category_name'},
-        {'data': 'is_available'},
-        {'data': 'height'},
-        {'data': 'width'},
-        {'data': 'depth'},
-      ],
+        {
+            "className":      'details-control',
+            "orderable":      false,
+            "data":           null,
+            "defaultContent": ''
+        },
+        { 'data': 'model_number'},
+        { 'data': 'brand_name'},
+        { 'data': 'price'},
+        { 'data': 'weight'},
+        { 'data': 'category_name'},
+        { 'data': 'is_available'},
+      ]
     });
-    $('#table_monitors').DataTable({
+    openCloseDetails('table_tvs', tvs_table);
+
+    let monitors_table = $('#table_monitors').DataTable({
       data: mock.mons,
       columns: [
-        {'data': 'model_number'},
-        {'data': 'brand_name'},
-        {'data': 'price'},
-        {'data': 'weight'},
-        {'data': 'is_available'},
-        {'data': 'height'},
-        {'data': 'width'},
-        {'data': 'depth'},
-      ],
+        {
+            "className":      'details-control',
+            "orderable":      false,
+            "data":           null,
+            "defaultContent": ''
+        },
+        { 'data': 'model_number'},
+        { 'data': 'brand_name'},
+        { 'data': 'price'},
+        { 'data': 'weight'},
+        { 'data': 'is_available'},
+      ]
     });
-    $('#table_tablets').DataTable({
+    openCloseDetails('table_monitors', monitors_table);
+
+    let tablets_table = $('#table_tablets').DataTable({
       data: mock.tabs,
       columns: [
-        {'data': 'model_number'},
-        {'data': 'brand_name'},
-        {'data': 'price'},
-        {'data': 'weight'},
-        {'data': 'is_availble'},
-        {'data': 'processor_type'},
-        {'data': 'ram_size'},
-        {'data': 'number_cpu_cores'},
-        {'data': 'harddrive_size'},
-        {'data': 'display_size'},
-        {'data': 'battery_info'},
-        {'data': 'os'},
-        {'data': 'height'},
-        {'data': 'width'},
-        {'data': 'depth'},
-        {'data': 'camera_info'},
-      ],
+        {
+            "className":      'details-control',
+            "orderable":      false,
+            "data":           null,
+            "defaultContent": ''
+        },
+        { 'data': 'model_number'},
+        { 'data': 'brand_name'},
+        { 'data': 'price'},
+        { 'data': 'weight'},
+        { 'data': 'is_availble'},
+      ]
     });
+    openCloseDetails('table_tablets', tablets_table);
 });
