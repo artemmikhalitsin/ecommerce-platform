@@ -22,9 +22,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'top',
   exists: false,
-  resave: true,
+  resave: false,
   saveUninitialized: true,
 }));
+// let sess;
 
 app.engine('hbs', hbs({extname: 'hbs'}));
 app.set('views', path.join(__dirname, 'public'));
@@ -89,8 +90,28 @@ app.post('/registrationRequest', function(req, res) {
 });
 
 app.post('/loginRequest', function(req, res) {
-  controller.loginRequest(req, res);
-});
+   controller.loginRequest(req, res);
+    // sess = req.session;
+    // let data = req.body;
+    // console.log(data);
+    // const userRepo = require(this.rootPath +
+    //   '/DataSource/Repository/UserRepository.js');
+    // userRepo.authenticate(data).then((result) => {
+    //   console.log('type of '+ result + ' is ' + typeof(result));
+    //   if (result.length <= 0) {
+    //     console.log('Invalid username or password.');
+    //     res.redirect('/login');
+    //   } else if (result.length > 1) {
+    //     console.log('Duplicate users detected');
+    //     res.redirect('/login');
+    //   } else if (result.length == 1) {
+    //     console.log('logging in');
+    //     req.session.exist=true;
+    //     console.log('displaying items');
+    //     res.redirect('/getAllInventoryItems');
+    //   }
+    // });
+  });
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');
