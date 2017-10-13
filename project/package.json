@@ -29,11 +29,7 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
-<<<<<<< HEAD
     "express-session": "^1.15.6"
-=======
-    "concurrently": "^3.5.0"
->>>>>>> 54c00cf894df0546cf280031018f1ced6fb023eb
   },
   "description": ""
 }
