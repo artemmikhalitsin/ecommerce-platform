@@ -1,43 +1,45 @@
-Class Tablet extends Computer{
-    constructor(processor_type, ram_size, number_cpu_cores, harddrive_size, display_size, dimensions, battery_info, os, camera_info, price, weight, brand_name, model_number){
-		super(processor_type, ram_size, number_cpu_cores, harddrive_size, price, weight, brand_name, model_number);
-        this.display_size = display_size;
+class Tablet extends Computer {
+    constructor(processorType, ramSize, numberCpuCores, harddriveSize,
+                displaySize, dimensions, batteryInfo, os, cameraInfo,
+                price, weight, brandName, modelNumber) {
+        super(processorType, ramSize, numberCpuCores, harddriveSize,
+              price, weight, brandName, modelNumber);
+        this.displaySize = displaySize;
         this.dimensions = dimensions;
-		this.battery_info = battery_info;
-		this.os = os;
-		this.camera_info = camera_info;
+        this.batteryInfo = batteryInfo;
+        this.os = os;
+        this.cameraInfo = cameraInfo;
     }
-}
-
-get_display_size(){
-  return this.display_size;
-}
-get_dimensions(){
-   return this.dimensions;
-}
-get_battery_info(){
-  return this.battery_info;
-}
-get_os(){
-  return this.os;
-}
-get_camera_info(){
-  return this.camera_info;
-}
-set_display_size(display_size){
-  this.display_size = display_size;
-}
-set_dimensions(dimensions){
-  this.dimensions = dimensions;
-}
-set_battery_info(battery_info){
-  this.battery_info = battery_info;
-}
-set_os(os){
-  this.os = os;
-}
-set_camera_info(camera_info){
-  this.camera_info = camera_info;
+    getDisplaySize() {
+      return this.displaySize;
+    }
+    getDimensions() {
+       return this.dimensions;
+    }
+    getBatteryInfo() {
+      return this.batteryInfo;
+    }
+    getOs() {
+      return this.os;
+    }
+    getCameraInfo() {
+      return this.cameraInfo;
+    }
+    setDisplaySize(displaySize) {
+      this.displaySize = displaySize;
+    }
+    setDimensions(dimensions) {
+      this.dimensions = dimensions;
+    }
+    setBatteryInfo(batteryInfo) {
+      this.batteryInfo = batteryInfo;
+    }
+    setOs(os) {
+      this.os = os;
+    }
+    setCameraInfo(cameraInfo) {
+      this.cameraInfo = cameraInfo;
+    }
 }
 
 module.exports = Tablet;

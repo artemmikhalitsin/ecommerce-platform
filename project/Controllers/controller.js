@@ -73,7 +73,7 @@ class Controller {
         desks: values[4],
       };
       let items = JSON.stringify(allItems);
-      // res.sess 
+      // res.sess
       res.render('inventory2', {items: items});
     }).catch((error) => {
       console.log(error);
@@ -83,10 +83,7 @@ class Controller {
   loginRequest(req, res) {
     let data = req.body;
     console.log(data);
-    const userRepo = require(this.rootPath +
-      '/DataSource/Repository/UserRepository.js');
-    userRepo.authenticate(data).then((result) => {
-      console.log('type of '+ result + ' is ' + typeof(result));
+    this.userRepo.authenticate(data).then((result) => {
       if (result.length <= 0) {
         console.log('Invalid username or password.');
         res.redirect('/login');
@@ -94,8 +91,14 @@ class Controller {
         console.log('Duplicate users detected');
         res.redirect('/login');
       } else if (result.length == 1) {
-        console.log('logging in');
         req.session.exists=true;
+        if (result[0].is_admin == 1) {
+          console.log('You an admin broo');
+          req.session.isAdmin=true;
+        } else {
+          console.log('user not admin');
+          req.session.isAdmin=false;
+        }
         // console.log(req.session.exists);
         console.log('displaying items');
         req.session.save(function(err) {

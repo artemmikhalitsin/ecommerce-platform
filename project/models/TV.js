@@ -1,24 +1,23 @@
-Class TV extends ProductDescription{
-    constructor(dimensions, category_name, price, weight, brand_name, model_number){
-		super(price, weight, brand_name, model_number);
+class TV extends ProductDescription {
+    constructor(dimensions, categoryName, price,
+                weight, brandName, modelNumber) {
+        super(price, weight, brandName, modelNumber);
         this.dimensions = dimensions;
-        this.category_name = category_name;
+        this.categoryName = categoryName;
     }
-}
+    getDimensions() {
+      return this.dimensions;
+    }
+    getCategoryName() {
+       return this.categoryName;
+    }
 
-get_dimensions(){
-  return this.dimensions;
-}
-get_category_name(){
-   return this.category_name;
-}
-
-
-set_dimensions(dimensions){
-  this.dimensions = dimensions;
-}
-set_category_name(category_name){
-  this.category_name = category_name;
+    setDimensions(dimensions) {
+      this.dimensions = dimensions;
+    }
+    setCategoryName(categoryName) {
+      this.categoryName = categoryName;
+    }
 }
 
 module.exports = TV;

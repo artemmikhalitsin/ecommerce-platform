@@ -1,38 +1,37 @@
-Class ProductDescription{
-    constructor(price, weight, brand_name, model_number){
+class ProductDescription {
+    constructor(price, weight, brandName, modelNumber) {
         this.price = price;
         this.weight = weight;
-		this.brand_name = brand_name;
-		this.model_number = model_number;
+        this.brandName = brandName;
+        this.modelNumber = modelNumber;
+    }
+
+    getPrice() {
+      return this.price;
+    }
+    getWeight() {
+       return this.weight;
+    }
+    getBrandName() {
+      return this.brandName;
+    }
+    getModelNumber() {
+      return this.modelNumber;
+    }
+
+
+    setPrice(price) {
+      this.price = price;
+    }
+    setWeight(weight) {
+      this.weight = weight;
+    }
+    setBrandName(brandName) {
+      this.brandName = brandName;
+    }
+    setModelNumber(modelNumber) {
+      this.modelNumber = modelNumber;
     }
 }
-
-get_price(){
-  return this.price;
-}
-get_weight(){
-   return this.weight;
-}
-get_brand_name(){
-  return this.brand_name;
-}
-get_model_number(){
-  return this.model_number;
-}
-
-
-set_price(price){
-  this.price = price;
-}
-set_weight(weight){
-  this.weight = weight;
-}
-set_brand_name(brand_name){
-  this.brand_name = brand_name;
-}
-set_model_number(model_number){
-  this.model_number = model_number;
-}
-
 
 module.exports = ProductDescription;

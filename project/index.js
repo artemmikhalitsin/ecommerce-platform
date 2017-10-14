@@ -4,8 +4,10 @@ const hbs = require('express-handlebars');
 const session = require('express-session');
 const rootPath = require('app-root-dir').get();
 const app = express();
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('./knexfile')[environment];
+const database = require('knex')(configuration);
 let bodyParser = require('body-parser');
-
 app.use( bodyParser.json() ); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
   extended: false,
@@ -19,6 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'top',
   exists: false,
+  isAdmin: false,
   resave: false,
   saveUninitialized: true,
 }));
@@ -79,8 +82,18 @@ app.get('/logout', function(req, res) {
   }
 });
 
-app.get('/navbar_test', function(req, res) {
-  res.render('navbar_test');
+
+// Use  access data from database
+app.get('/testdb', function(req, res) {
+  database('User').select( )
+    .then((customer) => {
+      customer = JSON.stringify(customer);
+      res.render('hbs_test', {body: customer});
+    })
+    .catch((error) => {
+        res.status(500).json({error});
+        return res.send();
+    });
 });
 
 app.get('/getAllInventoryItems', function(req, res) {
@@ -100,6 +113,11 @@ app.post('/registrationRequest', function(req, res) {
 app.post('/loginRequest', function(req, res) {
    controller.loginRequest(req, res);
   });
+
+  app.get('/admin', function(req, res) {
+    res.render('admin');
+  });
+
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');

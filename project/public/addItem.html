@@ -1,0 +1,76 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Add Item Page</title>
+
+  <link rel="stylesheet" href="css/masterStyle.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <!--<script type="text/javascript" src="/js/addItem.js"></script>-->
+
+</head>
+
+<body>
+	<header>
+	<h1>Add Item</h1>
+	</header>
+	
+	 <div id="wrapper">
+	<content>
+	        <nav>
+            <ul id="menuNav">
+                <li><a href="http://192.168.99.100" title="Home">Home</a></li>
+                <li><a href="http://192.168.99.100/getAllInventoryItems" title="inventory"> View Inventory</a></li>
+                <li><a href="http://192.168.99.100/addItem" title="modify_inventory">Modify Inventory</a></li>
+                <li><a href="#" title="delete_item">Delete Item</a></li>
+                <li><a href="#" title="modify_item">Modify Item</a></li>
+                 <li><a href="#" title="add_admin_account">Add Admin Account</a></li>
+            </ul>
+        </nav>
+		
+		<form class="form1" method="POST" action="/postDesktop" name="desktop_form">
+		  Model number:
+		  <input type="text" name="model_number">
+		  <br><br>
+		  Brand name:
+		  <input type="text" name="brand_name">
+		  <br><br>
+		  Price:
+		  <input type="number" name="price">
+		  <br><br>
+		  Weight:
+		  <input type="number" name="weight">
+		  <br/><br/>
+          Number of CPU Cores:
+		  <input type="number" name="number_cpu_cores">
+		  <br/><br/>
+          Hard Drive Size:
+		  <input type="number" name="harddrive_size">
+		  <br/><br/>
+          Depth:
+		  <input type="number" name="depth">
+		  <br/><br/>
+          Height:
+		  <input type="number" name="height">
+		  <br/><br/>
+          Width:
+		  <input type="number" name="width">
+		  <br/><br/>
+		  Processor Type:
+		  <input type="text" name="processor_type">
+		  <br><br>
+		  RAM Size:
+		  <input type="number" name="ram_size">
+		  <br><br>
+		  
+		  <input type="submit" value="Submit">
+		</form>
+		</div>
+	</content>
+<footer style="background-image: url(images/building.png); height:250px; width:100%;">
+<div class="footerText">All rights reserved | The Really Awesome Team</div>
+</footer>
+</body>
+</html>
