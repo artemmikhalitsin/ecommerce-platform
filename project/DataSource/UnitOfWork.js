@@ -232,6 +232,10 @@ function commitAll(object){
    });
 }
 
+function getAllProductsDescription(){
+  return connection('ProductDescription').select('*');
+}
+
 function addProductDescription(electronic){
   return connection.insert({
       'model_number': electronic.model_number,
@@ -314,4 +318,5 @@ module.exports = {
   constructor: constructor,
   commit: commit,
   commitAll: commitAll,
+  getAllProductsDescription: getAllProductsDescription,
 };

@@ -56,6 +56,7 @@ class Controller {
     }
   }
 
+  // this function will be deleted because it got replaced by getAllInventory
   getAllInventoryItems(req, res, done) {
     // console.log(req.session.exists);
     let laptopItems = this.laptopRepo.get('*');
@@ -77,6 +78,21 @@ class Controller {
       res.render('inventory2', {items: items});
     }).catch((error) => {
       console.log(error);
+    });
+  }
+
+  getAllInventory(req, res){
+    const asd = require('app-root-dir').get();
+    const ProductDescription = require(asd + '/DataSource/Repository/ProductDescriptionRepository');
+    let ProductDescriptionObj = new ProductDescription();
+    let prod = ProductDescriptionObj.getAllProductsDescription();
+    Promise.all([prod])
+    .then((values) => {
+      let items = JSON.stringify(values[0]);
+      res.render('inventory2', {items: items});
+    })
+    .catch((err) => {
+      console.log(err);
     });
   }
 
