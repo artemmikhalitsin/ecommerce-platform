@@ -75,12 +75,13 @@ class Controller {
       };
       let items = JSON.stringify(allItems);
       // res.sess
-      res.render('inventory2', {items: items});
+      res.render('inventory', {items: items});
     }).catch((error) => {
       console.log(error);
     });
   }
 
+  // this funtion is getting all the product description from the database
   getAllInventory(req, res){
     const asd = require('app-root-dir').get();
     const ProductDescription = require(asd + '/DataSource/Repository/ProductDescriptionRepository');
@@ -89,13 +90,14 @@ class Controller {
     Promise.all([prod])
     .then((values) => {
       let items = JSON.stringify(values[0]);
-      res.render('inventory2', {items: items});
+      res.render('inventory', {items: items});
     })
     .catch((err) => {
       console.log(err);
     });
   }
 
+  // this functon is adding a new user to the database
   loginRequest(req, res) {
     let data = req.body;
     console.log(data);

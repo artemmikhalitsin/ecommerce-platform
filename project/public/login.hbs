@@ -3,10 +3,13 @@
 <html>
   <head>
     <title> Login </title>
-    <script src = "js/login.js"></script>
+    <!-- <script src = "js/login.js"></script> -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
   </head>
 
-  <body>
+  <body ng-app="">
+    <div ng-include="'includes/header.hbs'"></div>
     <div class="container">
       <div class="main">
         <h2>Welcome Users!</h2>
@@ -38,4 +41,7 @@
       </div>
     </div>
 
+    <div ng-include="'includes/footer.hbs'"></div>
+
   </body>
+  </html>

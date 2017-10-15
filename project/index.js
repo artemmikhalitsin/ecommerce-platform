@@ -17,6 +17,9 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 const desktopRepo = require(rootPath +
   '/DataSource/Repository/DesktopRepository.js');
 
+// this will be removed (it is here only for testing purposes)
+desktopRepo.save2("object");
+
 const Controller = require(rootPath + '/Controllers/controller');
 let controller = new Controller();
 
@@ -33,12 +36,6 @@ app.use(session({
 app.engine('hbs', hbs({extname: 'hbs'}));
 app.set('views', path.join(__dirname, 'public'));
 app.set('view engine', 'hbs');
-
-// will be removed later
-app.get('/data', function(req, res){
-  desktopRepo.save2("object");
-  console.log("saved data");
-});
 
 // loading the home page
 app.get('/', function(req, res) {
@@ -93,7 +90,7 @@ app.get('/getAllInventoryItems', function(req, res) {
     controller.getAllInventory(req, res);
   } else {
     console.log('login error');
-    res.redirect('/');
+    res.redirect('/login');
   }
 });
 
