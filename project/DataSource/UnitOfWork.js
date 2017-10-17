@@ -8,172 +8,11 @@ var Promise = require('bluebird');
     function constructor(connection) {
        this.connection = connection;
     }
-
-   function commit(object, tableName){
-       var descriptions = [{
-        model_number: '56',
-        brand_name: "b",
-        price: 1,
-        weight: 1
-       },{
-        model_number: '57',
-        brand_name: "b",
-        price: 1,
-        weight: 1
-       },{
-        model_number: '58',
-        brand_name: "b",
-        price: 1,
-        weight: 1
-       }];
-       var computersObj = [{
-        processor_type: 'r',
-        ram_size: 1,
-        number_cpu_cores: 2,
-        harddrive_size: 3
-       },{
-        processor_type: 'q',
-        ram_size: 1,
-        number_cpu_cores: 2,
-        harddrive_size: 3
-       },{
-        processor_type: 'n',
-        ram_size: 1,
-        number_cpu_cores: 2,
-        harddrive_size: 3
-       }];
-       var electronics = [{
-        comp_id: 0,
-        model_number: 0,
-        dimension_id: 0
-       },{
-        comp_id: 0,
-        model_number: 0,
-        dimension_id: 0
-       },{
-        comp_id: 0,
-        model_number: 0,
-        dimension_id: 0
-       }];
-       var dimensions = [{
-        depth: 1,
-        height: 1,
-        width: 1
-       }];
-       if(tableName == 'Desktop' || tableName == 'Laptop' || tableName == 'Tablet')
-       return connection.transaction(function(trx){
-            connection.insert(descriptions, 'model_number')
-                    .into('ProductDescription')
-                    .transacting(trx)
-                    .then(function(modelNumbers){
-                        console.log(modelNumbers);
-                        return connection.insert(computersObj, 'comp_id')
-                                .into('Computer')
-                                .transacting(trx)
-                                .then(function(compIds){
-                                    return connection.insert(dimensions, 'dimensions_id')
-                                        .into('Dimensions')
-                                        .transacting(trx)
-                                        .then(function(dimensionIds){
-                                            electronics[0].comp_id = compIds[0];
-                                            electronics[0].dimension_id = dimensionIds[0];
-                                            electronics[0].model_number = '56';
-
-                                            return connection.insert(electronics[0])
-                                                    .into(tableName)
-                                                    .transacting(trx);
-                                        });
-                                });
-                    })
-                    .then(trx.commit)
-                    .catch(trx.rollback);
-       });
-       else return connection.transaction(function(trx){
-        connection.insert(object)
-                .into(tableName)
-                .transacting(trx)
-                .then(trx.commit)
-                .catch(trx.rollback);
-   });
-}
-
-function commitAll(object){
-    var electronics = [{
-     model_number: '56',
-     brand_name: "b",
-     price: 1,
-     weight: 1,
-     type: 'Desktop',
-     processor_type: 'r',
-     ram_size: 1,
-     number_cpu_cores: 2,
-     harddrive_size: 3,
-     dimensions: {depth: 1,
-        height: 1,
-        width: 1}
-    },{
-     model_number: '57',
-     brand_name: "b",
-     price: 1,
-     weight: 1,
-     type: 'Desktop',
-     processor_type: 'q',
-     ram_size: 1,
-     number_cpu_cores: 2,
-     harddrive_size: 3,
-     dimensions: {depth: 1,
-        height: 1,
-        width: 1}
-    },{
-     model_number: '58',
-     brand_name: "b",
-     price: 1,
-     weight: 1,
-     type: 'Laptop',
-     processor_type: 'n',
-     ram_size: 1,
-     number_cpu_cores: 2,
-     harddrive_size: 3,
-     display_size: 1,
-     battery_info: "info about battery",
-     os: "os info",
-     camera: true,
-     touch_screen: false
-   },{
-     model_number: '59',
-     brand_name: "b",
-     price: 1,
-     weight: 1,
-     type: 'Tablet',
-     processor_type: 'n',
-     ram_size: 1,
-     number_cpu_cores: 2,
-     harddrive_size: 3,
-     dimensions: {depth: 1,
-        height: 1,
-        width: 1},
-     display_size: 1,
-     battery_info: "info about battery",
-     os: "os info",
-     camera: "camera info"
-   },{
-     model_number: '60',
-     brand_name: "b",
-     price: 1,
-     weight: 1,
-     type: 'Monitor',
-     display_size: 1
-   },{
-     model_number: '61',
-     brand_name: "b",
-     price: 1,
-     weight: 1,
-     type: 'TV',
-     dimensions: {depth: 1,
-        height: 1,
-        width: 1},
-     category_name: "HD"
-   }];
+//in order to implement the identity map pattern, add a method in the commit all transaction to get all descriptions
+//then split the descriptions into the different types and do the comparisson in each case whether add
+//delete or update is necessary this way, in a single transaction we keep a copy of the db at its current sate.
+function commitAll(electronics){
+    
     return connection.transaction(function(trx){
         Promise.each(electronics, function(electronic){
             return addProductDescription(electronic)
@@ -316,7 +155,6 @@ function addTV(dimensionsId, electronic){
 
 module.exports = {
   constructor: constructor,
-  commit: commit,
   commitAll: commitAll,
   getAllProductsDescription: getAllProductsDescription,
 };
