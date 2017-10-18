@@ -6,12 +6,9 @@ exports.up = function(knex, Promise) {
       throw new Error('Error creating table ' + tablename);
     } else {
       table.increments('id').unsigned().primary();
+      table.string('description_id').notNullable();
+      table.foreign('description_id').references('ProductDescription.model_number');
 
-
-//      table.foreign('user_id').references('User.id');
-      // NOTE: I added a foreign key not reflected in the DOM here (Artem)
-      // table.integer('purchase_id').unsigned().notNullable()
-      // table.foreign('purchase_id').references('Purchase.id')
     }
   });
 };

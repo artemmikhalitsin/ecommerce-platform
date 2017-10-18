@@ -1,4 +1,14 @@
-const users = [/*{
+const users = [
+  {
+    'first_name': 'Admin',
+    'last_name': 'Admin',
+    'email': 'admin@admin.com',
+    'full_address': '123 Main Street',
+    'is_admin': true,
+    'phone_number': '1234567890',
+    'password': '123',
+  }
+  /*{
   'first_name': 'Giavani',
   'last_name': 'Linfitt',
   'email': 'glinfitt0@ihg.com',

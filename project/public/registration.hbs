@@ -7,18 +7,20 @@
   <title>Registration Page</title>
 
   <link rel="stylesheet" href="css/masterStyle.css">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script type="text/javascript" src="/js/registration.js"></script>
 
 </head>
 
-<body>
+<body ng-app="">
 	<header>
 	<h1>Registration</h1>
 	</header>
-	
+
+  <div ng-include="'includes/header.hbs'"></div>
 	<div id="wrapper">
-		
+
 		<content>
 			<form class="form1" method="POST" action="/registrationRequest" name="registration_form">
 			  First name:<br>
@@ -40,18 +42,15 @@
 			  <input type="password" name="password"><br><br>
 			  Confirm password: <br>
 			  <input type="password" name="confirmPassword"><br><br>
-			  
+
 			  Make this an admin account &nbsp; <input type="checkbox" name="is_admin" id="adminBoolean"><br><br>
-			  
+
 			  <input type="submit" value="Submit">
 			  <br><br>
 			</form>
 		</content>
 	</div>
-	<footer class="pageFooter">
-		<div class="footerText">All rights reserved | The Really Awesome Team</div>
-	</footer>
-
+	<div ng-include="'includes/footer.hbs'"></div>
 
 </body>
 </html>

@@ -13,6 +13,13 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
   extended: false,
 }));
 
+// will be removed later
+const desktopRepo = require(rootPath +
+  '/DataSource/Repository/DesktopRepository.js');
+
+// this will be removed (it is here only for testing purposes)
+desktopRepo.save2("object");
+
 const Controller = require(rootPath + '/Controllers/controller');
 let controller = new Controller();
 
@@ -26,11 +33,11 @@ app.use(session({
   saveUninitialized: true,
 }));
 // let sess;
-
 app.engine('hbs', hbs({extname: 'hbs'}));
 app.set('views', path.join(__dirname, 'public'));
 app.set('view engine', 'hbs');
 
+// loading the home page
 app.get('/', function(req, res) {
   if (req.session.exists) {
     console.log('already logged in, redirecting to inventory');
@@ -38,23 +45,25 @@ app.get('/', function(req, res) {
   } else res.render('home');
 });
 
+// getting the login page
 app.get('/login', function(req, res) {
-  res.render('login');
-});
-
-app.get('/registration', function(req, res) {
-  res.render('registration');
-});
-
-app.get('/inventory', function(req, res) {
   if (req.session.exists) {
-    res.render('inventory2');
-  } else {
-    console.log('login error');
-    res.redirect('/');
-  }
+    console.log('already logged in, redirecting to inventory');
+    res.redirect('/getAllInventoryItems');
+  } else
+    res.render('login');
 });
 
+// getting the registration page
+app.get('/registration', function(req, res) {
+  if (req.session.exists) {
+    console.log('already logged in, redirecting to inventory');
+    res.redirect('/getAllInventoryItems');
+  } else
+    res.render('registration');
+});
+
+// getting the add item page
 app.get('/addItem', function(req, res) {
   if (req.session.exists) {
     res.render('addItem');
@@ -64,14 +73,7 @@ app.get('/addItem', function(req, res) {
   }
 });
 
-app.get('/database', function(req, res) {
-  res.render('database');
-});
-
-app.get('/admin', function(req, res) { // leads to empty file
-  res.render('admin');
-});
-
+// this should be implemented in the controller
 app.get('/logout', function(req, res) {
   if (req.session.exists) {
     req.session.destroy();
@@ -82,42 +84,25 @@ app.get('/logout', function(req, res) {
   }
 });
 
-
-// Use  access data from database
-app.get('/testdb', function(req, res) {
-  database('User').select( )
-    .then((customer) => {
-      customer = JSON.stringify(customer);
-      res.render('hbs_test', {body: customer});
-    })
-    .catch((error) => {
-        res.status(500).json({error});
-        return res.send();
-    });
-});
-
+// getting the inventory from the database
 app.get('/getAllInventoryItems', function(req, res) {
   if (req.session.exists) {
-    controller.getAllInventoryItems(req, res);
+    controller.getAllInventory(req, res);
   } else {
     console.log('login error');
-    res.redirect('/');
+    res.redirect('/login');
   }
 });
 
-// MOVE TO CONTROLLER WHEN IT'S THERE
+// making the registration request
 app.post('/registrationRequest', function(req, res) {
   controller.registrationRequest(req, res);
 });
 
+// making the login request
 app.post('/loginRequest', function(req, res) {
    controller.loginRequest(req, res);
   });
-
-  app.get('/admin', function(req, res) {
-    res.render('admin');
-  });
-
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');

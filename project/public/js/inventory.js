@@ -1,5 +1,5 @@
 // Event listener for opening and closing details of a row
-function openCloseDetails(table_id, tableObject) {
+function openCloseDetails(table_id, tableObject, type) {
   $('#' + table_id + ' tbody').on('click', 'td.details-control', function() {
       let tr = $(this).closest('tr');
       let row = tableObject.row( tr );
@@ -10,7 +10,18 @@ function openCloseDetails(table_id, tableObject) {
           tr.removeClass('shown');
       } else {
           // Open this row
-          row.child( formatlaptopsTable(row.data()) ).show();
+          switch (type) {
+            case 'Laptop':
+              row.child( formatlaptopsTable(row.data()) ).show();break;
+            case 'Desktop':
+              row.child( formatDesktopsTable(row.data()) ).show();break;
+            case 'TV':
+            case 'Monitor':
+              row.child( formatTVsAndMonitorsTable(row.data()) ).show();break;
+            case 'Tablet':
+              row.child( formatTabletsTable(row.data()) ).show();break;
+            default:
+          }
           tr.addClass('shown');
       }
   });
@@ -160,8 +171,8 @@ function formatTabletsTable( data ) {
 }
 
 $(document).ready(function() {
-    let laptops_table = $('#table_laptops').DataTable({
-      data: mock.laptops,
+    let inventory_table = $('#table_inventory').DataTable({
+      data: mock,
       columns: [
         {
             'className': 'details-control',
@@ -173,11 +184,26 @@ $(document).ready(function() {
         {'data': 'brand_name'},
         {'data': 'price'},
         {'data': 'weight'},
+        {'data': 'type'},
         {'data': 'is_available'},
       ],
     });
-    openCloseDetails('table_laptops', laptops_table);
-
+    // if (mock[0].type == "Desktop") {
+    //   openCloseDetails('table_laptops', laptops_table, mock[0].type);
+    // }
+    // for (var i = 0; i < mock.length; i++) {
+    //   console.log(mock[i].type);
+    //   if (mock[i].type == "Desktop") {
+    //     openCloseDetails('table_laptops', laptops_table, mock[i].type);
+    //   }else if (mock[i].type == "Laptop") {
+    //     openCloseDetails('table_laptops', laptops_table, mock[i].type);
+    //   }else {
+    //     console.log("another table");
+    //   }
+    // }
+    //console.log(mock.length);
+    //openCloseDetails('table_laptops', laptops_table);
+/*
     let desktops_table = $('#table_desktops').DataTable({
       data: mock.desks,
       columns: [
@@ -250,4 +276,5 @@ $(document).ready(function() {
       ],
     });
     openCloseDetails('table_tablets', tablets_table);
+    */
 });

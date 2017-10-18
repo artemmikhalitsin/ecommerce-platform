@@ -11,6 +11,7 @@ exports.up = function(knex, Promise) {
       table.string('brand_name').notNullable();
       table.decimal('price').notNullable();
       table.decimal('weight').notNullable();
+      table.string('type').notNullable();
       table.boolean('is_available').defaultTo(true);
     }
   });
