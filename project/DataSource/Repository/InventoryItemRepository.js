@@ -5,23 +5,11 @@ const database = require('knex')(configuration);
 let UnitOfWork = require(rootPath + '/DataSource/UnitOfWork2.js');
 let uow = new UnitOfWork();
 
-function save(inventoryItem) {
-  database('InventoryItem').insert(inventoryItem)
-    .then((inventoryItem) => {
-      res.status(200).json(inventoryItem);
-      return res.send(inventoryItem);
-    })
-    .catch((error) => {
-      res.status(500).json({error});
-      return res.send(inventoryItem);
-    });
-};
-
 function get(args) {
   return database('inventoryItem').select('*');
 }
 
-function getAllInventoryItems(){
+function getAllInventoryItems() {
   return uow.getAllInventoryItems();
 }
 
