@@ -1,71 +1,68 @@
 'use strict';
-
-const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
-const configuration = require(rootPath + '/knexfile')[environment];
-const database = require('knex')(configuration);
-let uow = require(rootPath + '/DataSource/UnitOfWork.js');
 
-class ProductDescription{
+let UnitOfWork = require(rootPath + '/DataSource/UnitOfWork2.js');
+let uow = new UnitOfWork();
 
-  constructor(){
+class ProductDescription {
+  constructor() {
     this.model_number = null;
     this.brand_name = null;
-    this.price =  0;
+    this.price = 0;
     this.weight = 0;
     this.type = null;
     this.is_available = false;
   }
 
-  getAllProductsDescription(){
+  getAllProductsDescription() {
     return uow.getAllProductsDescription();
   }
 
-  getModelNumber(){
+  getModelNumber() {
     return this.model_number;
   }
 
-  getBrandName(){
+  getBrandName() {
     return this.brand_name;
   }
 
-  getPrice(){
+  getPrice() {
     return this.price;
   }
 
-  getWeight(){
+  getWeight() {
     return this.weight;
   }
 
-  getType(){
+  getType() {
     return this.type;
   }
 
-  getAvailability(){
+  getAvailability() {
     return this.is_available;
   }
 
-  setModelNumber(model_number){
+  setModelNumber(model_number) {
     this.model_number = model_number;
   }
 
-  setBrandName(brand_name){
+  setBrandName(brand_name) {
     this.brand_name = brand_name;
   }
 
-  setPrice(price){
+  setPrice(price) {
     this.price = price;
   }
 
-  setWeight(weight){
+  setWeight(weight) {
     this.weight = weight;
   }
 
-  setType(type){
+  setType(type) {
     this.type = type;
   }
 
-  setAvailability(is_available){
+  setAvailability(is_available) {
     this.is_available = is_available;
   }
 }

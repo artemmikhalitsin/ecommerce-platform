@@ -82,14 +82,14 @@ class Controller {
   }
 
   // this funtion is getting all the product description from the database
-  getAllInventory(req, res){
-    const asd = require('app-root-dir').get();
-    const ProductDescription = require(asd + '/DataSource/Repository/ProductDescriptionRepository');
-    let ProductDescriptionObj = new ProductDescription();
-    let prod = ProductDescriptionObj.getAllProductsDescription();
-    Promise.all([prod])
+  getAllInventory(req, res) {
+    const ProductDescription = require(this.rootPath +
+      '/DataSource/Repository/ProductDescriptionRepository');
+    let productDescriptionObj = new ProductDescription();
+    let prod = productDescriptionObj.getAllProductsDescription();
+    Promise.resolve(prod)
     .then((values) => {
-      let items = JSON.stringify(values[0]);
+      let items = JSON.stringify(values);
       res.render('inventory', {items: items});
     })
     .catch((err) => {
