@@ -104,6 +104,7 @@ return connection.transaction(function(trx) {
 function commitAll(object) {
     let electronics = [{
      model_number: '56',
+     serial_number: '10',
      brand_name: 'b',
      price: 1,
      weight: 1,
@@ -117,6 +118,7 @@ function commitAll(object) {
         width: 1},
     }, {
      model_number: '57',
+     serial_number: '11',
      brand_name: 'b',
      price: 1,
      weight: 1,
@@ -130,6 +132,7 @@ function commitAll(object) {
         width: 1},
     }, {
      model_number: '58',
+     serial_number: '12',
      brand_name: 'b',
      price: 1,
      weight: 1,
@@ -145,6 +148,7 @@ function commitAll(object) {
      touch_screen: false,
    }, {
      model_number: '59',
+     serial_number: '13',
      brand_name: 'b',
      price: 1,
      weight: 1,
@@ -162,6 +166,7 @@ function commitAll(object) {
      camera: 'camera info',
    }, {
      model_number: '60',
+     serial_number: '14',
      brand_name: 'b',
      price: 1,
      weight: 1,
@@ -169,6 +174,7 @@ function commitAll(object) {
      display_size: 1,
    }, {
      model_number: '61',
+     serial_number: '15',
      brand_name: 'b',
      price: 1,
      weight: 1,
@@ -182,6 +188,10 @@ function commitAll(object) {
         Promise.each(electronics, function(electronic) {
             return addProductDescription(electronic)
               .then(function(model_number) {
+                addInventoryItem(electronic.serial_number, electronic.model_number)
+                .then(function(id){
+                  console.log("added inventory item");
+                });
               switch (electronic.type) {
                 case 'Desktop': {
                   return addDimensions(electronic)
@@ -235,8 +245,22 @@ function commitAll(object) {
    });
 }
 
+function getAllInventoryItems(){
+  return connection('ProductDescription')
+  .innerJoin('Inventory', 'Inventory.model_number', 'ProductDescription.model_number')
+  .select('*');
+}
+
 function getAllProductsDescription() {
   return connection('ProductDescription').select('*');
+}
+
+function addInventoryItem(serial_number, model_number){
+  return connection.insert({
+      'model_number': model_number,
+      'serial_number': serial_number,
+    }, 'id')
+  .into('Inventory');
 }
 
 function addProductDescription(electronic) {
@@ -322,4 +346,5 @@ module.exports = {
   commit: commit,
   commitAll: commitAll,
   getAllProductsDescription: getAllProductsDescription,
+  getAllInventoryItems: getAllInventoryItems,
 };
