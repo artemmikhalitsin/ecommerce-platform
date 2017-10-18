@@ -3,104 +3,108 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
-var Promise = require('bluebird');
+let Promise = require('bluebird');
 
     function constructor(connection) {
        this.connection = connection;
     }
 
-   function commit(object, tableName){
-       var descriptions = [{
+   function commit(object, tableName) {
+       let descriptions = [{
         model_number: '56',
-        brand_name: "b",
+        brand_name: 'b',
         price: 1,
-        weight: 1
-       },{
+        weight: 1,
+       }, {
         model_number: '57',
-        brand_name: "b",
+        brand_name: 'b',
         price: 1,
-        weight: 1
-       },{
+        weight: 1,
+       }, {
         model_number: '58',
-        brand_name: "b",
+        brand_name: 'b',
         price: 1,
-        weight: 1
+        weight: 1,
        }];
-       var computersObj = [{
+       let computersObj = [{
         processor_type: 'r',
         ram_size: 1,
         number_cpu_cores: 2,
-        harddrive_size: 3
-       },{
+        harddrive_size: 3,
+       }, {
         processor_type: 'q',
         ram_size: 1,
         number_cpu_cores: 2,
-        harddrive_size: 3
-       },{
+        harddrive_size: 3,
+       }, {
         processor_type: 'n',
         ram_size: 1,
         number_cpu_cores: 2,
-        harddrive_size: 3
+        harddrive_size: 3,
        }];
-       var electronics = [{
+       let electronics = [{
         comp_id: 0,
         model_number: 0,
-        dimension_id: 0
-       },{
+        dimension_id: 0,
+       }, {
         comp_id: 0,
         model_number: 0,
-        dimension_id: 0
-       },{
+        dimension_id: 0,
+       }, {
         comp_id: 0,
         model_number: 0,
-        dimension_id: 0
+        dimension_id: 0,
        }];
-       var dimensions = [{
+       let dimensions = [{
         depth: 1,
         height: 1,
-        width: 1
+        width: 1,
        }];
-       if(tableName == 'Desktop' || tableName == 'Laptop' || tableName == 'Tablet')
-       return connection.transaction(function(trx){
-            connection.insert(descriptions, 'model_number')
-                    .into('ProductDescription')
-                    .transacting(trx)
-                    .then(function(modelNumbers){
-                        console.log(modelNumbers);
-                        return connection.insert(computersObj, 'comp_id')
-                                .into('Computer')
-                                .transacting(trx)
-                                .then(function(compIds){
-                                    return connection.insert(dimensions, 'dimensions_id')
-                                        .into('Dimensions')
-                                        .transacting(trx)
-                                        .then(function(dimensionIds){
-                                            electronics[0].comp_id = compIds[0];
-                                            electronics[0].dimension_id = dimensionIds[0];
-                                            electronics[0].model_number = '56';
-
-                                            return connection.insert(electronics[0])
-                                                    .into(tableName)
-                                                    .transacting(trx);
-                                        });
-                                });
-                    })
-                    .then(trx.commit)
-                    .catch(trx.rollback);
-       });
-       else return connection.transaction(function(trx){
-        connection.insert(object)
-                .into(tableName)
+       if (tableName == 'Desktop' ||
+          tableName == 'Laptop' ||
+          tableName == 'Tablet') {
+return connection.transaction(function(trx) {
+      connection.insert(descriptions, 'model_number')
+        .into('ProductDescription')
+        .transacting(trx)
+        .then(function(modelNumbers) {
+          console.log(modelNumbers);
+          return connection.insert(computersObj, 'comp_id')
+            .into('Computer')
+            .transacting(trx)
+            .then(function(compIds) {
+              return connection.insert(dimensions, 'dimensions_id')
+                .into('Dimensions')
                 .transacting(trx)
-                .then(trx.commit)
-                .catch(trx.rollback);
+                .then(function(dimensionIds) {
+                  electronics[0].comp_id = compIds[0];
+                  electronics[0].dimension_id = dimensionIds[0];
+                  electronics[0].model_number = '56';
+
+                  return connection.insert(electronics[0])
+                    .into(tableName)
+                    .transacting(trx);
+                  });
+            });
+        })
+       .then(trx.commit)
+       .catch(trx.rollback);
+});
+} else {
+return connection.transaction(function(trx) {
+  connection.insert(object)
+    .into(tableName)
+    .transacting(trx)
+    .then(trx.commit)
+    .catch(trx.rollback);
    });
 }
+}
 
-function commitAll(object){
-    var electronics = [{
+function commitAll(object) {
+    let electronics = [{
      model_number: '56',
-     brand_name: "b",
+     brand_name: 'b',
      price: 1,
      weight: 1,
      type: 'Desktop',
@@ -110,10 +114,10 @@ function commitAll(object){
      harddrive_size: 3,
      dimensions: {depth: 1,
         height: 1,
-        width: 1}
-    },{
+        width: 1},
+    }, {
      model_number: '57',
-     brand_name: "b",
+     brand_name: 'b',
      price: 1,
      weight: 1,
      type: 'Desktop',
@@ -123,10 +127,10 @@ function commitAll(object){
      harddrive_size: 3,
      dimensions: {depth: 1,
         height: 1,
-        width: 1}
-    },{
+        width: 1},
+    }, {
      model_number: '58',
-     brand_name: "b",
+     brand_name: 'b',
      price: 1,
      weight: 1,
      type: 'Laptop',
@@ -135,13 +139,13 @@ function commitAll(object){
      number_cpu_cores: 2,
      harddrive_size: 3,
      display_size: 1,
-     battery_info: "info about battery",
-     os: "os info",
+     battery_info: 'info about battery',
+     os: 'os info',
      camera: true,
-     touch_screen: false
-   },{
+     touch_screen: false,
+   }, {
      model_number: '59',
-     brand_name: "b",
+     brand_name: 'b',
      price: 1,
      weight: 1,
      type: 'Tablet',
@@ -153,39 +157,39 @@ function commitAll(object){
         height: 1,
         width: 1},
      display_size: 1,
-     battery_info: "info about battery",
-     os: "os info",
-     camera: "camera info"
-   },{
+     battery_info: 'info about battery',
+     os: 'os info',
+     camera: 'camera info',
+   }, {
      model_number: '60',
-     brand_name: "b",
+     brand_name: 'b',
      price: 1,
      weight: 1,
      type: 'Monitor',
-     display_size: 1
-   },{
+     display_size: 1,
+   }, {
      model_number: '61',
-     brand_name: "b",
+     brand_name: 'b',
      price: 1,
      weight: 1,
      type: 'TV',
      dimensions: {depth: 1,
         height: 1,
         width: 1},
-     category_name: "HD"
+     category_name: 'HD',
    }];
-    return connection.transaction(function(trx){
-        Promise.each(electronics, function(electronic){
+    return connection.transaction(function(trx) {
+        Promise.each(electronics, function(electronic) {
             return addProductDescription(electronic)
-              .then(function(model_number){
-              switch(electronic.type){
-                case 'Desktop':{
+              .then(function(model_number) {
+              switch (electronic.type) {
+                case 'Desktop': {
                   return addDimensions(electronic)
                   .transacting(trx)
-                  .then(function(dimensionsId){
+                  .then(function(dimensionsId) {
                     return addComputer(electronic)
                     .transacting(trx)
-                    .then(function(compId){
+                    .then(function(compId) {
                       return addDesktop(compId, dimensionsId, electronic)
                       .transacting(trx);
                     });
@@ -194,7 +198,7 @@ function commitAll(object){
                 case 'Laptop': {
                   return addComputer(electronic)
                   .transacting(trx)
-                  .then(function(compId){
+                  .then(function(compId) {
                     return addLaptop(compId, electronic)
                     .transacting(trx);
                   });
@@ -202,10 +206,10 @@ function commitAll(object){
                 case 'Tablet': {
                   return addDimensions(electronic)
                   .transacting(trx)
-                  .then(function(dimensionsId){
+                  .then(function(dimensionsId) {
                     return addComputer(electronic)
                     .transacting(trx)
-                    .then(function(compId){
+                    .then(function(compId) {
                       return addTablet(compId, dimensionsId, electronic)
                       .transacting(trx);
                     });
@@ -214,7 +218,7 @@ function commitAll(object){
                 case 'TV': {
                   return addDimensions(electronic)
                   .transacting(trx)
-                  .then(function(dimensionsId){
+                  .then(function(dimensionsId) {
                     return addTV(dimensionsId, electronic)
                     .transacting(trx);
                   });
@@ -224,54 +228,53 @@ function commitAll(object){
                   .transacting(trx);
                 };break;
               }
-            })
+            });
         })
         .then(trx.commit)
         .catch(trx.rollback);
-
    });
 }
 
-function getAllProductsDescription(){
+function getAllProductsDescription() {
   return connection('ProductDescription').select('*');
 }
 
-function addProductDescription(electronic){
+function addProductDescription(electronic) {
   return connection.insert({
       'model_number': electronic.model_number,
       'brand_name': electronic.brand_name,
       'weight': electronic.weight,
       'price': electronic.price,
-      'type': electronic.type
+      'type': electronic.type,
     }, 'model_number')
   .into('ProductDescription');
 }
 
-function addDimensions(electronic){
+function addDimensions(electronic) {
   return connection.insert(electronic.dimensions, 'dimension_id')
   .into('Dimensions');
 }
 
-function addComputer(electronic){
+function addComputer(electronic) {
   return connection.insert({
       'processor_type': electronic.processor_type,
       'ram_size': electronic.ram_size,
       'number_cpu_cores': electronic.number_cpu_cores,
-      'harddrive_size': electronic.harddrive_size
-  },'comp_id')
+      'harddrive_size': electronic.harddrive_size,
+  }, 'comp_id')
   .into('Computer');
 }
 
-function addDesktop(compId, dimensionsId, electronic){
+function addDesktop(compId, dimensionsId, electronic) {
   return connection.insert({
       'comp_id': compId,
       'model_number': electronic.model_number,
-      'dimension_id': dimensionsId
+      'dimension_id': dimensionsId,
   }, 'id')
   .into('Desktop');
 }
 
-function addLaptop(compId, electronic){
+function addLaptop(compId, electronic) {
   return connection.insert({
       'comp_id': compId,
       'model_number': electronic.model_number,
@@ -279,12 +282,12 @@ function addLaptop(compId, electronic){
       'battery_info': electronic.battery_info,
       'os': electronic.os,
       'camera': electronic.camera,
-      'touch_screen': electronic.touch_screen
+      'touch_screen': electronic.touch_screen,
   }, 'id')
   .into('Laptop');
 }
 
-function addTablet(compId, dimensionsId, electronic){
+function addTablet(compId, dimensionsId, electronic) {
   return connection.insert({
       'comp_id': compId,
       'model_number': electronic.model_number,
@@ -292,24 +295,24 @@ function addTablet(compId, dimensionsId, electronic){
       'display_size': electronic.display_size,
       'battery_info': electronic.battery_info,
       'os': electronic.os,
-      'camera_info': electronic.camera_info
+      'camera_info': electronic.camera_info,
   }, 'id')
   .into('Tablet');
 }
 
-function addMonitor(electronic){
+function addMonitor(electronic) {
   return connection.insert({
       'model_number': electronic.model_number,
-      'display_size': electronic.display_size
+      'display_size': electronic.display_size,
   }, 'id')
   .into('Monitor');
 }
 
-function addTV(dimensionsId, electronic){
+function addTV(dimensionsId, electronic) {
   return connection.insert({
       'model_number': electronic.model_number,
       'dimension_id': dimensionsId,
-      'category_name': electronic.category_name
+      'category_name': electronic.category_name,
   }, 'id')
   .into('TV');
 }
