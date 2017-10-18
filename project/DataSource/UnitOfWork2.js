@@ -10,6 +10,7 @@ class UnitOfWork {
   commitAll(object) {
       let electronics = [{
        model_number: '56',
+       serial_number: '10',
        brand_name: 'b',
        price: 1,
        weight: 1,
@@ -23,6 +24,7 @@ class UnitOfWork {
           width: 1},
       }, {
        model_number: '57',
+       serial_number: '11',
        brand_name: 'b',
        price: 1,
        weight: 1,
@@ -36,6 +38,7 @@ class UnitOfWork {
           width: 1},
       }, {
        model_number: '58',
+       serial_number: '12',
        brand_name: 'b',
        price: 1,
        weight: 1,
@@ -51,6 +54,7 @@ class UnitOfWork {
        touch_screen: false,
      }, {
        model_number: '59',
+       serial_number: '13',
        brand_name: 'b',
        price: 1,
        weight: 1,
@@ -68,6 +72,7 @@ class UnitOfWork {
        camera: 'camera info',
      }, {
        model_number: '60',
+       serial_number: '14',
        brand_name: 'b',
        price: 1,
        weight: 1,
@@ -75,6 +80,7 @@ class UnitOfWork {
        display_size: 1,
      }, {
        model_number: '61',
+       serial_number: '15',
        brand_name: 'b',
        price: 1,
        weight: 1,
@@ -84,10 +90,15 @@ class UnitOfWork {
           width: 1},
        category_name: 'HD',
      }];
-      return this.connection.transaction(function(trx) {
+      return connection.transaction(function(trx) {
           Promise.each(electronics, function(electronic) {
               return addProductDescription(electronic)
                 .then(function(model_number) {
+                  addInventoryItem(electronic.serial_number,
+                                   electronic.model_number)
+                  .then(function(id) {
+                    console.log('added inventory item');
+                  });
                 switch (electronic.type) {
                   case 'Desktop': {
                     return addDimensions(electronic)
@@ -139,6 +150,13 @@ class UnitOfWork {
           .then(trx.commit)
           .catch(trx.rollback);
      });
+  }
+
+  getAllInventoryItems() {
+    return connection('ProductDescription')
+    .innerJoin('Inventory', 'Inventory.model_number',
+               'ProductDescription.model_number')
+    .select('*');
   }
 
   getAllProductsDescription() {

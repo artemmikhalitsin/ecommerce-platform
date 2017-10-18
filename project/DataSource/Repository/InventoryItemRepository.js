@@ -2,7 +2,8 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
-let uow = require(rootPath + '/DataSource/UnitOfWork.js');
+let UnitOfWork = require(rootPath + '/DataSource/UnitOfWork2.js');
+let uow = new UnitOfWork();
 
 function save(inventoryItem) {
   database('InventoryItem').insert(inventoryItem)
