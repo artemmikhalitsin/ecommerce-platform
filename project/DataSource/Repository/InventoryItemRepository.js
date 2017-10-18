@@ -1,6 +1,8 @@
 const environment = process.env.NODE_ENV || 'development';
-const configuration = require('./knexfile')[environment];
+const rootPath = require('app-root-dir').get();
+const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
+let uow = require(rootPath + '/DataSource/UnitOfWork.js');
 
 function save(inventoryItem) {
   database('InventoryItem').insert(inventoryItem)
@@ -18,7 +20,12 @@ function get(args) {
   return database('inventoryItem').select('*');
 }
 
+function getAllInventoryItems(){
+  return uow.getAllInventoryItems();
+}
+
 module.exports = {
   save: save,
   get: get,
+  getAllInventoryItems: getAllInventoryItems,
 };
