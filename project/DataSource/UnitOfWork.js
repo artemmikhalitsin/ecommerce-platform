@@ -164,8 +164,16 @@ class UnitOfWork {
      });
   }
 
+  addInventoryItem(serial_number, model_number) {
+    return this.connection.insert({
+        'model_number': model_number,
+        'serial_number': serial_number,
+      }, 'id')
+    .into('Inventory');
+  }
+
   getAllInventoryItems() {
-    return connection('ProductDescription')
+    return this.connection('ProductDescription')
     .innerJoin('Inventory', 'Inventory.model_number',
                'ProductDescription.model_number')
     .select('*');
