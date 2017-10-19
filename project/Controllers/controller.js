@@ -9,8 +9,6 @@ class Controller {
       '/DataSource/Repository/MonitorRepository.js');
     this.tabletRepo = require( this.rootPath +
       '/DataSource/Repository/TabletRepository.js');
-    this.tvRepo = require( this.rootPath +
-      '/DataSource/Repository/TVRepository.js');
     this.userRepo = require(this.rootPath +
       '/DataSource/Repository/UserRepository.js');
     this.inventoryRepo = require(this.rootPath +

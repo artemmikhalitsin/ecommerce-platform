@@ -1,7 +1,7 @@
 'use strict';
 const rootPath = require('app-root-dir').get();
 
-let UnitOfWork = require(rootPath + '/DataSource/UnitOfWork2.js');
+let UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 let uow = new UnitOfWork();
 
 class ProductDescription {

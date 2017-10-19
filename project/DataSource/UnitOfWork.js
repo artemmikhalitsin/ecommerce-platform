@@ -7,10 +7,22 @@ class UnitOfWork {
     this.configuration = require(this.rootPath + '/knexfile')[this.environment];
     this.connection = require('knex')(this.configuration);
   }
+
+  addProductDescription(electronic) {
+    return this.connection.insert({
+        'model_number': electronic.model_number,
+        'brand_name': electronic.brand_name,
+        'weight': electronic.weight,
+        'price': electronic.price,
+        'type': electronic.type,
+      }, 'model_number')
+    .into('ProductDescription');
+  }
+
   commitAll(object) {
       let electronics = [{
        model_number: '56',
-       serial_number: '10',s
+       serial_number: '10',
        brand_name: 'b',
        price: 1,
        weight: 1,
@@ -90,58 +102,58 @@ class UnitOfWork {
           width: 1},
        category_name: 'HD',
      }];
-      return connection.transaction(function(trx) {
-          Promise.each(electronics, function(electronic) {
-              return addProductDescription(electronic)
-                .then(function(model_number) {
-                  addInventoryItem(electronic.serial_number,
+      return this.connection.transaction((trx) => {
+          Promise.each(electronics, (electronic) => {
+              return this.addProductDescription(electronic)
+                .then((model_number) => {
+                  this.addInventoryItem(electronic.serial_number,
                                    electronic.model_number)
-                  .then(function(id) {
+                  .then((id) => {
                     console.log('added inventory item');
                   });
                 switch (electronic.type) {
                   case 'Desktop': {
-                    return addDimensions(electronic)
+                    return this.addDimensions(electronic)
                     .transacting(trx)
-                    .then(function(dimensionsId) {
-                      return addComputer(electronic)
+                    .then((dimensionsId) => {
+                      return this.addComputer(electronic)
                       .transacting(trx)
-                      .then(function(compId) {
-                        return addDesktop(compId, dimensionsId, electronic)
+                      .then((compId) => {
+                        return this.addDesktop(compId, dimensionsId, electronic)
                         .transacting(trx);
                       });
                     });
                   };break;
                   case 'Laptop': {
-                    return addComputer(electronic)
+                    return this.addComputer(electronic)
                     .transacting(trx)
-                    .then(function(compId) {
-                      return addLaptop(compId, electronic)
+                    .then((compId) => {
+                      return this.addLaptop(compId, electronic)
                       .transacting(trx);
                     });
                   };break;
                   case 'Tablet': {
-                    return addDimensions(electronic)
+                    return this.addDimensions(electronic)
                     .transacting(trx)
-                    .then(function(dimensionsId) {
-                      return addComputer(electronic)
+                    .then((dimensionsId) => {
+                      return this.addComputer(electronic)
                       .transacting(trx)
-                      .then(function(compId) {
-                        return addTablet(compId, dimensionsId, electronic)
+                      .then((compId) => {
+                        return this.addTablet(compId, dimensionsId, electronic)
                         .transacting(trx);
                       });
                     });
                   };break;
                   case 'TV': {
-                    return addDimensions(electronic)
+                    return this.addDimensions(electronic)
                     .transacting(trx)
-                    .then(function(dimensionsId) {
-                      return addTV(dimensionsId, electronic)
+                    .then((dimensionsId) => {
+                      return this.addTV(dimensionsId, electronic)
                       .transacting(trx);
                     });
                   };break;
                   case 'Monitor': {
-                    return addMonitor(electronic)
+                    return this.addMonitor(electronic)
                     .transacting(trx);
                   };break;
                 }
@@ -161,17 +173,6 @@ class UnitOfWork {
 
   getAllProductsDescription() {
     return this.connection('ProductDescription').select('*');
-  }
-
-  addProductDescription(electronic) {
-    return this.connection.insert({
-        'model_number': electronic.model_number,
-        'brand_name': electronic.brand_name,
-        'weight': electronic.weight,
-        'price': electronic.price,
-        'type': electronic.type,
-      }, 'model_number')
-    .into('ProductDescription');
   }
 
   addDimensions(electronic) {
