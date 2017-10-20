@@ -9,10 +9,10 @@ class Controller {
       '/DataSource/Repository/MonitorRepository.js');
     this.tabletRepo = require( this.rootPath +
       '/DataSource/Repository/TabletRepository.js');
-    this.tvRepo = require( this.rootPath +
-      '/DataSource/Repository/TVRepository.js');
     this.userRepo = require(this.rootPath +
       '/DataSource/Repository/UserRepository.js');
+    this.inventoryRepo = require(this.rootPath +
+      '/DataSource/Repository/inventoryItemRepository.js');
   }
 
   registrationRequest(req, res) {
@@ -84,13 +84,12 @@ class Controller {
   } */
 
   // this funtion is getting all the product description from the database
-  getAllInventory(req, res){
-    const asd = require('app-root-dir').get();
-    const ProductDescription = require(asd + '/DataSource/Repository/ProductDescriptionRepository');
-    let ProductDescriptionObj = new ProductDescription();
-    let prod = ProductDescriptionObj.getAllProductsDescription();
-    Promise.all([prod])
+  getAllInventory(req, res) {
+    let inventoryItems = this.inventoryRepo.getAllInventoryItems();
+    Promise.all([inventoryItems])
     .then((values) => {
+      console.log('printing values');
+      console.log(values);
       let items = JSON.stringify(values[0]);
       res.render('inventory', {items: items});
     })
