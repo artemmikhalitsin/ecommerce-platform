@@ -4,9 +4,6 @@ const hbs = require('express-handlebars');
 const session = require('express-session');
 const rootPath = require('app-root-dir').get();
 const app = express();
-const environment = process.env.NODE_ENV || 'development';
-const configuration = require('./knexfile')[environment];
-const database = require('knex')(configuration);
 let bodyParser = require('body-parser');
 app.use( bodyParser.json() ); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
@@ -18,7 +15,7 @@ const desktopRepo = require(rootPath +
   '/DataSource/Repository/DesktopRepository.js');
 
 // this will be removed (it is here only for testing purposes)
-desktopRepo.save2("object");
+desktopRepo.save2('object');
 
 const Controller = require(rootPath + '/Controllers/controller');
 let controller = new Controller();
@@ -50,17 +47,19 @@ app.get('/login', function(req, res) {
   if (req.session.exists) {
     console.log('already logged in, redirecting to inventory');
     res.redirect('/getAllInventoryItems');
-  } else
-    res.render('login');
+  } else {
+res.render('login');
+}
 });
 
 // getting the registration page
 app.get('/registration', function(req, res) {
   if (req.session.exists) {
-    console.log('already logged in, redirecting to inventory');
-    res.redirect('/getAllInventoryItems');
-  } else
-    res.render('registration');
+      console.log('already logged in, redirecting to inventory');
+      res.redirect('/getAllInventoryItems');
+  } else {
+      res.render('registration');
+  }
 });
 
 // getting the add item page
