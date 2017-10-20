@@ -15,11 +15,7 @@ const desktopRepo = require(rootPath +
   '/DataSource/Repository/DesktopRepository.js');
 
 // this will be removed (it is here only for testing purposes)
-<<<<<<< HEAD
-//desktopRepo.save2("object");
-=======
 desktopRepo.save2('object');
->>>>>>> b27b5d9a91e1c939ceb6093e66034a1f11ac98cc
 
 const Controller = require(rootPath + '/Controllers/controller');
 let controller = new Controller();
