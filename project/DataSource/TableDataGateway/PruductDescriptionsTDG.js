@@ -4,6 +4,7 @@ class ProductDescriptionsTDG{
         this.rootPath = require('app-root-dir').get();
         this.configuration = require(this.rootPath + '/knexfile')[this.environment];
         this.connection = require('knex')(this.configuration);
+        this.InventoryItems = [];
     }
     add(productDescription){
         return this.connection
@@ -17,7 +18,8 @@ class ProductDescriptionsTDG{
                     .into('ProductDescription');
     }
     select(){
-
+        var context = this.connection('ProductDescription')
+                    .select('*');
     }
     update(productDescription){
         //TODO

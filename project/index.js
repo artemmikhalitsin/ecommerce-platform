@@ -16,6 +16,7 @@ const desktopRepo = require(rootPath +
 
 // this will be removed (it is here only for testing purposes)
 desktopRepo.save2('object');
+desktopRepo.deletethistestfunction();
 
 const Controller = require(rootPath + '/Controllers/controller');
 let controller = new Controller();
