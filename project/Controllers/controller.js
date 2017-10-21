@@ -59,7 +59,7 @@ class Controller {
  /** // this function will be deleted because it got replaced by getAllInventory
   getAllInventoryItems(req, res, done) {
     // console.log(req.session.exists);
-    
+
     let laptopItems = this.laptopRepo.get('*');
     let desktopItems = this.desktopRepo.get('*');
     let monitorItems = this.monitorRepo.get('*');
@@ -92,6 +92,7 @@ class Controller {
       console.log(values);
       let items = JSON.stringify(values[0]);
       res.render('inventory', {items: items});
+      //res.render('clientInventory', {items: items});
     })
     .catch((err) => {
       console.log(err);
