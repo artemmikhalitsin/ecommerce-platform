@@ -20,5 +20,10 @@
             <option value="true">Yes</option>
             <option value="false">No</option>
           </select>
-</label>
-<button ng-click="submitLaptop()">Click</button>
+</label><br />
+<p ng-show="laptop.serial_numbers.length != 0">Serial numbers to be added:</p>
+<p ng-repeat="serial in laptop.serial_numbers">{{ serial }}</p>
+<label>Serial Number: <input type="text" ng-model="serial_number" ng-submit="addSerial()">
+  <button ng-click="addSerial()">Add Serial</button>
+</label><br />
+<button ng-click="submitLaptop()">Add Laptop</button>
