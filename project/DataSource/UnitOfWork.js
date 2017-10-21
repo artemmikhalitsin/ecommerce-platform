@@ -7,20 +7,33 @@ class UnitOfWork {
     this.rootPath = require('app-root-dir').get();
     this.configuration = require(this.rootPath + '/knexfile')[this.environment];
     this.connection = require('knex')(this.configuration);
+    
+    let ProductDescriptionsTDG = require(this.rootPath + '/DataSource/TableDataGateway/PruductDescriptionsTDG.js');
+    this.productDescTDG = new ProductDescriptionsTDG();
+
+    let InventoryItemsTDG = require(this.rootPath + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
+    this.inventoryItemsTDG = new InventoryItemsTDG();
+    
+    let ComputersTDG = require(this.rootPath + '/DataSource/TableDataGateway/ComputersTDG.js');
+    this.computersTDG = new ComputersTDG();
+
+    let DesktopsTDG = require(this.rootPath + '/DataSource/TableDataGateway/DesktopsTDG.js');
+    this.desktopsTDG = new DesktopsTDG();
+
+    let DimensionsTDG = require(this.rootPath + '/DataSource/TableDataGateway/DimensionsTDG.js');
+    this.dimensionsTDG = new DimensionsTDG();
+
+    let LaptopsTDG = require(this.rootPath + '/DataSource/TableDataGateway/LaptopsTDG.js');
+    this.laptopsTDG = new LaptopsTDG();
+
+    let MonitorsTDG = require(this.rootPath + '/DataSource/TableDataGateway/MonitorsTDG.js');
+    this.monitorsTDG = new MonitorsTDG();
+
+    let TabletsTDG = require(this.rootPath + '/DataSource/TableDataGateway/TabletsTDG.js');
+    this.tabletsTDG = new TabletsTDG();
   }
 
-  addProductDescription(electronic) {
-    return this.connection.insert({
-        'model_number': electronic.model_number,
-        'brand_name': electronic.brand_name,
-        'weight': electronic.weight,
-        'price': electronic.price,
-        'type': electronic.type,
-      }, 'model_number')
-    .into('ProductDescription');
-  }
-
-  commitAll(object) { 
+  commitAll(object) {
       let electronics = [{
         serial_number: '123',
         model_number: '70',
@@ -50,6 +63,7 @@ class UnitOfWork {
            height: 1,
            width: 1}
        },{
+        serial_number: '12',
         model_number: '62',
         brand_name: "b",
         price: 1,
@@ -81,57 +95,50 @@ class UnitOfWork {
           console.log(electronicsToDelete);
 
           Promise.each(electronicsToAdd, (electronic) => {
-              return this.addProductDescription(electronic)
+            console.log("Serial number"+ !!electronic.serial_number);
+            return this.productDescTDG.add(electronic, trx) 
                 .then((model_number) => {
-                  if(!!electronic.serial_number)
                   return this.addInventoryItem(electronic.serial_number,
                                    electronic.model_number)
-                  .then((id) => {
-                    console.log('added inventory item');
-                  });
+                            .then((id) => {
+                              console.log('added inventory item');
+                            });
+                
                 switch (electronic.type) {
                   case 'Desktop': {
-                    return this.addDimensions(electronic)
+                    return this.dimensionsTDG.add(electronic)
                     .transacting(trx)
                     .then((dimensionsId) => {
-                      return this.addComputer(electronic)
+                      return this.computersTDG.add(electronic)
                       .transacting(trx)
                       .then((compId) => {
-                        return this.addDesktop(compId, dimensionsId, electronic)
+                        return this.desktopsTDG.add(compId, dimensionsId, electronic)
                         .transacting(trx);
                       });
                     });
                   };break;
                   case 'Laptop': {
-                    return this.addComputer(electronic)
+                    return this.computersTDG.add(electronic)
                     .transacting(trx)
                     .then((compId) => {
-                      return this.addLaptop(compId, electronic)
+                      return this.laptopsTDG.add(compId, electronic)
                       .transacting(trx);
                     });
                   };break;
                   case 'Tablet': {
-                    return this.addDimensions(electronic)
+                    return this.dimensionsTDG.add(electronic)
                     .transacting(trx)
                     .then((dimensionsId) => {
-                      return this.addComputer(electronic)
+                      return this.computersTDG.add(electronic)
                       .transacting(trx)
                       .then((compId) => {
-                        return this.addTablet(compId, dimensionsId, electronic)
-                        .transacting(trx);
+                        return this.tabletsTDG.add(compId, dimensionsId, electronic)
+                        .transacting(trx); 
                       });
                     });
                   };break;
-                  case 'TV': {
-                    return this.addDimensions(electronic)
-                    .transacting(trx)
-                    .then((dimensionsId) => {
-                      return this.addTV(dimensionsId, electronic)
-                      .transacting(trx);
-                    });
-                  };break;
                   case 'Monitor': {
-                    return this.addMonitor(electronic)
+                    return this.monitorsTDG.add(electronic)
                     .transacting(trx);
                   };break;
                 }
@@ -162,73 +169,6 @@ class UnitOfWork {
     return this.connection('ProductDescription').select('*');
   }
 
-  addDimensions(electronic) {
-    return this.connection.insert(electronic.dimensions, 'dimension_id')
-    .into('Dimensions');
-  }
-
-  addComputer(electronic) {
-    return this.connection.insert({
-        'processor_type': electronic.processor_type,
-        'ram_size': electronic.ram_size,
-        'number_cpu_cores': electronic.number_cpu_cores,
-        'harddrive_size': electronic.harddrive_size,
-    }, 'comp_id')
-    .into('Computer');
-  }
-
-  addDesktop(compId, dimensionsId, electronic) {
-    return this.connection.insert({
-        'comp_id': compId,
-        'model_number': electronic.model_number,
-        'dimension_id': dimensionsId,
-    }, 'id')
-    .into('Desktop');
-  }
-
-  addLaptop(compId, electronic) {
-    return this.connection.insert({
-        'comp_id': compId,
-        'model_number': electronic.model_number,
-        'display_size': electronic.display_size,
-        'battery_info': electronic.battery_info,
-        'os': electronic.os,
-        'camera': electronic.camera,
-        'touch_screen': electronic.touch_screen,
-    }, 'id')
-    .into('Laptop');
-  }
-
-  addTablet(compId, dimensionsId, electronic) {
-    return this.connection.insert({
-        'comp_id': compId,
-        'model_number': electronic.model_number,
-        'dimension_id': dimensionsId,
-        'display_size': electronic.display_size,
-        'battery_info': electronic.battery_info,
-        'os': electronic.os,
-        'camera_info': electronic.camera_info,
-    }, 'id')
-    .into('Tablet');
-  }
-
-  addMonitor(electronic) {
-    return this.connection.insert({
-        'model_number': electronic.model_number,
-        'display_size': electronic.display_size,
-    }, 'id')
-    .into('Monitor');
-  }
-
-  addTV(dimensionsId, electronic) {
-    return this.connection.insert({
-        'model_number': electronic.model_number,
-        'dimension_id': dimensionsId,
-        'category_name': electronic.category_name,
-    }, 'id')
-    .into('TV');
-  }
-
  compareWithContext(productDescriptions, electronics){
   var electronicsToAdd = [];
   var electronicsToUpdate = [];
@@ -236,9 +176,8 @@ class UnitOfWork {
   
   for(var i = 0; i < productDescriptions.length; i++){
     for(var j = 0; j < electronics.length; j++){
-      console.log("in the contex? "+ productDescriptions[i].model_number);
-      console.log("This is inside the first nested loop: " + electronics[j].model_number + "is in the list?" + electronicsToUpdate.findIndex(x => x.model_number == electronics[j].model_number));
-      if(productDescriptions[i].model_number == electronics[j].model_number && electronicsToUpdate.findIndex(x => x.model_number == electronics[j].model_number) === -1) 
+      if(productDescriptions[i].model_number == electronics[j].model_number &&
+         electronicsToUpdate.findIndex(x => x.model_number == electronics[j].model_number) === -1) 
         electronicsToUpdate.push(electronics[j]);
     }
   }
