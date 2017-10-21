@@ -12,7 +12,7 @@ class Controller {
     this.userRepo = require(this.rootPath +
       '/DataSource/Repository/UserRepository.js');
     this.inventoryRepo = require(this.rootPath +
-      '/DataSource/Repository/inventoryItemRepository.js');
+      '/DataSource/Repository/InventoryItemRepository.js');
   }
 
   registrationRequest(req, res) {
