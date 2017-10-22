@@ -7,7 +7,7 @@ laptopForm.component('laptopForm', {
     $scope.laptop = {};
     $scope.serial_number = '123abc';
     $scope.submitLaptop = () => {
-      $scope.$emit("newLaptop", $scope.laptop)
+      $scope.$emit("newLaptop", $scope.laptop);
       $scope.laptop = {};
     }
     $scope.addSerial = () => {

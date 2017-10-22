@@ -1,16 +1,22 @@
-<label>Brand: <input type="text" name="brand"></label><br />
-<label>Model: <input type="text" name="model"></label><br />
-<label>Price: <input type="number" step="0.01" min="0" name="price"></label><br />
-<label>Weight(g): <input type="number" step="1" min="0" name="weight"></label><br />
-<label>Display size: <input type="number" step="1" min="0" name="display_size"></label><br />
-<label>Processor Type: <input type="text" name="processor_type"></label><br />
-<label>RAM size: <input type="number" step="1" min="0" name="ram_size"></label><br />
-<label># of CPU cores: <input type="number" step="1" min="0" name="number_cpu_cores"></label><br />
-<label>Harddrive size: <input type="number" step="1" min="0" name="harddrive_size"></label><br />
-<label>Battery Info: <input type="text" name="battery_info"></label><br />
-<label>OS: <input type="text" name="os"></label><br />
-<label>Camera Info: <input type="text" name="camera_info"></label><br />
+<label>Brand: <input type="text" ng-model="tablet.brand"></label><br />
+<label>Model: <input type="text" ng-model="tablet.model"></label><br />
+<label>Price: <input type="number" step="0.01" min="0" ng-model="tablet.price"></label><br />
+<label>Weight(g): <input type="number" step="1" min="0" ng-model="tablet.weight"></label><br />
+<label>Display size: <input type="number" step="1" min="0" ng-model="tablet.display_size"></label><br />
+<label>Processor Type: <input type="text" ng-model="tablet.processor_type"></label><br />
+<label>RAM size: <input type="number" step="1" min="0" ng-model="tablet.ram_size"></label><br />
+<label># of CPU cores: <input type="number" step="1" min="0" ng-model="tablet.number_cpu_cores"></label><br />
+<label>Harddrive size: <input type="number" step="1" min="0" ng-model="tablet.harddrive_size"></label><br />
+<label>Battery Info: <input type="text" ng-model="tablet.battery_info"></label><br />
+<label>OS: <input type="text" ng-model="tablet.os"></label><br />
+<label>Camera Info: <input type="text" ng-model="tablet.camera_info"></label><br />
 <p>Dimensions(cm):</p>
-<label>Height: <input type="number" step="0.1" min="0" name="height"></label><br />
-<label>Width: <input type="number" step="0.1" min="0" name="width"></label><br />
-<label>Depth: <input type="number" step="0.1" min="0" name="depth"></lavel><br />
+<label>Height: <input type="number" step="0.1" min="0" ng-model="tablet.height"></label><br />
+<label>Width: <input type="number" step="0.1" min="0" ng-model="tablet.width"></label><br />
+<label>Depth: <input type="number" step="0.1" min="0" ng-model="tablet.depth"></lavel><br />
+<p ng-show="laptop.serial_numbers.length != 0">Serial numbers to be added:</p>
+<p ng-repeat="serial in tablet.serial_numbers">{{ serial }}</p>
+<label>Serial Number: <input type="text" ng-model="serial_number" ng-submit="addSerial()">
+  <button ng-click="addSerial()">Add Serial</button>
+</label><br />
+<button ng-click="submitTablet()">Add Tablet</button>
