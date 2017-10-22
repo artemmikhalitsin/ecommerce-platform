@@ -93,6 +93,17 @@ app.get('/getAllInventoryItems', function(req, res) {
   }
 });
 
+// getting the client inventory from the database
+app.get('/clientInventory', function(req, res) {
+  if (req.session.exists) {
+    controller.getAllInventory(req, res);
+    console.log('Successs')
+  } else {
+    console.log('login error');
+    res.redirect('/login');
+  }
+});
+
 // making the registration request
 app.post('/registrationRequest', function(req, res) {
   controller.registrationRequest(req, res);
