@@ -1,11 +1,11 @@
-class TabletsTDG{
-    constructor(){
+class TabletsTDG {
+    constructor() {
         this.environment = process.env.NODE_ENV || 'development';
         this.rootPath = require('app-root-dir').get();
         this.configuration = require(this.rootPath + '/knexfile')[this.environment];
         this.connection = require('knex')(this.configuration);
     }
-    add(compId, dimensionsId, tablet){
+    add(compId, dimensionsId, tablet) {
         return this.connection.insert({
             'comp_id': compId,
             'model_number': tablet.model_number,
@@ -17,11 +17,11 @@ class TabletsTDG{
         }, 'id')
         .into('Tablet');
     }
-    select(){
-        //TODO
+    select() {
+        // TODO
     }
-    update(tablet){
-        //TODO
+    update(tablet) {
+        // TODO
     }
 }
 module.exports = TabletsTDG;

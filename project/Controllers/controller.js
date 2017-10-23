@@ -56,47 +56,42 @@ class Controller {
     }
   }
 
- /** // this function will be deleted because it got replaced by getAllInventory
-  getAllInventoryItems(req, res, done) {
-    // console.log(req.session.exists);
-
-    let laptopItems = this.laptopRepo.get('*');
-    let desktopItems = this.desktopRepo.get('*');
-    let monitorItems = this.monitorRepo.get('*');
-    let tabletItems = this.tabletRepo.get('*');
-    let tvItems = this.tvRepo.get('*');
-
-    Promise.all([laptopItems, tvItems, monitorItems, tabletItems, desktopItems])
-    .then((values) => {
-      let allItems = {
-        laptops: values[0],
-        tvs: values[1],
-        mons: values[2],
-        tabs: values[3],
-        desks: values[4],
-      };
-      let items = JSON.stringify(allItems);
-      // res.sess
-      res.render('inventory', {items: items});
-    }).catch((error) => {
-      console.log(error);
-    });
-  } */
-
   // this funtion is getting all the product description from the database
   getAllInventory(req, res) {
     let inventoryItems = this.inventoryRepo.getAllInventoryItems();
     Promise.all([inventoryItems])
     .then((values) => {
+      /*
       console.log('printing values');
       console.log(values);
+      */
       let items = JSON.stringify(values[0]);
       res.render('inventory', {items: items});
-      //res.render('clientInventory', {items: items});
+      // res.render('clientInventory', {items: items});
     })
     .catch((err) => {
       console.log(err);
     });
+  }
+
+  inventoryAction(req, res) {
+    if (req.session.exists==true && req.session.isAdmin==true) {
+      let request = req.body;
+      console.log(request.actions);
+      let actions = JSON.parse(request.actions);
+      for (let key in actions) {
+        if (key == 'deleteSerials') {
+          for (let i = 0; i < actions[key].length; i++) {
+            let serial = actions[key][i].split('@')[0];
+            let model = actions[key][i].split('@')[1];
+            console.log(i + ': ' + serial + ': ' + model);
+          }
+        }
+      }
+      res.redirect('/getAllInventoryItems');
+    } else {
+      console.log('Not admin, fool!');
+    }
   }
 
   // this functon is adding a new user to the database
