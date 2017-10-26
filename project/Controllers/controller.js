@@ -78,7 +78,6 @@ class Controller {
       console.log(err);
     });
   }
-
   inventoryAction(req, res) {
     if (req.session.exists==true && req.session.isAdmin==true) {
       let request = req.body;
@@ -88,9 +87,11 @@ class Controller {
         if (key == 'deleteSerials') {
           console.log('To be deleted: ');
           for (let i = 0; i < actions[key].length; i++) {
-            let serial = actions[key][i].split('@')[0];
-            let model = actions[key][i].split('@')[1];
-            console.log(i + ': ' + serial + ': ' + model);
+            if (isAlphaNumeric.test(action[key][i])) {
+              let serial = actions[key][i].split('@')[0];
+              let model = actions[key][i].split('@')[1];
+              console.log(i + ': ' + serial + ': ' + model);
+            }
           }
         }
         if (key == 'addSerials') {
@@ -102,7 +103,6 @@ class Controller {
           }
         }
       }
-      res.redirect('back');
     } else {
       console.log('Not admin, fool!');
     }
@@ -115,10 +115,10 @@ class Controller {
     this.userRepo.authenticate(data).then((result) => {
       if (result.length <= 0) {
         console.log('Invalid username or password.');
-        res.redirect('/login');
+        res.render('login', {error: 'Invalid username/password'});
       } else if (result.length > 1) {
         console.log('Duplicate users detected');
-        res.redirect('/login');
+        res.render('login', {error: 'Duplicate users detected'});
       } else if (result.length == 1) {
         req.session.exists=true;
         if (result[0].is_admin == 1) {

@@ -5,12 +5,28 @@
     <title> Login </title>
     <!-- <script src = "js/login.js"></script> -->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-
+    <script type="text/javascript">
+      let error = '';
+      try{
+        error = JSON.parse('{{{error}}}');
+      } catch (err){
+        error = false;
+      }
+    </script>
   </head>
 
   <body ng-app="">
     <div ng-include="'includes/header.hbs'"></div></br></br>
     <div class="container">
+
+      {{#if error}}
+      <div class="row justify-content-center" style="margin-bottom: 1em;">
+        <div class="card" style="width: 30rem; background-color: #ffcccc;">
+          <div class="card-header text-center">{{error}}</div>
+        </div>
+      </div>
+      {{/if}}
+
       <div class="row justify-content-center">
         <div class="card" style="width: 30rem;">
           <h3 class="card-header text-center">Login</h3>
