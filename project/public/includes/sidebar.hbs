@@ -4,10 +4,22 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   </head>
 
-  <div class="w3-sidebar w3-light-grey w3-bar-block" style="width:10%">
+  <md-nav-bar md-selected-nav-item="currentNavItem">
+    <md-nav-item md-nav-click="goto('page1')" name="page1">
+      Page One
+    </md-nav-item>
+    <md-nav-item md-nav-href="#page2" name="page3">Page Two</md-nav-item>
+    <md-nav-item md-nav-sref="page3" name="page2">Page Three</md-nav-item>
+    <md-nav-item md-nav-sref="app.page4" sref-opts="{reload: true, notify: true}" name="page4">
+      Page Four
+    </md-nav-item>
+  </md-nav-bar>
+
+  <!--<div class="w3-sidebar w3-light-grey w3-bar-block" style="width:10%">
     <h3 class="w3-bar-item">Menu</h3>
-    <a href=addItem.hbs class="w3-bar-item w3-button">Add Product Description</a>
+    <a href="#" class="w3-bar-item w3-button">Add Product Description</a>
     <a href="#" class="w3-bar-item w3-button">Add New Item</a>
     <a href="#" class="w3-bar-item w3-button">View Inventory</a>
   </div>
+-->
 </html>
