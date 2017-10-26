@@ -1,5 +1,5 @@
 _commonProps = ["model_number", "brand_name", "price", "weight", "type", "is_available", "serial_numbers"];
-_requestJSON = {"deleteSerials":[]};
+_requestJSON = {"deleteSerials":[], "addSerials":[]};
 
 // Delete serial number in the request JSON
 function deleteSerial(checkbox){
@@ -17,7 +17,7 @@ function deleteSerial(checkbox){
 // Function used to populate the child rows
 function formatChildRows( data ) {
   tableString = "";
-  serialString = "";
+  serialRows = "";
   for (property in data) {
     if (data.hasOwnProperty(property) && !_commonProps.includes(property)) {
        tableString += `
@@ -31,16 +31,34 @@ function formatChildRows( data ) {
     }
   }
   var serial_numbers = data.serial_numbers;
+  if (serial_numbers < 1){
+    serialRows += `<tr>
+         <td colspan=2>
+           No serial numbers.
+         </td>
+       </tr>`
+  }
   for (number in serial_numbers) {
-     serialString += `
-        <tr>
-          <td>
-            ${serial_numbers[number]}
-          </td>
-          <td>
-            <input type="checkbox" id=${serial_numbers[number]}@${data["model_number"]} onchange='deleteSerial(this);'>
-          </td>
-        </tr>`
+     serialRows += `
+      <tr>
+        <td>
+          ${serial_numbers[number]}
+        </td>
+        <td>
+          <input type="checkbox" id=${serial_numbers[number]}@${data["model_number"]} onchange='deleteSerial(this);'>
+        </td>
+      </tr>`;
+      for (number in _requestJSON.addSerials) {
+         serialRows += `
+            <tr>
+              <td>
+                <input type="text" class="form-control" name=@${data["model_number"]} placeholder="Serial Number">
+              </td>
+              <td>
+                <button type="button" onclick="addSerial();" class="btn btn-secondary">Cancel</button>
+              </td>
+            </tr>`
+      }
   }
   return `<div class="container">
     <div class="row">
@@ -55,7 +73,7 @@ function formatChildRows( data ) {
             <td> Serial Numbers </td>
             <td> Delete? </td>
           </tr>
-            ${serialString}
+            ${serialRows}
         </table>
       </div>
     </div>
