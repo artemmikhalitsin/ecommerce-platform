@@ -2,16 +2,32 @@ _commonProps = ["model_number", "brand_name", "price", "weight",
                 "type", "is_available", "serial_numbers"];
 _requestJSON = {"deleteSerials":[], "addSerials":[]};
 
+// This is to check if there is symbols in what the client entered
+function validateValue(value){
+  let isAlphaNumeric = new RegExp(/^[a-zA-Z0-9]+/);
+  return isAlphaNumeric.test(value);
+}
+
 function getAllTextBoxes(){
+  let invalidModelIds = [];
   $('.add-item').each((i, obj) => {
     //gets the modelnumber of each serial number to be added
     let id = $(obj).parent().parent().parent().parent().attr('id');
     let value = $(obj).val();
-    let item = id+"@"+value;
-    if (!_requestJSON.addSerials.includes(item)){
-      _requestJSON.addSerials.push(item);
-    }
+    if (validateValue(value)){
+      let item = id+"@"+value;
+      if (!_requestJSON.addSerials.includes(item)){
+        _requestJSON.addSerials.push(item);
+      }
+  }else {
+    invalidModelIds.push(id);
+  }
   });
+  if (invalidModelIds.length ===0){
+    return true;
+  } else{
+    window.alert(`Serial Number at ${invalidModelIds.join(', ')} must be alphanumeric`);
+  }
 }
 
 // Delete serial number in the request JSON
@@ -145,12 +161,13 @@ $(document).ready(function() {
 });
 
 function submitData(){
-  getAllTextBoxes();
-  $.ajax({
-      url: '/inventoryAction',
-      type: 'post',
-      dataType: 'json',
-      success: window.location.reload(),
-      data: {"actions":JSON.stringify(_requestJSON)}
-  });
+    if(getAllTextBoxes()){
+    $.ajax({
+        url: '/inventoryAction',
+        type: 'post',
+        dataType: 'json',
+        success: window.location.reload(),
+        data: {"actions":JSON.stringify(_requestJSON)}
+    });
+  }
 }
