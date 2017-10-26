@@ -66,8 +66,13 @@ class Controller {
       console.log(values);
       */
       let items = JSON.stringify(values[0]);
-      res.render('inventory', {items: items});
-      // res.render('clientInventory', {items: items});
+      if (req.session.exists==true && req.session.isAdmin==true) {
+        res.render('inventory', {items: items});
+      } else if (req.session.exists==true && req.session.isAdmin==false) {
+        res.render('clientInventory', {items: items});
+      } else {
+        res.redirect('/login');
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -81,6 +86,15 @@ class Controller {
       let actions = JSON.parse(request.actions);
       for (let key in actions) {
         if (key == 'deleteSerials') {
+          console.log('To be deleted: ');
+          for (let i = 0; i < actions[key].length; i++) {
+            let serial = actions[key][i].split('@')[0];
+            let model = actions[key][i].split('@')[1];
+            console.log(i + ': ' + serial + ': ' + model);
+          }
+        }
+        if (key == 'addSerials') {
+          console.log('To be added: ');
           for (let i = 0; i < actions[key].length; i++) {
             let serial = actions[key][i].split('@')[0];
             let model = actions[key][i].split('@')[1];
@@ -88,7 +102,7 @@ class Controller {
           }
         }
       }
-      res.redirect('/getAllInventoryItems');
+      res.redirect('back');
     } else {
       console.log('Not admin, fool!');
     }

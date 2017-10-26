@@ -1,5 +1,18 @@
-_commonProps = ["model_number", "brand_name", "price", "weight", "type", "is_available", "serial_numbers"];
+_commonProps = ["model_number", "brand_name", "price", "weight",
+                "type", "is_available", "serial_numbers"];
 _requestJSON = {"deleteSerials":[], "addSerials":[]};
+
+function getAllTextBoxes(){
+  $('.add-item').each((i, obj) => {
+    //gets the modelnumber of each serial number to be added
+    let id = $(obj).parent().parent().parent().parent().attr('id');
+    let value = $(obj).val();
+    let item = id+"@"+value;
+    if (!_requestJSON.addSerials.includes(item)){
+      _requestJSON.addSerials.push(item);
+    }
+  });
+}
 
 // Delete serial number in the request JSON
 function deleteSerial(checkbox){
@@ -12,6 +25,23 @@ function deleteSerial(checkbox){
       _requestJSON.deleteSerials.splice(index, 1);
     }
   }
+}
+
+function cancelAdd(row){
+  $(row).parent().parent().remove();
+}
+
+function addSerialRow(button){
+  $(button).parent().parent().parent().find('tr:last').prev().after(`
+    <tr>
+      <td>
+        <input type="text" class="form-control add-item" name=@${data["model_number"]} placeholder="Serial Number">
+      </td>
+      <td>
+        <button type="button" onclick="cancelAdd(this);" class="btn btn-default">Cancel</button>
+      </td>
+    </tr>
+  `);
 }
 
 // Function used to populate the child rows
@@ -38,6 +68,7 @@ function formatChildRows( data ) {
          </td>
        </tr>`
   }
+  //for each existing serial number add a new row
   for (number in serial_numbers) {
      serialRows += `
       <tr>
@@ -48,18 +79,15 @@ function formatChildRows( data ) {
           <input type="checkbox" id=${serial_numbers[number]}@${data["model_number"]} onchange='deleteSerial(this);'>
         </td>
       </tr>`;
-      for (number in _requestJSON.addSerials) {
-         serialRows += `
-            <tr>
-              <td>
-                <input type="text" class="form-control" name=@${data["model_number"]} placeholder="Serial Number">
-              </td>
-              <td>
-                <button type="button" onclick="addSerial();" class="btn btn-secondary">Cancel</button>
-              </td>
-            </tr>`
-      }
   }
+  //button to add more serial numbers
+  serialRows += `
+    <tr>
+      <td colspan=2>
+        <button type="button" onclick="addSerialRow(this);" class="btn btn-success">Add New Item</button>
+      </td>
+    </tr>
+  `
   return `<div class="container">
     <div class="row">
       <div class="col">
@@ -68,7 +96,7 @@ function formatChildRows( data ) {
         </table>
       </div>
       <div class="col">
-        <table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
+        <table cellpadding="5" cellspacing="0" border="0" id=${data["model_number"]} style="padding-left:50px;">
           <tr>
             <td> Serial Numbers </td>
             <td> Delete? </td>
@@ -102,7 +130,6 @@ $(document).ready(function() {
     $('#table_inventory tbody').on('click', 'td.details-control', function() {
         let tr = $(this).closest('tr');
         let row = inventory_table.row( tr );
-
         if ( row.child.isShown() ) {
             // This row is already open - close it
             row.child.hide();
@@ -118,10 +145,12 @@ $(document).ready(function() {
 });
 
 function submitData(){
+  getAllTextBoxes();
   $.ajax({
       url: '/inventoryAction',
       type: 'post',
       dataType: 'json',
+      success: window.location.reload(),
       data: {"actions":JSON.stringify(_requestJSON)}
   });
 }
