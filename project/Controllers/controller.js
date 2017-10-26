@@ -12,7 +12,7 @@ class Controller {
     this.userRepo = require(this.rootPath +
       '/DataSource/Repository/UserRepository.js');
     this.inventoryRepo = require(this.rootPath +
-      '/DataSource/Repository/inventoryItemRepository.js');
+      '/DataSource/Repository/InventoryItemRepository.js');
   }
 
   registrationRequest(req, res) {
@@ -91,8 +91,8 @@ class Controller {
       console.log('printing values');
       console.log(values);
       let items = JSON.stringify(values[0]);
-      res.render('inventory', {items: items});
-      //res.render('clientInventory', {items: items});
+      //res.render('inventory', {items: items});
+      res.render('clientInventory', {items: items});
     })
     .catch((err) => {
       console.log(err);
