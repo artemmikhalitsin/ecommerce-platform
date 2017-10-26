@@ -1,18 +1,22 @@
+
+let rootPath = require('app-root-dir').get();
+let ProductDescriptionRepository = require(rootPath + 
+  '/DataSource/Repository/ProductDescriptionRepository.js');
 class Controller {
   constructor() {
-    this.rootPath = require('app-root-dir').get();
-    this.desktopRepo = require( this.rootPath +
+    this.desktopRepo = require( rootPath +
       '/DataSource/Repository/DesktopRepository.js');
-    this.laptopRepo = require( this.rootPath +
+    this.laptopRepo = require( rootPath +
       '/DataSource/Repository/LaptopRepository.js');
-    this.monitorRepo = require( this.rootPath +
+    this.monitorRepo = require( rootPath +
       '/DataSource/Repository/MonitorRepository.js');
-    this.tabletRepo = require( this.rootPath +
+    this.tabletRepo = require( rootPath +
       '/DataSource/Repository/TabletRepository.js');
-    this.userRepo = require(this.rootPath +
+    this.userRepo = require(rootPath +
       '/DataSource/Repository/UserRepository.js');
-    this.inventoryRepo = require(this.rootPath +
+    this.inventoryRepo = require(rootPath +
       '/DataSource/Repository/inventoryItemRepository.js');
+    this.productDescriptionRepo = new ProductDescriptionRepository();
   }
 
   registrationRequest(req, res) {
@@ -85,6 +89,52 @@ class Controller {
 
   // this funtion is getting all the product description from the database
   getAllInventory(req, res) {
+    let toSave = [{
+      serial_number: '123',
+      model_number: '70',
+      brand_name: "b",
+      price: 1,
+      weight: 1,
+      type: 'Desktop',
+      processor_type: 'r',
+      ram_size: 1,
+      number_cpu_cores: 2,
+      harddrive_size: 3,
+      dimensions: {depth: 1,
+         height: 1,
+         width: 1}
+     },{
+      serial_number: '1234',
+      model_number: '61',
+      brand_name: "b",
+      price: 1,
+      weight: 1,
+      type: 'Desktop',
+      processor_type: 'q',
+      ram_size: 1,
+      number_cpu_cores: 2,
+      harddrive_size: 3,
+      dimensions: {depth: 1,
+         height: 1,
+         width: 1}
+     },{
+      serial_number: '12',
+      model_number: '62',
+      brand_name: "b",
+      price: 1,
+      weight: 1,
+      type: 'Desktop',
+      processor_type: 'n',
+      ram_size: 1,
+      number_cpu_cores: 2,
+      harddrive_size: 3,
+      dimensions: {depth: 1,
+         height: 1,
+         width: 1}
+     }];
+    let results = this.productDescriptionRepo.save(toSave);
+    let prodDesc = this.productDescriptionRepo.getAll();
+    console.log("From Controller "+prodDesc);
     let inventoryItems = this.inventoryRepo.getAllInventoryItems();
     Promise.all([inventoryItems])
     .then((values) => {

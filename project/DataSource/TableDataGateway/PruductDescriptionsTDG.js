@@ -18,8 +18,13 @@ class ProductDescriptionsTDG{
                     .into('ProductDescription');
     }
     select(){
-        var context = this.connection('ProductDescription')
+        return this.connection('ProductDescription')
                     .select('*');
+    }
+    select(model_number){
+        return this.connection('ProductDescription')
+                    .select('*')
+                    .where('model_number = ' + model_number);
     }
     update(productDescription){
         //TODO

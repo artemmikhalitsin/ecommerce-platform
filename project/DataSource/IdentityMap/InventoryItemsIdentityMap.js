@@ -6,12 +6,17 @@ class InventoryItemsIdentityMap{
         this.productDescTDG = new ProductDescriptionsTDG();
         let uow = new UnitOfWork();
         this.context = this.productDescTDG.select();
+        //this.InventoryItems = [];
         Promise.all([this.context])
         .then((values) => {
-          this.InventoryItems = values[0];
+          this.InventoryItems =  JSON.stringify(values[0]);
           
         console.log("InventoryIM constructor" + this.InventoryItems);
-        })
+        });
+    }
+    getAll(){
+        console.log("From GetAll " + this.InventoryItems);
+        return this.InventoryItems;
     }
     get(model_numbers){
         return this.InventoryItems.filter(function(desc){

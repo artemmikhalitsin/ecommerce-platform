@@ -34,55 +34,13 @@ class UnitOfWork {
   }
 
   commitAll(object) {
-      let electronics = [{
-        serial_number: '123',
-        model_number: '70',
-        brand_name: "b",
-        price: 1,
-        weight: 1,
-        type: 'Desktop',
-        processor_type: 'r',
-        ram_size: 1,
-        number_cpu_cores: 2,
-        harddrive_size: 3,
-        dimensions: {depth: 1,
-           height: 1,
-           width: 1}
-       },{
-        serial_number: '1234',
-        model_number: '61',
-        brand_name: "b",
-        price: 1,
-        weight: 1,
-        type: 'Desktop',
-        processor_type: 'q',
-        ram_size: 1,
-        number_cpu_cores: 2,
-        harddrive_size: 3,
-        dimensions: {depth: 1,
-           height: 1,
-           width: 1}
-       },{
-        serial_number: '12',
-        model_number: '62',
-        brand_name: "b",
-        price: 1,
-        weight: 1,
-        type: 'Desktop',
-        processor_type: 'n',
-        ram_size: 1,
-        number_cpu_cores: 2,
-        harddrive_size: 3,
-        dimensions: {depth: 1,
-           height: 1,
-           width: 1}
-       }];
+      let electronics = [];
       return this.connection.transaction((trx) => {
         var context = this.connection('ProductDescription').select('*').transacting(trx);
         Promise.all([context])
         .then((values) => {
           let productDescriptions = JSON.stringify(values[0]);
-          console.log(values[0]);
+          //console.log(values[0]);
           var results = this.compareWithContext(values[0], electronics);
           var electronicsToAdd = results[0];
           var electronicsToUpdate = results[1];
