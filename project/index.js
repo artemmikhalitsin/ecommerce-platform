@@ -57,7 +57,6 @@ app.get('/registration', function(req, res) {
   if (req.session.exists) {
       console.log('already logged in, redirecting to inventory');
       res.redirect('/getAllInventoryItems');
-
   } else {
       res.render('registration');
   }
