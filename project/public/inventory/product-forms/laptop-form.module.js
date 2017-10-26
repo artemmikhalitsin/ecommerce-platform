@@ -5,8 +5,9 @@ laptopForm.component('laptopForm', {
   templateUrl: '/inventory/product-forms/laptop-form.html',
   controller: function($scope) {
     $scope.laptop = {};
-    $scope.serial_number = '123abc';
+    $scope.serial_number = '';
     $scope.submitLaptop = () => {
+      $scope.laptop.type = 'laptop';
       $scope.$emit("newLaptop", $scope.laptop);
       $scope.laptop = {};
     }
@@ -18,8 +19,10 @@ laptopForm.component('laptopForm', {
       }
       //append serial to array
         $scope.laptop.serial_numbers.push($scope.serial_number);
-        $scope.laptop.serial_number = '';
-        console.log($scope.laptop.serial_numbers)
+        $scope.serial_number = '';
+    }
+    $scope.remove = (index) => {
+      $scope.laptop.serial_numbers.splice(index,1);
     }
   },
-    });
+});

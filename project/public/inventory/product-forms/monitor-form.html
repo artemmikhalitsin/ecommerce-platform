@@ -5,7 +5,7 @@
 <label>Display size: <input type="number" step="1" min="0" ng-model="monitor.display_size"></label><br />
 <br />
 <p ng-show="monitor.serial_numbers.length != 0">Serial numbers to be added:</p>
-<p ng-repeat="serial in monitor.serial_numbers">{{ serial }}</p>
+<p ng-repeat="serial in monitor.serial_numbers track by $index">{{ serial }} <button ng-click="remove($index)">Delete</button></p>
 <label>Serial Number: <input type="text" ng-model="serial_number" ng-submit="addSerial()">
   <button ng-click="addSerial()">Add Serial</button>
 </label><br />

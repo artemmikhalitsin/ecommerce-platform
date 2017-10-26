@@ -1,14 +1,26 @@
 <html ng-app="newProduct">
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <!-- <link href="css/mdb.min.css" rel="stylesheet"> -->
+
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js" crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="inventory/new-product.module.js"></script>
 
-    <script type="text/javascript" src="inventory/product-forms/tv-form.module.js"></script>
     <script type="text/javascript" src="inventory/product-forms/monitor-form.module.js"></script>
     <script type="text/javascript" src="inventory/product-forms/laptop-form.module.js"></script>
     <script type="text/javascript" src="inventory/product-forms/desktop-form.module.js"></script>
     <script type="text/javascript" src="inventory/product-forms/tablet-form.module.js"></script>
+    <script type="text/javascript" src="inventory/product-entries/desktop-entry.module.js"></script>
+    <script type="text/javascript" src="inventory/product-entries/tablet-entry.module.js"></script>
+    <script type="text/javascript" src="inventory/product-entries/laptop-entry.module.js"></script>
+    <script type="text/javascript" src="inventory/product-entries/monitor-entry.module.js"></script>
 
   </head>
   <body ng-controller="FormController">
@@ -16,7 +28,6 @@
 
     <label> Product type:
       <select ng-model="selected">
-        <option value="tv">TV</option>
         <option value="monitor">Monitor</option>
         <option value="laptop">Laptop</option>
         <option value="desktop">Desktop</option>
@@ -28,10 +39,24 @@
       <laptop-form ng-show="selected=='laptop'"></laptop-form>
       <tablet-form ng-show="selected=='tablet'"></tablet-form>
       <desktop-form ng-show="selected=='desktop'"></desktop-form>
-      <tv-form ng-show="selected=='tv'"></tv-form>
       <monitor-form ng-show="selected=='monitor'"></monitor-form>
     </form>
-
+    <div ng-repeat="item in products.tablets track by $index">
+      <tablet-entry  tablet="item"></tablet-entry>
+      <button ng-click="removeTablet($index)">Delete</button>
+    </div>
+    <div ng-repeat="item in products.desktops track by $index">
+      <desktop-entry  desktop="item"></desktop-entry>
+      <button ng-click="removeDesktop($index)">Delete</button>
+    </div>
+    <div ng-repeat="item in products.monitors track by $index">
+      <monitor-entry  monitor="item"></monitor-entry>
+      <button ng-click="removeMonitor($index)">Delete</button>
+    </div>
+    <div ng-repeat="item in products.laptops track by $index">
+      <laptop-entry  laptop="item"></laptop-entry>
+      <button ng-click="removeLaptop($index)">Delete</button>
+    </div>
     <button type="button" ng-click="submit()">Click</button>
   </body>
 </html>

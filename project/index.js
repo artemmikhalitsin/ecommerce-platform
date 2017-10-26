@@ -77,6 +77,7 @@ app.get('/addProduct', function(req, res) {
   res.render('inventory/new-product');
 });
 
+
 // this should be implemented in the controller
 app.get('/logout', function(req, res) {
   if (req.session.exists) {

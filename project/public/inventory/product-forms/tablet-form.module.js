@@ -7,6 +7,7 @@ tabletForm.component('tabletForm', {
     $scope.tablet = {};
     $scope.serial_number = '';
     $scope.submitTablet =() => {
+      $scope.tablet.type = 'tablet';
       $scope.$emit('newTablet', $scope.tablet);
       $scope.tablet = {};
     }
@@ -16,8 +17,10 @@ tabletForm.component('tabletForm', {
         $scope.tablet.serial_numbers = [];
       }
         $scope.tablet.serial_numbers.push($scope.serial_number);
-        $scope.tablet.serial_number = '';
-        console.log($scope.tablet.serial_numbers)
+        $scope.serial_number = '';
+    }
+    $scope.remove = (index) => {
+      $scope.tablet.serial_numbers.splice(index,1);
     }
   },
-    });
+});

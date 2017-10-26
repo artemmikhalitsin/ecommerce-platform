@@ -5,8 +5,8 @@ desktopForm.component('desktopForm', {
   templateUrl: '/inventory/product-forms/desktop-form.html',
   controller: function($scope) {
     $scope.desktop = {};
-    $scope.serial_number = "";
     $scope.submitDesktop = () => {
+      $scope.desktop.type = 'desktop';
       $scope.$emit('newDesktop', $scope.desktop)
       $scope.desktop = {};
     }
@@ -16,8 +16,10 @@ desktopForm.component('desktopForm', {
         $scope.desktop.serial_numbers = [];
       }
         $scope.desktop.serial_numbers.push($scope.serial_number);
-        $scope.desktop.serial_number = '';
-        console.log($scope.desktop.serial_numbers)
+        $scope.serial_number = '';
+    }
+    $scope.remove = (index) => {
+      $scope.desktop.serial_numbers.splice(index,1);
     }
   },
-    });
+});

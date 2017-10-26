@@ -15,7 +15,7 @@
 <label>Width: <input type="number" step="0.1" min="0" ng-model="tablet.width"></label><br />
 <label>Depth: <input type="number" step="0.1" min="0" ng-model="tablet.depth"></lavel><br />
 <p ng-show="laptop.serial_numbers.length != 0">Serial numbers to be added:</p>
-<p ng-repeat="serial in tablet.serial_numbers">{{ serial }}</p>
+<p ng-repeat="serial in tablet.serial_numbers track by $index">{{ serial }} <button ng-click="remove($index)">Delete</button></p>
 <label>Serial Number: <input type="text" ng-model="serial_number" ng-submit="addSerial()">
   <button ng-click="addSerial()">Add Serial</button>
 </label><br />

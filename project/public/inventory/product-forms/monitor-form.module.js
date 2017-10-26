@@ -7,7 +7,8 @@ monitorForm.component('monitorForm', {
     $scope.monitor = {};
     $scope.serial_number = '';
     $scope.submitMonitor = () => {
-      $scope.$emit("newMonitor", $scope.monitor);
+      $scope.monitor.type = 'monitor';
+      $scope.$emit('newMonitor', $scope.monitor);
       $scope.monitor = {};
     }
     $scope.addSerial = () => {
@@ -18,8 +19,10 @@ monitorForm.component('monitorForm', {
       }
       //append serial to array
         $scope.monitor.serial_numbers.push($scope.serial_number);
-        $scope.monitor.serial_number = '';
-        console.log($scope.monitor.serial_numbers)
+        $scope.serial_number = '';
+    }
+    $scope.remove = (index) => {
+      $scope.monitor.serial_numbers.splice(index,1);
     }
   },
-    });
+});
