@@ -1,11 +1,11 @@
-class ComputersTDG{
-    constructor(){
+class ComputersTDG {
+    constructor() {
         this.environment = process.env.NODE_ENV || 'development';
         this.rootPath = require('app-root-dir').get();
         this.configuration = require(this.rootPath + '/knexfile')[this.environment];
         this.connection = require('knex')(this.configuration);
     }
-    add(computer){
+    add(computer) {
         return this.connection.insert({
             'processor_type': computer.processor_type,
             'ram_size': computer.ram_size,
@@ -14,12 +14,12 @@ class ComputersTDG{
         }, 'comp_id')
         .into('Computer');
     }
-    
-    select(){
-        //TODO
+
+    select() {
+        // TODO
     }
-    update(computer){
-        //TODO
+    update(computer) {
+        // TODO
     }
 }
 module.exports = ComputersTDG;

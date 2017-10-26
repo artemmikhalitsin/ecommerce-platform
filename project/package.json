@@ -24,6 +24,7 @@
     "express": "^4.15.4",
     "express-handlebars": "^3.0.0",
     "knex": "^0.13.0",
+    "meld": "^1.3.2",
     "mysql": "^2.14.1",
     "nodemon": "^1.12.1"
   },

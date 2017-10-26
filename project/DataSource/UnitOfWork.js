@@ -134,13 +134,13 @@ class UnitOfWork {
               .then((model_number) => {
                 // getting all the serial numbers from an electronic
                 let serials = electronic.serial_numbers;
-                serials.map(serial => { // adding each serial to the database
+                serials.map((serial) => { // adding each serial to the database
                 this.addInventoryItem(serial, electronic.model_number)
                   .then(() => {
-                    console.log("Success adding serial#: ", serial);
+                    console.log('Success adding serial#: ', serial);
                   })
                   .catch((err) => {
-                    console.log("Something bad happened! Here are all the details about it");
+                    console.log('Something bad happened! Here are all the details about it');
                     console.log(err);
                   });
                 });
@@ -182,7 +182,6 @@ class UnitOfWork {
                     .transacting(trx);
                   };break;
                 }
-
               });
           })
           .then(trx.commit)
@@ -200,90 +199,92 @@ class UnitOfWork {
 
   getAllInventoryItems() {
     return new Promise((resolve, reject) => {
-      let desktops =  this.getAllDesktops();
+      let desktops = this.getAllDesktops();
       let laptops = this.getAllLaptops();
       let tablets = this.getAllTablets();
       let monitors = this.getAllMonitors();
       let tvs = this.getAllTVs();
 
       Promise.all([laptops, desktops, tablets, monitors, tvs])
-      .then((results => {
+      .then(((results) => {
         let products = [].concat(...results);
 
-        //retrieve the model numbers present in the products
+        // retrieve the model numbers present in the products
         let model_numbers = this.getAllModelNumbers(products);
 
         // getting the serial numbers associated with the model numbers
         this.connection('Inventory')
         .select('*')
         .havingIn('model_number', model_numbers)
-        .then(serials => {
-            products = products.map(product => {
-              let serial_numbers = serials.filter(serial => {
+        .then((serials) => {
+            products = products.map((product) => {
+              let serial_numbers = serials.filter((serial) => {
                 return serial.model_number === product.model_number;
               })
-              .map(serial => {
+              .map((serial) => {
                 return serial.serial_number;
-              })
+              });
 
-              product.serial_numbers = serial_numbers
+              product.serial_numbers = serial_numbers;
               return product;
-            })
+            });
 
-            resolve(products)
+            resolve(products);
           }
-        )
+        );
       }))
-      .catch(err => reject(err))
-    })
+      .catch((err) => reject(err));
+    });
   }
 
-  getAllModelNumbers(products){
-    return products.map(obj => {return obj.model_number})
+  getAllModelNumbers(products) {
+    return products.map((obj) => {
+return obj.model_number;
+});
   }
 
   getAllProductsDescription() {
     return this.connection('ProductDescription').select('*');
   }
 
-  getAllDesktops(){
+  getAllDesktops() {
     return this.connection('ProductDescription')
     .innerJoin('Desktop', 'Desktop.model_number', 'ProductDescription.model_number')
     .innerJoin('Computer', 'Desktop.comp_id', 'Computer.comp_id')
     .innerJoin('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
-    .select('ProductDescription.model_number','brand_name','price', 'type',
+    .select('ProductDescription.model_number', 'brand_name', 'price', 'type',
     'weight', 'is_available', 'processor_type', 'ram_size', 'number_cpu_cores',
     'harddrive_size', 'depth', 'height', 'width');
   }
 
-  getAllLaptops(){
+  getAllLaptops() {
     return this.connection('ProductDescription')
     .innerJoin('Laptop', 'Laptop.model_number', 'ProductDescription.model_number')
     .innerJoin('Computer', 'Laptop.comp_id', 'Computer.comp_id')
-    .select('ProductDescription.model_number','brand_name','price', 'type',
+    .select('ProductDescription.model_number', 'brand_name', 'price', 'type',
     'weight', 'is_available', 'processor_type', 'ram_size', 'number_cpu_cores',
     'harddrive_size', 'os', 'touch_screen', 'camera', 'display_size', 'battery_info');
   }
 
-  getAllTablets(){
+  getAllTablets() {
     return this.connection('ProductDescription')
     .innerJoin('Tablet', 'Tablet.model_number', 'ProductDescription.model_number')
     .innerJoin('Computer', 'Tablet.comp_id', 'Computer.comp_id')
     .innerJoin('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
-    .select('ProductDescription.model_number','brand_name','price', 'type',
+    .select('ProductDescription.model_number', 'brand_name', 'price', 'type',
     'weight', 'is_available', 'processor_type', 'ram_size', 'number_cpu_cores',
     'harddrive_size', 'display_size', 'battery_info', 'camera_info', 'os', 'depth',
     'height', 'width');
   }
 
-  getAllMonitors(){
+  getAllMonitors() {
     return this.connection('ProductDescription')
     .innerJoin('Monitor', 'Monitor.model_number', 'ProductDescription.model_number')
     .select('ProductDescription.model_number', 'brand_name', 'price', 'type',
     'weight', 'is_available', 'display_size');
   }
 
-  getAllTVs(){
+  getAllTVs() {
     return this.connection('ProductDescription')
     .innerJoin('TV', 'TV.model_number', 'ProductDescription.model_number')
     .innerJoin('Dimensions', 'TV.dimension_id', 'Dimensions.dimension_id')
@@ -292,27 +293,27 @@ class UnitOfWork {
   }
 
 
-  compareWithContext(productDescriptions, electronics){
-    var electronicsToAdd = [];
-    var electronicsToUpdate = [];
-    var electronicsToDelete = [];
-    for(var i = 0; i < productDescriptions.length; i++){
-      for(var j = 0; j < electronics.length; j++){
-        if(productDescriptions[i].model_number == electronics[j].model_number &&
-          electronicsToUpdate.findIndex(x => x.model_number == electronics[j].model_number) === -1)
-          electronicsToUpdate.push(electronics[j]);
+  compareWithContext(productDescriptions, electronics) {
+    let electronicsToAdd = [];
+    let electronicsToUpdate = [];
+    let electronicsToDelete = [];
+    for (var i = 0; i < productDescriptions.length; i++) {
+      for (var j = 0; j < electronics.length; j++) {
+        if (productDescriptions[i].model_number == electronics[j].model_number &&
+          electronicsToUpdate.findIndex((x) => x.model_number == electronics[j].model_number) === -1)
+          {electronicsToUpdate.push(electronics[j]);}
         }
       }
 
-  for(var i = 0; i < productDescriptions.length; i++){
-    if(electronicsToUpdate.findIndex(x => x.model_number == productDescriptions[i].model_number) === -1 &&
-        electronicsToDelete.findIndex(x => x.model_number == productDescriptions[i].model_number) === -1)
-      electronicsToDelete.push(productDescriptions[i]);
+  for (var i = 0; i < productDescriptions.length; i++) {
+    if (electronicsToUpdate.findIndex((x) => x.model_number == productDescriptions[i].model_number) === -1 &&
+        electronicsToDelete.findIndex((x) => x.model_number == productDescriptions[i].model_number) === -1)
+      {electronicsToDelete.push(productDescriptions[i]);}
   }
-  for(var i = 0; i < electronics.length; i++){
-    if(productDescriptions.findIndex(x => x.model_number == electronics[i].model_number) === -1 &&
-        electronicsToAdd.findIndex(x => x.model_number == electronics[i].model_number) === -1)
-        electronicsToAdd.push(electronics[i]);
+  for (var i = 0; i < electronics.length; i++) {
+    if (productDescriptions.findIndex((x) => x.model_number == electronics[i].model_number) === -1 &&
+        electronicsToAdd.findIndex((x) => x.model_number == electronics[i].model_number) === -1)
+        {electronicsToAdd.push(electronics[i]);}
   }
   return [electronicsToAdd, electronicsToUpdate, electronicsToDelete];
 }

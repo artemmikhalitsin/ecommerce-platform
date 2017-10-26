@@ -88,11 +88,11 @@ class Controller {
     let inventoryItems = this.inventoryRepo.getAllInventoryItems();
     Promise.all([inventoryItems])
     .then((values) => {
-      console.log('printing values');
-      console.log(values);
+      // console.log('printing values');
+      // console.log(values);
       let items = JSON.stringify(values[0]);
       res.render('inventory', {items: items});
-      //res.render('clientInventory', {items: items});
+      // res.render('clientInventory', {items: items});
     })
     .catch((err) => {
       console.log(err);
@@ -120,7 +120,7 @@ class Controller {
           req.session.isAdmin=false;
         }
         // console.log(req.session.exists);
-        console.log('displaying items');
+        // console.log('displaying items');
         req.session.save(function(err) {
             if (err) console.error(err);
             res.redirect('/getAllInventoryItems');
