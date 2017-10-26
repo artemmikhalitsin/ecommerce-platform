@@ -1,7 +1,6 @@
 var productCard = angular.module('productCard', [])
 
-function productCardController($scope) {
-
+function productCardController($scope) { 
 }
 
 //Component data

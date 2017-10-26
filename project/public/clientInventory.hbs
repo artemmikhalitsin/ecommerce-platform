@@ -74,14 +74,14 @@
     <option value="4">Tablet</option>
   </select></br></br></br>
 
-      <div class="row">
-        <div class="col-lg-4 col-md-6 mb-4">
-          <product-card model-number="RICK-BB8"
-                        serial-number="H3110"
-                        brand-name="Toshiba"
-                        price="$1000.00"
-                        weight="700 gram"
-                        type="Desktop"
+      <div class="row" ng-repeat="row in items"  >
+        <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in row">
+          <product-card model-number="{[{item.modelNumber}]}"
+                        serial-number="{[{item.serialNumber}]}"
+                        brand="{[{item.brand}]}"
+                        price="{[{item.price}]}"
+                        weight="{[{item.weight}]}"
+                        type="{[{item.type}]}"
                          ></product-card>
         </div>
       </div>
