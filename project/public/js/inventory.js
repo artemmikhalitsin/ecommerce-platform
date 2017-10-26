@@ -1,178 +1,133 @@
-// Event listener for opening and closing details of a row
-function openCloseDetails(table_id, tableObject, type) {
-  $('#' + table_id + ' tbody').on('click', 'td.details-control', function() {
-      let tr = $(this).closest('tr');
-      let row = tableObject.row( tr );
+_commonProps = ["model_number", "brand_name", "price", "weight",
+                "type", "is_available", "serial_numbers"];
+_requestJSON = {"deleteSerials":[], "addSerials":[]};
 
-      if ( row.child.isShown() ) {
-          // This row is already open - close it
-          row.child.hide();
-          tr.removeClass('shown');
-      } else {
-          // Open this row
-          switch (type) {
-            case 'Laptop':
-              row.child( formatlaptopsTable(row.data()) ).show();break;
-            case 'Desktop':
-              row.child( formatDesktopsTable(row.data()) ).show();break;
-            case 'TV':
-            case 'Monitor':
-              row.child( formatTVsAndMonitorsTable(row.data()) ).show();break;
-            case 'Tablet':
-              row.child( formatTabletsTable(row.data()) ).show();break;
-            default:
-          }
-          tr.addClass('shown');
+// This is to check if there is symbols in what the client entered
+function validateValue(value){
+  let isAlphaNumeric = new RegExp(/^[a-zA-Z0-9]+/);
+  return isAlphaNumeric.test(value);
+}
+
+function getAllTextBoxes(){
+  let invalidModelIds = [];
+  $('.add-item').each((i, obj) => {
+    //gets the modelnumber of each serial number to be added
+    let id = $(obj).parent().parent().parent().parent().attr('id');
+    let value = $(obj).val();
+    if (validateValue(value)){
+      let item = id+"@"+value;
+      if (!_requestJSON.addSerials.includes(item)){
+        _requestJSON.addSerials.push(item);
       }
+  }else {
+    invalidModelIds.push(id);
+  }
   });
+  if (invalidModelIds.length ===0){
+    return true;
+  } else{
+    window.alert(`Serial Number at ${invalidModelIds.join(', ')} must be alphanumeric`);
+  }
 }
 
-// Function used to populate the child rows for laptops table
-function formatlaptopsTable( data ) {
-  return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-      '<tr>'+
-          '<td>Processor Type:</td>'+
-          '<td>'+data.processor_type+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>RAM size:</td>'+
-          '<td>'+data.ram_size+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td># of CPU cores:</td>'+
-          '<td>'+data.number_cpu_cores+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Hard Drive size:</td>'+
-          '<td>'+data.harddrive_size+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Display size:</td>'+
-          '<td>'+data.display_size+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Battery Info:</td>'+
-          '<td>'+data.battery_info+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>OS:</td>'+
-          '<td>'+data.os+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Camera:</td>'+
-          '<td>'+data.camera+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Touch Screen:</td>'+
-          '<td>'+data.touch_screen+'</td>'+
-      '</tr>'+
-  '</table>';
+// Delete serial number in the request JSON
+function deleteSerial(checkbox){
+  alreadyIn = _requestJSON.deleteSerials.includes(checkbox.id);
+  if (checkbox.checked && !alreadyIn){
+    _requestJSON.deleteSerials.push(checkbox.id);
+  }else if (!checkbox.checked && alreadyIn){
+    var index = _requestJSON.deleteSerials.indexOf(checkbox.id);
+    if (index > -1) {
+      _requestJSON.deleteSerials.splice(index, 1);
+    }
+  }
 }
 
-// Function used to populate the child rows for desktop table
-function formatDesktopsTable( data ) {
-  return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-      '<tr>'+
-          '<td>Processor Type:</td>'+
-          '<td>'+data.processor_type+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>RAM size:</td>'+
-          '<td>'+data.ram_size+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td># of CPU cores:</td>'+
-          '<td>'+data.number_cpu_cores+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Hard Drive size:</td>'+
-          '<td>'+data.harddrive_size+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Height:</td>'+
-          '<td>'+data.height+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Width:</td>'+
-          '<td>'+data.width+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Depth:</td>'+
-          '<td>'+data.depth+'</td>'+
-      '</tr>'+
-  '</table>';
+function cancelAdd(row){
+  $(row).parent().parent().remove();
 }
 
-// Function used to populate the child rows for TVs and monitors tables
-function formatTVsAndMonitorsTable( data ) {
-  return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-      '<tr>'+
-          '<td>Height:</td>'+
-          '<td>'+data.height+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Width:</td>'+
-          '<td>'+data.width+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Depth:</td>'+
-          '<td>'+data.depth+'</td>'+
-      '</tr>'+
-  '</table>';
+function addSerialRow(button){
+  $(button).parent().parent().parent().find('tr:last').prev().after(`
+    <tr>
+      <td>
+        <input type="text" class="form-control add-item" name=@${data["model_number"]} placeholder="Serial Number">
+      </td>
+      <td>
+        <button type="button" onclick="cancelAdd(this);" class="btn btn-default">Cancel</button>
+      </td>
+    </tr>
+  `);
 }
 
-// Function used to populate the child rows for tablets table
-function formatTabletsTable( data ) {
-  return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-      '<tr>'+
-          '<td>Processor Type:</td>'+
-          '<td>'+data.processor_type+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>RAM size:</td>'+
-          '<td>'+data.ram_size+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td># of CPU cores:</td>'+
-          '<td>'+data.number_cpu_cores+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Hard Drive size:</td>'+
-          '<td>'+data.harddrive_size+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Display size:</td>'+
-          '<td>'+data.display_size+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Battery Info:</td>'+
-          '<td>'+data.battery_info+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>OS:</td>'+
-          '<td>'+data.os+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Height:</td>'+
-          '<td>'+data.height+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Width:</td>'+
-          '<td>'+data.width+'</td>'+
-      '</tr>'+
-      '<tr>'+
-          '<td>Depth:</td>'+
-          '<td>'+data.depth+'</td>'+
-      '</tr>'+
-          '<td>Camera:</td>'+
-          '<td>'+data.camera_info+'</td>'+
-      '</tr>'+
-  '</table>';
+// Function used to populate the child rows
+function formatChildRows( data ) {
+  tableString = "";
+  serialRows = "";
+  for (property in data) {
+    if (data.hasOwnProperty(property) && !_commonProps.includes(property)) {
+       tableString += `
+          <tr>
+            <td>
+              ${property}
+            </td><td>
+              ${data[property]}
+            </td>
+          </tr>`
+    }
+  }
+  var serial_numbers = data.serial_numbers;
+  if (serial_numbers < 1){
+    serialRows += `<tr>
+         <td colspan=2>
+           No serial numbers.
+         </td>
+       </tr>`
+  }
+  //for each existing serial number add a new row
+  for (number in serial_numbers) {
+     serialRows += `
+      <tr>
+        <td>
+          ${serial_numbers[number]}
+        </td>
+        <td>
+          <input type="checkbox" id=${serial_numbers[number]}@${data["model_number"]} onchange='deleteSerial(this);'>
+        </td>
+      </tr>`;
+  }
+  //button to add more serial numbers
+  serialRows += `
+    <tr>
+      <td colspan=2>
+        <button type="button" onclick="addSerialRow(this);" class="btn btn-success">Add New Item</button>
+      </td>
+    </tr>
+  `
+  return `<div class="container">
+    <div class="row">
+      <div class="col">
+        <table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">
+          ${tableString}
+        </table>
+      </div>
+      <div class="col">
+        <table cellpadding="5" cellspacing="0" border="0" id=${data["model_number"]} style="padding-left:50px;">
+          <tr>
+            <td> Serial Numbers </td>
+            <td> Delete? </td>
+          </tr>
+            ${serialRows}
+        </table>
+      </div>
+    </div>
+  </div>`;
 }
+
 
 $(document).ready(function() {
     let inventory_table = $('#table_inventory').DataTable({
-      data: mock,
+      data: data,
       columns: [
         {
             'className': 'details-control',
@@ -188,93 +143,31 @@ $(document).ready(function() {
         {'data': 'is_available'},
       ],
     });
-    // if (mock[0].type == "Desktop") {
-    //   openCloseDetails('table_laptops', laptops_table, mock[0].type);
-    // }
-    // for (var i = 0; i < mock.length; i++) {
-    //   console.log(mock[i].type);
-    //   if (mock[i].type == "Desktop") {
-    //     openCloseDetails('table_laptops', laptops_table, mock[i].type);
-    //   }else if (mock[i].type == "Laptop") {
-    //     openCloseDetails('table_laptops', laptops_table, mock[i].type);
-    //   }else {
-    //     console.log("another table");
-    //   }
-    // }
-    //console.log(mock.length);
-    //openCloseDetails('table_laptops', laptops_table);
-/*
-    let desktops_table = $('#table_desktops').DataTable({
-      data: mock.desks,
-      columns: [
-        {
-            'className': 'details-control',
-            'orderable': false,
-            'data': null,
-            'defaultContent': '',
-        },
-        {'data': 'model_number'},
-        {'data': 'brand_name'},
-        {'data': 'price'},
-        {'data': 'weight'},
-        {'data': 'is_available'},
-      ],
+    $('#table_inventory tbody').on('click', 'td.details-control', function() {
+        let tr = $(this).closest('tr');
+        let row = inventory_table.row( tr );
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        } else {
+            // Open this row
+            let rowData = row.data();
+            console.log("Printing type: ", rowData.type);
+            row.child( formatChildRows(row.data()) ).show();
+            tr.addClass('shown');
+        }
     });
-    openCloseDetails('table_desktops', desktops_table);
-
-    let tvs_table = $('#table_tvs').DataTable({
-      data: mock.tvs,
-      columns: [
-        {
-            'className': 'details-control',
-            'orderable': false,
-            'data': null,
-            'defaultContent': '',
-        },
-        {'data': 'model_number'},
-        {'data': 'brand_name'},
-        {'data': 'price'},
-        {'data': 'weight'},
-        {'data': 'category_name'},
-        {'data': 'is_available'},
-      ],
-    });
-    openCloseDetails('table_tvs', tvs_table);
-
-    let monitors_table = $('#table_monitors').DataTable({
-      data: mock.mons,
-      columns: [
-        {
-            'className': 'details-control',
-            'orderable': false,
-            'data': null,
-            'defaultContent': '',
-        },
-        {'data': 'model_number'},
-        {'data': 'brand_name'},
-        {'data': 'price'},
-        {'data': 'weight'},
-        {'data': 'is_available'},
-      ],
-    });
-    openCloseDetails('table_monitors', monitors_table);
-
-    let tablets_table = $('#table_tablets').DataTable({
-      data: mock.tabs,
-      columns: [
-        {
-            'className': 'details-control',
-            'orderable': false,
-            'data': null,
-            'defaultContent': '',
-        },
-        {'data': 'model_number'},
-        {'data': 'brand_name'},
-        {'data': 'price'},
-        {'data': 'weight'},
-        {'data': 'is_availble'},
-      ],
-    });
-    openCloseDetails('table_tablets', tablets_table);
-    */
 });
+
+function submitData(){
+    if(getAllTextBoxes()){
+    $.ajax({
+        url: '/inventoryAction',
+        type: 'post',
+        dataType: 'json',
+        success: window.location.reload(),
+        data: {"actions":JSON.stringify(_requestJSON)}
+    });
+  }
+}
