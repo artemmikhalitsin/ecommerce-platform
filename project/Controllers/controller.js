@@ -91,8 +91,8 @@ class Controller {
       console.log('printing values');
       console.log(values);
       let items = JSON.stringify(values[0]);
-      res.render('inventory', {items: items});
-      //res.render('clientInventory', {items: items});
+      //res.render('inventory', {items: items});
+      res.render('clientInventory', {items: items});
     })
     .catch((err) => {
       console.log(err);
