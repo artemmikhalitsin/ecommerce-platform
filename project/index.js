@@ -121,6 +121,11 @@ app.post('/loginRequest', function(req, res) {
    controller.loginRequest(req, res);
   });
 
+// making the login request
+app.post('/inventoryAction', function(req, res) {
+     controller.inventoryAction(req, res);
+    });
+
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');
 });

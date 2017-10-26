@@ -5,31 +5,40 @@ class UnitOfWork {
   constructor() {
     this.environment = process.env.NODE_ENV || 'development';
     this.rootPath = require('app-root-dir').get();
-    this.configuration = require(this.rootPath + '/knexfile')[this.environment];
+    this.configuration = require(this.rootPath +
+        '/knexfile')[this.environment];
     this.connection = require('knex')(this.configuration);
 
-    let ProductDescriptionsTDG = require(this.rootPath + '/DataSource/TableDataGateway/PruductDescriptionsTDG.js');
+    let ProductDescriptionsTDG = require(this.rootPath +
+        '/DataSource/TableDataGateway/PruductDescriptionsTDG.js');
     this.productDescTDG = new ProductDescriptionsTDG();
 
-    let InventoryItemsTDG = require(this.rootPath + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
+    let InventoryItemsTDG = require(this.rootPath +
+        '/DataSource/TableDataGateway/InventoryItemsTDG.js');
     this.inventoryItemsTDG = new InventoryItemsTDG();
 
-    let ComputersTDG = require(this.rootPath + '/DataSource/TableDataGateway/ComputersTDG.js');
+    let ComputersTDG = require(this.rootPath +
+        '/DataSource/TableDataGateway/ComputersTDG.js');
     this.computersTDG = new ComputersTDG();
 
-    let DesktopsTDG = require(this.rootPath + '/DataSource/TableDataGateway/DesktopsTDG.js');
+    let DesktopsTDG = require(this.rootPath +
+        '/DataSource/TableDataGateway/DesktopsTDG.js');
     this.desktopsTDG = new DesktopsTDG();
 
-    let DimensionsTDG = require(this.rootPath + '/DataSource/TableDataGateway/DimensionsTDG.js');
+    let DimensionsTDG = require(this.rootPath +
+        '/DataSource/TableDataGateway/DimensionsTDG.js');
     this.dimensionsTDG = new DimensionsTDG();
 
-    let LaptopsTDG = require(this.rootPath + '/DataSource/TableDataGateway/LaptopsTDG.js');
+    let LaptopsTDG = require(this.rootPath +
+        '/DataSource/TableDataGateway/LaptopsTDG.js');
     this.laptopsTDG = new LaptopsTDG();
 
-    let MonitorsTDG = require(this.rootPath + '/DataSource/TableDataGateway/MonitorsTDG.js');
+    let MonitorsTDG = require(this.rootPath +
+        '/DataSource/TableDataGateway/MonitorsTDG.js');
     this.monitorsTDG = new MonitorsTDG();
 
-    let TabletsTDG = require(this.rootPath + '/DataSource/TableDataGateway/TabletsTDG.js');
+    let TabletsTDG = require(this.rootPath +
+        '/DataSource/TableDataGateway/TabletsTDG.js');
     this.tabletsTDG = new TabletsTDG();
   }
 
@@ -128,64 +137,64 @@ class UnitOfWork {
           width: 1},
        category_name: 'HD',
      }];
-      return this.connection.transaction((trx) => {
-          Promise.each(electronics, (electronic) => {
-            return this.addProductDescription(electronic)
-              .then((model_number) => {
-                // getting all the serial numbers from an electronic
-                let serials = electronic.serial_numbers;
-                serials.map((serial) => { // adding each serial to the database
-                this.addInventoryItem(serial, electronic.model_number)
-                  .then(() => {
-                    console.log('Success adding serial#: ', serial);
-                  })
-                  .catch((err) => {
-                    console.log('Something bad happened! Here are all the details about it');
-                    console.log(err);
-                  });
+    return this.connection.transaction((trx) => {
+        Promise.each(electronics, (electronic) => {
+          return this.addProductDescription(electronic)
+            .then((model_number) => {
+              // getting all the serial numbers from an electronic
+              let serials = electronic.serial_numbers;
+              serials.map((serial) => { // adding each serial to the database
+              this.addInventoryItem(serial, electronic.model_number)
+                .then(() => {
+                  console.log('Success adding serial#: ', serial);
+                })
+                .catch((err) => {
+                  console.log('Something bad happened! Here are all the details about it');
+                  console.log(err);
                 });
-                switch (electronic.type) {
-                  case 'Desktop': {
-                    return this.dimensionsTDG.add(electronic)
-                    .transacting(trx)
-                    .then((dimensionsId) => {
-                      return this.computersTDG.add(electronic)
-                      .transacting(trx)
-                      .then((compId) => {
-                        return this.desktopsTDG.add(compId, dimensionsId, electronic)
-                        .transacting(trx);
-                      });
-                    });
-                  };break;
-                  case 'Laptop': {
+              });
+              switch (electronic.type) {
+                case 'Desktop': {
+                  return this.dimensionsTDG.add(electronic)
+                  .transacting(trx)
+                  .then((dimensionsId) => {
                     return this.computersTDG.add(electronic)
                     .transacting(trx)
                     .then((compId) => {
-                      return this.laptopsTDG.add(compId, electronic)
+                      return this.desktopsTDG.add(compId, dimensionsId, electronic)
                       .transacting(trx);
                     });
-                  };break;
-                  case 'Tablet': {
-                    return this.dimensionsTDG.add(electronic)
-                    .transacting(trx)
-                    .then((dimensionsId) => {
-                      return this.computersTDG.add(electronic)
-                      .transacting(trx)
-                      .then((compId) => {
-                        return this.tabletsTDG.add(compId, dimensionsId, electronic)
-                        .transacting(trx);
-                      });
-                    });
-                  };break;
-                  case 'Monitor': {
-                    return this.monitorsTDG.add(electronic)
+                  });
+                };break;
+                case 'Laptop': {
+                  return this.computersTDG.add(electronic)
+                  .transacting(trx)
+                  .then((compId) => {
+                    return this.laptopsTDG.add(compId, electronic)
                     .transacting(trx);
-                  };break;
-                }
-              });
-          })
-          .then(trx.commit)
-          .catch(trx.rollback);
+                  });
+                };break;
+                case 'Tablet': {
+                  return this.dimensionsTDG.add(electronic)
+                  .transacting(trx)
+                  .then((dimensionsId) => {
+                    return this.computersTDG.add(electronic)
+                    .transacting(trx)
+                    .then((compId) => {
+                      return this.tabletsTDG.add(compId, dimensionsId, electronic)
+                      .transacting(trx);
+                    });
+                  });
+                };break;
+                case 'Monitor': {
+                  return this.monitorsTDG.add(electronic)
+                  .transacting(trx);
+                };break;
+              }
+            });
+        })
+        .then(trx.commit)
+        .catch(trx.rollback);
      });
   }
 
@@ -300,20 +309,23 @@ return obj.model_number;
     for (var i = 0; i < productDescriptions.length; i++) {
       for (var j = 0; j < electronics.length; j++) {
         if (productDescriptions[i].model_number == electronics[j].model_number &&
-          electronicsToUpdate.findIndex((x) => x.model_number == electronics[j].model_number) === -1)
-          {electronicsToUpdate.push(electronics[j]);}
+          electronicsToUpdate.findIndex((x) => x.model_number == electronics[j].model_number) === -1) {
+electronicsToUpdate.push(electronics[j]);
+}
         }
       }
 
   for (var i = 0; i < productDescriptions.length; i++) {
     if (electronicsToUpdate.findIndex((x) => x.model_number == productDescriptions[i].model_number) === -1 &&
-        electronicsToDelete.findIndex((x) => x.model_number == productDescriptions[i].model_number) === -1)
-      {electronicsToDelete.push(productDescriptions[i]);}
+        electronicsToDelete.findIndex((x) => x.model_number == productDescriptions[i].model_number) === -1) {
+electronicsToDelete.push(productDescriptions[i]);
+}
   }
   for (var i = 0; i < electronics.length; i++) {
     if (productDescriptions.findIndex((x) => x.model_number == electronics[i].model_number) === -1 &&
-        electronicsToAdd.findIndex((x) => x.model_number == electronics[i].model_number) === -1)
-        {electronicsToAdd.push(electronics[i]);}
+        electronicsToAdd.findIndex((x) => x.model_number == electronics[i].model_number) === -1) {
+electronicsToAdd.push(electronics[i]);
+}
   }
   return [electronicsToAdd, electronicsToUpdate, electronicsToDelete];
 }
