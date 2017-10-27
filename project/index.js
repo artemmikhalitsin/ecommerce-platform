@@ -11,11 +11,14 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 }));
 
 // will be removed later
-const desktopRepo = require(rootPath +
+let DesktopRepository = require(rootPath +
   '/DataSource/Repository/DesktopRepository.js');
 
 // this will be removed (it is here only for testing purposes)
-desktopRepo.save2('object');
+this.desktopRepo = new DesktopRepository();
+//this.desktopRepo.save2('object');
+//this.resu = this.desktopRepo.deletethistestfunction();
+//console.log("Index JS "+ this.resu);
 
 const Controller = require(rootPath + '/Controllers/controller');
 let controller = new Controller();
@@ -71,6 +74,11 @@ app.get('/addItem', function(req, res) {
     res.redirect('/');
   }
 });
+
+app.get('/addProduct', function(req, res) {
+  res.render('inventory/new-product');
+});
+
 
 // this should be implemented in the controller
 app.get('/logout', function(req, res) {

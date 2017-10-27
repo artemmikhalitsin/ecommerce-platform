@@ -26,9 +26,7 @@
 	/*padding: 20px;*/
 	/*padding-top: 0px;*/
 	/*width: 250px;*/
-	height: 600px;
 	-webkit-transform: rotateY(-180deg);
-	overflow: scroll;
 }
 
 .card:hover .back {

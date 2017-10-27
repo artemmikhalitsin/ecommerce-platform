@@ -1,19 +1,19 @@
 console.log('loaded')
 
-var clientInventory = angular.module('clientInventory', ['productCard']);
+var clientInventory = angular.module('clientInventory', ['desktopCard', 'monitorCard', 'tabletCard', 'laptopCard']);
 
 function ClientInventoryController($scope) {
   $scope.fruit = 'banana', 'mango'
   //Load items from inventory
   //Split into arrays of 4 at a time to make a grid
-  $scope.items = [[
+  $scope.items = [
     {
       brand:'Toshiba',
       modelNumber:'RUB-A535',
       serialNumber: '1231231',
       price: '700.00',
       weight: '300 gram',
-      type: 'Desktop'
+      type: 'desktop'
     },
     {
       brand:'Apple',
@@ -21,7 +21,7 @@ function ClientInventoryController($scope) {
       serialNumber: '34343434',
       price: '800.00',
       weight: '420 gram',
-      type: 'Tablet'
+      type: 'tablet'
     },
     {
       brand:'HP',
@@ -29,9 +29,14 @@ function ClientInventoryController($scope) {
       serialNumber: '808080',
       price: '1000.00',
       weight: '850 gram',
-      type: 'Monitor'
+      type: 'monitor'
     }
-  ]]
+  ];
+
+  $scope.itemsShown = [];
+
+  $scope.itemsPerPage = 4;
+  $scope.pages = Math.ceil($scope.items.length * 1.0/ $scope.itemsPerPage);
 }
 
 clientInventory.controller('ClientInventoryController', ClientInventoryController);

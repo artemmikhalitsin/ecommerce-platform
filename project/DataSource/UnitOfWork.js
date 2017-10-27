@@ -1,163 +1,82 @@
 
 const Promise = require('bluebird');
 
+let rootPath = require('app-root-dir').get();
+
+let ProductDescriptionsTDG = require(rootPath + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
+let InventoryItemsTDG = require(rootPath + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
+let ComputersTDG = require(rootPath + '/DataSource/TableDataGateway/ComputersTDG.js');
+let DesktopsTDG = require(rootPath + '/DataSource/TableDataGateway/DesktopsTDG.js');
+let DimensionsTDG = require(rootPath + '/DataSource/TableDataGateway/DimensionsTDG.js');
+let LaptopsTDG = require(rootPath + '/DataSource/TableDataGateway/LaptopsTDG.js');
+let MonitorsTDG = require(rootPath + '/DataSource/TableDataGateway/MonitorsTDG.js');
+let TabletsTDG = require(rootPath + '/DataSource/TableDataGateway/TabletsTDG.js');
 class UnitOfWork {
   constructor() {
     this.environment = process.env.NODE_ENV || 'development';
-    this.rootPath = require('app-root-dir').get();
-    this.configuration = require(this.rootPath +
-        '/knexfile')[this.environment];
+    this.configuration = require(rootPath + '/knexfile')[this.environment];
     this.connection = require('knex')(this.configuration);
 
-    let ProductDescriptionsTDG = require(this.rootPath +
-        '/DataSource/TableDataGateway/PruductDescriptionsTDG.js');
     this.productDescTDG = new ProductDescriptionsTDG();
-
-    let InventoryItemsTDG = require(this.rootPath +
-        '/DataSource/TableDataGateway/InventoryItemsTDG.js');
     this.inventoryItemsTDG = new InventoryItemsTDG();
-
-    let ComputersTDG = require(this.rootPath +
-        '/DataSource/TableDataGateway/ComputersTDG.js');
     this.computersTDG = new ComputersTDG();
-
-    let DesktopsTDG = require(this.rootPath +
-        '/DataSource/TableDataGateway/DesktopsTDG.js');
     this.desktopsTDG = new DesktopsTDG();
-
-    let DimensionsTDG = require(this.rootPath +
-        '/DataSource/TableDataGateway/DimensionsTDG.js');
     this.dimensionsTDG = new DimensionsTDG();
-
-    let LaptopsTDG = require(this.rootPath +
-        '/DataSource/TableDataGateway/LaptopsTDG.js');
     this.laptopsTDG = new LaptopsTDG();
-
-    let MonitorsTDG = require(this.rootPath +
-        '/DataSource/TableDataGateway/MonitorsTDG.js');
     this.monitorsTDG = new MonitorsTDG();
-
-    let TabletsTDG = require(this.rootPath +
-        '/DataSource/TableDataGateway/TabletsTDG.js');
     this.tabletsTDG = new TabletsTDG();
+
+    this.dirtyElements = [];
+    this.newElements = [];
+    this.deletedElements = [];
   }
-
-  addProductDescription(electronic) {
-    return this.connection.insert({
-        'model_number': electronic.model_number,
-        'brand_name': electronic.brand_name,
-        'weight': electronic.weight,
-        'price': electronic.price,
-        'type': electronic.type,
-      }, 'model_number')
-    .into('ProductDescription');
+  registerNew(object){
+    this.newElements = [];
+    this.newElements.push(object);
   }
-
-
+  registerDirty(object){
+    this.dirtyElements = [];
+    this.dirtyElements.push(object);
+  }
+  registerDeleted(object){
+    this.deletedElements = [];
+    this.deletedElements.push(object);
+  }
   commitAll(object) {
-      let electronics = [{
-       model_number: '56',
-       serial_numbers: ['10', '20', '21', '22'],
-       brand_name: 'b',
-       price: 1,
-       weight: 1,
-       type: 'Desktop',
-       processor_type: 'r',
-       ram_size: 1,
-       number_cpu_cores: 2,
-       harddrive_size: 3,
-       dimensions: {depth: 1,
-          height: 1,
-          width: 1},
-      }, {
-       model_number: '57',
-       serial_numbers: [],
-       brand_name: 'b',
-       price: 1,
-       weight: 1,
-       type: 'Desktop',
-       processor_type: 'q',
-       ram_size: 1,
-       number_cpu_cores: 2,
-       harddrive_size: 3,
-       dimensions: {depth: 1,
-          height: 1,
-          width: 1},
-      }, {
-       model_number: '58',
-       serial_numbers: ['12', '30', '31', '33', '34', '35'],
-       brand_name: 'b',
-       price: 1,
-       weight: 1,
-       type: 'Laptop',
-       processor_type: 'n',
-       ram_size: 1,
-       number_cpu_cores: 2,
-       harddrive_size: 3,
-       display_size: 1,
-       battery_info: 'info about battery',
-       os: 'os info',
-       camera: true,
-       touch_screen: false,
-     }, {
-       model_number: '59',
-       serial_numbers: ['13'],
-       brand_name: 'b',
-       price: 1,
-       weight: 1,
-       type: 'Tablet',
-       processor_type: 'n',
-       ram_size: 1,
-       number_cpu_cores: 2,
-       harddrive_size: 3,
-       dimensions: {depth: 1,
-          height: 1,
-          width: 1},
-       display_size: 1,
-       battery_info: 'info about battery',
-       os: 'os info',
-       camera_info: 'camera info',
-     }, {
-       model_number: '60',
-       serial_numbers: ['14'],
-       brand_name: 'b',
-       price: 1,
-       weight: 1,
-       type: 'Monitor',
-       display_size: 1,
-     }, {
-       model_number: '61',
-       serial_numbers: ['15', '16'],
-       brand_name: 'b',
-       price: 1,
-       weight: 1,
-       type: 'TV',
-       dimensions: {depth: 1,
-          height: 1,
-          width: 1},
-       category_name: 'HD',
-     }];
-    return this.connection.transaction((trx) => {
-        Promise.each(electronics, (electronic) => {
-          return this.addProductDescription(electronic)
-            .then((model_number) => {
-              // getting all the serial numbers from an electronic
-              let serials = electronic.serial_numbers;
-              serials.map((serial) => { // adding each serial to the database
-              this.addInventoryItem(serial, electronic.model_number)
-                .then(() => {
-                  console.log('Success adding serial#: ', serial);
-                })
-                .catch((err) => {
-                  console.log('Something bad happened! Here are all the details about it');
-                  console.log(err);
-                });
-              });
-              switch (electronic.type) {
-                case 'Desktop': {
-                  return this.dimensionsTDG.add(electronic)
-                  .transacting(trx)
-                  .then((dimensionsId) => {
+
+      let electronics = [];
+      return this.connection.transaction((trx) => {
+          console.log("Electronics new Elements: ");
+          console.log(this.newElements[0]);
+          console.log("Electronics to update ");
+          console.log(this.dirtyElements[0]);
+          console.log("Electronics to delete: ");
+          console.log(this.deletedElements[0]);
+
+          Promise.each(this.newElements[0], (electronic) => {
+            console.log("Serial number"+ electronic.serial_number);
+            return this.productDescTDG.add(electronic, trx)
+                .then((model_number) => {
+                  return this.addInventoryItem(electronic.serial_number,
+                                   electronic.model_number)
+                            .then((id) => {
+                              console.log('added inventory item ');
+                            });
+
+                switch (electronic.type) {
+                  case 'Desktop': {
+                    return this.dimensionsTDG.add(electronic)
+                    .transacting(trx)
+                    .then((dimensionsId) => {
+                      return this.computersTDG.add(electronic)
+                      .transacting(trx)
+                      .then((compId) => {
+                        return this.desktopsTDG.add(compId, dimensionsId, electronic)
+                        .transacting(trx);
+                      });
+                    });
+                  };break;
+                  case 'Laptop': {
                     return this.computersTDG.add(electronic)
                     .transacting(trx)
                     .then((compId) => {
@@ -207,15 +126,14 @@ class UnitOfWork {
   }
 
   getAllInventoryItems() {
-    return new Promise((resolve, reject) => {
-      let desktops = this.getAllDesktops();
-      let laptops = this.getAllLaptops();
-      let tablets = this.getAllTablets();
-      let monitors = this.getAllMonitors();
-      let tvs = this.getAllTVs();
+    /*return new Promise((resolve, reject) => {
+      let desktops =  DesktopTDG.getAllDesktops();
+      let laptops = LaptopTDG.getAllLaptops();
+      let tablets = // get all deksktops
+      let monitors = //get all monitors
 
-      Promise.all([laptops, desktops, tablets, monitors, tvs])
-      .then(((results) => {
+      Promise.all([laptops, desktops, tablets, monitors])
+      .then((results => {
         let products = [].concat(...results);
 
         // retrieve the model numbers present in the products
@@ -242,8 +160,11 @@ class UnitOfWork {
           }
         );
       }))
-      .catch((err) => reject(err));
-    });
+      .catch(err => reject(err))
+    })*/
+    return this.connection('ProductDescription')
+    .innerJoin('Inventory', 'Inventory.model_number', 'ProductDescription.model_number')
+    .select('*');
   }
 
   getAllModelNumbers(products) {

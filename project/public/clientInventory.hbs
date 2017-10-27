@@ -29,14 +29,15 @@
 </head>
 
 <body ng-controller="ClientInventoryController">
+  <div ng-include="'includes/header.hbs'"></div>
 
-{{items}}
+
     <!-- Start your project here-->
     <!-- Page content -->
   </br>
     <div class="container">
-      <!-- Page features -->
-      <fieldset class="form-group">
+     <!-- Page features -->
+      <!--<fieldset class="form-group">
     <legend>Preferences</legend>
     <div class="form-check">
       <label class="form-check-label">
@@ -56,8 +57,8 @@
         Option 3
       </label>
     </div>
-  </fieldset>
-  <label class="mr-sm-2" for="inlineFormCustomSelect">Preference</label>
+  </fieldset>-->
+  <!--<label class="mr-sm-2" for="inlineFormCustomSelect">Preference</label>
   <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect">
     <option selected>Choose...</option>
     <option value="1">Dell</option>
@@ -72,17 +73,15 @@
     <option value="2">Laptop</option>
     <option value="3">Monitor</option>
     <option value="4">Tablet</option>
-  </select></br></br></br>
+  </select></br></br></br>-->
 
-      <div class="row" ng-repeat="row in items"  >
-        <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in row">
-          <product-card model-number="{[{item.modelNumber}]}"
-                        serial-number="{[{item.serialNumber}]}"
-                        brand="{[{item.brand}]}"
-                        price="{[{item.price}]}"
-                        weight="{[{item.weight}]}"
-                        type="{[{item.type}]}"
-                         ></product-card>
+      <div class="row">
+        <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in items">
+          <desktop-card ng-show="item.type==='desktop'" desktop="item"></desktop-card>
+          <laptop-card ng-show="item.type==='laptop'" laptop="item"></laptop-card>
+          <tablet-card ng-show="item.type==='tablet'" tablet="item"></tablet-card>
+          <monitor-card ng-show="item.type==='monitor'" monitor="item"></monitor-card>
+
         </div>
       </div>
       <!--/.row-->
@@ -106,6 +105,6 @@
       $("#card1").flip();
     </script> -->
 
+    <div ng-include="'includes/footer.hbs'"></div>
 </body>
-
 </html>
