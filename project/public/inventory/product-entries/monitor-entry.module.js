@@ -2,12 +2,16 @@ var monitorEntry = angular.module('monitorEntry', []);
 
 monitorEntry.component('monitorEntry', {
   bindings: {
-    monitor: '='
+    monitor: '=',
+    index: '='
   },
   templateUrl: '/inventory/product-entries/monitor-entry.html',
   controller: function($scope) {
     $scope.removeSerial = (index) => {
       $scope.$ctrl.monitor.serial_numbers.splice(index,1);
+    }
+    $scope.removeMonitorEntry =() =>{
+      $scope.$emit('removeMonitor', $scope.$ctrl.index);
     }
   }
 })

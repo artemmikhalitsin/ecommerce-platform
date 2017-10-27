@@ -2,12 +2,16 @@ var desktopEntry = angular.module('desktopEntry', []);
 
 desktopEntry.component('desktopEntry', {
   bindings: {
-    desktop: '='
+    desktop: '=',
+    index: '='
   },
   templateUrl: '/inventory/product-entries/desktop-entry.html',
   controller: function($scope) {
     $scope.removeSerial = (index) => {
       $scope.$ctrl.desktop.serial_numbers.splice(index,1);
+    }
+    $scope.removeDesktopEntry =() =>{
+      $scope.$emit('removeDesktop', $scope.$ctrl.index);
     }
   }
 })

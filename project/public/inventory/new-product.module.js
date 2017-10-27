@@ -37,5 +37,17 @@ newProduct.controller('FormController', ['$scope', function($scope) {
   $scope.$on('newDesktop', (event, item) => {
     $scope.products.desktops.push(item);
   })
+  $scope.$on('removeDesktop', (event,index)=>{
+    $scope.removeDesktop(index);
+  })
+  $scope.$on('removeLaptop', (event,index)=>{
+    $scope.removeLaptop(index);
+  })
+  $scope.$on('removeTablet', (event,index)=>{
+    $scope.removeTablet(index);
+  })
+  $scope.$on('removeMonitor', (event,index)=>{
+    $scope.removeMonitor(index);
+  })
 
 }]);

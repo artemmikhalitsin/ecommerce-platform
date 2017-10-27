@@ -1,5 +1,5 @@
-<div class="container">
-  <div class="card" style="height: 20rem;">
+<div class="container"  style="height:auto;">
+  <div class="card" style="height: auto;">
     <div class="row text-left">
       <div class='col'>
         <div class="card-body">
@@ -15,7 +15,6 @@
           <label class="control-label">RAM Size: {[{ $ctrl.desktop.ram_size}]} </label><br />
           <label class="control-label"># of CPU cores: {[{ $ctrl.desktop.number_cpu_cores}]} </label><br />
           <label class="control-label">Harddrive size: {[{ $ctrl.desktop.harddrive_size}]} </label><br />
-          <p>Dimensions(cm): <p>
           <label class="control-label">Height: {[{ $ctrl.desktop.height}]} </label><br />
           <label class="control-label">Width: {[{ $ctrl.desktop.width}]} </label><br />
           <label class="control-label">Depth: {[{ $ctrl.desktop.depth}]} </label><br />
@@ -34,5 +33,6 @@
         </div>
       </div>
     </div>
+    <button class="btn btn-primary" ng-click="removeDesktopEntry()">Delete</button>
   </div>
 </div>
