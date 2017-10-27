@@ -12,15 +12,15 @@ function getAllTextBoxes(){
   let invalidModelIds = [];
   $('.add-item').each((i, obj) => {
     //gets the modelnumber of each serial number to be added
-    let id = $(obj).parent().parent().parent().parent().attr('id');
+    let modelId = $(obj).parent().parent().parent().parent().attr('id');
     let value = $(obj).val();
     if (validateValue(value)){
-      let item = id+"@"+value;
+      let item = value+"@"+ modelId;
       if (!_requestJSON.addSerials.includes(item)){
         _requestJSON.addSerials.push(item);
       }
     } else {
-      invalidModelIds.push(id);
+      invalidModelIds.push(modelId);
     }
   });
   if (invalidModelIds.length === 0){
