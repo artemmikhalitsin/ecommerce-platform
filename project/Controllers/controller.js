@@ -103,13 +103,19 @@ class Controller {
               let serial = serialsToAdd.split('@')[0];
               let model = serialsToAdd.split('@')[1];
               console.log(i + ': ' + serial + ': ' + model);
+              // Insert actual add function later
+              if (serial === 'break') {
+                res.status(500).send({error: 'Something bad happened'});
+              }
             }
           }
         }
       }
+      res.status(200).send({success: 'Something gud happened'});
     } else {
       console.log('Not admin, fool!');
     }
+    //
   }
 
   // this functon is adding a new user to the database

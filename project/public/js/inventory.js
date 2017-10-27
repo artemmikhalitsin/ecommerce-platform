@@ -167,7 +167,14 @@ function submitData(){
         url: '/inventoryAction',
         type: 'post',
         dataType: 'json',
-        success: window.location.reload(),
+        success: function (xhr) {
+          window.location.reload()
+        },
+        error: function (xhr) {
+          _requestJSON.addSerials = [];
+          $('#error-box').show();
+          $('#error-message').html(xhr.responseJSON.error);
+        },
         data: {"actions":JSON.stringify(_requestJSON)}
     });
   }
