@@ -90,8 +90,8 @@ class Controller {
   // this funtion is getting all the product description from the database
   getAllInventory(req, res) {
     let toSave = [{
-      serial_number: '123',
-      model_number: '70',
+      serial_number: '47',
+      model_number: '47',
       brand_name: "b",
       price: 1,
       weight: 1,
@@ -106,7 +106,7 @@ class Controller {
      },{
       serial_number: '1234',
       model_number: '61',
-      brand_name: "b",
+      brand_name: "changed3",
       price: 1,
       weight: 1,
       type: 'Desktop',
@@ -134,7 +134,6 @@ class Controller {
      }];
     let results = this.productDescriptionRepo.save(toSave);
     let prodDesc = this.productDescriptionRepo.getAll();
-    console.log("From Controller "+prodDesc);
     let inventoryItems = this.inventoryRepo.getAllInventoryItems();
     Promise.all([inventoryItems])
     .then((values) => {

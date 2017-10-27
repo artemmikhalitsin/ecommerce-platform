@@ -1,38 +1,44 @@
 
 const Promise = require('bluebird');
 
+let rootPath = require('app-root-dir').get();
+
+let ProductDescriptionsTDG = require(rootPath + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
+let InventoryItemsTDG = require(rootPath + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
+let ComputersTDG = require(rootPath + '/DataSource/TableDataGateway/ComputersTDG.js');
+let DesktopsTDG = require(rootPath + '/DataSource/TableDataGateway/DesktopsTDG.js');
+let DimensionsTDG = require(rootPath + '/DataSource/TableDataGateway/DimensionsTDG.js');
+let LaptopsTDG = require(rootPath + '/DataSource/TableDataGateway/LaptopsTDG.js');
+let MonitorsTDG = require(rootPath + '/DataSource/TableDataGateway/MonitorsTDG.js');
+let TabletsTDG = require(rootPath + '/DataSource/TableDataGateway/TabletsTDG.js');
 class UnitOfWork {
   constructor() {
     this.environment = process.env.NODE_ENV || 'development';
-    this.rootPath = require('app-root-dir').get();
-    this.configuration = require(this.rootPath + '/knexfile')[this.environment];
+    this.configuration = require(rootPath + '/knexfile')[this.environment];
     this.connection = require('knex')(this.configuration);
     
-    let ProductDescriptionsTDG = require(this.rootPath + '/DataSource/TableDataGateway/PruductDescriptionsTDG.js');
     this.productDescTDG = new ProductDescriptionsTDG();
-
-    let InventoryItemsTDG = require(this.rootPath + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
     this.inventoryItemsTDG = new InventoryItemsTDG();
-    
-    let ComputersTDG = require(this.rootPath + '/DataSource/TableDataGateway/ComputersTDG.js');
     this.computersTDG = new ComputersTDG();
-
-    let DesktopsTDG = require(this.rootPath + '/DataSource/TableDataGateway/DesktopsTDG.js');
     this.desktopsTDG = new DesktopsTDG();
-
-    let DimensionsTDG = require(this.rootPath + '/DataSource/TableDataGateway/DimensionsTDG.js');
     this.dimensionsTDG = new DimensionsTDG();
-
-    let LaptopsTDG = require(this.rootPath + '/DataSource/TableDataGateway/LaptopsTDG.js');
     this.laptopsTDG = new LaptopsTDG();
-
-    let MonitorsTDG = require(this.rootPath + '/DataSource/TableDataGateway/MonitorsTDG.js');
     this.monitorsTDG = new MonitorsTDG();
-
-    let TabletsTDG = require(this.rootPath + '/DataSource/TableDataGateway/TabletsTDG.js');
     this.tabletsTDG = new TabletsTDG();
-  }
 
+    this.dirtyElements = [];
+    this.newElements = [];
+    this.deletedElements = [];
+  }
+  registerNew(object){
+    this.newElements.push(object);
+  }
+  registerDirty(object){
+    this.dirtyElements.push(object);
+  }
+  registerDeleted(object){
+    this.deletedElements.push(object);
+  }
   commitAll(object) {
       let electronics = [];
       return this.connection.transaction((trx) => {
@@ -41,25 +47,27 @@ class UnitOfWork {
         .then((values) => {
           let productDescriptions = JSON.stringify(values[0]);
           //console.log(values[0]);
-          var results = this.compareWithContext(values[0], electronics);
-          var electronicsToAdd = results[0];
-          var electronicsToUpdate = results[1];
-          var electronicsToDelete = results[2];
+          //var results = this.compareWithContext(values[0], electronics);
+          var electronicsToAdd = object;//results[0];
+          //var electronicsToUpdate = results[1];
+          //var electronicsToDelete = results[2];
           console.log("Electronics to add: ");
           console.log(electronicsToAdd);
+          console.log("Electronics new Elements: ");
+          console.log(this.newElements[0]);
           console.log("Electronics to update ");
-          console.log(electronicsToUpdate);
+          console.log(this.dirtyElements[0]);
           console.log("Electronics to delete: ");
-          console.log(electronicsToDelete);
+          console.log(this.deletedElements[0]);
 
-          Promise.each(electronicsToAdd, (electronic) => {
-            console.log("Serial number"+ !!electronic.serial_number);
+          Promise.each(this.newElements[0], (electronic) => {
+            console.log("Serial number"+ electronic.serial_number);
             return this.productDescTDG.add(electronic, trx) 
                 .then((model_number) => {
                   return this.addInventoryItem(electronic.serial_number,
                                    electronic.model_number)
                             .then((id) => {
-                              console.log('added inventory item');
+                              console.log('added inventory item ');
                             });
                 
                 switch (electronic.type) {

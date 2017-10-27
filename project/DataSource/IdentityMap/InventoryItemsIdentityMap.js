@@ -2,16 +2,14 @@ class InventoryItemsIdentityMap{
     constructor(){
         this.rootPath = require('app-root-dir').get();
         let UnitOfWork = require(this.rootPath + '/DataSource/UnitOfWork.js');
-        let ProductDescriptionsTDG = require(this.rootPath + '/DataSource/TableDataGateway/PruductDescriptionsTDG.js');
+        let ProductDescriptionsTDG = require(this.rootPath + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
         this.productDescTDG = new ProductDescriptionsTDG();
         let uow = new UnitOfWork();
         this.context = this.productDescTDG.select();
         //this.InventoryItems = [];
         Promise.all([this.context])
         .then((values) => {
-          this.InventoryItems =  JSON.stringify(values[0]);
-          
-        console.log("InventoryIM constructor" + this.InventoryItems);
+          this.InventoryItems =  values[0];
         });
     }
     getAll(){

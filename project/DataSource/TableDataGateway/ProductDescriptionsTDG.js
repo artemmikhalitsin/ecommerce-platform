@@ -21,10 +21,10 @@ class ProductDescriptionsTDG{
         return this.connection('ProductDescription')
                     .select('*');
     }
-    select(model_number){
+    selectById(model_number){
         return this.connection('ProductDescription')
-                    .select('*')
-                    .where('model_number = ' + model_number);
+                    .where({model_number: model_number})
+                    .select('*');
     }
     update(productDescription){
         //TODO

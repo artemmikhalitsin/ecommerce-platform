@@ -3,7 +3,7 @@ const rootPath = require('app-root-dir').get();
 
 let UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 let ProductDescriptionIdentityMap = require(rootPath + '/DataSource/IdentityMap/ProductDescriptionsIdentityMap.js');
-let ProductDescriptionsTDG = require(rootPath + '/DataSource/TableDataGateway/PruductDescriptionsTDG.js');
+let ProductDescriptionsTDG = require(rootPath + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
 class ProductDescriptionRepository {
   constructor() {
     this.uow = new UnitOfWork();
@@ -12,9 +12,12 @@ class ProductDescriptionRepository {
   }
   getAll(){
     let context = this.ProductDescriptionIM.getAll();
-    console.log("From Product description Repo " + context);
     if (context.length <= 0){
-      context = productDescTDG.select();
+      context = this.productDescTDG.select();
+
+      Promise.all([context]).then((values)=>{
+        context = values[0];
+      });
       this.ProductDescriptionIM.add(context);
     }
     return context;
@@ -26,15 +29,28 @@ class ProductDescriptionRepository {
     return this.ProductDescriptionIM.get([id]);
   }
   getByIds(ids){
+    let products = this.ProductDescriptionIM.get(ids);
+    if(products.length <= 0){
+      products = this.productDescTDG.select();
+            Promise.all([products]).then((values)=>{
+              products = values[0];
+            });
+            this.ProductDescriptionIM.add(products);
+    }
+    console.log("-------------");
+    console.log(JSON.stringify(products));
+    console.log("-------------");
     //have to do same thing as getAll implement add in case not found to Identity mapper
-    return this.ProductDescriptionIM.get(id);
+    return products;
   }
   save(products){
     var electronicsToAdd = [];
     var electronicsToUpdate = [];
     var electronicsToDelete = [];
-
+ 
     let productIds = products.map(p => p.model_number);
+    
+    if(productIds.length > 0){
     let context = this.getByIds(productIds);
     for(var i = 0; i < products.length; i++){
       if(context.findIndex(p => p.model_number == products[i].model_number) !== -1
@@ -46,10 +62,20 @@ class ProductDescriptionRepository {
                 electronicsToAdd.push(products[i]);
               }
     }
-    electronicsToDelete = context.filter(p => electronicsToUpdate.indexOf(p) == -1);
-    console.log("Electronics to add (repo) " + electronicsToAdd);
-    console.log("Electronics to update (repo) " + electronicsToUpdate);
-    console.log("Electronics to delete (repo) " + electronicsToDelete);
+    electronicsToDelete = context.filter(function(desc){
+      return electronicsToUpdate.findIndex(e => e.model_number == desc.model_number) !== -1;
+    });
+  }
+    console.log("Electronics to add (repo) " + JSON.stringify(electronicsToAdd));
+    console.log("Electronics to update (repo) " + JSON.stringify(electronicsToUpdate));
+    console.log("Electronics to delete (repo) " + JSON.stringify(electronicsToDelete));
+    this.uow.registerNew(electronicsToAdd);
+    this.uow.registerDirty(electronicsToUpdate);
+    this.uow.registerDeleted(electronicsToDelete);
+
+    this.uow.commitAll(electronicsToAdd);
+    console.log("Affter commiting");
+    this.ProductDescriptionIM.add(electronicsToAdd);
   }
   /*getModelNumber() {
     for(var i = 0; i < productDescriptions.length; i++){

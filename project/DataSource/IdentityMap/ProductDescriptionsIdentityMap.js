@@ -1,46 +1,51 @@
 const rootPath = require('app-root-dir').get();
 let UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
-let ProductDescriptionsTDG = require(rootPath + '/DataSource/TableDataGateway/PruductDescriptionsTDG.js');
+let ProductDescriptionsTDG = require(rootPath + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
 class ProductDescriptionsIdentityMap{
     constructor(){
        // this.ProductDescriptions = uow.loadProductDescriptions();
         this.productDescTDG = new ProductDescriptionsTDG();
         this.uow = new UnitOfWork(); 
-        this.context = this.productDescTDG.select();
-        Promise.all([this.context])
+        let context = this.productDescTDG.select();
+        this.productDesc = [];
+        Promise.all([context])
         .then((values) => {
-          this.ProductDescriptions = JSON.stringify(values[0]);
-          
-        console.log("Product Description IM constructor" + this.ProductDescriptions);
+          this.productDesc = values[0];
+          console.log("Printing...." + JSON.stringify(values[0]));
         })
     }
     getAll(){
-        let result = this.ProductDescriptions;
-        if(result.length > 0){
-            console.log("Product Description IM getall if" + result);
+        let result = this.productDesc;
+        if(this.productDesc.length > 0){
             return result;
         }
         else{
-            this.productDescTDG.select();
-            Promise.all([this.context])
+            result = this.productDescTDG.select();
+            Promise.all([result])
             .then((values) => {
-              result = JSON.stringify(values[0]);
-              
-            console.log("Product Description IM getall" + result);
-            return result;
+              return values[0];
             })
+            return [];
         }
     }
     get(model_numbers){
-        return this.getAll().filter(function(desc){
+       
+        var allProducts = this.getAll();
+        console.log(allProducts);
+        console.log(model_numbers);
+        if(allProducts != null){
+        return allProducts.filter(function(desc){
+            console.log(model_numbers);
             return model_numbers.findIndex(x => x == desc.model_number) > -1;
         });
+        return [];
+    }
     }
     add(newProductDescriptions){
-        this.ProductDescriptions.push(newProductDescriptions);
+        this.productDesc.push(newProductDescriptions);
     }
     delete(productDescriptionsToRemove){
-        this.ProductDescriptions.filter(function(desc){
+        this.productDesc.filter(function(desc){
             return productDescriptionsToRemove.findIndex(x => x == desc.model_number) === -1;
         });
     }
