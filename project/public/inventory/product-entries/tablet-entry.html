@@ -24,11 +24,11 @@
         </div>
       </div>
       <div class='col'>
-        <div ng-class="card-body">
+        <div class="card-body">
           <div ng-show="$ctrl.tablet.serial_numbers.length > 0">
             <p>Serial numbers</p>
             <ul>
-              <li ng-repeat="serial in $ctrl.desktop.serial_numbers track by $index">
+              <li ng-repeat="serial in $ctrl.tablet.serial_numbers track by $index">
                 {[{ serial }]}  <button ng-click="removeSerial($index)">X</button>
               </li>
             </ul>
@@ -36,6 +36,6 @@
         </div>
       </div>
     </div>
-    <button class="btn btn-primary" ng-click="removeDesktopEntry()">Delete</button>
+    <button class="btn btn-primary" ng-click="removeTabletEntry()">Delete</button>
   </div>
 </div>
