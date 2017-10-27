@@ -129,7 +129,7 @@ class Controller {
           req.session.isAdmin=false;
         }
         // console.log(req.session.exists);
-        // console.log('displaying items');
+         console.log('saving session');
         req.session.save(function(err) {
             if (err) console.error(err);
             res.redirect('/getAllInventoryItems');

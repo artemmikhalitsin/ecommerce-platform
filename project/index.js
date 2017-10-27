@@ -55,7 +55,7 @@ app.get('/login', function(req, res) {
     console.log('already logged in, redirecting to inventory');
     res.redirect('/getAllInventoryItems');
   } else {
-res.render('login');
+  res.render('login');
 }
 });
 
@@ -130,32 +130,52 @@ app.listen(8080, function() {
   console.log('Example app listening on port 8080!');
 });
 
-meld.around(app, 'get', function(methodCall) {
-  const dest = methodCall.args[0];
+// meld.around(app, 'render', function(page) {
+//   console.log('caught res! :' + page.args);
+//   return page.proceed();
+// });
+
+meld.around(app, 'render', function(methodCall) {
+  const dest = '/'+methodCall.args[0];
+  // console.log('dest: '+ dest);
   if (typeof dest != 'string') {
+    console.log('destination not a string');
     return methodCall.proceed();
   }
-  console.log('');
-  console.log(app);
-  console.log('method callgrp: ' + methodCall.args);
-  console.log('first arg' + methodCall.args[0]);
-  console.log('session:' + app.session); // undefined
-  const sessionStats = app.session;
-  const c1 = preLogPages.indexOf(dest)>-1 && !sessionStats;
+  // if ((methodCall.args[0] === 'env') |
+  //     (methodCall.args[0] === 'etag fn') |
+  //     (methodCall.args[0] === 'views') |
+  //     (methodCall.args[0] === 'view') |
+  //     (methodCall.args[0] === 'view engine')) {
+  //     console.log('method ignored, args[0]: '+ methodCall.args[0]);
+  //   return methodCall.proceed();
+  // }
+  // console.log('');
+   console.log('context: ' + methodCall.target.toString());
+   console.log('method callgrp: ' + methodCall.args);
+   console.log('method name: ' + methodCall.method);
+   console.log('session:' + app.session); // undefined
+  //const sessionStats = methodCall.target.arguments[0].session;
+  const c1 = preLogPages.indexOf(dest)>-1 &&
+    (typeof sessionStats === 'undefined');
   const c2 = postLogPages.indexOf(dest)>-1 && sessionStats.exists;
   const c3 = clientPages.indexOf(dest)>-1 && !sessionStats.isAdmin;
   const c4 = adminPages.indexOf(dest)>-1 && sessionStats.isAdmin;
+  // console.log('prelogIndex: ' + preLogPages.indexOf(dest));
+  // console.log(sessionStats);
   if (c1 || c2 || c3 || c4) {
     console.log('all normal');
+    return methodCall.proceed();
   } else if (sessionStats && sessionStats.isAdmin) {
     console.log('back to the admin cage');
     methodCall.args[0] = '/getAllInventoryItems';
+    methodCall.method = 'redirect';
   } else if (sessionStats) {
-    console.log('back to the peasant cage');
-    methodCall.args[0] = '/clientInventory';
+    console.log('back to the client cage');
+    methodCall.args[0] = '/getAllInventoryItems';
+    methodCall.method = 'redirect';
   } else {
     console.log('backgroundMagic');
+    return methodCall.proceed();
   }
-  console.log('your method call got captured by a smooth criminal in index.js');
-  return methodCall.proceed();
 });
