@@ -32,48 +32,50 @@
         </header>
         <div class="row-fluid text-center justify-content-center">
           <div class="card-fluid" style="width: 70rem;">
-            <div class="card-block-fluid"></br>
-              <label class="col-4 col-form-label"> <h6>Product type</h6>
-                <select class="form-control" ng-model="selected">
-                  <option value="monitor">Monitor</option>
-                  <option value="laptop">Laptop</option>
-                  <option value="desktop">Desktop</option>
-                  <option value="tablet">Tablet</option>
-                </select>
-              </label><br />
-              <form ng-model="formData">
-                <laptop-form ng-show="selected=='laptop'"></laptop-form>
-                <tablet-form ng-show="selected=='tablet'"></tablet-form>
-                <desktop-form ng-show="selected=='desktop'"></desktop-form>
-                <monitor-form ng-show="selected=='monitor'"></monitor-form>
-              </form><br />
-              <div class="card" style="height:auto;" ng-show="products.tablets.length > 0">
-                <h5 class="card-header text-left">Tablets</h5>
-                <div ng-repeat="item in products.tablets track by $index">
-                  <br /><tablet-entry  tablet="item"></tablet-entry>
-                </div>
-              </div><br />
-              <div class="card" style="height:auto;" ng-show="products.desktops.length > 0">
-                <h5 class="card-header text-left">Desktops</h5>
-                <div ng-repeat="item in products.desktops track by $index">
-                  <br /><desktop-entry  desktop="item" index="$index"></desktop-entry>
-                </div>
-              </div><br />
-              <div class="card" style="height:auto;" ng-show="products.monitors.length > 0">
-                <h5 class="card-header text-left">Monitors</h5>
-                <div ng-repeat="item in products.monitors track by $index">
-                  <br /><monitor-entry  monitor="item"></monitor-entry>
-                </div>
-              </div><br />
-              <div class="card" style="height:auto;" ng-show="products.laptops.length > 0">
-                <h5 class="card-header text-left">Laptops</h5>
-                <div ng-repeat="item in products.laptops track by $index">
-                  <br /><laptop-entry  laptop="item"></laptop-entry>
-                </div>
-              </div><br />
+            <h3 class="card-header text-center">Product details</h3>
+              <div class="card-block-fluid"></br>
+                <label class="col-4 col-form-label"> <h6>Product type</h6>
+                  <select class="form-control" ng-model="selected">
+                    <option value="monitor">Monitor</option>
+                    <option value="laptop">Laptop</option>
+                    <option value="desktop">Desktop</option>
+                    <option value="tablet">Tablet</option>
+                  </select>
+                </label><br />
+                <form ng-model="formData">
+                  <laptop-form ng-show="selected=='laptop'"></laptop-form>
+                  <tablet-form ng-show="selected=='tablet'"></tablet-form>
+                  <desktop-form ng-show="selected=='desktop'"></desktop-form>
+                  <monitor-form ng-show="selected=='monitor'"></monitor-form>
+                </form>
+                <br />
+                <div class="card" style="height:auto;" ng-show="products.tablets.length > 0">
+                  <h5 class="card-header text-left">Tablets</h5>
+                  <div ng-repeat="item in products.tablets track by $index">
+                    <br /><tablet-entry  tablet="item"></tablet-entry>
+                  </div>
+                </div><br />
+                <div class="card" style="height:auto;" ng-show="products.desktops.length > 0">
+                  <h5 class="card-header text-left">Desktops</h5>
+                  <div ng-repeat="item in products.desktops track by $index">
+                    <br /><desktop-entry  desktop="item" index="$index"></desktop-entry>
+                  </div>
+                </div><br />
+                <div class="card" style="height:auto;" ng-show="products.monitors.length > 0">
+                  <h5 class="card-header text-left">Monitors</h5>
+                  <div ng-repeat="item in products.monitors track by $index">
+                    <br /><monitor-entry  monitor="item"></monitor-entry>
+                  </div>
+                </div><br />
+                <div class="card" style="height:auto;" ng-show="products.laptops.length > 0">
+                  <h5 class="card-header text-left">Laptops</h5>
+                  <div ng-repeat="item in products.laptops track by $index">
+                    <br /><laptop-entry  laptop="item"></laptop-entry>
+                  </div>
+                </div><br />
+              </div>
             </div>
           </div>
-        </div>
         <button ng-show="products.monitors.length > 0 || products.tablets.length > 0 || products.desktops.length > 0||products.laptops.length > 0" class="btn btn-primary" type="button" ng-click="submit()">Submit All</button>
       </div>
     <!-- Bootstrap core JavaScript -->
