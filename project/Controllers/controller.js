@@ -15,7 +15,7 @@ class Controller {
     this.userRepo = require(rootPath +
       '/DataSource/Repository/UserRepository.js');
     this.inventoryRepo = require(rootPath +
-      '/DataSource/Repository/inventoryItemRepository.js');
+      '/DataSource/Repository/InventoryItemRepository.js');
     this.productDescriptionRepo = new ProductDescriptionRepository();
   }
 

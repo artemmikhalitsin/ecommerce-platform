@@ -7,7 +7,7 @@ class InventoryItemsIdentityMap {
         let uow = new UnitOfWork();
         this.context = this.productDescTDG.select();
         //this.InventoryItems = [];
-        Promise.all([thigit s.context])
+        Promise.all([this.context])
         .then((values) => {
           this.InventoryItems =  values[0];
         });

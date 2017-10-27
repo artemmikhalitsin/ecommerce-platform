@@ -76,15 +76,6 @@ class UnitOfWork {
                       });
                     });
                   };break;
-                  case 'Laptop': {
-                    return this.computersTDG.add(electronic)
-                    .transacting(trx)
-                    .then((compId) => {
-                      return this.desktopsTDG.add(compId, dimensionsId, electronic)
-                      .transacting(trx);
-                    });
-                  });
-                };break;
                 case 'Laptop': {
                   return this.computersTDG.add(electronic)
                   .transacting(trx)
