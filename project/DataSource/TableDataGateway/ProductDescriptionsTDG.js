@@ -28,9 +28,16 @@ class ProductDescriptionsTDG{
     }
     update(productDescription){
         //TODO
-    }
+          return this.connection.update({
+            'brand_name': productDescription.brand_name,
+            'weight': productDescription.weight,
+            'price': productDescription.price,
+            'type': productDescription.type,
+          }).from('ProductDescription').where('model_number', productDescription.model_number);
+
     //update is not in current requirements for inventory items
     /*delete(productDescription){
     }*/
+  }
 }
 module.exports = ProductDescriptionsTDG;

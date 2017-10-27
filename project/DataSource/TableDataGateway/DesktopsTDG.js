@@ -13,11 +13,17 @@ class DesktopsTDG{
         }, 'id')
         .into('Desktop');
     }
-    
+
     select(){
         //TODO
     }
+
     update(desktop){
+        return this.connection.update({
+        'model_number': desktop.model_number,
+        'dimension_id': dimensionsId,
+      }).from('Desktop').where('id', id);
+
         //TODO
     }
 }
