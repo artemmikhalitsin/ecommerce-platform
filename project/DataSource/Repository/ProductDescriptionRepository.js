@@ -31,14 +31,14 @@ class ProductDescriptionRepository {
   getByIds(ids){
     let products = this.ProductDescriptionIM.get(ids);
     if(products.length <= 0){
-      products = this.productDescTDG.select();
-            Promise.all([products]).then((values)=>{
+      var prodDescFromTDG = this.productDescTDG.select();
+            Promise.all([prodDescFromTDG]).then((values)=>{
               products = values[0];
             });
             this.ProductDescriptionIM.add(products);
     }
     console.log("-------------");
-    console.log(JSON.stringify(products));
+    //console.log(JSON.stringify(products));
     console.log("-------------");
     //have to do same thing as getAll implement add in case not found to Identity mapper
     return products;
@@ -52,6 +52,7 @@ class ProductDescriptionRepository {
     
     if(productIds.length > 0){
     let context = this.getByIds(productIds);
+    console.log("Context in repo is: " + JSON.stringify(context));
     for(var i = 0; i < products.length; i++){
       if(context.findIndex(p => p.model_number == products[i].model_number) !== -1
           && electronicsToUpdate.findIndex(e => e.model_number == products[i].model_number) === -1){
