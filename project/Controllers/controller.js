@@ -12,7 +12,7 @@ class Controller {
     this.userRepo = require(this.rootPath +
       '/DataSource/Repository/UserRepository.js');
     this.inventoryRepo = require(this.rootPath +
-      '/DataSource/Repository/inventoryItemRepository.js');
+      '/DataSource/Repository/InventoryItemRepository.js');
   }
 
   registrationRequest(req, res) {
@@ -56,14 +56,16 @@ class Controller {
     }
   }
 
-  // this function will be deleted because it got replaced by getAllInventory
+ /** // this function will be deleted because it got replaced by getAllInventory
   getAllInventoryItems(req, res, done) {
     // console.log(req.session.exists);
+
     let laptopItems = this.laptopRepo.get('*');
     let desktopItems = this.desktopRepo.get('*');
     let monitorItems = this.monitorRepo.get('*');
     let tabletItems = this.tabletRepo.get('*');
     let tvItems = this.tvRepo.get('*');
+
     Promise.all([laptopItems, tvItems, monitorItems, tabletItems, desktopItems])
     .then((values) => {
       let allItems = {
@@ -79,7 +81,7 @@ class Controller {
     }).catch((error) => {
       console.log(error);
     });
-  }
+  } */
 
   // this funtion is getting all the product description from the database
   getAllInventory(req, res) {
@@ -89,7 +91,8 @@ class Controller {
       console.log('printing values');
       console.log(values);
       let items = JSON.stringify(values[0]);
-      res.render('inventory', {items: items});
+      //res.render('inventory', {items: items});
+      res.render('clientInventory', {items: items});
     })
     .catch((err) => {
       console.log(err);

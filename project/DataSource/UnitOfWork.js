@@ -1,3 +1,4 @@
+
 const Promise = require('bluebird');
 
 class UnitOfWork {
@@ -6,6 +7,30 @@ class UnitOfWork {
     this.rootPath = require('app-root-dir').get();
     this.configuration = require(this.rootPath + '/knexfile')[this.environment];
     this.connection = require('knex')(this.configuration);
+
+    let ProductDescriptionsTDG = require(this.rootPath + '/DataSource/TableDataGateway/PruductDescriptionsTDG.js');
+    this.productDescTDG = new ProductDescriptionsTDG();
+
+    let InventoryItemsTDG = require(this.rootPath + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
+    this.inventoryItemsTDG = new InventoryItemsTDG();
+
+    let ComputersTDG = require(this.rootPath + '/DataSource/TableDataGateway/ComputersTDG.js');
+    this.computersTDG = new ComputersTDG();
+
+    let DesktopsTDG = require(this.rootPath + '/DataSource/TableDataGateway/DesktopsTDG.js');
+    this.desktopsTDG = new DesktopsTDG();
+
+    let DimensionsTDG = require(this.rootPath + '/DataSource/TableDataGateway/DimensionsTDG.js');
+    this.dimensionsTDG = new DimensionsTDG();
+
+    let LaptopsTDG = require(this.rootPath + '/DataSource/TableDataGateway/LaptopsTDG.js');
+    this.laptopsTDG = new LaptopsTDG();
+
+    let MonitorsTDG = require(this.rootPath + '/DataSource/TableDataGateway/MonitorsTDG.js');
+    this.monitorsTDG = new MonitorsTDG();
+
+    let TabletsTDG = require(this.rootPath + '/DataSource/TableDataGateway/TabletsTDG.js');
+    this.tabletsTDG = new TabletsTDG();
   }
 
   addProductDescription(electronic) {
@@ -19,10 +44,11 @@ class UnitOfWork {
     .into('ProductDescription');
   }
 
+
   commitAll(object) {
       let electronics = [{
        model_number: '56',
-       serial_number: '10',
+       serial_numbers: ['10', '20', '21', '22'],
        brand_name: 'b',
        price: 1,
        weight: 1,
@@ -36,7 +62,7 @@ class UnitOfWork {
           width: 1},
       }, {
        model_number: '57',
-       serial_number: '11',
+       serial_numbers: [],
        brand_name: 'b',
        price: 1,
        weight: 1,
@@ -50,7 +76,7 @@ class UnitOfWork {
           width: 1},
       }, {
        model_number: '58',
-       serial_number: '12',
+       serial_numbers: ['12', '30', '31', '33', '34', '35'],
        brand_name: 'b',
        price: 1,
        weight: 1,
@@ -66,7 +92,7 @@ class UnitOfWork {
        touch_screen: false,
      }, {
        model_number: '59',
-       serial_number: '13',
+       serial_numbers: ['13'],
        brand_name: 'b',
        price: 1,
        weight: 1,
@@ -81,10 +107,10 @@ class UnitOfWork {
        display_size: 1,
        battery_info: 'info about battery',
        os: 'os info',
-       camera: 'camera info',
+       camera_info: 'camera info',
      }, {
        model_number: '60',
-       serial_number: '14',
+       serial_numbers: ['14'],
        brand_name: 'b',
        price: 1,
        weight: 1,
@@ -92,7 +118,7 @@ class UnitOfWork {
        display_size: 1,
      }, {
        model_number: '61',
-       serial_number: '15',
+       serial_numbers: ['15', '16'],
        brand_name: 'b',
        price: 1,
        weight: 1,
@@ -104,59 +130,59 @@ class UnitOfWork {
      }];
       return this.connection.transaction((trx) => {
           Promise.each(electronics, (electronic) => {
-              return this.addProductDescription(electronic)
-                .then((model_number) => {
-                  this.addInventoryItem(electronic.serial_number,
-                                   electronic.model_number)
-                  .then((id) => {
-                    console.log('added inventory item');
+            return this.addProductDescription(electronic)
+              .then((model_number) => {
+                // getting all the serial numbers from an electronic
+                let serials = electronic.serial_numbers;
+                serials.map(serial => { // adding each serial to the database
+                this.addInventoryItem(serial, electronic.model_number)
+                  .then(() => {
+                    console.log("Success adding serial#: ", serial);
+                  })
+                  .catch((err) => {
+                    console.log("Something bad happened! Here are all the details about it");
+                    console.log(err);
                   });
+                });
                 switch (electronic.type) {
                   case 'Desktop': {
-                    return this.addDimensions(electronic)
+                    return this.dimensionsTDG.add(electronic)
                     .transacting(trx)
                     .then((dimensionsId) => {
-                      return this.addComputer(electronic)
+                      return this.computersTDG.add(electronic)
                       .transacting(trx)
                       .then((compId) => {
-                        return this.addDesktop(compId, dimensionsId, electronic)
+                        return this.desktopsTDG.add(compId, dimensionsId, electronic)
                         .transacting(trx);
                       });
                     });
                   };break;
                   case 'Laptop': {
-                    return this.addComputer(electronic)
+                    return this.computersTDG.add(electronic)
                     .transacting(trx)
                     .then((compId) => {
-                      return this.addLaptop(compId, electronic)
+                      return this.laptopsTDG.add(compId, electronic)
                       .transacting(trx);
                     });
                   };break;
                   case 'Tablet': {
-                    return this.addDimensions(electronic)
+                    return this.dimensionsTDG.add(electronic)
                     .transacting(trx)
                     .then((dimensionsId) => {
-                      return this.addComputer(electronic)
+                      return this.computersTDG.add(electronic)
                       .transacting(trx)
                       .then((compId) => {
-                        return this.addTablet(compId, dimensionsId, electronic)
+                        return this.tabletsTDG.add(compId, dimensionsId, electronic)
                         .transacting(trx);
                       });
                     });
                   };break;
-                  case 'TV': {
-                    return this.addDimensions(electronic)
-                    .transacting(trx)
-                    .then((dimensionsId) => {
-                      return this.addTV(dimensionsId, electronic)
-                      .transacting(trx);
-                    });
-                  };break;
                   case 'Monitor': {
-                    return this.addMonitor(electronic)
+                    return this.monitorsTDG.add(electronic)
                     .transacting(trx);
                   };break;
                 }
+
               });
           })
           .then(trx.commit)
@@ -173,82 +199,122 @@ class UnitOfWork {
   }
 
   getAllInventoryItems() {
-    return this.connection('ProductDescription')
-    .innerJoin('Inventory', 'Inventory.model_number',
-               'ProductDescription.model_number')
-    .select('*');
+    return new Promise((resolve, reject) => {
+      let desktops =  this.getAllDesktops();
+      let laptops = this.getAllLaptops();
+      let tablets = this.getAllTablets();
+      let monitors = this.getAllMonitors();
+      let tvs = this.getAllTVs();
+
+      Promise.all([laptops, desktops, tablets, monitors, tvs])
+      .then((results => {
+        let products = [].concat(...results);
+
+        //retrieve the model numbers present in the products
+        let model_numbers = this.getAllModelNumbers(products);
+
+        // getting the serial numbers associated with the model numbers
+        this.connection('Inventory')
+        .select('*')
+        .havingIn('model_number', model_numbers)
+        .then(serials => {
+            products = products.map(product => {
+              let serial_numbers = serials.filter(serial => {
+                return serial.model_number === product.model_number;
+              })
+              .map(serial => {
+                return serial.serial_number;
+              })
+
+              product.serial_numbers = serial_numbers
+              return product;
+            })
+
+            resolve(products)
+          }
+        )
+      }))
+      .catch(err => reject(err))
+    })
+  }
+
+  getAllModelNumbers(products){
+    return products.map(obj => {return obj.model_number})
   }
 
   getAllProductsDescription() {
     return this.connection('ProductDescription').select('*');
   }
 
-  addDimensions(electronic) {
-    return this.connection.insert(electronic.dimensions, 'dimension_id')
-    .into('Dimensions');
+  getAllDesktops(){
+    return this.connection('ProductDescription')
+    .innerJoin('Desktop', 'Desktop.model_number', 'ProductDescription.model_number')
+    .innerJoin('Computer', 'Desktop.comp_id', 'Computer.comp_id')
+    .innerJoin('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
+    .select('ProductDescription.model_number','brand_name','price', 'type',
+    'weight', 'is_available', 'processor_type', 'ram_size', 'number_cpu_cores',
+    'harddrive_size', 'depth', 'height', 'width');
   }
 
-  addComputer(electronic) {
-    return this.connection.insert({
-        'processor_type': electronic.processor_type,
-        'ram_size': electronic.ram_size,
-        'number_cpu_cores': electronic.number_cpu_cores,
-        'harddrive_size': electronic.harddrive_size,
-    }, 'comp_id')
-    .into('Computer');
+  getAllLaptops(){
+    return this.connection('ProductDescription')
+    .innerJoin('Laptop', 'Laptop.model_number', 'ProductDescription.model_number')
+    .innerJoin('Computer', 'Laptop.comp_id', 'Computer.comp_id')
+    .select('ProductDescription.model_number','brand_name','price', 'type',
+    'weight', 'is_available', 'processor_type', 'ram_size', 'number_cpu_cores',
+    'harddrive_size', 'os', 'touch_screen', 'camera', 'display_size', 'battery_info');
   }
 
-  addDesktop(compId, dimensionsId, electronic) {
-    return this.connection.insert({
-        'comp_id': compId,
-        'model_number': electronic.model_number,
-        'dimension_id': dimensionsId,
-    }, 'id')
-    .into('Desktop');
+  getAllTablets(){
+    return this.connection('ProductDescription')
+    .innerJoin('Tablet', 'Tablet.model_number', 'ProductDescription.model_number')
+    .innerJoin('Computer', 'Tablet.comp_id', 'Computer.comp_id')
+    .innerJoin('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
+    .select('ProductDescription.model_number','brand_name','price', 'type',
+    'weight', 'is_available', 'processor_type', 'ram_size', 'number_cpu_cores',
+    'harddrive_size', 'display_size', 'battery_info', 'camera_info', 'os', 'depth',
+    'height', 'width');
   }
 
-  addLaptop(compId, electronic) {
-    return this.connection.insert({
-        'comp_id': compId,
-        'model_number': electronic.model_number,
-        'display_size': electronic.display_size,
-        'battery_info': electronic.battery_info,
-        'os': electronic.os,
-        'camera': electronic.camera,
-        'touch_screen': electronic.touch_screen,
-    }, 'id')
-    .into('Laptop');
+  getAllMonitors(){
+    return this.connection('ProductDescription')
+    .innerJoin('Monitor', 'Monitor.model_number', 'ProductDescription.model_number')
+    .select('ProductDescription.model_number', 'brand_name', 'price', 'type',
+    'weight', 'is_available', 'display_size');
   }
 
-  addTablet(compId, dimensionsId, electronic) {
-    return this.connection.insert({
-        'comp_id': compId,
-        'model_number': electronic.model_number,
-        'dimension_id': dimensionsId,
-        'display_size': electronic.display_size,
-        'battery_info': electronic.battery_info,
-        'os': electronic.os,
-        'camera_info': electronic.camera_info,
-    }, 'id')
-    .into('Tablet');
+  getAllTVs(){
+    return this.connection('ProductDescription')
+    .innerJoin('TV', 'TV.model_number', 'ProductDescription.model_number')
+    .innerJoin('Dimensions', 'TV.dimension_id', 'Dimensions.dimension_id')
+    .select('ProductDescription.model_number', 'brand_name', 'price', 'type',
+    'weight', 'is_available', 'category_name', 'height', 'width', 'depth');
   }
 
-  addMonitor(electronic) {
-    return this.connection.insert({
-        'model_number': electronic.model_number,
-        'display_size': electronic.display_size,
-    }, 'id')
-    .into('Monitor');
-  }
 
-  addTV(dimensionsId, electronic) {
-    return this.connection.insert({
-        'model_number': electronic.model_number,
-        'dimension_id': dimensionsId,
-        'category_name': electronic.category_name,
-    }, 'id')
-    .into('TV');
+  compareWithContext(productDescriptions, electronics){
+    var electronicsToAdd = [];
+    var electronicsToUpdate = [];
+    var electronicsToDelete = [];
+    for(var i = 0; i < productDescriptions.length; i++){
+      for(var j = 0; j < electronics.length; j++){
+        if(productDescriptions[i].model_number == electronics[j].model_number &&
+          electronicsToUpdate.findIndex(x => x.model_number == electronics[j].model_number) === -1)
+          electronicsToUpdate.push(electronics[j]);
+        }
+      }
+
+  for(var i = 0; i < productDescriptions.length; i++){
+    if(electronicsToUpdate.findIndex(x => x.model_number == productDescriptions[i].model_number) === -1 &&
+        electronicsToDelete.findIndex(x => x.model_number == productDescriptions[i].model_number) === -1)
+      electronicsToDelete.push(productDescriptions[i]);
   }
+  for(var i = 0; i < electronics.length; i++){
+    if(productDescriptions.findIndex(x => x.model_number == electronics[i].model_number) === -1 &&
+        electronicsToAdd.findIndex(x => x.model_number == electronics[i].model_number) === -1)
+        electronicsToAdd.push(electronics[i]);
+  }
+  return [electronicsToAdd, electronicsToUpdate, electronicsToDelete];
 }
-
+}
 module.exports = UnitOfWork;
