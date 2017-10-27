@@ -1,16 +1,125 @@
-<label>Brand: <input type="text" name="brand"></label><br />
-<label>Model: <input type="text" name="model"></label><br />
-<label>Price: <input type="number" step="0.01" min="0" name="price"></label><br />
-<label>Weight(g): <input type="number" step="1" min="0" name="weight"></label><br />
-<label>Display size: <input type="number" step="1" min="0" name="display_size"></label><br />
-<label>Processor Type: <input type="text" name="processor_type"></label><br />
-<label>RAM size: <input type="number" step="1" min="0" name="ram_size"></label><br />
-<label># of CPU cores: <input type="number" step="1" min="0" name="number_cpu_cores"></label><br />
-<label>Harddrive size: <input type="number" step="1" min="0" name="harddrive_size"></label><br />
-<label>Battery Info: <input type="text" name="battery_info"></label><br />
-<label>OS: <input type="text" name="os"></label><br />
-<label>Camera Info: <input type="text" name="camera_info"></label><br />
-<p>Dimensions(cm):</p>
-<label>Height: <input type="number" step="0.1" min="0" name="height"></label><br />
-<label>Width: <input type="number" step="0.1" min="0" name="width"></label><br />
-<label>Depth: <input type="number" step="0.1" min="0" name="depth"></lavel><br />
+<div class="row justify-content-center">
+  <div class="card-block"  style="height:auto;"></br>
+    <form  method="POST" action="">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="form-group row">
+              <label class="col-4 col-form-label">Brand</label>
+              <div class="col-md-8">
+                <input type="text" ng-model="tablet.brand" class="form-control">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-4 col-form-label">Model</label>
+              <div class="col-md-8">
+                <input type="text" ng-model="tablet.model" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">Price</label>
+              <div class="col-md-8">
+                <input type="number" step="0.01" min="0" ng-model="tablet.price" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">Weight(g)</label>
+              <div class="col-md-8">
+                <input type="number" step="1" min="0" ng-model="tablet.weight" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">Display size</label>
+              <div class="col-md-8">
+                <input type="number" step="1" min="0" ng-model="tablet.display_size" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">Processor Type</label>
+              <div class="col-md-8">
+                <input type="text" ng-model="tablet.processor_type" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">RAM size</label>
+              <div class="col-md-8">
+                <input type="number" step="1" min="0" ng-model="tablet.ram_size" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label"># of CPU cores</label>
+              <div class="col-md-8">
+                <input type="number" step="1" min="0" ng-model="tablet.number_cpu_cores" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">Harddrive size</label>
+              <div class="col-md-8">
+                <input type="number" step="1" min="0" ng-model="tablet.harddrive_size" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">Battery Info</label>
+              <div class="col-md-8">
+                <input type="text" ng-model="tablet.battery_info" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">OS</label>
+              <div class="col-md-8">
+                <input type="text" ng-model="tablet.os" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">Camera Info</label>
+              <div class="col-md-8">
+                <input type="text" ng-model="tablet.camera_info" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">Height (cm)</label>
+              <div class="col-md-8">
+                <input type="number" step="0.1" min="0" ng-model="tablet.height" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">Width (cm)</label>
+              <div class="col-md-8">
+                <input type="number" step="0.1" min="0" ng-model="tablet.width" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">Depth (cm)</label>
+              <div class="col-md-8">
+                <input type="number" step="0.1" min="0" ng-model="tablet.depth" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <div class="card-fluid"  style="height:auto;">
+                <div class="col"><br />
+                  <div class="row form-group">
+                    <label class="col-5 col-form-label">Serial Number(s)</label>
+                    <div class="col-md-7">
+                      <input type="text" ng-model="serial_number" ng-submit="addSerial()" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <button ng-click="addSerial()" class="btn btn-primary">Add serial number</button>
+                  </div><br />
+                  <div class="card" style="height:auto;">
+                    <h6 ng-show="tablet.serial_numbers.length != 0" class="card-header text-center">Serial number(s) to be added</h6><br />
+                    <p ng-repeat="serial in tablet.serial_numbers track by $index">{{ serial }} <button ng-click="remove($index)">X</button></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <button ng-click="submitTablet()" class="btn btn-primary">Add Tablet</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
