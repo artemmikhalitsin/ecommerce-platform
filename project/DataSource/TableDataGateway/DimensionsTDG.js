@@ -9,12 +9,15 @@ class DimensionsTDG{
         return this.connection.insert(dimension.dimensions, 'dimension_id')
         .into('Dimensions');
     }
-    
+
     select(){
         //TODO
     }
     update(dimension){
         //TODO
+        return this.connection.update({
+          'dimension_id': dimension_id,
+        }).from('Dimensions').where('id', id);
     }
 }
 module.exports = DimensionsTDG;

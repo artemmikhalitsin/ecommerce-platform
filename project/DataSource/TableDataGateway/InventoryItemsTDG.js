@@ -21,6 +21,7 @@ class InventoryItemsTDG{
     }*/
     delete(inventoryItem){
         //TODO
+        return this.connection.from('Inventory').where('id',id).del();
     }
 }
 module.exports = InventoryItemsTDG;
