@@ -1,11 +1,11 @@
-class LaptopsTDG{
-    constructor(){
+class LaptopsTDG {
+    constructor() {
         this.environment = process.env.NODE_ENV || 'development';
         this.rootPath = require('app-root-dir').get();
         this.configuration = require(this.rootPath + '/knexfile')[this.environment];
         this.connection = require('knex')(this.configuration);
     }
-    add(compId, laptop){
+    add(compId, laptop) {
         return this.connection.insert({
             'comp_id': compId,
             'model_number': laptop.model_number,
@@ -17,12 +17,12 @@ class LaptopsTDG{
         }, 'id')
         .into('Laptop');
     }
-    
-    select(){
-        //TODO
+
+    select() {
+        // TODO
     }
-    update(laptop){
-        //TODO
+    update(laptop) {
+        // TODO
     }
 }
 module.exports = LaptopsTDG;

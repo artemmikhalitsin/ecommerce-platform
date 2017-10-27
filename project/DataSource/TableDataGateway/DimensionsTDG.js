@@ -1,5 +1,5 @@
-class DimensionsTDG{
-    constructor(){
+class DimensionsTDG {
+    constructor() {
         this.environment = process.env.NODE_ENV || 'development';
         this.rootPath = require('app-root-dir').get();
         this.configuration = require(this.rootPath + '/knexfile')[this.environment];
@@ -9,12 +9,12 @@ class DimensionsTDG{
         return this.connection.insert(dimension.dimensions, 'dimension_id')
         .into('Dimensions');
     }
-    
-    select(){
-        //TODO
+
+    select() {
+        // TODO
     }
-    update(dimension){
-        //TODO
+    update(dimension) {
+        // TODO
     }
 }
 module.exports = DimensionsTDG;

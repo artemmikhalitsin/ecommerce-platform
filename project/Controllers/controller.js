@@ -1,18 +1,22 @@
+
+let rootPath = require('app-root-dir').get();
+let ProductDescriptionRepository = require(rootPath +
+  '/DataSource/Repository/ProductDescriptionRepository.js');
 class Controller {
   constructor() {
-    this.rootPath = require('app-root-dir').get();
-    this.desktopRepo = require( this.rootPath +
+    this.desktopRepo = require( rootPath +
       '/DataSource/Repository/DesktopRepository.js');
-    this.laptopRepo = require( this.rootPath +
+    this.laptopRepo = require( rootPath +
       '/DataSource/Repository/LaptopRepository.js');
-    this.monitorRepo = require( this.rootPath +
+    this.monitorRepo = require( rootPath +
       '/DataSource/Repository/MonitorRepository.js');
-    this.tabletRepo = require( this.rootPath +
+    this.tabletRepo = require( rootPath +
       '/DataSource/Repository/TabletRepository.js');
-    this.userRepo = require(this.rootPath +
+    this.userRepo = require(rootPath +
       '/DataSource/Repository/UserRepository.js');
-    this.inventoryRepo = require(this.rootPath +
+    this.inventoryRepo = require(rootPath +
       '/DataSource/Repository/InventoryItemRepository.js');
+    this.productDescriptionRepo = new ProductDescriptionRepository();
   }
 
   registrationRequest(req, res) {
@@ -56,47 +60,111 @@ class Controller {
     }
   }
 
- /** // this function will be deleted because it got replaced by getAllInventory
-  getAllInventoryItems(req, res, done) {
-    // console.log(req.session.exists);
-
-    let laptopItems = this.laptopRepo.get('*');
-    let desktopItems = this.desktopRepo.get('*');
-    let monitorItems = this.monitorRepo.get('*');
-    let tabletItems = this.tabletRepo.get('*');
-    let tvItems = this.tvRepo.get('*');
-
-    Promise.all([laptopItems, tvItems, monitorItems, tabletItems, desktopItems])
-    .then((values) => {
-      let allItems = {
-        laptops: values[0],
-        tvs: values[1],
-        mons: values[2],
-        tabs: values[3],
-        desks: values[4],
-      };
-      let items = JSON.stringify(allItems);
-      // res.sess
-      res.render('inventory', {items: items});
-    }).catch((error) => {
-      console.log(error);
-    });
-  } */
-
   // this funtion is getting all the product description from the database
   getAllInventory(req, res) {
+    let toSave = [{
+      serial_number: '22',
+      model_number: '22',
+      brand_name: "b",
+      price: 1,
+      weight: 1,
+      type: 'Desktop',
+      processor_type: 'r',
+      ram_size: 1,
+      number_cpu_cores: 2,
+      harddrive_size: 3,
+      dimensions: {depth: 1,
+         height: 1,
+         width: 1}
+     },{
+      serial_number: '1234',
+      model_number: '61',
+      brand_name: "changed",
+      price: 1,
+      weight: 1,
+      type: 'Desktop',
+      processor_type: 'q',
+      ram_size: 1,
+      number_cpu_cores: 2,
+      harddrive_size: 3,
+      dimensions: {depth: 1,
+         height: 1,
+         width: 1}
+     },{
+      serial_number: '12',
+      model_number: '62',
+      brand_name: "b",
+      price: 1,
+      weight: 1,
+      type: 'Desktop',
+      processor_type: 'n',
+      ram_size: 1,
+      number_cpu_cores: 2,
+      harddrive_size: 3,
+      dimensions: {depth: 1,
+         height: 1,
+         width: 1}
+     }];
+    let results = this.productDescriptionRepo.save(toSave);
+    let prodDesc = this.productDescriptionRepo.getAll();
     let inventoryItems = this.inventoryRepo.getAllInventoryItems();
     Promise.all([inventoryItems])
     .then((values) => {
+      /*
       console.log('printing values');
       console.log(values);
+      */
       let items = JSON.stringify(values[0]);
-      //res.render('inventory', {items: items});
-      res.render('clientInventory', {items: items});
+      if (req.session.exists==true && req.session.isAdmin==true) {
+        res.render('inventory', {items: items});
+      } else if (req.session.exists==true && req.session.isAdmin==false) {
+        res.render('clientInventory', {items: items});
+      } else {
+        res.redirect('/login');
+      }
     })
     .catch((err) => {
       console.log(err);
     });
+  }
+  inventoryAction(req, res) {
+    if (req.session.exists==true && req.session.isAdmin==true) {
+      let request = req.body;
+      console.log(request.actions);
+      let actions = JSON.parse(request.actions);
+      for (let key in actions) {
+        if (key == 'deleteSerials') {
+          console.log('To be deleted: ');
+          for (let i = 0; i < actions[key].length; i++) {
+            let serialsToDelete = actions[key][i];
+            if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+/.test(serialsToDelete)) {
+              let serial = serialsToDelete.split('@')[0];
+              let model = serialsToDelete.split('@')[1];
+              console.log(i + ': ' + serial + ': ' + model);
+            }
+          }
+        }
+        if (key == 'addSerials') {
+          console.log('To be added: ');
+          for (let i = 0; i < actions[key].length; i++) {
+            let serialsToAdd = actions[key][i];
+            if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+/.test(serialsToAdd)) {
+              let serial = serialsToAdd.split('@')[0];
+              let model = serialsToAdd.split('@')[1];
+              console.log(i + ': ' + serial + ': ' + model);
+              // Insert actual add function later
+              if (serial === 'break') {
+                res.status(500).send({error: 'Something bad happened'});
+              }
+            }
+          }
+        }
+      }
+      res.status(200).send({success: 'Something gud happened'});
+    } else {
+      console.log('Not admin, fool!');
+    }
+    //
   }
 
   // this functon is adding a new user to the database
@@ -106,10 +174,10 @@ class Controller {
     this.userRepo.authenticate(data).then((result) => {
       if (result.length <= 0) {
         console.log('Invalid username or password.');
-        res.redirect('/login');
+        res.render('login', {error: 'Invalid username/password'});
       } else if (result.length > 1) {
         console.log('Duplicate users detected');
-        res.redirect('/login');
+        res.render('login', {error: 'Duplicate users detected'});
       } else if (result.length == 1) {
         req.session.exists=true;
         if (result[0].is_admin == 1) {

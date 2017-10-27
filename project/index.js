@@ -11,11 +11,14 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 }));
 
 // will be removed later
-const desktopRepo = require(rootPath +
+let DesktopRepository = require(rootPath +
   '/DataSource/Repository/DesktopRepository.js');
 
 // this will be removed (it is here only for testing purposes)
-desktopRepo.save2('object');
+this.desktopRepo = new DesktopRepository();
+//this.desktopRepo.save2('object');
+//this.resu = this.desktopRepo.deletethistestfunction();
+//console.log("Index JS "+ this.resu);
 
 const Controller = require(rootPath + '/Controllers/controller');
 let controller = new Controller();
@@ -57,7 +60,6 @@ app.get('/registration', function(req, res) {
   if (req.session.exists) {
       console.log('already logged in, redirecting to inventory');
       res.redirect('/getAllInventoryItems');
-
   } else {
       res.render('registration');
   }
@@ -72,6 +74,11 @@ app.get('/addItem', function(req, res) {
     res.redirect('/');
   }
 });
+
+app.get('/addProduct', function(req, res) {
+  res.render('inventory/new-product');
+});
+
 
 // this should be implemented in the controller
 app.get('/logout', function(req, res) {
@@ -98,7 +105,7 @@ app.get('/getAllInventoryItems', function(req, res) {
 app.get('/clientInventory', function(req, res) {
   if (req.session.exists) {
     controller.getAllInventory(req, res);
-    console.log('Successs')
+    console.log('Successs');
   } else {
     console.log('login error');
     res.redirect('/login');
@@ -113,7 +120,12 @@ app.post('/registrationRequest', function(req, res) {
 // making the login request
 app.post('/loginRequest', function(req, res) {
    controller.loginRequest(req, res);
-  });
+});
+
+// making the login request
+app.post('/inventoryAction', function(req, res) {
+     controller.inventoryAction(req, res);
+});
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');

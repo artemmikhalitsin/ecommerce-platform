@@ -1,0 +1,43 @@
+<div class="container"  style="height:auto;">
+  <div class="card" style="height: auto;">
+    <div class="row text-left">
+      <div class='col'>
+        <div class="card-body">
+          <label class="control-label">Brand: {[{ $ctrl.laptop.brand }]}  </label><br />
+          <label class="control-label">Model: {[{ $ctrl.laptop.model}]} </label><br />
+          <label class="control-label">Price: {[{ $ctrl.laptop.price}]} </label><br />
+          <label class="control-label">Weight (g): {[{ $ctrl.laptop.weight}]} </label>
+        </div>
+      </div>
+      <div class='col'>
+        <div class="card-body">
+          <label class="control-label">Display Size: {[{ $ctrl.laptop.display_size}]} </label><br />
+          <label class="control-label">Processor Type: {[{ $ctrl.laptop.processor_type}]} </label><br />
+          <label class="control-label">RAM Size: {[{ $ctrl.laptop.ram_size}]} </label><br />
+          <label class="control-label"># of CPU cores: {[{ $ctrl.laptop.number_cpu_cores}]} </label><br />
+          <label class="control-label">Harddrive size: {[{ $ctrl.laptop.harddrive_size}]} </label><br />
+          <label class="control-label">Battery Info: {[{ $ctrl.laptop.battery_info}]} </label><br />
+          <label class="control-label">OS: {[{ $ctrl.laptop.os}]} </label><br />
+          <label class="control-label">Camera: {[{ $ctrl.laptop.camera}]} </label><br />
+          <label class="control-label">Touch screen: {[{ $ctrl.laptop.touch_screen}]} </label><br />
+          <label class="control-label">Height (cm): {[{ $ctrl.laptop.height}]} </label><br />
+          <label class="control-label">Width (cm): {[{ $ctrl.laptop.width}]} </label><br />
+          <label class="control-label">Depth (cm): {[{ $ctrl.laptop.depth}]} </label><br />
+        </div>
+      </div>
+      <div class='col'>
+        <div class="card-body">
+          <div ng-show="$ctrl.laptop.serial_numbers.length > 0">
+            <p>Serial numbers</p>
+            <ul>
+              <li ng-repeat="serial in $ctrl.laptop.serial_numbers track by $index">
+                {[{ serial }]}  <button ng-click="removeSerial($index)">X</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" ng-click="removeLaptopEntry()">Delete</button>
+  </div>
+</div>

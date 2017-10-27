@@ -1,11 +1,12 @@
-class ProductDescriptionsTDG{
-    constructor(){
+class ProductDescriptionsTDG {
+    constructor() {
         this.environment = process.env.NODE_ENV || 'development';
         this.rootPath = require('app-root-dir').get();
         this.configuration = require(this.rootPath + '/knexfile')[this.environment];
         this.connection = require('knex')(this.configuration);
+        this.InventoryItems = [];
     }
-    add(productDescription){
+    add(productDescription) {
         return this.connection
                     .insert({
                         'model_number': productDescription.model_number,
@@ -17,13 +18,19 @@ class ProductDescriptionsTDG{
                     .into('ProductDescription');
     }
     select(){
-
+        return this.connection('ProductDescription')
+                    .select('*');
     }
-    update(productDescription){
-        //TODO
+    selectById(model_number){
+        return this.connection('ProductDescription')
+                    .where({model_number: model_number})
+                    .select('*');
     }
-    //update is not in current requirements for inventory items
-    /*delete(productDescription){
+    update(productDescription) {
+        // TODO
+    }
+    // update is not in current requirements for inventory items
+    /* delete(productDescription){
     }*/
 }
 module.exports = ProductDescriptionsTDG;
