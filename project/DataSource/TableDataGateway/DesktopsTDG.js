@@ -14,11 +14,17 @@ class DesktopsTDG {
         .into('Desktop');
     }
 
-    select() {
-        // TODO
+    select(){
+        //TODO
     }
-    update(desktop) {
-        // TODO
+
+    update(desktop){
+        return this.connection.update({
+        'model_number': desktop.model_number,
+        'dimension_id': dimensionsId,
+      }).from('Desktop').where('id', id);
+
+        //TODO
     }
 }
 module.exports = DesktopsTDG;

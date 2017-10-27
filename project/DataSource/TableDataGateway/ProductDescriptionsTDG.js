@@ -32,5 +32,6 @@ class ProductDescriptionsTDG {
     // update is not in current requirements for inventory items
     /* delete(productDescription){
     }*/
+  }
 }
 module.exports = ProductDescriptionsTDG;

@@ -20,8 +20,17 @@ class TabletsTDG {
     select() {
         // TODO
     }
-    update(tablet) {
-        // TODO
+    update(tablet){
+        //TODO
+        return this.connection.update({
+          'comp_id': compId,
+          'model_number': tablet.model_number,
+          'dimension_id': dimensionsId,
+          'display_size': tablet.display_size,
+          'battery_info': tablet.battery_info,
+          'os': tablet.os,
+          'camera_info': tablet.camera_info,
+        }).from('Tablet').where('id', id);
     }
 }
 module.exports = TabletsTDG;
