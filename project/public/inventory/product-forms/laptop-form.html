@@ -1,29 +1,121 @@
-<label>Brand: <input type="text" ng-model="laptop.brand"></label><br />
-<label>Model: <input type="text" ng-model="laptop.model"></label><br />
-<label>Price: <input type="number" step="0.01" min="0" ng-model="laptop.price"></label><br />
-<label>Weight(g): <input type="number" step="1" min="0" ng-model="laptop.weight"></label><br />
-<label>Display size: <input type="number" step="1" min="0" ng-model="laptop.display_size"></label><br />
-<label>Processor Type: <input type="text" ng-model="laptop.processor_type"></label><br />
-<label>RAM size: <input type="number" step="1" min="0" ng-model="laptop.ram_size"></label><br />
-<label># of CPU cores: <input type="number" step="1" min="0" ng-model="laptop.number_cpu_cores"></label><br />
-<label>Harddrive size: <input type="number" step="1" min="0" ng-model="laptop.harddrive_size"></label><br />
-<label>Battery Info: <input type="text" ng-model="laptop.battery_info"></label><br />
-<label>OS: <input type="text" ng-model="laptop.os"></label><br />
-<label>Camera:
-          <select ng-model="laptop.camera">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
-</label><br />
-<label>Touch Screen:
-          <select ng-model="laptop.touch_screen">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
-</label><br />
-<p ng-show="laptop.serial_numbers.length != 0">Serial numbers to be added:</p>
-<p ng-repeat="serial in laptop.serial_numbers track by $index">{{ serial }} <button ng-click="remove($index)">Delete</button></p>
-<label>Serial Number: <input type="text" ng-model="serial_number" ng-submit="addSerial()">
-  <button ng-click="addSerial()">Add Serial</button>
-</label><br />
-<button ng-click="submitLaptop()">Add Laptop</button>
+<div class="row justify-content-center">
+  <div class="card-block"></br>
+    <form  method="POST" action="/loginRequest">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+
+            <div class="form-group row">
+              <label class="col-4 col-form-label">Brand</label>
+              <div class="col-md-8">
+                <input type="text" ng-model="laptop.brand" class="form-control">
+              </div>
+            </div>
+
+          <div class="form-group row">
+            <label class="col-4 col-form-label">Model</label>
+            <div class="col-md-8">
+              <input type="text" ng-model="laptop.model" class="form-control">
+            </div>
+          </div>
+          <div class="row form-group">
+            <label class="col-4 col-form-label">Price</label>
+            <div class="col-md-8">
+              <input type="number" step="0.01" min="0" ng-model="laptop.price" class="form-control">
+            </div>
+          </div>
+          <div class="row form-group">
+            <label class="col-4 col-form-label">Weight(g)</label>
+            <div class="col-md-8">
+              <input type="number" step="1" min="0" ng-model="laptop.weight" class="form-control">
+            </div>
+          </div>
+          <div class="row form-group">
+            <label class="col-4 col-form-label">Display size</label>
+            <div class="col-md-8">
+              <input type="text" ng-model="laptop.display_size" class="form-control">
+            </div>
+          </div>
+          <div class="row form-group">
+            <label class="col-4 col-form-label">Processor Type</label>
+            <div class="col-md-8">
+              <input type="text" ng-model="laptop.processor_type" class="form-control">
+            </div>
+          </div>
+          <div class="row form-group">
+            <label class="col-4 col-form-label">RAM size</label>
+            <div class="col-md-8">
+              <input type="number" step="1" min="0" ng-model="laptop.ram_size" class="form-control">
+            </div>
+          </div>
+          <div class="row form-group">
+            <label class="col-4 col-form-label"># of CPU cores</label>
+            <div class="col-md-8">
+              <input type="number" step="1" min="0" ng-model="laptop.number_cpu_cores" class="form-control">
+            </div>
+          </div>
+          <div class="row form-group">
+            <label class="col-4 col-form-label">Harddrive size</label>
+            <div class="col-md-8">
+              <input type="number" step="1" min="0" ng-model="laptop.harddrive_size" class="form-control">
+            </div>
+          </div>
+          <div class="row form-group">
+            <label class="col-4 col-form-label">Battery Info</label>
+            <div class="col-md-8">
+              <input type="number" step="0.1" min="0" ng-model="laptop.battery_info" class="form-control">
+            </div>
+          </div>
+          <div class="row form-group">
+            <label class="col-4 col-form-label">OS</label>
+            <div class="col-md-8">
+              <input type="number" step="0.1" min="0" ng-model="laptop.os" class="form-control">
+            </div>
+          </div>
+          <div class="row form-group">
+            <label class="col-4 col-form-label">Camera</label>
+            <div class="col-md-8">
+              <select ng-model="laptop.camera">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+          </div>
+          <div class="row form-group">
+            <label class="col-4 col-form-label">Touch screen</label>
+            <div class="col-md-8">
+              <select ng-model="laptop.touch_screen">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <div class="card" style="height: 36em;">
+              <div class="col"><br />
+                <div class="row form-group">
+                  <label class="col-4 col-form-label">Serial Number</label>
+                  <div class="col-md-8">
+                    <input type="text" ng-model="serial_number" ng-submit="addSerial()" class="form-control">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <button ng-click="addSerial()" class="btn btn-primary">Add serial number</button>
+                </div><br />
+                <div class="card" style="height: 25em;">
+                  <h6 ng-show="laptop.serial_numbers.length != 0" class="card-header text-center">Serial numbers to be added</h6>
+                  <p ng-repeat="serial in laptop.serial_numbers track by $index">{{ serial }} <button ng-click="remove($index)">X</button></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <button ng-click="submitLaptop()" class="btn btn-primary">Add Laptop</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
