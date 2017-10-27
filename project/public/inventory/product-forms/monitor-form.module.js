@@ -21,6 +21,7 @@ monitorForm.component('monitorForm', {
         $scope.monitor.serial_numbers.push($scope.serial_number);
         $scope.serial_number = '';
     }
+    //remoce serial from array
     $scope.remove = (index) => {
       $scope.monitor.serial_numbers.splice(index,1);
     }
