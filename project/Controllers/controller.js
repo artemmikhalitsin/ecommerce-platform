@@ -87,9 +87,10 @@ class Controller {
         if (key == 'deleteSerials') {
           console.log('To be deleted: ');
           for (let i = 0; i < actions[key].length; i++) {
-            if (isAlphaNumeric.test(action[key][i])) {
-              let serial = actions[key][i].split('@')[0];
-              let model = actions[key][i].split('@')[1];
+            let serialsToDelete = actions[key][i];
+            if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+/.test(serialsToDelete)) {
+              let serial = serialsToDelete.split('@')[0];
+              let model = serialsToDelete.split('@')[1];
               console.log(i + ': ' + serial + ': ' + model);
             }
           }
@@ -97,9 +98,12 @@ class Controller {
         if (key == 'addSerials') {
           console.log('To be added: ');
           for (let i = 0; i < actions[key].length; i++) {
-            let serial = actions[key][i].split('@')[0];
-            let model = actions[key][i].split('@')[1];
-            console.log(i + ': ' + serial + ': ' + model);
+            let serialsToAdd = actions[key][i];
+            if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+/.test(serialsToAdd)) {
+              let serial = serialsToAdd.split('@')[0];
+              let model = serialsToAdd.split('@')[1];
+              console.log(i + ': ' + serial + ': ' + model);
+            }
           }
         }
       }
