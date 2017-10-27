@@ -1,22 +1,28 @@
+
+
 <div class='row'>
   <div class='col'>
-    <label>Brand: {[{ $ctrl.tablet.brand }]}  </label><br />
-    <label>Model: {[{ $ctrl.tablet.model}]} </label><br />
-    <label>Price: {[{ $ctrl.tablet.price}]} </label><br />
-    <label>Weight (g): {[{ $ctrl.tablet.weight}]} </label>
+      <div class="card">
+        <label>Brand: {[{ $ctrl.tablet.brand }]}  </label><br />
+        <label>Model: {[{ $ctrl.tablet.model}]} </label><br />
+        <label>Price: {[{ $ctrl.tablet.price}]} </label><br />
+        <label>Weight (g): {[{ $ctrl.tablet.weight}]} </label>
+      </div>
   </div>
   <div class='col'>
-    <label>Display Size: {[{ $ctrl.tablet.display_size}]} </label><br />
-    <label>Processor Type: {[{ $ctrl.tablet.processor_type}]} </label><br />
-    <label>RAM Size: {[{ $ctrl.tablet.ram_size}]} </label><br />
-    <label># of CPU cores: {[{ $ctrl.tablet.number_cpu_cores}]} </label><br />
-    <label>Harddrive size: {[{ $ctrl.tablet.harddrive_size}]} </label><br />
-    <label>Battery Info: {[{ $ctrl.tablet.battery_info}]} </label><br />
-    <label>Camera Info: {[{ $ctrl.tablet.camera_info}]} </label><br />
-    <p>Dimensions(cm): <p>
-    <label>Height: {[{ $ctrl.tablet.height}]} </label><br />
-    <label>Width: {[{ $ctrl.tablet.width}]} </label><br />
-    <label>Depth: {[{ $ctrl.tablet.depth}]} </label><br />
+      <div class="card">
+      <label>Display Size: {[{ $ctrl.tablet.display_size}]} </label><br />
+      <label>Processor Type: {[{ $ctrl.tablet.processor_type}]} </label><br />
+      <label>RAM Size: {[{ $ctrl.tablet.ram_size}]} </label><br />
+      <label># of CPU cores: {[{ $ctrl.tablet.number_cpu_cores}]} </label><br />
+      <label>Harddrive size: {[{ $ctrl.tablet.harddrive_size}]} </label><br />
+      <label>Battery Info: {[{ $ctrl.tablet.battery_info}]} </label><br />
+      <label>Camera Info: {[{ $ctrl.tablet.camera_info}]} </label><br />
+      <p>Dimensions(cm): <p>
+      <label>Height: {[{ $ctrl.tablet.height}]} </label><br />
+      <label>Width: {[{ $ctrl.tablet.width}]} </label><br />
+      <label>Depth: {[{ $ctrl.tablet.depth}]} </label><br />
+    </div>
   </div>
 </div>
 <div class='row'  ng-show="$ctrl.tablet.serial_numbers.length > 0">

@@ -1,5 +1,6 @@
 <html ng-app="newProduct">
   <head>
+    <title> Add product </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -23,40 +24,56 @@
     <script type="text/javascript" src="inventory/product-entries/monitor-entry.module.js"></script>
 
   </head>
-  <body ng-controller="FormController">
-    <h1>Add a product</h1>
+  <body ng-app="" ng-controller="FormController">
+    <div ng-include="'includes/header.hbs'"></div>
+      <div class="container">
+        <header class="jumbotron my-4">
+          <h1 class="display-4">Add a product</h1>
+        </header>
+        <div class="row text-center justify-content-center">
+          <div class="card" style="width: 70rem;">
+            <h3 class="card-header text-center">Product details</h3>
+              <div class="card-block"></br>
+                <label> Product type:
+                  <select ng-model="selected">
+                    <option value="monitor">Monitor</option>
+                    <option value="laptop">Laptop</option>
+                    <option value="desktop">Desktop</option>
+                    <option value="tablet">Tablet</option>
+                  </select>
+                </label><br />
+                <form ng-model="formData">
+                  <laptop-form ng-show="selected=='laptop'"></laptop-form>
+                  <tablet-form ng-show="selected=='tablet'"></tablet-form>
+                  <desktop-form ng-show="selected=='desktop'"></desktop-form>
+                  <monitor-form ng-show="selected=='monitor'"></monitor-form>
+                </form>
+                <div ng-repeat="item in products.tablets track by $index">
+                  <tablet-entry  tablet="item"></tablet-entry>
+                  <button class="btn btn-primary" ng-click="removeTablet($index)">Delete</button>
+                </div>
+                <div ng-repeat="item in products.desktops track by $index">
+                  <desktop-entry  desktop="item"></desktop-entry>
+                  <button class="btn btn-primary" ng-click="removeDesktop($index)">Delete</button>
+                </div>
+                <div ng-repeat="item in products.monitors track by $index">
+                  <monitor-entry  monitor="item"></monitor-entry>
+                  <button class="btn btn-primary" ng-click="removeMonitor($index)">Delete</button>
+                </div>
+                <div ng-repeat="item in products.laptops track by $index">
+                  <laptop-entry  laptop="item"></laptop-entry>
+                  <button class="btn btn-primary" ng-click="removeLaptop($index)">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <button class="btn btn-primary" type="button" ng-click="submit()">Submit All</button>
+      </div>
+    <div ng-include="'includes/footer.hbs'"></div>
 
-    <label> Product type:
-      <select ng-model="selected">
-        <option value="monitor">Monitor</option>
-        <option value="laptop">Laptop</option>
-        <option value="desktop">Desktop</option>
-        <option value="tablet">Tablet</option>
-      </select>
-    </label>
-
-    <form ng-model="formData">
-      <laptop-form ng-show="selected=='laptop'"></laptop-form>
-      <tablet-form ng-show="selected=='tablet'"></tablet-form>
-      <desktop-form ng-show="selected=='desktop'"></desktop-form>
-      <monitor-form ng-show="selected=='monitor'"></monitor-form>
-    </form>
-    <div ng-repeat="item in products.tablets track by $index">
-      <tablet-entry  tablet="item"></tablet-entry>
-      <button ng-click="removeTablet($index)">Delete</button>
-    </div>
-    <div ng-repeat="item in products.desktops track by $index">
-      <desktop-entry  desktop="item"></desktop-entry>
-      <button ng-click="removeDesktop($index)">Delete</button>
-    </div>
-    <div ng-repeat="item in products.monitors track by $index">
-      <monitor-entry  monitor="item"></monitor-entry>
-      <button ng-click="removeMonitor($index)">Delete</button>
-    </div>
-    <div ng-repeat="item in products.laptops track by $index">
-      <laptop-entry  laptop="item"></laptop-entry>
-      <button ng-click="removeLaptop($index)">Delete</button>
-    </div>
-    <button type="button" ng-click="submit()">Click</button>
+    <!-- Bootstrap core JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
   </body>
 </html>
