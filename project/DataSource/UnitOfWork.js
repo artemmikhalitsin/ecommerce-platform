@@ -52,7 +52,23 @@ class UnitOfWork {
           console.log(this.dirtyElements[0]);
           console.log("Electronics to delete: ");
           console.log(this.deletedElements[0]);
+/*
+          Promise.each(this.deletedElements[0],(electronic) => {
+            console.log("Serial number" + electronic.serial_number);
+            return this.productDescTDG.delete(electronic, trx)
+            .then((serial_number)=>{
+              return this.deleteInventoryItems(electronic.serial_number)
+              .then((id)=>{
+                console.log(' deleted inventory item ')
+              })
+            });
+          })
 
+
+          Promise.each(this.dirtyElements[0],(electronic) =>{
+            console.log("Model")
+          })
+*/
           Promise.each(this.newElements[0], (electronic) => {
             console.log("Serial number"+ electronic.serial_number);
             return this.productDescTDG.add(electronic, trx)
@@ -107,6 +123,10 @@ class UnitOfWork {
           .then(trx.commit)
           .catch(trx.rollback);
      });
+  }
+
+  deleteInventoryItems(serial_number){
+    return this.connection.from('Inventory').where('id', id).del();
   }
 
   addInventoryItem(serial_number, model_number) {
