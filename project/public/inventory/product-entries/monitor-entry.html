@@ -1,23 +1,25 @@
-<div class='row'>
-  <div class='col'>
-      <div class="card">
-        <label>Brand: {[{ $ctrl.monitor.brand }]}  </label><br />
-        <label>Model: {[{ $ctrl.monitor.model}]} </label><br />
-        <label>Price: {[{ $ctrl.monitor.price}]} </label><br />
-        <label>Weight (g): {[{ $ctrl.monitor.weight}]} </label>
-      </div>
+<div class="container">
+  <div class='row'>
+    <div class='col'>
+        <div class="card" style="height:15em">
+          <label>Brand: {[{ $ctrl.monitor.brand }]}  </label><br />
+          <label>Model: {[{ $ctrl.monitor.model}]} </label><br />
+          <label>Price: {[{ $ctrl.monitor.price}]} </label><br />
+          <label>Weight (g): {[{ $ctrl.monitor.weight}]} </label>
+        </div>
+    </div>
+    <div class='col'>
+        <div class="card" style="height:15em">
+          <label>Display Size: {[{ $ctrl.monitor.display_size}]} </label><br />
+        </div>
+    </div>
   </div>
-  <div class='col'>
-      <div class="card">
-        <label>Display Size: {[{ $ctrl.monitor.display_size}]} </label><br />
-      </div>
+  <div class='row'  ng-show="$ctrl.monitor.serial_numbers.length > 0">
+    <p>Serial numbers to be added</p>
+    <ul>
+      <li ng-repeat="serial in $ctrl.monitor.serial_numbers track by $index">
+        {[{ serial }]}  <button ng-click="removeSerial($index)">X</button>
+      </li>
+    </ul>
   </div>
-</div>
-<div class='row'  ng-show="$ctrl.monitor.serial_numbers.length > 0">
-  <p>Serial numbers to be added</p>
-  <ul>
-    <li ng-repeat="serial in $ctrl.monitor.serial_numbers track by $index">
-      {[{ serial }]}  <button ng-click="removeSerial($index)">X</button>
-    </li>
-  </ul>
 </div>

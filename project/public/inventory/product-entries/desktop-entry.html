@@ -1,11 +1,13 @@
 <div class="container">
   <div class="card" style="height: 20rem;">
-    <div class="row">
+    <div class="row text-left">
       <div class='col'>
-        <label class="control-label">Brand: {[{ $ctrl.desktop.brand }]}  </label><br />
-        <label class="control-label">Model: {[{ $ctrl.desktop.model}]} </label><br />
-        <label class="control-label">Price: {[{ $ctrl.desktop.price}]} </label><br />
-        <label class="control-label">Weight (g): {[{ $ctrl.desktop.weight}]} </label>
+        <div class="card-body">
+          <label class="control-label">Brand: {[{ $ctrl.desktop.brand }]}  </label><br />
+          <label class="control-label">Model: {[{ $ctrl.desktop.model}]} </label><br />
+          <label class="control-label">Price: {[{ $ctrl.desktop.price}]} </label><br />
+          <label class="control-label">Weight (g): {[{ $ctrl.desktop.weight}]} </label>
+        </div>
       </div>
       <div class='col'>
         <div class="card-body">
@@ -19,14 +21,18 @@
           <label class="control-label">Depth: {[{ $ctrl.desktop.depth}]} </label><br />
         </div>
       </div>
+      <div class='col'>
+        <div class="card-body">
+          <div ng-show="$ctrl.desktop.serial_numbers.length > 0">
+            <p>Serial numbers</p>
+            <ul>
+              <li ng-repeat="serial in $ctrl.desktop.serial_numbers track by $index">
+                {[{ serial }]}  <button ng-click="removeSerial($index)">X</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div style="height=auto" ng-show="$ctrl.desktop.serial_numbers.length > 0">
-    <p>Serial numbers to be added</p>
-    <ul>
-      <li ng-repeat="serial in $ctrl.desktop.serial_numbers track by $index">
-        {[{ serial }]}  <button ng-click="removeSerial($index)">X</button>
-      </li>
-    </ul>
   </div>
 </div>
