@@ -1,5 +1,5 @@
 _commonProps = ["model_number", "brand_name", "price", "weight",
-                "type", "is_available", "serial_numbers"];
+                "type", "is_available", "serial_number"];
 _requestJSON = {"deleteSerials":[], "addSerials":[]};
 
 // This is to check if there is symbols in what the client entered
@@ -77,7 +77,7 @@ function formatChildRows( data ) {
           </tr>`
     }
   }
-  var serial_numbers = data.serial_numbers;
+  var serial_numbers = data.serial_number;
   if (serial_numbers < 1){
     serialRows += `<tr>
          <td colspan=2>

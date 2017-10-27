@@ -46,12 +46,12 @@ class UnitOfWork {
 
       let electronics = [];
       return this.connection.transaction((trx) => {
-          console.log("Electronics new Elements: ");
-          console.log(this.newElements[0]);
-          console.log("Electronics to update ");
-          console.log(this.dirtyElements[0]);
-          console.log("Electronics to delete: ");
-          console.log(this.deletedElements[0]);
+          //console.log("Electronics new Elements: ");
+          //console.log(this.newElements[0]);
+          //console.log("Electronics to update ");
+          //console.log(this.dirtyElements[0]);
+          //console.log("Electronics to delete: ");
+          //console.log(this.deletedElements[0]);
 /*
           Promise.each(this.deletedElements[0],(electronic) => {
             console.log("Serial number" + electronic.serial_number);
@@ -62,15 +62,15 @@ class UnitOfWork {
                 console.log(' deleted inventory item ')
               })
             });
-          })
 
+          })
 
           Promise.each(this.dirtyElements[0],(electronic) =>{
             console.log("Model")
           })
 */
           Promise.each(this.newElements[0], (electronic) => {
-            console.log("Serial number"+ electronic.serial_number);
+            //console.log("Serial number"+ electronic.serial_number);
             return this.productDescTDG.add(electronic, trx)
                 .then((model_number) => {
                   return this.addInventoryItem(electronic.serial_number,

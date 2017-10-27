@@ -33,5 +33,4 @@ class ProductDescriptionsTDG {
     /* delete(productDescription){
     }*/
   }
-}
 module.exports = ProductDescriptionsTDG;

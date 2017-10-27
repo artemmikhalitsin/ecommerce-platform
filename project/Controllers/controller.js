@@ -63,7 +63,7 @@ class Controller {
   // this funtion is getting all the product description from the database
   getAllInventory(req, res) {
     let toSave = [{
-      serial_number: '22',
+      serial_number: ['22'],
       model_number: '22',
       brand_name: "b",
       price: 1,
@@ -77,7 +77,7 @@ class Controller {
          height: 1,
          width: 1}
      },{
-      serial_number: '1234',
+      serial_number: ['1234'],
       model_number: '61',
       brand_name: "changed",
       price: 1,
@@ -91,7 +91,7 @@ class Controller {
          height: 1,
          width: 1}
      },{
-      serial_number: '12',
+      serial_number: ['12', '14'],
       model_number: '62',
       brand_name: "b",
       price: 1,
@@ -115,6 +115,7 @@ class Controller {
       console.log(values);
       */
       let items = JSON.stringify(values[0]);
+      items = JSON.stringify(toSave);
       if (req.session.exists==true && req.session.isAdmin==true) {
         res.render('inventory', {items: items});
       } else if (req.session.exists==true && req.session.isAdmin==false) {
