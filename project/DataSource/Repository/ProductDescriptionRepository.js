@@ -30,7 +30,7 @@ class ProductDescriptionRepository {
   }
   getByIds(ids){
     let products = this.ProductDescriptionIM.get(ids);
-    if(products.length <= 0){
+    if(products.length <= 0 || products.length < ids.length){
       var prodDescFromTDG = this.productDescTDG.select();
             Promise.all([prodDescFromTDG]).then((values)=>{
               products = values[0];
@@ -38,7 +38,7 @@ class ProductDescriptionRepository {
             this.ProductDescriptionIM.add(products);
     }
     console.log("-------------");
-    //console.log(JSON.stringify(products));
+    console.log(JSON.stringify(products));
     console.log("-------------");
     //have to do same thing as getAll implement add in case not found to Identity mapper
     return products;
@@ -64,12 +64,10 @@ class ProductDescriptionRepository {
               }
     }
     electronicsToDelete = context.filter(function(desc){
-      return electronicsToUpdate.findIndex(e => e.model_number == desc.model_number) !== -1;
+      console.log(desc.model_number);
+      return electronicsToUpdate.findIndex(e => e.model_number == desc.model_number) === -1;
     });
   }
-    console.log("Electronics to add (repo) " + JSON.stringify(electronicsToAdd));
-    console.log("Electronics to update (repo) " + JSON.stringify(electronicsToUpdate));
-    console.log("Electronics to delete (repo) " + JSON.stringify(electronicsToDelete));
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);
     this.uow.registerDeleted(electronicsToDelete);

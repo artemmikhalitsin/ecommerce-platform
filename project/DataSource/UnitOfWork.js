@@ -31,28 +31,21 @@ class UnitOfWork {
     this.deletedElements = [];
   }
   registerNew(object){
+    this.newElements = [];
     this.newElements.push(object);
   }
   registerDirty(object){
+    this.dirtyElements = [];
     this.dirtyElements.push(object);
   }
   registerDeleted(object){
+    this.deletedElements = [];
     this.deletedElements.push(object);
   }
   commitAll(object) {
+   
       let electronics = [];
       return this.connection.transaction((trx) => {
-        var context = this.connection('ProductDescription').select('*').transacting(trx);
-        Promise.all([context])
-        .then((values) => {
-          let productDescriptions = JSON.stringify(values[0]);
-          //console.log(values[0]);
-          //var results = this.compareWithContext(values[0], electronics);
-          var electronicsToAdd = object;//results[0];
-          //var electronicsToUpdate = results[1];
-          //var electronicsToDelete = results[2];
-          console.log("Electronics to add: ");
-          console.log(electronicsToAdd);
           console.log("Electronics new Elements: ");
           console.log(this.newElements[0]);
           console.log("Electronics to update ");
@@ -110,7 +103,7 @@ class UnitOfWork {
                 }
                 
               });
-          })})
+          })
           .then(trx.commit)
           .catch(trx.rollback);
      });
@@ -134,31 +127,5 @@ class UnitOfWork {
   getAllProductsDescription() {
     return this.connection('ProductDescription').select('*');
   }
-
- compareWithContext(productDescriptions, electronics){
-  var electronicsToAdd = [];
-  var electronicsToUpdate = [];
-  var electronicsToDelete = [];
-  
-  for(var i = 0; i < productDescriptions.length; i++){
-    for(var j = 0; j < electronics.length; j++){
-      if(productDescriptions[i].model_number == electronics[j].model_number &&
-         electronicsToUpdate.findIndex(x => x.model_number == electronics[j].model_number) === -1) 
-        electronicsToUpdate.push(electronics[j]);
-    }
-  }
-  
-  for(var i = 0; i < productDescriptions.length; i++){
-    if(electronicsToUpdate.findIndex(x => x.model_number == productDescriptions[i].model_number) === -1 && 
-        electronicsToDelete.findIndex(x => x.model_number == productDescriptions[i].model_number) === -1)
-      electronicsToDelete.push(productDescriptions[i]);
-  }
-  for(var i = 0; i < electronics.length; i++){
-    if(productDescriptions.findIndex(x => x.model_number == electronics[i].model_number) === -1 &&
-        electronicsToAdd.findIndex(x => x.model_number == electronics[i].model_number) === -1)
-        electronicsToAdd.push(electronics[i]);
-  }
-  return [electronicsToAdd, electronicsToUpdate, electronicsToDelete];
-}
 }
 module.exports = UnitOfWork;
