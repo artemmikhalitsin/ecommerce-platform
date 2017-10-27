@@ -5,7 +5,7 @@ class DimensionsTDG{
         this.configuration = require(this.rootPath + '/knexfile')[this.environment];
         this.connection = require('knex')(this.configuration);
     }
-    addDimensions(dimension) {
+    add(dimension) {
         return this.connection.insert(dimension.dimensions, 'dimension_id')
         .into('Dimensions');
     }

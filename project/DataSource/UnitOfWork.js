@@ -16,7 +16,7 @@ class UnitOfWork {
     this.environment = process.env.NODE_ENV || 'development';
     this.configuration = require(rootPath + '/knexfile')[this.environment];
     this.connection = require('knex')(this.configuration);
-    
+
     this.productDescTDG = new ProductDescriptionsTDG();
     this.inventoryItemsTDG = new InventoryItemsTDG();
     this.computersTDG = new ComputersTDG();
@@ -31,28 +31,21 @@ class UnitOfWork {
     this.deletedElements = [];
   }
   registerNew(object){
+    this.newElements = [];
     this.newElements.push(object);
   }
   registerDirty(object){
+    this.dirtyElements = [];
     this.dirtyElements.push(object);
   }
   registerDeleted(object){
+    this.deletedElements = [];
     this.deletedElements.push(object);
   }
   commitAll(object) {
+
       let electronics = [];
       return this.connection.transaction((trx) => {
-        var context = this.connection('ProductDescription').select('*').transacting(trx);
-        Promise.all([context])
-        .then((values) => {
-          let productDescriptions = JSON.stringify(values[0]);
-          //console.log(values[0]);
-          //var results = this.compareWithContext(values[0], electronics);
-          var electronicsToAdd = object;//results[0];
-          //var electronicsToUpdate = results[1];
-          //var electronicsToDelete = results[2];
-          console.log("Electronics to add: ");
-          console.log(electronicsToAdd);
           console.log("Electronics new Elements: ");
           console.log(this.newElements[0]);
           console.log("Electronics to update ");
@@ -62,14 +55,14 @@ class UnitOfWork {
 
           Promise.each(this.newElements[0], (electronic) => {
             console.log("Serial number"+ electronic.serial_number);
-            return this.productDescTDG.add(electronic, trx) 
+            return this.productDescTDG.add(electronic, trx)
                 .then((model_number) => {
                   return this.addInventoryItem(electronic.serial_number,
                                    electronic.model_number)
                             .then((id) => {
                               console.log('added inventory item ');
                             });
-                
+
                 switch (electronic.type) {
                   case 'Desktop': {
                     return this.dimensionsTDG.add(electronic)
@@ -99,7 +92,7 @@ class UnitOfWork {
                       .transacting(trx)
                       .then((compId) => {
                         return this.tabletsTDG.add(compId, dimensionsId, electronic)
-                        .transacting(trx); 
+                        .transacting(trx);
                       });
                     });
                   };break;
@@ -108,9 +101,9 @@ class UnitOfWork {
                     .transacting(trx);
                   };break;
                 }
-                
+
               });
-          })})
+          })
           .then(trx.commit)
           .catch(trx.rollback);
      });
@@ -125,40 +118,53 @@ class UnitOfWork {
   }
 
   getAllInventoryItems() {
+    /*return new Promise((resolve, reject) => {
+      let desktops =  DesktopTDG.getAllDesktops();
+      let laptops = LaptopTDG.getAllLaptops();
+      let tablets = // get all deksktops
+      let monitors = //get all monitors
+
+      Promise.all([laptops, desktops, tablets, monitors])
+      .then((results => {
+        let products = [].concat(...results);
+
+        //retrieve the model numbers present in the products
+        let model_numbers = this.getAllModelNumbers(products);
+
+        // getting the serial numbers associated with the model numbers
+        this.connection('Inventory')
+        .select('*')
+        .havingIn('model_number', model_numbers)
+        .then(serials => {
+            products = products.map(product => {
+              let serial_numbers = serials.filter(serial => {
+                return serial.model_number === product.model_number;
+              })
+              .map(serial => {
+                return serial.serial_number;
+              })
+
+              product.serial_numbers = serial_numbers
+              return product;
+            })
+
+            resolve(products)
+          }
+        )
+      }))
+      .catch(err => reject(err))
+    })*/
     return this.connection('ProductDescription')
-    .innerJoin('Inventory', 'Inventory.model_number',
-               'ProductDescription.model_number')
+    .innerJoin('Inventory', 'Inventory.model_number', 'ProductDescription.model_number')
     .select('*');
+  }
+
+  getAllModelNumbers(products){
+    return products.map(obj => {return obj.model_number})
   }
 
   getAllProductsDescription() {
     return this.connection('ProductDescription').select('*');
   }
-
- compareWithContext(productDescriptions, electronics){
-  var electronicsToAdd = [];
-  var electronicsToUpdate = [];
-  var electronicsToDelete = [];
-  
-  for(var i = 0; i < productDescriptions.length; i++){
-    for(var j = 0; j < electronics.length; j++){
-      if(productDescriptions[i].model_number == electronics[j].model_number &&
-         electronicsToUpdate.findIndex(x => x.model_number == electronics[j].model_number) === -1) 
-        electronicsToUpdate.push(electronics[j]);
-    }
-  }
-  
-  for(var i = 0; i < productDescriptions.length; i++){
-    if(electronicsToUpdate.findIndex(x => x.model_number == productDescriptions[i].model_number) === -1 && 
-        electronicsToDelete.findIndex(x => x.model_number == productDescriptions[i].model_number) === -1)
-      electronicsToDelete.push(productDescriptions[i]);
-  }
-  for(var i = 0; i < electronics.length; i++){
-    if(productDescriptions.findIndex(x => x.model_number == electronics[i].model_number) === -1 &&
-        electronicsToAdd.findIndex(x => x.model_number == electronics[i].model_number) === -1)
-        electronicsToAdd.push(electronics[i]);
-  }
-  return [electronicsToAdd, electronicsToUpdate, electronicsToDelete];
-}
 }
 module.exports = UnitOfWork;

@@ -20,29 +20,31 @@ class ProductDescriptionsIdentityMap{
             return result;
         }
         else{
-            result = this.productDescTDG.select();
-            Promise.all([result])
+            var productsFromTDG = this.productDescTDG.select();
+            Promise.all([productsFromTDG])
             .then((values) => {
-              return values[0];
+                console.log("from add all from product tdg" + JSON.stringify(values[0]));
+              result = values[0];
             })
-            return [];
+            return result;
         }
     }
     get(model_numbers){
        
         var allProducts = this.getAll();
-        console.log(allProducts);
-        console.log(model_numbers);
+        console.log("All products from IM" + JSON.stringify(allProducts));
         if(allProducts != null){
-        return allProducts.filter(function(desc){
-            console.log(model_numbers);
+        var results = allProducts.filter(function(desc){
             return model_numbers.findIndex(x => x == desc.model_number) > -1;
         });
-        return [];
-    }
+        console.log("Results" + JSON.stringify(results));
+        return results;
+        }
+        else return [];
     }
     add(newProductDescriptions){
-        this.productDesc.push(newProductDescriptions);
+        for(var i = 0; i < newProductDescriptions.length; i++)
+            this.productDesc.push(newProductDescriptions[i]);
     }
     delete(productDescriptionsToRemove){
         this.productDesc.filter(function(desc){

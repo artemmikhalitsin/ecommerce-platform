@@ -1,0 +1,42 @@
+  <!--Card-->
+  <div class="card" style="height:48rem;">
+    <div class="front">
+      <!--Card image-->
+      <div class="view overlay hm-white-slight">
+          <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20%287%29.jpg" class="img-fluid" alt="">
+      </div>
+      <!--Card content-->
+      <div class="card-body">
+        <div class="caption">
+          <h4 class="pull-right">${[{ $ctrl.product.price }]}</h4>
+          <h4>{[{ $ctrl.product.type }]}</h4></br>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Model Number: {[{ $ctrl.product.modelNumber }]}</li>
+            <li class="list-group-item">Serial Number: {[{ $ctrl.product.serialNumber }]}</li>
+            <li class="list-group-item">Brand Name: {[{ $ctrl.product.brand }]}</li>
+            <li class="list-group-item">Weight: {[{ $ctrl.product.weight }]} </li>
+          </ul></br>
+          <a href="#" class="btn btn-primary">View Details</a>
+        </div>
+        <!--/.caption-->
+      </div>
+      <!--/.card-body-->
+    </div>
+    <!--/.front-->
+
+    <div class="back"></br>
+      <h2 class="text-center">Detailed Info</h2>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Model Number: </li>
+          <li class="list-group-item">Serial Number: </li>
+          <li class="list-group-item">Brand Name: </li>
+          <li class="list-group-item">Weight: </li>
+        </ul></br>
+        <a class="btn btn-primary">Go Back</a>
+      </div>
+      <!--/.card-body-->
+    </div>
+    <!--/.back-->
+  </div>
+  <!--/.Camoderd-->

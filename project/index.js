@@ -60,6 +60,7 @@ app.get('/registration', function(req, res) {
   if (req.session.exists) {
       console.log('already logged in, redirecting to inventory');
       res.redirect('/getAllInventoryItems');
+
   } else {
       res.render('registration');
   }
@@ -74,6 +75,11 @@ app.get('/addItem', function(req, res) {
     res.redirect('/');
   }
 });
+
+app.get('/addProduct', function(req, res) {
+  res.render('inventory/new-product');
+});
+
 
 // this should be implemented in the controller
 app.get('/logout', function(req, res) {
@@ -90,6 +96,17 @@ app.get('/logout', function(req, res) {
 app.get('/getAllInventoryItems', function(req, res) {
   if (req.session.exists) {
     controller.getAllInventory(req, res);
+  } else {
+    console.log('login error');
+    res.redirect('/login');
+  }
+});
+
+// getting the client inventory from the database
+app.get('/clientInventory', function(req, res) {
+  if (req.session.exists) {
+    controller.getAllInventory(req, res);
+    console.log('Successs')
   } else {
     console.log('login error');
     res.redirect('/login');

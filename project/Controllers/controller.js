@@ -1,6 +1,6 @@
 
 let rootPath = require('app-root-dir').get();
-let ProductDescriptionRepository = require(rootPath + 
+let ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
 class Controller {
   constructor() {
@@ -63,7 +63,7 @@ class Controller {
  /** // this function will be deleted because it got replaced by getAllInventory
   getAllInventoryItems(req, res, done) {
     // console.log(req.session.exists);
-    
+
     let laptopItems = this.laptopRepo.get('*');
     let desktopItems = this.desktopRepo.get('*');
     let monitorItems = this.monitorRepo.get('*');
@@ -90,8 +90,8 @@ class Controller {
   // this funtion is getting all the product description from the database
   getAllInventory(req, res) {
     let toSave = [{
-      serial_number: '47',
-      model_number: '47',
+      serial_number: '22',
+      model_number: '22',
       brand_name: "b",
       price: 1,
       weight: 1,
@@ -106,7 +106,7 @@ class Controller {
      },{
       serial_number: '1234',
       model_number: '61',
-      brand_name: "changed3",
+      brand_name: "changed",
       price: 1,
       weight: 1,
       type: 'Desktop',
@@ -140,7 +140,8 @@ class Controller {
       console.log('printing values');
       console.log(values);
       let items = JSON.stringify(values[0]);
-      res.render('inventory', {items: items});
+      //res.render('inventory', {items: items});
+      res.render('clientInventory', {items: items});
     })
     .catch((err) => {
       console.log(err);
