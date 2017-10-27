@@ -118,14 +118,13 @@ class UnitOfWork {
   }
 
   getAllInventoryItems() {
-    return new Promise((resolve, reject) => {
-      let desktops =  this.getAllDesktops();
-      let laptops = this.getAllLaptops();
-      let tablets = this.getAllTablets();
-      let monitors = this.getAllMonitors();
-      let tvs = this.getAllTVs();
+    /*return new Promise((resolve, reject) => {
+      let desktops =  DesktopTDG.getAllDesktops();
+      let laptops = LaptopTDG.getAllLaptops();
+      let tablets = // get all deksktops
+      let monitors = //get all monitors
 
-      Promise.all([laptops, desktops, tablets, monitors, tvs])
+      Promise.all([laptops, desktops, tablets, monitors])
       .then((results => {
         let products = [].concat(...results);
 
@@ -154,7 +153,10 @@ class UnitOfWork {
         )
       }))
       .catch(err => reject(err))
-    })
+    })*/
+    return this.connection('ProductDescription')
+    .innerJoin('Inventory', 'Inventory.model_number', 'ProductDescription.model_number')
+    .select('*');
   }
 
   getAllModelNumbers(products){

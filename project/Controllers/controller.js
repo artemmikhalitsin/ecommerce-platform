@@ -1,6 +1,6 @@
 
 let rootPath = require('app-root-dir').get();
-let ProductDescriptionRepository = require(rootPath + 
+let ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
 class Controller {
   constructor() {
@@ -14,14 +14,9 @@ class Controller {
       '/DataSource/Repository/TabletRepository.js');
     this.userRepo = require(rootPath +
       '/DataSource/Repository/UserRepository.js');
-<<<<<<< HEAD
-    this.inventoryRepo = require(this.rootPath +
-      '/DataSource/Repository/InventoryItemRepository.js');
-=======
     this.inventoryRepo = require(rootPath +
       '/DataSource/Repository/inventoryItemRepository.js');
     this.productDescriptionRepo = new ProductDescriptionRepository();
->>>>>>> fdd77e440ddba39741a039ba3f370adcd3f06da0
   }
 
   registrationRequest(req, res) {
@@ -145,8 +140,8 @@ class Controller {
       console.log('printing values');
       console.log(values);
       let items = JSON.stringify(values[0]);
-      //res.render('inventory', {items: items});
-      res.render('clientInventory', {items: items});
+      res.render('inventory', {items: items});
+      //res.render('clientInventory', {items: items});
     })
     .catch((err) => {
       console.log(err);

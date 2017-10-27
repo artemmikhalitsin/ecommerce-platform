@@ -1,6 +1,6 @@
 console.log('loaded')
 
-var clientInventory = angular.module('clientInventory', ['productCard', 'desktopCard']);
+var clientInventory = angular.module('clientInventory', ['desktopCard', 'monitorCard', 'tabletCard', 'laptopCard']);
 
 function ClientInventoryController($scope) {
   $scope.fruit = 'banana', 'mango'
