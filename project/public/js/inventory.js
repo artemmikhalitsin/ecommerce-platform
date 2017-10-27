@@ -19,14 +19,15 @@ function getAllTextBoxes(){
       if (!_requestJSON.addSerials.includes(item)){
         _requestJSON.addSerials.push(item);
       }
-  }else {
-    invalidModelIds.push(id);
-  }
+    } else {
+      invalidModelIds.push(id);
+    }
   });
-  if (invalidModelIds.length ===0){
+  if (invalidModelIds.length === 0){
     return true;
   } else{
     window.alert(`Serial Number at ${invalidModelIds.join(', ')} must be alphanumeric`);
+    return false;
   }
 }
 
