@@ -16,9 +16,6 @@ let DesktopRepository = require(rootPath +
 
 // this will be removed (it is here only for testing purposes)
 this.desktopRepo = new DesktopRepository();
-//this.desktopRepo.save2('object');
-//this.resu = this.desktopRepo.deletethistestfunction();
-//console.log("Index JS "+ this.resu);
 
 const Controller = require(rootPath + '/Controllers/controller');
 let controller = new Controller();
