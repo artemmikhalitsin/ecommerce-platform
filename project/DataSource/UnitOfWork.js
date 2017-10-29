@@ -51,32 +51,17 @@ class UnitOfWork {
           console.log("Electronics to update ");
           console.log(this.dirtyElements[0]);
           console.log("Electronics to delete: ");
-          console.log(this.deletedElements[0]);
-/*
-          Promise.each(this.deletedElements[0],(electronic) => {
-            console.log("Serial number" + electronic.serial_number);
-            return this.productDescTDG.delete(electronic, trx)
-            .then((serial_number)=>{
-              return this.deleteInventoryItems(electronic.serial_number)
-              .then((id)=>{
-                console.log(' deleted inventory item ')
-              })
-            });
+          console.log(this.deletedElements[0]); 
 
-          })
-
-          Promise.each(this.dirtyElements[0],(electronic) =>{
-            console.log("Model")
-          })
-*/
           Promise.each(this.newElements[0], (electronic) => {
             //console.log("Serial number"+ electronic.serial_number);
             return this.productDescTDG.add(electronic, trx)
                 .then((model_number) => {
-                  return this.addInventoryItem(electronic.serial_number,
-                                   electronic.model_number)
-                            .then((id) => {
-                              console.log('added inventory item ');
+                            Promise.each(electronic.serial_number, (item_serial_number) => {
+                              return this.addInventoryItem(item_serial_number, electronic.model_number)
+                                          .then((id) => {
+                                            console.log('added inventory item ');
+                                          });
                             });
 
                 switch (electronic.type) {
@@ -136,7 +121,7 @@ class UnitOfWork {
     .into('Inventory');
   }
 
-  getAllInventoryItems() {
+  /*getAllInventoryItems() {
     /*return new Promise((resolve, reject) => {
       let desktops =  DesktopTDG.getAllDesktops();
       let laptops = LaptopTDG.getAllLaptops();
@@ -172,11 +157,11 @@ class UnitOfWork {
         );
       }))
       .catch(err => reject(err))
-    })*/
+    })
     return this.connection('ProductDescription')
     .innerJoin('Inventory', 'Inventory.model_number', 'ProductDescription.model_number')
     .select('*');
-  }
+  }*/
 
   getAllModelNumbers(products) {
     return products.map((obj) => {

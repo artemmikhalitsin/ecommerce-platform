@@ -101,13 +101,8 @@ class Controller {
      }];
     let results = this.productDescriptionRepo.save(toSave);
     let prodDesc = this.productDescriptionRepo.getAll();
-    let inventoryItems = this.inventoryRepo.getAllInventoryItems();
     Promise.all([prodDesc])
     .then((values) => {
-      /*
-      console.log('printing values');
-      console.log(values);
-      */
       let items = JSON.stringify(values[0]);
       items = JSON.stringify(toSave);
       if (req.session.exists==true && req.session.isAdmin==true) {
