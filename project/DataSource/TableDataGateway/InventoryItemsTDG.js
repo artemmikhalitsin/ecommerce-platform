@@ -21,7 +21,9 @@ class InventoryItemsTDG {
     }*/
     delete(inventoryItem){
         //TODO
-        return this.connection.from('Inventory').where('id',id).del();
+        return this.connection.from('Inventory').where('id',id).del({
+          'serial_number': inventoryItem.serial_number,
+        });
     }
 }
 module.exports = InventoryItemsTDG;
