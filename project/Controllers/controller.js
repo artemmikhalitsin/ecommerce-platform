@@ -67,9 +67,11 @@ class Controller {
       ram_size: 1,
       number_cpu_cores: 2,
       harddrive_size: 3,
-      dimensions: {depth: 1,
+      dimension: {depth: 1,
          height: 1,
-         width: 1}
+         width: 1,
+         dimensions_id: 2
+      }
      },{
       serial_number: ['26'],
       model_number: '26',
@@ -81,9 +83,11 @@ class Controller {
       ram_size: 1,
       number_cpu_cores: 2,
       harddrive_size: 3,
-      dimensions: {depth: 1,
+      dimension: {depth: 1,
          height: 1,
-         width: 1}
+         width: 1,
+         dimensions_id:3
+      }
      },{
       serial_number: ['12', '14'],
       model_number: '62',
@@ -95,9 +99,11 @@ class Controller {
       ram_size: 1,
       number_cpu_cores: 2,
       harddrive_size: 3,
-      dimensions: {depth: 1,
+      dimension: {depth: 1,
          height: 1,
-         width: 1}
+         width: 1,
+         dimensions_id:1
+       }
      }];
     let results = this.productDescriptionRepo.save(toSave);
     let prodDesc = this.productDescriptionRepo.getAll();
