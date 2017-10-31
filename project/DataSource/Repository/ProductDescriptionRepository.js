@@ -49,7 +49,7 @@ class ProductDescriptionRepository {
           && electronicsToUpdate.findIndex(e => e.model_number == products[i].model_number) === -1){
             electronicsToUpdate.push(products[i]);
       }
-      else if(context.findIndex(p => p.model_number == products[i].model_number) === -1
+      else if(allRecords.findIndex(p => p.model_number == products[i].model_number) === -1
               && electronicsToAdd.findIndex(e => e.model_number == products[i].model_number) === -1){
                 electronicsToAdd.push(products[i]);
               }

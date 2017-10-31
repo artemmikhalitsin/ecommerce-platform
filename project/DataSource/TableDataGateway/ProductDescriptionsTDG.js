@@ -28,7 +28,7 @@ class ProductDescriptionsTDG {
       'weight': productDescription.weight,
       'price': productDescription.price,
       'type': productDescription.type
-    }).from('ProductDescription').where('model_number', model_number);
+    }).from('ProductDescription').where({model_number: productDescription.model_number});
   }
 
 }

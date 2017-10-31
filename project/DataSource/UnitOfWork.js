@@ -52,9 +52,10 @@ class UnitOfWork {
       console.log(this.dirtyElements[0]);
       console.log("Electronics to delete: ");
       console.log(this.deletedElements[0]);
-
+      let deletedItems;
       //delete items
-      Promise.each(this.deletedElements[0], (electronics) => {
+      if(this.deletedElements[0].length > 0){
+       deletedItems = Promise.each(this.deletedElements[0], (electronics) => {
         return this.InventoryItemsTDG.delete(electronic, trx).then((serial_number) => {
           Promise.each(electronic.serial_number, (item_serial_number) => {
             return this.deleteInventoryItems(item_serial_number, electronic.serial_number).then((id) => {
@@ -62,17 +63,17 @@ class UnitOfWork {
             })
           })
         })
-      }).then(trx.commit).catch(trx.rollback);
+      });}//.then(trx.commit).catch(trx.rollback);
       //end of delete
 
       //update
-      Promise.each(this.newElements[0], (electronic) => {
-        return this.productDescTDG.update(electronic, trx).then((model_number) => {
-          Promise.each(electronic.model_number, (item_model_number) => {
+      let updateditems = Promise.each(this.dirtyElements[0], (electronic) => {
+         this.productDescTDG.update(electronic, trx).then((model_number) => {
+          /*Promise.each(electronic.model_number, (item_model_number) => {
             return this.updateDescription(item_model_number, electronic.model_number).then((id) => {
               console.log('updated item description');
             });
-          });
+          });*/
 
           switch (electronic.type) {
             case 'Desktop':
@@ -107,11 +108,11 @@ class UnitOfWork {
               break;
           }
         });
-      }).then(trx.commit).catch(trx.rollback);
-      //end of update
+      });//.then(trx.commit).catch(trx.rollback);
+      //end of update 
 
       //add items
-      Promise.each(this.newElements[0], (electronic) => {
+      let addeditems = Promise.each(this.newElements[0], (electronic) => {
         return this.productDescTDG.add(electronic, trx).then((model_number) => {
           Promise.each(electronic.serial_number, (item_serial_number) => {
             return this.addInventoryItem(item_serial_number, electronic.model_number).then((id) => {
@@ -154,7 +155,8 @@ class UnitOfWork {
         });
       }
       //add
-      ).then(trx.commit).catch(trx.rollback);
+      );//.then(trx.commit).catch(trx.rollback);
+      Promise.all([deletedItems, updateditems, addeditems]).then(trx.commit).catch(trx.rollback);
     });
   }
 
