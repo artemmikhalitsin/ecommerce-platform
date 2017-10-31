@@ -2,20 +2,14 @@
 let rootPath = require('app-root-dir').get();
 let ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
+let InventoryItemRepository = require(rootPath +
+  '/DataSource/Repository/InventoryItemRepository.js');
+let UserRepository = require(rootPath +
+  '/DataSource/Repository/UserRepository.js');
 class Controller {
   constructor() {
-    this.desktopRepo = require( rootPath +
-      '/DataSource/Repository/DesktopRepository.js');
-    this.laptopRepo = require( rootPath +
-      '/DataSource/Repository/LaptopRepository.js');
-    this.monitorRepo = require( rootPath +
-      '/DataSource/Repository/MonitorRepository.js');
-    this.tabletRepo = require( rootPath +
-      '/DataSource/Repository/TabletRepository.js');
-    this.userRepo = require(rootPath +
-      '/DataSource/Repository/UserRepository.js');
-    this.inventoryRepo = require(rootPath +
-      '/DataSource/Repository/InventoryItemRepository.js');
+    this.userRepo = new UserRepository();
+    this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
   }
 
@@ -63,8 +57,8 @@ class Controller {
   // this funtion is getting all the product description from the database
   getAllInventory(req, res) {
     let toSave = [{
-      serial_number: ['22'],
-      model_number: '22',
+      serial_number: ['133'],
+      model_number: '133',
       brand_name: "b",
       price: 1,
       weight: 1,
@@ -77,8 +71,8 @@ class Controller {
          height: 1,
          width: 1}
      },{
-      serial_number: ['1234'],
-      model_number: '61',
+      serial_number: ['26'],
+      model_number: '26',
       brand_name: "changed",
       price: 1,
       weight: 1,
@@ -107,13 +101,8 @@ class Controller {
      }];
     let results = this.productDescriptionRepo.save(toSave);
     let prodDesc = this.productDescriptionRepo.getAll();
-    let inventoryItems = this.inventoryRepo.getAllInventoryItems();
-    Promise.all([inventoryItems])
+    Promise.all([prodDesc])
     .then((values) => {
-      /*
-      console.log('printing values');
-      console.log(values);
-      */
       let items = JSON.stringify(values[0]);
       items = JSON.stringify(toSave);
       if (req.session.exists==true && req.session.isAdmin==true) {

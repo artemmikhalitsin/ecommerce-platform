@@ -11,19 +11,13 @@ class ProductDescriptionRepository {
     this.productDescTDG = new ProductDescriptionsTDG();
   }
   getAll(){
-    let context = this.ProductDescriptionIM.getAll();
-    if (context.length <= 0){
-      context = this.productDescTDG.select();
+      let context = this.productDescTDG.select();
 
       Promise.all([context]).then((values)=>{
         context = values[0];
       });
       this.ProductDescriptionIM.add(context);
-    }
     return context;
-  }
-  getAllProductsDescription() {
-    return this.uow.getAllProductsDescription();
   }
   getById(id){
     return this.ProductDescriptionIM.get([id]);
@@ -34,13 +28,10 @@ class ProductDescriptionRepository {
       var prodDescFromTDG = this.productDescTDG.select();
             Promise.all([prodDescFromTDG]).then((values)=>{
               products = values[0];
+              this.ProductDescriptionIM.add(products);
+              return products;
             });
-            this.ProductDescriptionIM.add(products);
     }
-    console.log("-------------");
-    console.log(JSON.stringify(products));
-    console.log("-------------");
-    //have to do same thing as getAll implement add in case not found to Identity mapper
     return products;
   }
   save(products){
@@ -52,7 +43,7 @@ class ProductDescriptionRepository {
     
     if(productIds.length > 0){
     let context = this.getByIds(productIds);
-    console.log("Context in repo is: " + JSON.stringify(context));
+    let allRecords = this.ProductDescriptionIM.getAll();
     for(var i = 0; i < products.length; i++){
       if(context.findIndex(p => p.model_number == products[i].model_number) !== -1
           && electronicsToUpdate.findIndex(e => e.model_number == products[i].model_number) === -1){
@@ -63,7 +54,7 @@ class ProductDescriptionRepository {
                 electronicsToAdd.push(products[i]);
               }
     }
-    electronicsToDelete = context.filter(function(desc){
+    electronicsToDelete = allRecords.filter(function(desc){
       console.log(desc.model_number);
       return electronicsToUpdate.findIndex(e => e.model_number == desc.model_number) === -1;
     });
@@ -73,7 +64,6 @@ class ProductDescriptionRepository {
     this.uow.registerDeleted(electronicsToDelete);
 
     this.uow.commitAll(electronicsToAdd);
-    console.log("Affter commiting");
     this.ProductDescriptionIM.add(electronicsToAdd);
   }
   /*getModelNumber() {
