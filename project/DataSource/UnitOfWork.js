@@ -10,6 +10,7 @@ let DimensionsTDG = require(rootPath + '/DataSource/TableDataGateway/DimensionsT
 let LaptopsTDG = require(rootPath + '/DataSource/TableDataGateway/LaptopsTDG.js');
 let MonitorsTDG = require(rootPath + '/DataSource/TableDataGateway/MonitorsTDG.js');
 let TabletsTDG = require(rootPath + '/DataSource/TableDataGateway/TabletsTDG.js');
+
 class UnitOfWork {
   constructor() {
     this.environment = process.env.NODE_ENV || 'development';
@@ -52,6 +53,7 @@ class UnitOfWork {
       console.log("Electronics to delete: ");
       console.log(this.deletedElements[0]);
 
+      //delete items
       Promise.each(this.deletedElements[0], (electronics) => {
         return this.InventoryItemsTDG.delete(electronic, trx).then((serial_number) => {
           Promise.each(electronic.serial_number, (item_serial_number) => {
@@ -60,10 +62,56 @@ class UnitOfWork {
             })
           })
         })
-      })
+      }).then(trx.commit).catch(trx.rollback);
+      //end of delete
 
+      //update
       Promise.each(this.newElements[0], (electronic) => {
-        //console.log("Serial number"+ electronic.serial_number);
+        return this.productDescTDG.update(electronic, trx).then((model_number) => {
+          Promise.each(electronic.model_number, (item_model_number) => {
+            return this.updateDescription(item_model_number, electronic.model_number).then((id) => {
+              console.log('updated item description');
+            });
+          });
+
+          switch (electronic.type) {
+            case 'Desktop':
+              {
+                return this.dimensionsTDG.update(electronic).transacting(trx).then((dimensionsId) => {
+                  return this.computersTDG.update(electronic).transacting(trx).then((compId) => {
+                    return this.desktopsTDG.update(compId, dimensionsId, electronic).transacting(trx);
+                  });
+                });
+              };
+              break;
+            case 'Laptop':
+              {
+                return this.computersTDG.update(electronic).transacting(trx).then((compId) => {
+                  return this.laptopsTDG.update(compId, electronic).transacting(trx);
+                });
+              };
+              break;
+            case 'Tablet':
+              {
+                return this.dimensionsTDG.update(electronic).transacting(trx).then((dimensionsId) => {
+                  return this.computersTDG.update(electronic).transacting(trx).then((compId) => {
+                    return this.tabletsTDG.update(compId, dimensionsId, electronic).transacting(trx);
+                  });
+                });
+              };
+              break;
+            case 'Monitor':
+              {
+                return this.monitorsTDG.update(electronic).transacting(trx);
+              };
+              break;
+          }
+        });
+      }).then(trx.commit).catch(trx.rollback);
+      //end of update
+
+      //add items
+      Promise.each(this.newElements[0], (electronic) => {
         return this.productDescTDG.add(electronic, trx).then((model_number) => {
           Promise.each(electronic.serial_number, (item_serial_number) => {
             return this.addInventoryItem(item_serial_number, electronic.model_number).then((id) => {
@@ -114,6 +162,10 @@ class UnitOfWork {
     return this.connection.from('Inventory').where('id', id).del({'serial_number': serial_number});
   }
 
+
+  updateDescription(){
+
+  }
   addInventoryItem(serial_number, model_number) {
     return this.connection.insert({
       'model_number': model_number,
