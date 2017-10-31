@@ -16,8 +16,10 @@ class DimensionsTDG {
     update(dimension){
         //TODO
         return this.connection.update({
-          'dimension_id': dimension_id,
-        }).from('Dimensions').where('id', id);
+          'depth': dimension.dimensions.depth,
+          'height': dimension.dimensions.height,
+          'width': dimension.dimensions.width
+        }).from('Dimensions').where({dimension_id: dimension.dimensions.dimension_id});
     }
-}
+} 
 module.exports = DimensionsTDG;
