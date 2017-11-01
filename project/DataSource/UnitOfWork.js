@@ -56,10 +56,10 @@ class UnitOfWork {
       //delete items
       if(this.deletedElements[0].length > 0){
        deletedItems = Promise.each(this.deletedElements[0], (electronic) => {
-        return this.inventoryItemsTDG.delete(electronic, trx).then(() => {
+        return this.inventoryItemsTDG.delete(electronic).transacting(trx).then(() => {
               console.log('deleted inventory item');
         })
-      });}//.then(trx.commit).catch(trx.rollback);
+      });}
       //end of delete
 
       //update
@@ -67,13 +67,7 @@ class UnitOfWork {
       if(this.dirtyElements[0].length > 0){
 
       updateditems = Promise.each(this.dirtyElements[0], (electronic) => {
-        return this.productDescTDG.update(electronic, trx).then((model_number) => {
-         /*Promise.each(electronic.model_number, (item_model_number) => {
-           return this.updateDescription(item_model_number, electronic.model_number).then((id) => {
-             console.log('updated item description');
-           });
-         });*/
-
+        return this.productDescTDG.update(electronic).transacting(trx).then((model_number) => {
          switch (electronic.type) {
            case 'Desktop':
              {
@@ -108,14 +102,14 @@ class UnitOfWork {
          }
        });
      });
-      }//.then(trx.commit).catch(trx.rollback);
+      }
       //end of update
 
       //add items
       let addeditems = Promise.each(this.newElements[0], (electronic) => {
-        return this.productDescTDG.add(electronic, trx).then((model_number) => {
+        return this.productDescTDG.add(electronic).transacting(trx).then((model_number) => {
           Promise.each(electronic.serial_number, (item_serial_number) => {
-            return this.addInventoryItem(item_serial_number, electronic.model_number).then((id) => {
+            return this.inventoryItemsTDG.add(item_serial_number, electronic.model_number).transacting(trx).then((id) => {
               console.log('added inventory item ');
             });
           });
@@ -155,23 +149,9 @@ class UnitOfWork {
         });
       }
       //add
-      );//.then(trx.commit).catch(trx.rollback);
+      );
       Promise.props([deletedItems, updateditems, addeditems]).then(trx.commit).catch(trx.rollback);
     });
-  }
-  deleteInventoryItems(serial_number) {
-    return this.connection.from('Inventory').where('id', id).del({'serial_number': serial_number});
-  }
-
-
-  updateDescription(){
-
-  }
-  addInventoryItem(serial_number, model_number) {
-    return this.connection.insert({
-      'model_number': model_number,
-      'serial_number': serial_number
-    }, 'id').into('Inventory');
   }
 
   // the following function is getting all the items along with their descriptions
@@ -212,17 +192,16 @@ class UnitOfWork {
       }))
       .catch(err => reject(err))
     })
-    // return this.connection('ProductDescription')
-    // .innerJoin('Inventory', 'Inventory.model_number', 'ProductDescription.model_number')
-    // .select('*');
   }
 
+  // this function is getting all the model numbers from all the products
   getAllModelNumbers(products) {
     return products.map((obj) => {
       return obj.model_number;
     });
   }
 
+  // this function already exists in the ProductDescriptionsTDG so it should be removed
   getAllProductsDescription() {
     return this.connection('ProductDescription').select('*');
   }
@@ -244,10 +223,7 @@ class UnitOfWork {
     return this.connection('ProductDescription').innerJoin('Monitor', 'Monitor.model_number', 'ProductDescription.model_number').select('ProductDescription.model_number', 'brand_name', 'price', 'type', 'weight', 'is_available', 'display_size');
   }
 
-  // getAllTVs() {
-  //   return this.connection('ProductDescription').innerJoin('TV', 'TV.model_number', 'ProductDescription.model_number').innerJoin('Dimensions', 'TV.dimension_id', 'Dimensions.dimension_id').select('ProductDescription.model_number', 'brand_name', 'price', 'type', 'weight', 'is_available', 'category_name', 'height', 'width', 'depth');
-  // }
-
+  // NOTE if we are not using this function then it should be removed. If we gonna use it later then ignore this comment
   compareWithContext(productDescriptions, electronics) {
     let electronicsToAdd = [];
     let electronicsToUpdate = [];
