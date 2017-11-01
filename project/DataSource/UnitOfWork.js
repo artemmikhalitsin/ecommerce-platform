@@ -55,13 +55,9 @@ class UnitOfWork {
       let deletedItems;
       //delete items
       if(this.deletedElements[0].length > 0){
-       deletedItems = Promise.each(this.deletedElements[0], (electronics) => {
-        return this.InventoryItemsTDG.delete(electronic, trx).then((serial_number) => {
-          Promise.each(electronic.serial_number, (item_serial_number) => {
-            return this.deleteInventoryItems(item_serial_number, electronic.serial_number).then((id) => {
+       deletedItems = Promise.each(this.deletedElements[0], (electronic) => {
+        return this.inventoryItemsTDG.delete(electronic, trx).then(() => {
               console.log('deleted inventory item');
-            })
-          })
         })
       });}//.then(trx.commit).catch(trx.rollback);
       //end of delete

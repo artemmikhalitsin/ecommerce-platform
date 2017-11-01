@@ -57,8 +57,8 @@ class Controller {
   // this funtion is getting all the product description from the database
   getAllInventory(req, res) {
     let toSave = [{
-      serial_number: ['133'],
-      model_number: '133',
+      serial_number: ['1'],
+      model_number: '1',
       brand_name: "b",
       price: 1,
       weight: 1,
@@ -75,8 +75,8 @@ class Controller {
          dimensions_id: 2
       }
      },{
-      serial_number: ['26'],
-      model_number: '26',
+      serial_number: ['2'],
+      model_number: '2',
       brand_name: "changed",
       price: 1,
       weight: 1,
@@ -93,12 +93,30 @@ class Controller {
          dimensions_id:3
       }
      },{
-      serial_number: ['12', '14'],
-      model_number: '62',
+      serial_number: ['3', '4'],
+      model_number: '3',
       brand_name: "b",
       price: 1,
       weight: 1,
       type: 'Desktop',
+      id: 3,
+      processor_type: 'n',
+      ram_size: 1,
+      number_cpu_cores: 2,
+      harddrive_size: 3,
+      comp_id: 1,
+      dimension: {depth: 1,
+         height: 1,
+         width: 1,
+         dimensions_id:1
+       }
+     },{
+      serial_number: ['7'],
+      model_number: '5',
+      brand_name: "b",
+      price: 1,
+      weight: 1,
+      type: 'Monitor',
       id: 3,
       processor_type: 'n',
       ram_size: 1,
