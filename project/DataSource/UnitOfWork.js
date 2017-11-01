@@ -65,7 +65,7 @@ class UnitOfWork {
       //update
       let updateditems;
       if(this.dirtyElements[0].length > 0){
-        
+
       updateditems = Promise.each(this.dirtyElements[0], (electronic) => {
         return this.productDescTDG.update(electronic, trx).then((model_number) => {
          /*Promise.each(electronic.model_number, (item_model_number) => {
@@ -109,7 +109,7 @@ class UnitOfWork {
        });
      });
       }//.then(trx.commit).catch(trx.rollback);
-      //end of update 
+      //end of update
 
       //add items
       let addeditems = Promise.each(this.newElements[0], (electronic) => {
@@ -174,12 +174,13 @@ class UnitOfWork {
     }, 'id').into('Inventory');
   }
 
-  /*getAllInventoryItems() {
-    /*return new Promise((resolve, reject) => {
-      let desktops =  DesktopTDG.getAllDesktops();
-      let laptops = LaptopTDG.getAllLaptops();
-      let tablets = // get all deksktops
-      let monitors = //get all monitors
+  // the following function is getting all the items along with their descriptions
+  getAllInventoryItems() {
+    return new Promise((resolve, reject) => {
+      let desktops =  this.getAllDesktops();
+      let laptops = this.getAllLaptops();
+      let tablets = this.getAllTablets();
+      let monitors = this.getAllMonitors();
 
       Promise.all([laptops, desktops, tablets, monitors])
       .then((results => {
@@ -211,10 +212,10 @@ class UnitOfWork {
       }))
       .catch(err => reject(err))
     })
-    return this.connection('ProductDescription')
-    .innerJoin('Inventory', 'Inventory.model_number', 'ProductDescription.model_number')
-    .select('*');
-  }*/
+    // return this.connection('ProductDescription')
+    // .innerJoin('Inventory', 'Inventory.model_number', 'ProductDescription.model_number')
+    // .select('*');
+  }
 
   getAllModelNumbers(products) {
     return products.map((obj) => {
@@ -226,6 +227,7 @@ class UnitOfWork {
     return this.connection('ProductDescription').select('*');
   }
 
+  // the following getter function will need to be moved to their respective TDGs
   getAllDesktops() {
     return this.connection('ProductDescription').innerJoin('Desktop', 'Desktop.model_number', 'ProductDescription.model_number').innerJoin('Computer', 'Desktop.comp_id', 'Computer.comp_id').innerJoin('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id').select('ProductDescription.model_number', 'brand_name', 'price', 'type', 'weight', 'is_available', 'processor_type', 'ram_size', 'number_cpu_cores', 'harddrive_size', 'depth', 'height', 'width');
   }
@@ -242,9 +244,9 @@ class UnitOfWork {
     return this.connection('ProductDescription').innerJoin('Monitor', 'Monitor.model_number', 'ProductDescription.model_number').select('ProductDescription.model_number', 'brand_name', 'price', 'type', 'weight', 'is_available', 'display_size');
   }
 
-  getAllTVs() {
-    return this.connection('ProductDescription').innerJoin('TV', 'TV.model_number', 'ProductDescription.model_number').innerJoin('Dimensions', 'TV.dimension_id', 'Dimensions.dimension_id').select('ProductDescription.model_number', 'brand_name', 'price', 'type', 'weight', 'is_available', 'category_name', 'height', 'width', 'depth');
-  }
+  // getAllTVs() {
+  //   return this.connection('ProductDescription').innerJoin('TV', 'TV.model_number', 'ProductDescription.model_number').innerJoin('Dimensions', 'TV.dimension_id', 'Dimensions.dimension_id').select('ProductDescription.model_number', 'brand_name', 'price', 'type', 'weight', 'is_available', 'category_name', 'height', 'width', 'depth');
+  // }
 
   compareWithContext(productDescriptions, electronics) {
     let electronicsToAdd = [];
