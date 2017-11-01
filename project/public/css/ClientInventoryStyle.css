@@ -1,8 +1,7 @@
 /* YOUR CUSTOM STYLES */
 .front, .back {
-	position: absolute;
 	background: #FFF;
-	transition: -webkit-transform 5s;
+	transition: -webkit-transform 1s;
 	-webkit-transform-style: preserve-3d;
 	-webkit-backface-visibility: hidden;
 }
@@ -13,12 +12,8 @@
 	z-index: 1;
 }
 
-.back {
-	-webkit-transform: rotateY(180deg);
-}
-
 .card.flip-to-front .back {
-	-webkit-transform: rotateY(0);
+	-webkit-transform: rotateY(180deg);
 }
 
 .card.flip-to-back .front {
