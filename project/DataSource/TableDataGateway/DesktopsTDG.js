@@ -18,11 +18,11 @@ class DesktopsTDG {
         //TODO
     }
 
-    update(desktop){
+    update(compId, dimensionsId, desktop){
         return this.connection.update({
         'model_number': desktop.model_number,
-        'dimension_id': dimensionsId,
-      }).from('Desktop').where('id', id);
+        'dimension_id': desktop.dimension.dimensions_id,
+      }).from('Desktop').where({id: desktop.id});
 
         //TODO
     }

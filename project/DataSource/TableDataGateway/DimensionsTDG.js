@@ -15,15 +15,14 @@ class DimensionsTDG {
     }
 
     select(){
-        //TODO
+        // TODO
     }
     update(dimension){
-        //TODO
         return this.connection.update({
           'depth': dimension.depth,
           'height': dimension.height,
           'width': dimension.width
-        }).from('Dimensions').where({'dimensionId': dimension.dimensionId});
+        }).from('Dimensions').where({dimension_id: dimension.dimensions_id});
     }
 }
 module.exports = DimensionsTDG;

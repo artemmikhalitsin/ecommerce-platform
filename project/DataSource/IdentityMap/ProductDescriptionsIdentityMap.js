@@ -3,9 +3,7 @@ let UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 let ProductDescriptionsTDG = require(rootPath + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
 class ProductDescriptionsIdentityMap{
     constructor(){
-       // this.ProductDescriptions = uow.loadProductDescriptions();
         this.productDescTDG = new ProductDescriptionsTDG();
-        this.uow = new UnitOfWork();
         let context = this.productDescTDG.select();
         this.productDesc = [];
         Promise.all([context])

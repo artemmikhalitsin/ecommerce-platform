@@ -20,7 +20,7 @@ class MonitorsTDG {
         return this.connection.update({
           'model_number': monitor.model_number,
           'display_size': monitor.display_size,
-        }).from('Monitor').where('id',id);
+        }).from('Monitor').where({id: monitor.id});
     }
 }
 module.exports = MonitorsTDG;

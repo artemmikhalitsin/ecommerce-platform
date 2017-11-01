@@ -2,19 +2,29 @@ class InventoryItemsIdentityMap {
     constructor() {
         this.rootPath = require('app-root-dir').get();
         let UnitOfWork = require(this.rootPath + '/DataSource/UnitOfWork.js');
-        let ProductDescriptionsTDG = require(this.rootPath + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
-        this.productDescTDG = new ProductDescriptionsTDG();
-        let uow = new UnitOfWork();
-        this.context = this.productDescTDG.select();
-        //this.InventoryItems = [];
-        Promise.all([this.context])
+        let InventoryItemsTDG = require(this.rootPath + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
+        this.inventoryTDG = new InventoryItemsTDG();
+        let context = this.inventoryTDG.select();
+        this.InventoryItems = [];
+        Promise.all([context])
         .then((values) => {
-          this.InventoryItems =  values[0];
+            this.InventoryItems = values[0];
         });
     }
     getAll(){
         console.log("From GetAll " + this.InventoryItems);
-        return this.InventoryItems;
+        let result = this.InventoryItems;
+        if(this.InventoryItems.length > 0){
+            return result;
+        }
+        else{
+            var itemsFromTDG = this.inventoryTDG.select();
+            Promise.all([itemsFromTDG])
+            .then((values) => {
+              result = values[0];
+            })
+            return result;
+        }
     }
     get(model_numbers) {
         return this.InventoryItems.filter(function(desc) {
@@ -22,6 +32,16 @@ class InventoryItemsIdentityMap {
               (x) => x == desc.model_number
             ) > -1;
         });
+    }
+    getByModelNumbers(model_numbers){
+        var allItems = this.getAll();
+        if(allItems != null){
+        var results = allItems.filter(function(item){
+            return model_numbers.findIndex(x => x == item.model_number) > -1;
+        });
+        return results;
+        }
+        else return [];
     }
     add(newInventoryItems) {
         this.InventoryItems.push(newInventoryItems);
