@@ -1,38 +1,26 @@
 /* YOUR CUSTOM STYLES */
-.info-card {
-    /*float: left;*/
-	/*margin: 10px;*/
-	/*-webkit-perspective: 600px;*/
-}
-
 .front, .back {
+	position: absolute;
 	background: #FFF;
-	/*border-radius: 10px;*/
-	transition: -webkit-transform 1s;
+	transition: -webkit-transform 5s;
 	-webkit-transform-style: preserve-3d;
 	-webkit-backface-visibility: hidden;
-	/*border: 1px solid black;*/
 }
 
 .front {
 	overflow: hidden;
-	/*width: 100%;*/
-	/*height: 400px;*/
 	position: absolute;
 	z-index: 1;
 }
 
 .back {
-	/*padding: 20px;*/
-	/*padding-top: 0px;*/
-	/*width: 250px;*/
-	-webkit-transform: rotateY(-180deg);
+	-webkit-transform: rotateY(180deg);
 }
 
-.card:hover .back {
+.card.flip-to-front .back {
 	-webkit-transform: rotateY(0);
 }
 
-.card:hover .front {
+.card.flip-to-back .front {
 	-webkit-transform: rotateY(180deg);
 }
