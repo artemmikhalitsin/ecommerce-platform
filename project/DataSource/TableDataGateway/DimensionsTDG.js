@@ -6,18 +6,23 @@ class DimensionsTDG {
         this.connection = require('knex')(this.configuration);
     }
     add(dimension) {
-        return this.connection.insert(dimension.dimensions, 'dimension_id')
+        return this.connection.insert({
+          'depth': dimension.depth,
+          'height': dimension.height,
+          'width': dimension.width
+        },'id')
         .into('Dimensions');
     }
 
     select(){
-        //TODO
+        // TODO
     }
     update(dimension){
-        //TODO
         return this.connection.update({
-          'dimension_id': dimension_id,
-        }).from('Dimensions').where('id', id);
+          'depth': dimension.depth,
+          'height': dimension.height,
+          'width': dimension.width
+        }).from('Dimensions').where({dimension_id: dimension.dimensions_id});
     }
 }
 module.exports = DimensionsTDG;

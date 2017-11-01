@@ -1,5 +1,5 @@
 <!--Card-->
-<div class="card" style="height:48rem;">
+<div class="card" style="height:48rem;" ng-class="{false:'flip-to-front', true:'flip-to-back'}[rotated]">
   <div class="front">
     <!--Card image-->
     <div class="view overlay hm-white-slight">
@@ -16,7 +16,7 @@
           <li class="list-group-item">Brand Name: {[{ $ctrl.monitor.brand }]}</li>
           <li class="list-group-item">Weight: {[{ $ctrl.monitor.weight }]} </li>
         </ul></br>
-        <a href="#" class="btn btn-primary">View Details</a>
+        <a href="#" class="btn btn-primary" ng-click="rotate()">View Details</a>
       </div>
       <!--/.caption-->
     </div>
@@ -28,12 +28,9 @@
     <h2 class="text-center">Detailed Info</h2>
     <div class="card-body">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">Model Number: </li>
-        <li class="list-group-item">Serial Number: </li>
-        <li class="list-group-item">Brand Name: </li>
-        <li class="list-group-item">Weight: </li>
+        <li class="list-group-item">Dicplay Size (inches): </li>
       </ul></br>
-      <a class="btn btn-primary">Go Back</a>
+      <a href="#" class="btn btn-primary" ng-click="rotate()">Go Back</a>
     </div>
     <!--/.card-body-->
   </div>

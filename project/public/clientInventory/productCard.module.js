@@ -7,18 +7,24 @@ var monitorCard = angular.module('monitorCard', [])
 function productCardController($scope) {
 }
 function desktopCardController($scope) {
+  rotateCard($scope);
+}
+function laptopCardController($scope) {
+  rotateCard($scope);
+}
+function tabletCardController($scope) {
+  rotateCard($scope);
+}
+function monitorCardController($scope) {
+  rotateCard($scope);
+}
+
+function rotateCard($scope) {
   $scope.rotated = false;
 
   $scope.rotate = () => {
     $scope.rotated = !$scope.rotated;
-    console.log($scope.rotated);
   }
-}
-function laptopCardController($scope) {
-}
-function tabletCardController($scope) {
-}
-function monitorCardController($scope) {
 }
 
 //Component data

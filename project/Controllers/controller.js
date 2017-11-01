@@ -2,20 +2,14 @@
 let rootPath = require('app-root-dir').get();
 let ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
+let InventoryItemRepository = require(rootPath +
+  '/DataSource/Repository/InventoryItemRepository.js');
+let UserRepository = require(rootPath +
+  '/DataSource/Repository/UserRepository.js');
 class Controller {
   constructor() {
-    this.desktopRepo = require( rootPath +
-      '/DataSource/Repository/DesktopRepository.js');
-    this.laptopRepo = require( rootPath +
-      '/DataSource/Repository/LaptopRepository.js');
-    this.monitorRepo = require( rootPath +
-      '/DataSource/Repository/MonitorRepository.js');
-    this.tabletRepo = require( rootPath +
-      '/DataSource/Repository/TabletRepository.js');
-    this.userRepo = require(rootPath +
-      '/DataSource/Repository/UserRepository.js');
-    this.inventoryRepo = require(rootPath +
-      '/DataSource/Repository/InventoryItemRepository.js');
+    this.userRepo = new UserRepository();
+    this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
   }
 
@@ -62,60 +56,85 @@ class Controller {
 
   // this funtion is getting all the product description from the database
   getAllInventory(req, res) {
-    let toSave = [{
-      serial_number: ['22'],
-      model_number: '22',
-      brand_name: "b",
-      price: 1,
-      weight: 1,
-      type: 'Desktop',
-      processor_type: 'r',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      dimensions: {depth: 1,
-         height: 1,
-         width: 1}
-     },{
-      serial_number: ['1234'],
-      model_number: '61',
-      brand_name: "changed",
-      price: 1,
-      weight: 1,
-      type: 'Desktop',
-      processor_type: 'q',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      dimensions: {depth: 1,
-         height: 1,
-         width: 1}
-     },{
-      serial_number: ['12', '14'],
-      model_number: '62',
-      brand_name: "b",
-      price: 1,
-      weight: 1,
-      type: 'Desktop',
-      processor_type: 'n',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      dimensions: {depth: 1,
-         height: 1,
-         width: 1}
-     }];
-    let results = this.productDescriptionRepo.save(toSave);
-    let prodDesc = this.productDescriptionRepo.getAll();
-    let inventoryItems = this.inventoryRepo.getAllInventoryItems();
-    Promise.all([inventoryItems])
+    // let toSave = [{
+    //   serial_number: ['1'],
+    //   model_number: '1',
+    //   brand_name: "b",
+    //   price: 1,
+    //   weight: 1,
+    //   id: 1,
+    //   type: 'Desktop',
+    //   processor_type: 'r',
+    //   ram_size: 1,
+    //   number_cpu_cores: 2,
+    //   harddrive_size: 3,
+    //   comp_id: 3,
+    //   dimension: {depth: 1,
+    //      height: 1,
+    //      width: 1,
+    //      dimensions_id: 2
+    //   }
+    //  },{
+    //   serial_number: ['2'],
+    //   model_number: '2',
+    //   brand_name: "changed",
+    //   price: 1,
+    //   weight: 1,
+    //   type: 'Desktop',
+    //   id: 2,
+    //   processor_type: 'q',
+    //   ram_size: 1,
+    //   number_cpu_cores: 2,
+    //   harddrive_size: 3,
+    //   comp_id: 2,
+    //   dimension: {depth: 1,
+    //      height: 1,
+    //      width: 1,
+    //      dimensions_id:3
+    //   }
+    //  },{
+    //   serial_number: ['3', '4'],
+    //   model_number: '3',
+    //   brand_name: "b",
+    //   price: 1,
+    //   weight: 1,
+    //   type: 'Desktop',
+    //   id: 3,
+    //   processor_type: 'n',
+    //   ram_size: 1,
+    //   number_cpu_cores: 2,
+    //   harddrive_size: 3,
+    //   comp_id: 1,
+    //   dimension: {depth: 1,
+    //      height: 1,
+    //      width: 1,
+    //      dimensions_id:1
+    //    }
+    //  },{
+    //   serial_number: ['7'],
+    //   model_number: '5',
+    //   brand_name: "b",
+    //   price: 1,
+    //   weight: 1,
+    //   type: 'Monitor',
+    //   id: 3,
+    //   processor_type: 'n',
+    //   ram_size: 1,
+    //   number_cpu_cores: 2,
+    //   harddrive_size: 3,
+    //   comp_id: 1,
+    //   dimension: {depth: 1,
+    //      height: 1,
+    //      width: 1,
+    //      dimensions_id:1
+    //    }
+    //  }];
+    //let results = this.productDescriptionRepo.save(toSave);
+    let prodDesc = this.inventoryRepo.getAllInventoryItems();
+    Promise.all([prodDesc])
     .then((values) => {
-      /*
-      console.log('printing values');
-      console.log(values);
-      */
       let items = JSON.stringify(values[0]);
-      items = JSON.stringify(toSave);
+      //items = JSON.stringify(toSave);
       if (req.session.exists==true && req.session.isAdmin==true) {
         res.render('inventory', {items: items});
       } else if (req.session.exists==true && req.session.isAdmin==false) {

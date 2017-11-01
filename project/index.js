@@ -10,16 +10,6 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
   extended: false,
 }));
 
-// will be removed later
-let DesktopRepository = require(rootPath +
-  '/DataSource/Repository/DesktopRepository.js');
-
-// this will be removed (it is here only for testing purposes)
-this.desktopRepo = new DesktopRepository();
-//this.desktopRepo.save2('object');
-//this.resu = this.desktopRepo.deletethistestfunction();
-//console.log("Index JS "+ this.resu);
-
 const Controller = require(rootPath + '/Controllers/controller');
 let controller = new Controller();
 
@@ -65,20 +55,13 @@ app.get('/registration', function(req, res) {
   }
 });
 
-// getting the add item page
-app.get('/addItem', function(req, res) {
+app.get('/addProduct', function(req, res) {
   if (req.session.exists) {
-    res.render('addItem');
+    res.render('inventory/new-product');
   } else {
-    console.log('login error');
-    res.redirect('/');
+    res.redirect('/login');
   }
 });
-
-app.get('/addProduct', function(req, res) {
-  res.render('inventory/new-product');
-});
-
 
 // this should be implemented in the controller
 app.get('/logout', function(req, res) {
