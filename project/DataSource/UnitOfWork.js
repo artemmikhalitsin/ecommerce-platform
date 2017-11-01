@@ -38,6 +38,7 @@ class UnitOfWork {
     this.dirtyElements = [];
     this.dirtyElements.push(object);
   }
+  //simplest sln for now is adding newInventoryItems list and having a separate register new method for it
   registerDeleted(object) {
     this.deletedElements = [];
     this.deletedElements.push(object);
