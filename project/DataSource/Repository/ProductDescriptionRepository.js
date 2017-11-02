@@ -64,19 +64,19 @@ class ProductDescriptionRepository {
         console.log("serial number " + ser_number);
       })) === -1;
     });*/
-    electronicsToDelete = allInventoryItems.filter(function(item){
+    /*electronicsToDelete = allInventoryItems.filter(function(item){
       let elect = electronicsToUpdate.find(e => e.model_number == item.model_number).serial_number;
       console.log("Electronic item " + elect);
       console.log("with serial num " + item.serial_number);
       return elect.findIndex(i => i == item.serial_number) === -1;
-    });
+    });*/
 
   }
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);
-    this.uow.registerDeleted(electronicsToDelete);
+    //this.uow.registerDeleted(electronicsToDelete);
 
-    this.uow.commitAll(electronicsToAdd);
+    this.uow.commitAll();
     this.ProductDescriptionIM.add(electronicsToAdd);
   }
 }
