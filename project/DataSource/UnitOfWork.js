@@ -29,6 +29,8 @@ class UnitOfWork {
     this.dirtyElements = [];
     this.newElements = [];
     this.deletedElements = [];
+    this.newInventoryItems = [];
+    this.deletedInventoryItems = [];
   }
   registerNew(object) {
     this.newElements = [];
@@ -42,7 +44,15 @@ class UnitOfWork {
     this.deletedElements = [];
     this.deletedElements.push(object);
   }
-  commitAll(object) {
+  registerNewItem(object){
+    this.newInventoryItems = [];
+    this.newInventoryItems.push(object);
+  }
+  registerDeletedItem(object){
+    this.deletedInventoryItems = [];
+    this.deletedInventoryItems.push(object);
+  }
+  commitAll() {
 
     let electronics = [];
     return this.connection.transaction((trx) => {
@@ -50,24 +60,35 @@ class UnitOfWork {
       console.log(this.newElements[0]);
       console.log("Electronics to update ");
       console.log(this.dirtyElements[0]);
-      console.log("Electronics to delete: ");
-      console.log(this.deletedElements[0]);
+      console.log("Inventory items to add");
+      console.log(this.newInventoryItems[0]);
+      console.log("Inventory items to delete: ");
+      console.log(this.deletedInventoryItems[0]);
       let deletedItems;
       //delete items
-      if(this.deletedElements[0].length > 0){
-       deletedItems = Promise.each(this.deletedElements[0], (electronic) => {
+      if(this.deletedInventoryItems[0] != null && this.deletedInventoryItems[0].length > 0){
+       deletedItems = Promise.each(this.deletedInventoryItems[0], (electronic) => {
         return this.inventoryItemsTDG.delete(electronic).transacting(trx).then(() => {
               console.log('deleted inventory item');
         })
       });}
       //end of delete
-
-      //update
+      //add items
+      let newItems;
+      if(this.newInventoryItems[0] != null && this.newInventoryItems[0].length > 0){
+        newItems = Promise.each(this.newInventoryItems[0], (electronic) => {
+          return this.inventoryItemsTDG.add(electronic.serial_number, electronic.model_number).transacting(trx).then(() => {
+               console.log('added inventory item');
+         })
+       });}
+      //update products
       let updateditems;
-      if(this.dirtyElements[0].length > 0){
+      if(this.dirtyElements[0] && this.dirtyElements[0].length > 0){
 
       updateditems = Promise.each(this.dirtyElements[0], (electronic) => {
         return this.productDescTDG.update(electronic).transacting(trx).then((model_number) => {
+
+          console.log('updated description ');
          switch (electronic.type) {
            case 'Desktop':
              {
@@ -105,15 +126,17 @@ class UnitOfWork {
       }
       //end of update
 
-      //add items
-      let addeditems = Promise.each(this.newElements[0], (electronic) => {
+      //add products
+      let addeditems;
+      if(this.newElements[0] != null){
+      addeditems = Promise.each(this.newElements[0], (electronic) => {
         return this.productDescTDG.add(electronic).transacting(trx).then((model_number) => {
-          Promise.each(electronic.serial_number, (item_serial_number) => {
+          /*Promise.each(electronic.serial_number, (item_serial_number) => {
             return this.inventoryItemsTDG.add(item_serial_number, electronic.model_number).transacting(trx).then((id) => {
               console.log('added inventory item ');
             });
-          });
-
+          });*/
+          console.log('added description ');
           switch (electronic.type) {
             case 'Desktop':
               {
@@ -149,8 +172,8 @@ class UnitOfWork {
         });
       }
       //add
-      );
-      Promise.props([deletedItems, updateditems, addeditems]).then(trx.commit).catch(trx.rollback);
+      );}
+      Promise.props([newItems, deletedItems, updateditems, addeditems]).then(trx.commit).catch(trx.rollback);
     });
   }
 
