@@ -133,11 +133,12 @@ class Controller {
     //this.manageProductCatalog();
     this.manageInventory();
 
-    let prodDesc = this.productDescriptionRepo.getAll();
+    let prodDesc = this.inventoryRepo.getAllInventoryItems();
     Promise.all([prodDesc])
     .then((values) => {
       let items = JSON.stringify(values[0]);
       //items = JSON.stringify(toSave);
+      console.log("Values: ", items);
       if (req.session.exists==true && req.session.isAdmin==true) {
         res.render('inventory', {items: items});
       } else if (req.session.exists==true && req.session.isAdmin==false) {

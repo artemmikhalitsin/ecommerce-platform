@@ -40,9 +40,9 @@ class ProductDescriptionRepository {
     var electronicsToAdd = [];
     var electronicsToUpdate = [];
     var electronicsToDelete = [];
- 
+
     let productIds = products.map(p => p.model_number);
-    
+
     if(productIds.length > 0){
     let context = this.getByIds(productIds);
     let allRecords = this.ProductDescriptionIM.getAll();
@@ -60,7 +60,7 @@ class ProductDescriptionRepository {
     /*electronicsToDelete = allInventoryItems.filter(function(item){
       console.log(item.model_number);
       return electronicsToUpdate.findIndex(e => e.serial_number.forEach(function(ser_number){
-        ser_number == item.serial_number 
+        ser_number == item.serial_number
         console.log("serial number " + ser_number);
       })) === -1;
     });*/
