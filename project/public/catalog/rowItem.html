@@ -1,0 +1,99 @@
+<div class="container">
+  <row>
+    <div ng-click="toggle()">
+    <col>
+      {[{$ctrl.product.brand_name}]}
+    </col>
+    <col>
+      {[{$ctrl.product.model_number}]}
+    </col>
+    <col>
+      {[{$ctrl.product.type}]}
+    </col>
+    <col>
+      {[{$ctrl.product.price}]}
+    </col>
+    </div>
+    <col>
+    <button ng-show="!editMode" ng-click="editDescription()">Edit</button>
+    <button ng-show="editMode" ng-click="saveDescription()">Save</button>
+
+    </col>
+  </row>
+  <row ng-show="showMore">
+    <col>
+      <label>Weight:</label>{[{$ctrl.product.weight}]}
+      <div ng-show="isMonitor() || isLaptop()">
+      <label>Display Size:</label>
+        <span ng-show='!editMode'>{[{$ctrl.product.display_size}]}</span>
+        <input ng-show='editMode' type="number" step="0.01" min="0" class="form-control" ng-model="$ctrl.product.display_size"></input>
+      </div>
+      <div ng-show="isDesktop() || isLaptop() || isTablet()">
+        <label>Processor Type:</label>
+        <span ng-show='!editMode'>{[{$ctrl.product.processor_type}]}</span>
+        <input ng-show='editMode' type="text" class="form-control" ng-model="$ctrl.product.processor_type"></input>
+      </div>
+      <div ng-show="isTablet() || isLaptop()">
+        <label>Battery Info:</label>
+        <span ng-show='!editMode'>{[{$ctrl.product.battery_info}]}</span>
+        <input ng-show='editMode' type="text" class="form-control" ng-model="$ctrl.product.battery_info"></input>
+      </div>
+      <div ng-show= "isTablet() || isDesktop() || isLaptop()">
+        <label>RAM Size:</label>
+        <span ng-show='!editMode'>{[{$ctrl.product.ram_size}]}</span>
+        <input ng-show='editMode' type="number" step="512" min="0" class="form-control" ng-model="$ctrl.product.ram_size"></input>
+      </div>
+      <div ng-show= "isTablet() || isDesktop() || isLaptop()">
+        <label>Number of CPU Cores:</label>
+        <span ng-show='!editMode'> {[{$ctrl.product.number_cpu_cores}]}</span>
+        <input ng-show='editMode' type="number" step="1" min="0" class="form-control" ng-model="$ctrl.product.number_cpu_cores"></input>
+      </div>
+      <div ng-show= "isTablet() || isDesktop()">
+        <label>Height:</label>
+        <span ng-show='!editMode'>{[{$ctrl.product.height}]}</span>
+        <input ng-show='editMode' type="number" step="0.01" min="0" class="form-control" ng-model="$ctrl.product.height"></input>
+      </div>
+      <div ng-show= "isTablet() || isDesktop()">
+        <label>Depth:</label>
+        <span ng-show='!editMode'>{[{$ctrl.product.depth}]}</span>
+        <input ng-show='editMode' type="number" step="0.01" min="0" class="form-control" ng-model="$ctrl.product.depth"></input>
+      </div>
+      <div ng-show= "isTablet() || isDesktop()">
+        <label>Width:</label>
+        <span ng-show='!editMode'>{[{$ctrl.product.width}]}</span>
+        <input ng-show='editMode' type="number" step="0.01" min="0" class="form-control" ng-model="$ctrl.product.width"></input>
+      </div>
+      <div ng-show="isLaptop()">
+        <label>Touch Screen:</label>
+        <span ng-show="!editMode">{[{$ctrl.product.touch_screen ? 'yes':'no'}]}</span>
+        <select ng-show='editMode' class="form-control" >
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+      <div ng-show="isLaptop()">
+        <label>Camera:</label>
+        <span ng-show="!editMode">{[{$ctrl.product.camera  ? 'yes':'no'}]}</span>
+        <select ng-show='editMode' class="form-control" >
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+      <div ng-show= "isTablet() || isDesktop() || isLaptop()">
+        <label>OS:</label>
+        <span ng-show='!editMode'>{[{$ctrl.product.os}]}</span>
+        <input ng-show='editMode' type="text" class="form-control" ng-model="$ctrl.product.os"></input>
+      </div>
+      <div ng-show= "isTablet() || isDesktop() || isLaptop()">
+        <label>Harddrive Size:</label>
+        <span ng-show='!editMode'>{[{$ctrl.product.harddrive_size}]}</span>
+        <input ng-show='editMode' type="number" step="0.01" min="0" class="form-control" ng-model="$ctrl.product.harddrive_size"></input>
+      </div>
+      <div ng-show= "isTablet()">
+        <label>Camera Info:</label>
+        <span ng-show='!editMode'>{[{$ctrl.product.camera_info}]}</span>
+        <input ng-show='editMode' type="text" class="form-control" ng-model="$ctrl.product.camera_info"></input>
+      </div>
+    </col>
+  </row>
+</div>

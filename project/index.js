@@ -77,6 +77,10 @@ app.get('/addProduct', function(req, res) {
   res.render('inventory/new-product');
 });
 
+app.get('/catalog', function(req, res) {
+  res.render('catalog');
+});
+
 
 // this should be implemented in the controller
 app.get('/logout', function(req, res) {
