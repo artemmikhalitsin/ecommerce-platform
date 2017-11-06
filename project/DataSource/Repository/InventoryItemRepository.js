@@ -33,9 +33,6 @@ class InventoryItemRepository{
             });
             this.inventoryItemsIM.add(items);
     }
-    console.log("-------------");
-    console.log(JSON.stringify(items));
-    console.log("-------------");
     return items;
   }
   getAllInventoryItems() {
@@ -46,10 +43,8 @@ class InventoryItemRepository{
     var electronicsToDelete = [];
  
     let model_numbers = items.map(p => p.model_number);
-    console.log("model nums are: " + JSON.stringify(model_numbers));
     if(model_numbers.length > 0){
       let allInventoryItems = this.inventoryItemsIM.getByModelNumbers(model_numbers);
-      console.log("all electronic items are: " + JSON.stringify(allInventoryItems));
       for(var i = 0; i < items.length; i++){
         for(var j = 0; j < items[i].serial_number.length; j++){
           if(allInventoryItems.findIndex(p => p.serial_number == items[i].serial_number[j]) === -1
@@ -61,17 +56,14 @@ class InventoryItemRepository{
       electronicsToDelete = allInventoryItems.filter(function(item){
         console.log(item.model_number);
        items.forEach(function(element){
-         console.log("serial numbers: " + JSON.stringify(element.serial_number));
          return element.serial_number.findIndex(e => e == item.serial_number) === -1;
         })
       });
   }
-  console.log("Items to add" + JSON.stringify(electronicsToAdd));
     this.uow.registerNewItem(electronicsToAdd);
     this.uow.registerDeletedItem(electronicsToDelete);
 
     this.uow.commitAll();
-    console.log("Affter commiting");
     this.inventoryItemsIM.add(electronicsToAdd);
   }
 }
