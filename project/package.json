@@ -10,11 +10,10 @@
     "rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
     "make-seed": "knex seed:make",
-    "start": "nodemon -L index.js",
     "lint": "node_modules/eslint/bin/eslint.js .",
     "lint-fix": "node_modules/eslint/bin/eslint.js . --fix",
     "make-docs": "node_modules/.bin/esdoc",
-    "conc": "node node_modules/concurrently/src/main.js -c \"bgBlue,bgRed\" -n \"Express,ESLint\" \"nodemon -L index.js\" \"nodemon -L node_modules/eslint/bin/eslint.js .\""
+    "start": "node node_modules/concurrently/src/main.js -c \"bgBlue,bgRed\" -n \"Express,ESLint\" \"nodemon -L index.js\" \"nodemon -L node_modules/eslint/bin/eslint.js .\""
   },
   "keywords": [],
   "author": "",
