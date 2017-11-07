@@ -11,6 +11,9 @@
     "seed": "knex seed:run",
     "make-seed": "knex seed:make",
     "start": "nodemon -L index.js",
+    "lint": "node_modules/eslint/bin/eslint.js .",
+    "lint-fix": "node_modules/eslint/bin/eslint.js . --fix",
+    "make-docs": "node_modules/.bin/esdoc",
     "conc": "node node_modules/concurrently/src/main.js -c \"bgBlue,bgRed\" -n \"Express,ESLint\" \"nodemon -L index.js\" \"nodemon -L node_modules/eslint/bin/eslint.js .\""
   },
   "keywords": [],
@@ -32,6 +35,8 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
+    "concurrently": "^3.5.0",
+    "esdoc-standard-plugin": "^1.0.0",
     "express-session": "^1.15.6"
   },
   "description": "",

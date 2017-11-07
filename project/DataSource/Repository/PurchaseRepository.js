@@ -1,4 +1,11 @@
+/* eslint-disable */
+// Eslint disabled for this file only until issue is resolved
+
 'use strict';
+
+// TODO: This repo is not even implemented as a class, and hence I did not
+// document this. Should this be deleted? - Artem
+
 let PurcheRepository = function() {
   const express = require('express');
   const app = express();
