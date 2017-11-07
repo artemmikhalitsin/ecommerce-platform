@@ -2,16 +2,33 @@ _commonProps = ["model_number", "brand_name", "price", "weight",
                 "type", "is_available", "serial_numbers"];
 _requestJSON = {"deleteSerials":[], "addSerials":[]};
 
+// This is to check if there is symbols in what the client entered
+function validateValue(value){
+  let isAlphaNumeric = new RegExp(/^[a-zA-Z0-9]+/);
+  return isAlphaNumeric.test(value);
+}
+
 function getAllTextBoxes(){
+  let invalidModelIds = [];
   $('.add-item').each((i, obj) => {
     //gets the modelnumber of each serial number to be added
-    let id = $(obj).parent().parent().parent().parent().attr('id');
+    let modelId = $(obj).parent().parent().parent().parent().attr('id');
     let value = $(obj).val();
-    let item = id+"@"+value;
-    if (!_requestJSON.addSerials.includes(item)){
-      _requestJSON.addSerials.push(item);
+    if (validateValue(value)){
+      let item = value+"@"+ modelId;
+      if (!_requestJSON.addSerials.includes(item)){
+        _requestJSON.addSerials.push(item);
+      }
+    } else {
+      invalidModelIds.push(modelId);
     }
   });
+  if (invalidModelIds.length === 0){
+    return true;
+  } else{
+    window.alert(`Serial Number at ${invalidModelIds.join(', ')} must be alphanumeric`);
+    return false;
+  }
 }
 
 // Delete serial number in the request JSON
@@ -145,12 +162,20 @@ $(document).ready(function() {
 });
 
 function submitData(){
-  getAllTextBoxes();
-  $.ajax({
-      url: '/inventoryAction',
-      type: 'post',
-      dataType: 'json',
-      success: window.location.reload(),
-      data: {"actions":JSON.stringify(_requestJSON)}
-  });
+    if(getAllTextBoxes()){
+    $.ajax({
+        url: '/inventoryAction',
+        type: 'post',
+        dataType: 'json',
+        success: function (xhr) {
+          window.location.reload()
+        },
+        error: function (xhr) {
+          _requestJSON.addSerials = [];
+          $('#error-box').show();
+          $('#error-message').html(xhr.responseJSON.error);
+        },
+        data: {"actions":JSON.stringify(_requestJSON)}
+    });
+  }
 }

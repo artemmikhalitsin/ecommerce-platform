@@ -18,11 +18,20 @@ class LaptopsTDG {
         .into('Laptop');
     }
 
-    select() {
-        // TODO
+    select(){
+        //TODO
     }
-    update(laptop) {
-        // TODO
+    update(compId, laptop){
+        //TODO
+        return this.connection.update({
+          'comp_id': laptop.comp_id,
+          'model_number': laptop.model_number,
+          'display_size': laptop.display_size,
+          'battery_info': laptop.battery_info,
+          'os': laptop.os,
+          'camera': laptop.camera,
+          'touch_screen': laptop.touch_screen,
+        }).from('Laptop').where({id: laptop.id});
     }
 }
 module.exports = LaptopsTDG;

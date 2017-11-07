@@ -1,37 +1,87 @@
 <html ng-app="newProduct">
   <head>
+    <title> Add product </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <!-- <link href="css/mdb.min.css" rel="stylesheet"> -->
+
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js" crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="inventory/new-product.module.js"></script>
 
-    <script type="text/javascript" src="inventory/product-forms/tv-form.module.js"></script>
     <script type="text/javascript" src="inventory/product-forms/monitor-form.module.js"></script>
     <script type="text/javascript" src="inventory/product-forms/laptop-form.module.js"></script>
     <script type="text/javascript" src="inventory/product-forms/desktop-form.module.js"></script>
     <script type="text/javascript" src="inventory/product-forms/tablet-form.module.js"></script>
+    <script type="text/javascript" src="inventory/product-entries/desktop-entry.module.js"></script>
+    <script type="text/javascript" src="inventory/product-entries/tablet-entry.module.js"></script>
+    <script type="text/javascript" src="inventory/product-entries/laptop-entry.module.js"></script>
+    <script type="text/javascript" src="inventory/product-entries/monitor-entry.module.js"></script>
 
   </head>
-  <body ng-controller="FormController">
-    <h1>Add a product</h1>
-
-    <label> Product type:
-      <select ng-model="selected">
-        <option value="tv">TV</option>
-        <option value="monitor">Monitor</option>
-        <option value="laptop">Laptop</option>
-        <option value="desktop">Desktop</option>
-        <option value="tablet">Tablet</option>
-      </select>
-    </label>
-
-    <form ng-model="formData">
-      <laptop-form ng-show="selected=='laptop'"></laptop-form>
-      <tablet-form ng-show="selected=='tablet'"></tablet-form>
-      <desktop-form ng-show="selected=='desktop'"></desktop-form>
-      <tv-form ng-show="selected=='tv'"></tv-form>
-      <monitor-form ng-show="selected=='monitor'"></monitor-form>
-    </form>
-
-    <button type="button" ng-click="submit()">Click</button>
+  <body ng-app="" ng-controller="FormController">
+    <div ng-include="'includes/header.hbs'"></div>
+      <div class="container">
+        <header class="jumbotron my-4">
+          <h1 class="display-4">Add a product</h1>
+        </header>
+        <div class="row-fluid text-center justify-content-center">
+          <div class="card-fluid" style="width: 70rem;">
+            <h3 class="card-header text-center">Product details</h3>
+              <div class="card-block-fluid"></br>
+                <label class="col-4 col-form-label"> <h6>Product type</h6>
+                  <select class="form-control" ng-model="selected">
+                    <option value="monitor">Monitor</option>
+                    <option value="laptop">Laptop</option>
+                    <option value="desktop">Desktop</option>
+                    <option value="tablet">Tablet</option>
+                  </select>
+                </label><br />
+                <form ng-model="formData">
+                  <laptop-form ng-show="selected=='laptop'"></laptop-form>
+                  <tablet-form ng-show="selected=='tablet'"></tablet-form>
+                  <desktop-form ng-show="selected=='desktop'"></desktop-form>
+                  <monitor-form ng-show="selected=='monitor'"></monitor-form>
+                </form>
+                <br />
+                <div class="card" style="height:auto;" ng-show="products.tablets.length > 0">
+                  <h5 class="card-header text-left">Tablets</h5>
+                  <div ng-repeat="item in products.tablets track by $index">
+                    <br /><tablet-entry  tablet="item"></tablet-entry>
+                  </div>
+                </div><br />
+                <div class="card" style="height:auto;" ng-show="products.desktops.length > 0">
+                  <h5 class="card-header text-left">Desktops</h5>
+                  <div ng-repeat="item in products.desktops track by $index">
+                    <br /><desktop-entry  desktop="item" index="$index"></desktop-entry>
+                  </div>
+                </div><br />
+                <div class="card" style="height:auto;" ng-show="products.monitors.length > 0">
+                  <h5 class="card-header text-left">Monitors</h5>
+                  <div ng-repeat="item in products.monitors track by $index">
+                    <br /><monitor-entry  monitor="item"></monitor-entry>
+                  </div>
+                </div><br />
+                <div class="card" style="height:auto;" ng-show="products.laptops.length > 0">
+                  <h5 class="card-header text-left">Laptops</h5>
+                  <div ng-repeat="item in products.laptops track by $index">
+                    <br /><laptop-entry  laptop="item"></laptop-entry>
+                  </div>
+                </div><br />
+              </div>
+            </div>
+          </div>
+        <button ng-show="products.monitors.length > 0 || products.tablets.length > 0 || products.desktops.length > 0||products.laptops.length > 0" class="btn btn-primary" type="button" ng-click="submit()">Submit All</button>
+      </div>
+    <!-- Bootstrap core JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <div ng-include="'includes/footer.hbs'"></div>
   </body>
 </html>

@@ -16,13 +16,6 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
   extended: false,
 }));
 
-// will be removed later
-const desktopRepo = require(rootPath +
-  '/DataSource/Repository/DesktopRepository.js');
-
-// this will be removed (it is here only for testing purposes)
-desktopRepo.save2('object');
-
 const Controller = require(rootPath + '/Controllers/controller');
 let controller = new Controller();
 
@@ -69,13 +62,11 @@ app.get('/registration', function(req, res) {
   }
 });
 
-// getting the add item page
-app.get('/addItem', function(req, res) {
+app.get('/addProduct', function(req, res) {
   if (req.session.exists) {
-    res.render('addItem');
+    res.render('inventory/new-product');
   } else {
-    console.log('login error');
-    res.redirect('/');
+    res.redirect('/login');
   }
 });
 
@@ -119,12 +110,12 @@ app.post('/registrationRequest', function(req, res) {
 // making the login request
 app.post('/loginRequest', function(req, res) {
    controller.loginRequest(req, res);
-  });
+});
 
 // making the login request
 app.post('/inventoryAction', function(req, res) {
      controller.inventoryAction(req, res);
-    });
+});
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');

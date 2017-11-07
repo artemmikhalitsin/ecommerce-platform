@@ -8,13 +8,13 @@
       <!--Card content-->
       <div class="card-body">
         <div class="caption">
-          <h4 class="pull-right">${[{ $ctrl.price }]}</h4>
-          <h4>{[{ $ctrl.type }]}</h4></br>
+          <h4 class="pull-right">${[{ $ctrl.product.price }]}</h4>
+          <h4>{[{ $ctrl.product.type }]}</h4></br>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">Model Number: {[{ $ctrl.modelNumber }]}</li>
-            <li class="list-group-item">Serial Number: {[{ $ctrl.serialNumber }]}</li>
-            <li class="list-group-item">Brand Name: {[{ $ctrl.brand }]}</li>
-            <li class="list-group-item">Weight: {[{ $ctrl.weight }]} </li>
+            <li class="list-group-item">Model Number: {[{ $ctrl.product.modelNumber }]}</li>
+            <li class="list-group-item">Serial Number: {[{ $ctrl.product.serialNumber }]}</li>
+            <li class="list-group-item">Brand Name: {[{ $ctrl.product.brand }]}</li>
+            <li class="list-group-item">Weight: {[{ $ctrl.product.weight }]} </li>
           </ul></br>
           <a href="#" class="btn btn-primary">View Details</a>
         </div>
