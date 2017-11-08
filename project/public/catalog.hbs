@@ -14,13 +14,39 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
 
   </head>
-  <body ng-controller="CatalogController">
+  <body ng-app="" ng-controller="CatalogController">
+    <div ng-include="'/includes/header.hbs'"></div>
     <div class="container">
-      <div ng-include="'/includes/header.hbs'"></div>
       <header class="jumbotron my-4">
         <h1 class="display-4">Catalog</h1>
       </header>
-      <row-item ng-repeat="product in products track by $index" product="product" index="$index"></row-item>
+      <div class="row-fluid text-center justify-content-center">
+        <div class="card-fluid" style="width: 70rem;">
+          <div class="card-block-fluid"></br>
+            <table id="table_inventory" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
+                <div class='row'>
+                  <div class='col'>
+                    <label class="control-label"><b>Brand Name</b></label>
+                  </div>
+                  <div class='col'>
+                    <label class="control-label"><b>Model Number</b></label>
+                  </div>
+                  <div class='col'>
+                    <label class="control-label"><b>Product Type</b></label>
+                  </div>
+                  <div class='col'>
+                    <label class="control-label"><b>Price</b></label>
+                  </div>
+                  <div class='col'>
+                  </div>
+                </div>
+             <row>
+               <row-item ng-repeat="product in products track by $index" product="product" index="$index"></row-item>
+             </row>
+           </table>
+          </div>
+        </div>
+      </div>
     </div>
       <!-- Bootstrap core JavaScript -->
       <script src="/js/jquery.min.js"></script>

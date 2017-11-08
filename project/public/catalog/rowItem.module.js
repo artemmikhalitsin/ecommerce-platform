@@ -15,6 +15,7 @@ controller: function($scope) {
   },
   $scope.editDescription = () =>{
     $scope.editMode = true;
+    $scope.showMore = false;
   },
   $scope.saveDescription = () =>{
     $scope.$emit('updateDescription', $scope.$ctrl.product, $scope.$ctrl.index)
