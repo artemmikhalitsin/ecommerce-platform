@@ -63,6 +63,10 @@ app.get('/addProduct', function(req, res) {
   }
 });
 
+app.get('/catalog', function(req, res) {
+  res.render('catalog');
+});
+
 // this should be implemented in the controller
 app.get('/logout', function(req, res) {
   if (req.session.exists) {
@@ -105,7 +109,6 @@ app.post('/loginRequest', function(req, res) {
    controller.loginRequest(req, res);
 });
 
-// making the login request
 app.post('/inventoryAction', function(req, res) {
      controller.inventoryAction(req, res);
 });
