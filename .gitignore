@@ -1,6 +1,7 @@
 *.un~
 *~
 node_modules/
+docs/
 .DS_Store
 _.swp
 _customBAT.bat
