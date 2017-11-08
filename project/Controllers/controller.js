@@ -1,18 +1,31 @@
-
-let rootPath = require('app-root-dir').get();
-let ProductDescriptionRepository = require(rootPath +
+const rootPath = require('app-root-dir').get();
+const ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
-let InventoryItemRepository = require(rootPath +
+const InventoryItemRepository = require(rootPath +
   '/DataSource/Repository/InventoryItemRepository.js');
-let UserRepository = require(rootPath +
+const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
+
+/**
+ * Identity map of inventory items
+ * @author TODO: IF YOU WROTE THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * REVIEW: Please make sure the comments are correct - Artem
+ */
 class Controller {
+  /**
+   * Constructor creates a new instanted of a user item and product repos
+   */
   constructor() {
     this.userRepo = new UserRepository();
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
   }
 
+  /**
+   * Processes a registration registrationRequest
+   * @param {Object} req Incoming HTTP request containing registration info
+   * @param {Object} res HTTP Response object to be sent back to user
+   */
   registrationRequest(req, res) {
     let userData = req.body;
     let password = userData['password'];
@@ -54,7 +67,12 @@ class Controller {
     }
   }
 
-  // this funtion is getting all the product description from the database
+  /**
+   * Retrieves a complete list of products and serial numbers from
+   * the database
+   * @param {Object} req HTTP Request object containing query info
+   * @param {Object} res HTTP Response object to be send back to the user
+   */
   getAllInventory(req, res) {
     let toSave = [{
       serial_number: ['1'],
@@ -239,6 +257,12 @@ class Controller {
      }];
     let results = this.productDescriptionRepo.save(toSave);
   }
+
+  /**
+   * Processes an inventory action initiated by the user
+   * @param {Object} req HTTP request object containing action info
+   * @param {Object} res HTTP response object to be returned to the user
+   */
   inventoryAction(req, res) {
     if (req.session.exists==true && req.session.isAdmin==true) {
       let request = req.body;
@@ -279,7 +303,11 @@ class Controller {
     //
   }
 
-  // this functon is adding a new user to the database
+  /**
+   * Processes a login request
+   * @param {Object} req HTTP request containing login info
+   * @param {Object} res HTTP response to be returned to the user
+   */
   loginRequest(req, res) {
     let data = req.body;
     console.log(data);
@@ -293,13 +321,14 @@ class Controller {
       } else if (result.length == 1) {
         req.session.exists=true;
         if (result[0].is_admin == 1) {
+          // REVIEW: this should probably be removed - Artem
           console.log('You an admin broo');
           req.session.isAdmin=true;
         } else {
+          // REVIEW: this should probably be removed - Artem
           console.log('user not admin');
           req.session.isAdmin=false;
         }
-        // console.log(req.session.exists);
         console.log('displaying items');
         req.session.save(function(err) {
             if (err) console.error(err);

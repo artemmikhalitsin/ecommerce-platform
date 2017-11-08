@@ -1,12 +1,24 @@
+const environment = process.env.NODE_ENV || 'development';
+const rootPath = require('app-root-dir').get();
+const configuration = require(rootPath + '/knexfile')[environment];
+const connection = require('knex')(configuration);
+
+/**
+ * Table Data Gateway for the Laptop table
+ * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
+ */
 class LaptopsTDG {
-    constructor() {
-        this.environment = process.env.NODE_ENV || 'development';
-        this.rootPath = require('app-root-dir').get();
-        this.configuration = require(this.rootPath + '/knexfile')[this.environment];
-        this.connection = require('knex')(this.configuration);
-    }
+    /**
+     * Inserts a laptop object into the Laptop table
+     * @param {number} compId the id of the Computer portion specification in
+     * the Computer table
+     * @param {Object} laptop the product specifications of a laptop
+     * @return {Promise<number[]>} promise which resolves to the list containing
+     * the id of the new laptop record in the database
+     */
     add(compId, laptop) {
-        return this.connection.insert({
+        return connection.insert({
             'comp_id': compId,
             'model_number': laptop.model_number,
             'display_size': laptop.display_size,
@@ -18,12 +30,21 @@ class LaptopsTDG {
         .into('Laptop');
     }
 
-    select(){
-        //TODO
+    select() {
+        // TODO
     }
-    update(compId, laptop){
-        //TODO
-        return this.connection.update({
+
+    /**
+     * Updates the specifications of a laptop in the database
+     * @param {number} compId the id of the Computer portion specification in
+     * the Computer table
+     * @param {Object} laptop the product specifications of a laptop
+     * @return {Promise<number>} promise which resolves to the number of
+     * rows affected
+     */
+    update(compId, laptop) {
+      // REVIEW: This was marked todo, is this still the case? - Artem
+        return connection.update({
           'comp_id': laptop.comp_id,
           'model_number': laptop.model_number,
           'display_size': laptop.display_size,

@@ -1,4 +1,10 @@
+/* eslint-disable */
+// Eslint disabled for this file only until issue is resolved
+
 'use strict';
+// TODO: This repo is not even implemented as a class, and hence I did not
+// document this. Should this be deleted? - Artem
+
 const rootPath = require('app-root-dir').get();
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require(rootPath + '/knexfile')[environment];
