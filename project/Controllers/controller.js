@@ -22,6 +22,7 @@ class Controller {
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
     this.clientInventory = {};
+    this.shoppingCartList = {};
   }
 
   /**
@@ -77,37 +78,101 @@ class Controller {
     newInventory.forEach((product, index) => {
       product.serial_numbers.forEach((serialNumber, index) => {
         if (!this.clientInventory[serialNumber]) {
-          this.clientInventory[serialNumber] = {client: null,
+          this.clientInventory[serialNumber] = {
                                                 locked: false,
                                                 timeout: null};
         }
       });
     });
-    console.log(this.clientInventory);
   }
 
+  /**
+    *@param {String} req user who added an item to their cart
+    *@param {String} res item user wants to add to their cart
+  */
+  addToShoppingCart(req, res) {
+    let item = req.body.serialNumber;
+    let productNumber = req.body.modelNumber;
+    if (this.lockItem(item)) {
+      let user = req.session.user.toString();
+      if (!this.shoppingCartList[user]) {
+        this.shoppingCartList[user] = new ShoppingCart();
+      }
+      this.shoppingCartList[user].addToCart(item, productNumber);
+      res.status(200).send({success: 'successfully added'});
+    } else {
+      res.status(500).send({error: 'item already in another cart'});
+    }
+  }
+
+  /**
+    * Unlocks a previously locked items
+    * @param {String} itemToUnlock Serial number of item to unlock
+  **/
   unlockItem(itemToUnlock) {
-    console.log('unlocked!');
     this.clientInventory[itemToUnlock].locked = false;
   }
 
   /**
    * Locks an item to a user's shopping cart if it isn't already locked
-   * @param {Object} req HTTP request object containing serial number
-   * @param {Object} res HTTP response to be sent back to the user
+   * @param {Object} itemToLock serial number of item to lock
+   * @return {Boolean} Returns whether or not the item was locked
   */
-  lockItem(req, res) {
-    let itemToLock = req.body.serialNumber;
-    console.log(itemToLock);
+  lockItem(itemToLock) {
     if (this.clientInventory[itemToLock].locked) {
-      res.status(500).send({error: 'item already in another cart'});
+      return false;
     } else {
       this.clientInventory[itemToLock].locked = true;
       // Store pointer of timeout function
       this.clientInventory[itemToLock].timeout = setTimeout(
-        this.unlockItem.bind(this), 2000, itemToLock);
-      res.status(200).send({success: 'successfully added'});
+        this.unlockItem.bind(this), 10000, itemToLock);
+      return true;
     }
+  }
+
+  /**
+   * Submits purchase transaction to database
+   * @param {Object} req
+   * @param {Object} res
+  */
+  completePurchaseTransaction(req, res) {
+    let user = req.session.user.toString();
+    let cart = Object.values(this.shoppingCartList[user].getCart());
+    console.log(cart);
+    let serialsAndModels = [];
+    for (let i in Object.keys(cart)) {
+      if (cart[i]) {
+      console.log(cart[i]);
+      serialsAndModels.push({model: cart[i].model,
+                            serial: cart[i].serial});
+      }
+    }
+    let purchasedItems = [req.session.user, serialsAndModels];
+    // call repo using purchased items
+    res.status(200).send({message: 'Purchased!'});
+  }
+
+  /**
+   * Submits cancel transaction and frees locked items, if any
+   * @param {Object} req
+   * @param {Object} res
+  */
+  cancelPurchaseTransaction(req, res) {
+    let user = req.session.user.toString();
+    let cartItems = this.shoppingCartList[user].getCartSerialNumbers();
+    for (let item = 0; item < cartItems.length; item++) {
+      this.unlockItem(cartItems[item]);
+      clearTimeout(this.clientInventory[cartItems[item]].timeout);
+    }
+  }
+
+  /**
+   * Submits return transaction to database
+   * @param {Object} req
+   * @param {Object} res
+  */
+  returnPurchaseTransaction(req, res) {
+    console.log('returning');
   }
 
   /**
@@ -355,7 +420,6 @@ class Controller {
    */
   loginRequest(req, res) {
     let data = req.body;
-    console.log(data);
     this.userRepo.authenticate(data).then((result) => {
       if (result.length <= 0) {
         console.log('Invalid username or password.');
@@ -372,7 +436,8 @@ class Controller {
         } else {
           // REVIEW: this should probably be removed - Artem
           console.log('user not admin');
-          req.session.isAdmin=false;
+          req.session.isAdmin= false;
+          req.session.user = data.email;
         }
         console.log('displaying items');
         req.session.save(function(err) {

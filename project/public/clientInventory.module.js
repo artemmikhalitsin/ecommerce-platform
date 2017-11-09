@@ -2,7 +2,7 @@ console.log('loaded')
 
 var clientInventory = angular.module('clientInventory', ['desktopCard', 'monitorCard', 'tabletCard', 'laptopCard']);
 
-function ClientInventoryController($scope) {
+function ClientInventoryController($scope, $http) {
   $scope.fruit = 'banana', 'mango'
   //Load items from inventory
   //Split into arrays of 4 at a time to make a grid
@@ -45,6 +45,18 @@ function ClientInventoryController($scope) {
 
   $scope.itemsPerPage = 4;
   $scope.pages = Math.ceil($scope.items.length * 1.0/ $scope.itemsPerPage);
+
+  $scope.purchase = function(){
+    $http({
+      method: 'POST',
+      url: '/purchaseItems'
+    }).then(function successCallback(response) {
+        window.alert("Purchased!");
+
+      }, function errorCallback(response) {
+        window.alert("Not purchased");
+    });
+  }
 }
 
 clientInventory.controller('ClientInventoryController', ClientInventoryController);

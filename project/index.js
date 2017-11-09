@@ -17,13 +17,15 @@ let controller = new Controller();
 const ShoppingCart = require(rootPath +
     '/models/ShoppingCart.js');
 // allows use of static pages
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'top',
   exists: false,
   isAdmin: false,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  user: null,
 }));
 // let sess;
 app.engine('hbs', hbs({extname: 'hbs'}));
@@ -117,9 +119,12 @@ app.post('/inventoryAction', function(req, res) {
 });
 
 app.post('/addToCart', function(req, res) {
-    controller.lockItem(req, res);
+    controller.addToShoppingCart(req, res);
 });
 
+app.post('/purchaseItems', function(req, res) {
+  controller.completePurchaseTransaction(req, res);
+});
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');

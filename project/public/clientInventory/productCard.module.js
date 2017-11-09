@@ -8,36 +8,37 @@ function productCardController($scope) {
 }
 function desktopCardController($scope, $http) {
   rotateCard($scope);
-  $scope.addToShoppingCart = function(serialNumber){
-    addToShoppingCart(serialNumber, $http);
+  $scope.addToShoppingCart = function(serialNumber, modelNumber){
+    addToShoppingCart(serialNumber,modelNumber, $http);
   }
 }
 function laptopCardController($scope, $http) {
   rotateCard($scope);
-  $scope.addToShoppingCart = function(serialNumber){
-    addToShoppingCart(serialNumber, $http);
+  $scope.addToShoppingCart = function(serialNumber, modelNumber){
+    addToShoppingCart(serialNumber,modelNumber, $http);
   }
 }
 function tabletCardController($scope, $http) {
   rotateCard($scope);
-  $scope.addToShoppingCart = function(serialNumber){
-    addToShoppingCart(serialNumber, $http);
+  $scope.addToShoppingCart = function(serialNumber, modelNumber){
+    addToShoppingCart(serialNumber,modelNumber, $http);
   }
 }
 function monitorCardController($scope, $http) {
   rotateCard($scope);
-  $scope.addToShoppingCart = function(serialNumber){
-    addToShoppingCart(serialNumber, $http);
+  $scope.addToShoppingCart = function(serialNumber, modelNumber){
+    addToShoppingCart(serialNumber,modelNumber, $http);
   }
 }
 
-function addToShoppingCart(serialNumber, http) {
+function addToShoppingCart(serialNumber,modelNumber, http) {
   http({
     method: 'POST',
     url: '/addToCart',
-    data: {serialNumber: serialNumber},
+    data: {serialNumber: serialNumber, modelNumber: modelNumber},
   }).then(function successCallback(response) {
       window.alert("hurray");
+
     }, function errorCallback(response) {
       window.alert("darn");
   });

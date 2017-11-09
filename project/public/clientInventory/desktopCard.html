@@ -17,7 +17,7 @@
           <li class="list-group-item">Weight: {[{ $ctrl.desktop.weight }]} </li>
         </ul></br>
         <a href="#" class="btn btn-primary" ng-click="rotate()">View Details</a>
-        <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.desktop.serialNumber)">Add to Shopping Cart</a>
+        <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.desktop.serialNumber, $ctrl.desktop.modelNumber)">Add to Shopping Cart</a>
       </div>
       <!--/.caption-->
     </div>
@@ -38,7 +38,7 @@
         <li class="list-group-item">Depth (cm): </li>
       </ul></br>
       <a href="#" class="btn btn-primary" ng-click="rotate()">Go Back</a>
-      <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.desktop.serialNumber)">Add to Shopping Cart</a>
+      <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.desktop.serialNumber, $ctrl.desktop.modelNumber)">Add to Shopping Cart</a>
     </div>
     <!--/.card-body-->
   </div>
