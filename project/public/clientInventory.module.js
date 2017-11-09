@@ -10,15 +10,15 @@ function ClientInventoryController($scope) {
     {
       brand:'Toshiba',
       modelNumber:'RUB-A535',
-      serialNumber: '1231231',
+      serialNumber: 'EE5U-VCJ7-HJ3G-CW4R',
       price: '700.00',
       weight: '300 gram',
       type: 'desktop'
     },
     {
-      brand:'Apple',
+      brand:'Apple2',
       modelNumber:'HAL-9000',
-      serialNumber: '34343434',
+      serialNumber: 'CRAJ-4MV5-VSYY-FUWT',
       price: '800.00',
       weight: '420 gram',
       type: 'tablet'
@@ -26,7 +26,15 @@ function ClientInventoryController($scope) {
     {
       brand:'HP',
       modelNumber:'N1C3R1D3',
-      serialNumber: '808080',
+      serialNumber: 'HHV8-B52E-YGA7-HSSH',
+      price: '1000.00',
+      weight: '850 gram',
+      type: 'monitor'
+    },
+    {
+      brand:'HP2',
+      modelNumber:'N1C3R1D3',
+      serialNumber: 'HHV9-B52E-YGA7-HSSH',
       price: '1000.00',
       weight: '850 gram',
       type: 'monitor'

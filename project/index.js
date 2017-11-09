@@ -1,3 +1,4 @@
+require('babel-core').transform('code', {});
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
@@ -13,6 +14,8 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 const Controller = require(rootPath + '/Controllers/controller');
 let controller = new Controller();
 
+const ShoppingCart = require(rootPath +
+    '/models/ShoppingCart.js');
 // allows use of static pages
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
@@ -20,7 +23,7 @@ app.use(session({
   exists: false,
   isAdmin: false,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: true
 }));
 // let sess;
 app.engine('hbs', hbs({extname: 'hbs'}));
@@ -89,7 +92,7 @@ app.get('/getAllInventoryItems', function(req, res) {
 });
 
 // getting the client inventory from the database
-app.get('/clientInventory', function(req, res) {
+/* app.get('/clientInventory', function(req, res) {
   if (req.session.exists) {
     controller.getAllInventory(req, res);
     console.log('Successs');
@@ -97,7 +100,7 @@ app.get('/clientInventory', function(req, res) {
     console.log('login error');
     res.redirect('/login');
   }
-});
+});*/
 
 // making the registration request
 app.post('/registrationRequest', function(req, res) {
@@ -112,6 +115,11 @@ app.post('/loginRequest', function(req, res) {
 app.post('/inventoryAction', function(req, res) {
      controller.inventoryAction(req, res);
 });
+
+app.post('/addToCart', function(req, res) {
+    controller.lockItem(req, res);
+});
+
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');

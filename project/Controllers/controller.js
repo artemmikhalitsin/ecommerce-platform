@@ -21,7 +21,6 @@ class Controller {
     this.userRepo = new UserRepository();
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
-    this.shoppingCart = new ShoppingCart();
     this.clientInventory = {};
   }
 
@@ -84,23 +83,30 @@ class Controller {
         }
       });
     });
+    console.log(this.clientInventory);
+  }
+
+  unlockItem(itemToUnlock) {
+    console.log('unlocked!');
+    this.clientInventory[itemToUnlock].locked = false;
   }
 
   /**
    * Locks an item to a user's shopping cart if it isn't already locked
-   * @param {String} itemToLock serial number associated with item to lock
-   * @return {Boolean} returns whether or not item was locked
+   * @param {Object} req HTTP request object containing serial number
+   * @param {Object} res HTTP response to be sent back to the user
   */
-  lockItem(itemToLock) {
+  lockItem(req, res) {
+    let itemToLock = req.body.serialNumber;
+    console.log(itemToLock);
     if (this.clientInventory[itemToLock].locked) {
-      return false;
+      res.status(500).send({error: 'item already in another cart'});
     } else {
       this.clientInventory[itemToLock].locked = true;
       // Store pointer of timeout function
-      this.clientInventory[itemToLock].timeout = setTimeout((itemToLock) => {
-        this.clientInventory[itemToLock].locked = false;
-      }, 7000);
-      return true;
+      this.clientInventory[itemToLock].timeout = setTimeout(
+        this.unlockItem.bind(this), 2000, itemToLock);
+      res.status(200).send({success: 'successfully added'});
     }
   }
 
@@ -188,17 +194,17 @@ class Controller {
     // this.manageProductCatalog();
     this.manageInventory();
 
+
     let prodDesc = this.inventoryRepo.getAllInventoryItems();
     Promise.all([prodDesc])
     .then((values) => {
       let items = JSON.stringify(values[0]);
-      console.log(values[0]);
       // items = JSON.stringify(toSave);
       console.log('Values: ', items);
       if (req.session.exists==true && req.session.isAdmin==true) {
         res.render('inventory', {items: items});
       } else if (req.session.exists==true && req.session.isAdmin==false) {
-        this.updateInventoryList(items);
+        this.updateInventoryList(values[0]);
         res.render('clientInventory', {items: items});
       } else {
         res.redirect('/login');

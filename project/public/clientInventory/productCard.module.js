@@ -6,17 +6,41 @@ var monitorCard = angular.module('monitorCard', [])
 
 function productCardController($scope) {
 }
-function desktopCardController($scope) {
+function desktopCardController($scope, $http) {
   rotateCard($scope);
+  $scope.addToShoppingCart = function(serialNumber){
+    addToShoppingCart(serialNumber, $http);
+  }
 }
-function laptopCardController($scope) {
+function laptopCardController($scope, $http) {
   rotateCard($scope);
+  $scope.addToShoppingCart = function(serialNumber){
+    addToShoppingCart(serialNumber, $http);
+  }
 }
-function tabletCardController($scope) {
+function tabletCardController($scope, $http) {
   rotateCard($scope);
+  $scope.addToShoppingCart = function(serialNumber){
+    addToShoppingCart(serialNumber, $http);
+  }
 }
-function monitorCardController($scope) {
+function monitorCardController($scope, $http) {
   rotateCard($scope);
+  $scope.addToShoppingCart = function(serialNumber){
+    addToShoppingCart(serialNumber, $http);
+  }
+}
+
+function addToShoppingCart(serialNumber, http) {
+  http({
+    method: 'POST',
+    url: '/addToCart',
+    data: {serialNumber: serialNumber},
+  }).then(function successCallback(response) {
+      window.alert("hurray");
+    }, function errorCallback(response) {
+      window.alert("darn");
+  });
 }
 
 function rotateCard($scope) {
