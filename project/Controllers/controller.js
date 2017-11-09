@@ -5,6 +5,8 @@ const InventoryItemRepository = require(rootPath +
   '/DataSource/Repository/InventoryItemRepository.js');
 const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
+const ShoppingCart = require(rootPath +
+    '/models/ShoppingCart.js');
 
 /**
  * Identity map of inventory items
@@ -19,6 +21,8 @@ class Controller {
     this.userRepo = new UserRepository();
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
+    this.shoppingCart = new ShoppingCart();
+    this.clientInventory = {};
   }
 
   /**
@@ -30,7 +34,6 @@ class Controller {
     let userData = req.body;
     let password = userData['password'];
     let confirmPassword = userData['confirmPassword'];
-
     if (password != confirmPassword) {
       console.log('password confirmation failed. try again...');
       res.redirect('/registration');
@@ -68,6 +71,40 @@ class Controller {
   }
 
   /**
+   * Updates the Controller's list of current items
+   * @param {Object} newInventory Inventory items
+  */
+  updateInventoryList(newInventory) {
+    newInventory.forEach((product, index) => {
+      product.serial_numbers.forEach((serialNumber, index) => {
+        if (!this.clientInventory[serialNumber]) {
+          this.clientInventory[serialNumber] = {client: null,
+                                                locked: false,
+                                                timeout: null};
+        }
+      });
+    });
+  }
+
+  /**
+   * Locks an item to a user's shopping cart if it isn't already locked
+   * @param {String} itemToLock serial number associated with item to lock
+   * @return {Boolean} returns whether or not item was locked
+  */
+  lockItem(itemToLock) {
+    if (this.clientInventory[itemToLock].locked) {
+      return false;
+    } else {
+      this.clientInventory[itemToLock].locked = true;
+      // Store pointer of timeout function
+      this.clientInventory[itemToLock].timeout = setTimeout((itemToLock) => {
+        this.clientInventory[itemToLock].locked = false;
+      }, 7000);
+      return true;
+    }
+  }
+
+  /**
    * Retrieves a complete list of products and serial numbers from
    * the database
    * @param {Object} req HTTP Request object containing query info
@@ -77,7 +114,7 @@ class Controller {
     let toSave = [{
       serial_number: ['1'],
       model_number: '1',
-      brand_name: "b",
+      brand_name: 'b',
       price: 1,
       weight: 1,
       id: 1,
@@ -90,12 +127,12 @@ class Controller {
       dimension: {depth: 1,
          height: 1,
          width: 1,
-         dimensions_id: 2
-      }
-     },{
+         dimensions_id: 2,
+      },
+     }, {
       serial_number: ['2'],
       model_number: '2',
-      brand_name: "changed",
+      brand_name: 'changed',
       price: 1,
       weight: 1,
       type: 'Desktop',
@@ -108,12 +145,12 @@ class Controller {
       dimension: {depth: 1,
          height: 1,
          width: 1,
-         dimensions_id:3
-      }
-     },{
+         dimensions_id: 3,
+      },
+     }, {
       serial_number: ['3', '4'],
       model_number: '3',
-      brand_name: "b",
+      brand_name: 'b',
       price: 1,
       weight: 1,
       type: 'Desktop',
@@ -126,12 +163,12 @@ class Controller {
       dimension: {depth: 1,
          height: 1,
          width: 1,
-         dimensions_id:1
-       }
-     },{
+         dimensions_id: 1,
+       },
+     }, {
       serial_number: ['7'],
       model_number: '5',
-      brand_name: "b",
+      brand_name: 'b',
       price: 1,
       weight: 1,
       type: 'Monitor',
@@ -144,22 +181,24 @@ class Controller {
       dimension: {depth: 1,
          height: 1,
          width: 1,
-         dimensions_id:1
-       }
+         dimensions_id: 1,
+       },
      }];
-    //let results = this.productDescriptionRepo.save(toSave);
-    //this.manageProductCatalog();
+    // let results = this.productDescriptionRepo.save(toSave);
+    // this.manageProductCatalog();
     this.manageInventory();
 
     let prodDesc = this.inventoryRepo.getAllInventoryItems();
     Promise.all([prodDesc])
     .then((values) => {
       let items = JSON.stringify(values[0]);
-      //items = JSON.stringify(toSave);
-      console.log("Values: ", items);
+      console.log(values[0]);
+      // items = JSON.stringify(toSave);
+      console.log('Values: ', items);
       if (req.session.exists==true && req.session.isAdmin==true) {
         res.render('inventory', {items: items});
       } else if (req.session.exists==true && req.session.isAdmin==false) {
+        this.updateInventoryList(items);
         res.render('clientInventory', {items: items});
       } else {
         res.redirect('/login');
@@ -169,26 +208,26 @@ class Controller {
       console.log(err);
     });
   }
-  manageInventory(){
+  manageInventory() {
     let toSave = [{
       serial_number: ['1'],
       model_number: '1',
-     },{
+     }, {
       serial_number: ['2'],
       model_number: '2',
-     },{
+     }, {
       serial_number: ['3', '34'],
       model_number: '3',
-     },{
+     }, {
       serial_number: ['7'],
       model_number: '5',
      }];
     let results = this.inventoryRepo.save(toSave);
   }
-  manageProductCatalog(){
+  manageProductCatalog() {
     let toSave = [{
       model_number: '1',
-      brand_name: "b",
+      brand_name: 'b',
       price: 1,
       weight: 1,
       id: 1,
@@ -201,11 +240,11 @@ class Controller {
       dimension: {depth: 1,
          height: 1,
          width: 1,
-         dimensions_id: 2
-      }
-     },{
+         dimensions_id: 2,
+      },
+     }, {
       model_number: '2',
-      brand_name: "changed product desc",
+      brand_name: 'changed product desc',
       price: 1,
       weight: 1,
       type: 'Desktop',
@@ -218,11 +257,11 @@ class Controller {
       dimension: {depth: 1,
          height: 1,
          width: 1,
-         dimensions_id:3
-      }
-     },{
+         dimensions_id: 3,
+      },
+     }, {
       model_number: '3',
-      brand_name: "b",
+      brand_name: 'b',
       price: 1,
       weight: 1,
       type: 'Desktop',
@@ -235,11 +274,11 @@ class Controller {
       dimension: {depth: 1,
          height: 1,
          width: 1,
-         dimensions_id:1
-       }
-     },{
+         dimensions_id: 1,
+       },
+     }, {
       model_number: '5',
-      brand_name: "b",
+      brand_name: 'b',
       price: 1,
       weight: 1,
       type: 'Monitor',
@@ -252,8 +291,8 @@ class Controller {
       dimension: {depth: 1,
          height: 1,
          width: 1,
-         dimensions_id:1
-       }
+         dimensions_id: 1,
+       },
      }];
     let results = this.productDescriptionRepo.save(toSave);
   }
