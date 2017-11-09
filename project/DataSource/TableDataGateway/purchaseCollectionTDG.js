@@ -18,7 +18,7 @@ class InventoryItemsTDG {
      * @return {Promise<number[]>} a promise which resolves to an array
      * containing the id of the inserted item in the table
      */
-    add(serialNumber, modelNumber) {
+    add(clientID, serialNumber, modelNumber) {
         return connection.insert({
             'client_id': clientID,
             'serial_number': serialNumber,
@@ -45,9 +45,11 @@ class InventoryItemsTDG {
      * @return {Promise<number>} a promise which resolves to the number of rows
      * affected
      */
-    delete(inventoryItem) {
-        // TODO
+
+    /**delete(inventoryItem) {
+        // TODO Need to implement for returns.
         return connection.from('PurchaseCollection').where({id: inventoryItem.id}).del();
     }
+    */
 }
 module.exports = InventoryItemsTDG;

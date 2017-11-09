@@ -1,3 +1,7 @@
+/**
+  @author Michael Li
+  Creates the PurchaseCollection Table in the 343DB Database.
+*/
 const tablename='PurchaseCollection';
 
 exports.up = function(knex, Promise) {

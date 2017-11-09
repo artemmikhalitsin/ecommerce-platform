@@ -1,4 +1,4 @@
-require('babel-core').transform('code', {});
+//require('babel-core').transform('code', {});
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
