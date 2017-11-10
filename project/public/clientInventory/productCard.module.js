@@ -8,27 +8,54 @@ function productCardController($scope) {
 }
 function desktopCardController($scope, $http) {
   rotateCard($scope);
-  $scope.addToShoppingCart = function(serialNumber, modelNumber){
+  $scope.addToShoppingCart = (serialNumber, modelNumber) => {
     addToShoppingCart(serialNumber,modelNumber, $http);
+  }
+  $scope.remove = (index) => {
+    remove(index, $http);
   }
 }
 function laptopCardController($scope, $http) {
   rotateCard($scope);
-  $scope.addToShoppingCart = function(serialNumber, modelNumber){
+  $scope.addToShoppingCart = (serialNumber, modelNumber) => {
     addToShoppingCart(serialNumber,modelNumber, $http);
+  }
+  $scope.remove = (index) => {
+    remove(index, $http);
   }
 }
 function tabletCardController($scope, $http) {
   rotateCard($scope);
-  $scope.addToShoppingCart = function(serialNumber, modelNumber){
+  $scope.addToShoppingCart = (serialNumber, modelNumber) => {
     addToShoppingCart(serialNumber,modelNumber, $http);
+  }
+  $scope.remove = (index) => {
+    remove(index, $http);
   }
 }
 function monitorCardController($scope, $http) {
   rotateCard($scope);
-  $scope.addToShoppingCart = function(serialNumber, modelNumber){
+  $scope.addToShoppingCart = (serialNumber, modelNumber) => {
     addToShoppingCart(serialNumber,modelNumber, $http);
   }
+  $scope.remove = (index) => {
+    remove(index, $http);
+  }
+}
+
+function remove(http) {
+  http({
+    method: 'POST',
+    url: '/addToCart',
+    data: {serialNumber: serialNumber, modelNumber: modelNumber},
+  }).then(function successCallback(response) {
+      $('#temp_cart').append('<li>' + serialNumber+ '</li><button ng-click="remove()">X</button>')
+      window.alert("hurray");
+
+    }, function errorCallback(response) {
+      window.alert("darn");
+  });
+
 }
 
 function addToShoppingCart(serialNumber,modelNumber, http) {
@@ -37,6 +64,7 @@ function addToShoppingCart(serialNumber,modelNumber, http) {
     url: '/addToCart',
     data: {serialNumber: serialNumber, modelNumber: modelNumber},
   }).then(function successCallback(response) {
+      $('#temp_cart').append('<li>' + serialNumber+ '</li><button ng-click="remove()">X</button>')
       window.alert("hurray");
 
     }, function errorCallback(response) {
