@@ -121,6 +121,7 @@ class Controller {
   **/
   unlockItem(itemToUnlock) {
     this.clientInventory[itemToUnlock].locked = false;
+    this.clientInventory[itemToUnlock].timeout = null;
   }
 
   /**
@@ -129,7 +130,8 @@ class Controller {
    * @return {Boolean} Returns whether or not the item was locked
   */
   lockItem(itemToLock) {
-    if (this.clientInventory[itemToLock].locked) {
+    if (this.clientInventory[itemToLock] == null ||
+        this.clientInventory[itemToLock].locked) {
       return false;
     } else {
       this.clientInventory[itemToLock].locked = true;
@@ -148,7 +150,6 @@ class Controller {
   completePurchaseTransaction(req, res) {
     let user = req.session.user.toString();
     let cart = Object.values(this.shoppingCartList[user].getCart());
-    console.log(cart);
     let purchases = [];
     for (let i in Object.keys(cart)) {
       if (cart[i]) {
@@ -171,9 +172,11 @@ class Controller {
     let user = req.session.user.toString();
     let cartItems = this.shoppingCartList[user].getCartSerialNumbers();
     for (let item = 0; item < cartItems.length; item++) {
-      this.unlockItem(cartItems[item]);
-      clearTimeout(this.clientInventory[cartItems[item]].timeout);
+      this.unlockItem(cartItems[item].serial);
+      clearTimeout(this.clientInventory[cartItems[item].serial].timeout);
     }
+    delete this.shoppingCartList[user];
+    res.status(200).send({success: 'Successfully canceled'});
   }
 
   /**
@@ -182,7 +185,6 @@ class Controller {
    * @param {Object} res list/array of serial numbers of returned items
   */
   returnPurchaseTransaction(req, res) {
-    console.log('returning');
     let returnItem = res;
 
     res.forEach((product, serialNumber) => {

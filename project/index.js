@@ -1,4 +1,4 @@
-//require('babel-core').transform('code', {});
+// require('babel-core').transform('code', {});
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
@@ -13,9 +13,6 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 
 const Controller = require(rootPath + '/Controllers/controller');
 let controller = new Controller();
-
-const ShoppingCart = require(rootPath +
-    '/models/ShoppingCart.js');
 // allows use of static pages
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -132,6 +129,10 @@ app.post('/purchaseItems', function(req, res) {
 
 app.get('/viewShoppingCart', function(req, res) {
   controller.viewShoppingCart(req, res);
+});
+
+app.post('/cancelTransaction', function(req, res) {
+  controller.cancelPurchaseTransaction(req, res);
 });
 
 app.get('/viewPurchaseCollection', function(req, res) {

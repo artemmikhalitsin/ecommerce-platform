@@ -20,13 +20,16 @@ class ShoppingCart {
     addToCart(item, modelNumber) {
       precondition: {
         // !this.cartItems.includes(item);
+        this.cartItems[item] != true;
         Object.keys(this.cartItems) < 7;
       };
-      this.cartItems[item] = {cartItemId: this.cartItemId,
+      if (!this.cartItems[item]) {
+        this.cartItems[item] = {cartItemId: this.cartItemId,
                               model: modelNumber,
                               serial: item,
                               };
-      this.cartItemId++;
+        this.cartItemId++;
+      }
       return item;
       postcondition: {
         this.cartItems.length === old(this.cartItems.length) + 1;

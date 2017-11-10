@@ -57,6 +57,18 @@ function ClientInventoryController($scope, $http) {
         window.alert("Not purchased");
     });
   }
+
+  $scope.cancelTransaction = function(){
+    $http({
+      method: 'POST',
+      url: '/cancelTransaction'
+    }).then(function successCallback(response) {
+        window.alert("Canceled!");
+
+      }, function errorCallback(response) {
+        window.alert("Not canceled");
+    });
+  }
 }
 
 clientInventory.controller('ClientInventoryController', ClientInventoryController);
