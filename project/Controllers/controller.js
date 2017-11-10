@@ -149,7 +149,8 @@ class Controller {
       console.log(cart[i]);
       purchases.push({client: user,
                             model_number: cart[i].model,
-                            serial_number: cart[i].serial});
+                            serial_number: cart[i].serial,
+                            purchase_Id: cart[i].cartItemId});
       }
     }
     // call repo using purchased items

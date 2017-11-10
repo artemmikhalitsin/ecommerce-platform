@@ -115,7 +115,7 @@ class UnitOfWork {
        let purchasedItems;
        if (this.newPurchases[0] != null && this.newPurchases[0].length > 0) {
          purchasedItems = Promise.each(this.newPurchases[0], (electronic) => {
-           return this.purchaseTDG.add(electronic.client, electronic.serial_number, electronic.model_number)
+           return this.purchaseTDG.add(electronic.client, electronic.serial_number, electronic.model_number, electronic.purchase_Id)
                   .transacting(trx).then(() => {
                     console.log("Added purchased items");
                   })

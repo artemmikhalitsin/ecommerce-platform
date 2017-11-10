@@ -18,11 +18,12 @@ class PurchaseCollectionTDG {
      * @return {Promise<number[]>} a promise which resolves to an array
      * containing the id of the inserted item in the table
      */
-    add(clientID, serialNumber, modelNumber) {
+    add(clientID, serialNumber, modelNumber, purchaseId) {
         return connection.insert({
             'user_id': clientID,
             'serial_number': serialNumber,
             'model_number': modelNumber,
+            'purchase_Id': purchaseId,
           }, 'id')
         .into('PurchaseCollection');
     }
