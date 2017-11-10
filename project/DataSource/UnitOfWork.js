@@ -52,10 +52,11 @@ class UnitOfWork {
 
     this.dirtyElements = [];
     this.newElements = [];
-    this.newPurchases = [];
     this.deletedElements = [];
     this.newInventoryItems = [];
     this.deletedInventoryItems = [];
+    this.newPurchases = [];
+    this.deletePurchases = [];
   }
   registerNew(object) {
     this.newElements = [];
@@ -65,6 +66,12 @@ class UnitOfWork {
     this.newPurchases = [];
     this.newPurchases.push(object);
   }
+
+  registerReturn(object){
+    this.deletePurchases = [];
+    this.deletedPurchase.push(object);
+  }
+  
   registerDirty(object) {
     this.dirtyElements = [];
     this.dirtyElements.push(object);
@@ -93,6 +100,11 @@ class UnitOfWork {
       console.log(this.newInventoryItems[0]);
       console.log("Inventory items to delete: ");
       console.log(this.deletedInventoryItems[0]);
+      console.log("Purchase to add:");;
+      console.log(this.newPurchases[0]);
+      console.log("Purchase to delete:");
+      console.log(this.deletePurchases[0]);
+
       let deletedItems;
       //delete items
       if(this.deletedInventoryItems[0] != null && this.deletedInventoryItems[0].length > 0){
@@ -121,6 +133,15 @@ class UnitOfWork {
                   })
          })
        }
+
+       //remove purchase
+       let deletedPurchase;
+       if(this.deletedPurchases[0] != null && this.deletedPurchases[0].length > 0){
+        deletedPurchases = Promise.each(this.deletedPurchases[0], (electronic) => {
+         return this.purchaseTDG.delete(electronic).transacting(trx).then(() => {
+               console.log('deleted purchase item');
+         })
+       });}
 
       //update products
       let updateditems;

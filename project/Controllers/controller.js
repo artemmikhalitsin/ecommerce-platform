@@ -174,10 +174,18 @@ class Controller {
   /**
    * Submits return transaction to database
    * @param {Object} req
-   * @param {Object} res
+   * @param {Object} res list/array of serial numbers of returned items
   */
   returnPurchaseTransaction(req, res) {
     console.log('returning');
+    let returnItem = res;
+
+    res.forEach((product, serialNumber) => {
+
+    })
+
+    this.purchaseCollectionRepo.returnItems(returnItem);
+
   }
 
   /**
