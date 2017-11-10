@@ -44,7 +44,7 @@ adminInventory.controller('AdminController', function($scope) {
        height: 1,
        width: 1}
    }];
-   
+
    //Datatable setup
    var inventory_table = $('#table_inventory').DataTable({
      data: $scope.items,
