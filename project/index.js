@@ -122,8 +122,20 @@ app.post('/addToCart', function(req, res) {
     controller.addToShoppingCart(req, res);
 });
 
+app.post('/removeFromCart', function(req, res) {
+    controller.removeFromShoppingCart(req, res);
+});
+
 app.post('/purchaseItems', function(req, res) {
   controller.completePurchaseTransaction(req, res);
+});
+
+app.get('/viewShoppingCart', function(req, res) {
+  controller.viewShoppingCart(req, res);
+});
+
+app.get('/viewPurchaseCollection', function(req, res) {
+  controller.viewPurchaseCollection(req, res);
 });
 
 app.listen(8080, function() {

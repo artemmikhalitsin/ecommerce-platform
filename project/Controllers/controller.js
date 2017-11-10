@@ -25,8 +25,8 @@ class Controller {
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
     this.purchaseCollectionRepo = new PurchaseCollectionRepo();
-    this.clientInventory = {};
-    this.shoppingCartList = {};
+    this.clientInventory = {}; // List of inventory items, key: serial number, value: locked or not locked
+    this.shoppingCartList = {}; // List of shopping carts associated to users key:user, value: shopping cart
   }
 
   /**
@@ -109,6 +109,12 @@ class Controller {
     }
   }
 
+  removeFromShoppingCart(req, res) {
+    let item = req.body.serialNumber;
+    this.shoppingCartList[user].removeFromCart(item);
+    clearTimeout(this.clientInventory[item].timeout);
+  }
+
   /**
     * Unlocks a previously locked items
     * @param {String} itemToUnlock Serial number of item to unlock
@@ -152,7 +158,6 @@ class Controller {
                             serial_number: cart[i].serial});
       }
     }
-    // call repo using purchased items
     this.purchaseCollectionRepo.save(purchases);
   }
 
@@ -177,6 +182,18 @@ class Controller {
   */
   returnPurchaseTransaction(req, res) {
     console.log('returning');
+  }
+
+  viewPurchaseCollection(req, res) {
+    let cart = this.purchaseCollectionRepo.get('*');
+    Promise.all([cart])
+    .then((values) => {
+      let items = JSON.stringify(values[0]);
+      console.log(items);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   /**
