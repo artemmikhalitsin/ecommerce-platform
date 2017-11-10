@@ -155,7 +155,8 @@ class Controller {
       console.log(cart[i]);
       purchases.push({client: user,
                             model_number: cart[i].model,
-                            serial_number: cart[i].serial});
+                            serial_number: cart[i].serial,
+                            purchase_Id: cart[i].cartItemId});
       }
     }
     this.purchaseCollectionRepo.save(purchases);
@@ -178,10 +179,18 @@ class Controller {
   /**
    * Submits return transaction to database
    * @param {Object} req
-   * @param {Object} res
+   * @param {Object} res list/array of serial numbers of returned items
   */
   returnPurchaseTransaction(req, res) {
     console.log('returning');
+    let returnItem = res;
+
+    res.forEach((product, serialNumber) => {
+
+    })
+
+    this.purchaseCollectionRepo.returnItems(returnItem);
+
   }
 
   viewPurchaseCollection(req, res) {

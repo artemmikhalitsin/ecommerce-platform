@@ -15,41 +15,40 @@ class PurchaseCollectionTDG {
      * @param {string} clientID The unique id of the client.
      * @param {string} serialNumber The unique serial number of the item
      * @param {string} modelNumber The model number to associate the serial to
+     * @param {string} purchaseId The unique id for purchase item.
      * @return {Promise<number[]>} a promise which resolves to an array
      * containing the id of the inserted item in the table
      */
-    add(clientID, serialNumber, modelNumber) {
+    add(clientID, serialNumber, modelNumber, purchaseId) {
         return connection.insert({
             'user_id': clientID,
             'serial_number': serialNumber,
             'model_number': modelNumber,
+            'purchase_Id': purchaseId,
           }, 'id')
         .into('PurchaseCollection');
     }
 
     /**
-     * Gets all items from the table
+     * Gets all items from the Purchase Collection table
      * @return {Promise<Object[]>} a promise which resolves to an array of items
      */
     select() {
         return connection('PurchaseCollection').select('*');
     }
-    // update is not in current requirements for inventory items
-    /* update(inventoryItems){
-    }*/
 
     /**
      * Deletes an item from the inventory given an id
-     * @param {number} inventoryItem the id of the item to be deleted,
+     * @param {number} returnItem the id of the purchase item to be deleted,
      * as it appears in the table
      * @return {Promise<number>} a promise which resolves to the number of rows
      * affected
      */
-
-    /**delete(inventoryItem) {
-        // TODO Need to implement for returns.
-        return connection.from('PurchaseCollection').where({id: inventoryItem.id}).del();
+    delete(returnItem) {
+        return connection.from('PurchaseCollection').where(
+          {serial_number: returnItem.serial_number}
+        ).del();
     }
-    */
+
 }
 module.exports = PurchaseCollectionTDG;
