@@ -3,8 +3,8 @@ const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
 let UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
-class UserRepository{
-  constructor(){
+class UserRepository {
+  constructor() {
     this.uow = new UnitOfWork();
   }
   save(user) {

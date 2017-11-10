@@ -1,3 +1,5 @@
+const meld = require('meld');
+const inv = /[a-z]*.nventory[a-zA-z]*/;
 
 let rootPath = require('app-root-dir').get();
 let ProductDescriptionRepository = require(rootPath +
@@ -129,12 +131,12 @@ class Controller {
     //      dimensions_id:1
     //    }
     //  }];
-    //let results = this.productDescriptionRepo.save(toSave);
+    // let results = this.productDescriptionRepo.save(toSave);
     let prodDesc = this.inventoryRepo.getAllInventoryItems();
     Promise.all([prodDesc])
     .then((values) => {
       let items = JSON.stringify(values[0]);
-      //items = JSON.stringify(toSave);
+      // items = JSON.stringify(toSave);
       if (req.session.exists==true && req.session.isAdmin==true) {
         res.render('inventory', {items: items});
       } else if (req.session.exists==true && req.session.isAdmin==false) {
@@ -156,7 +158,7 @@ class Controller {
         if (key == 'deleteSerials') {
           console.log('To be deleted: ');
           for (let i = 0; i < actions[key].length; i++) {
-            let serialsToDelete = actions[key][i];``
+            let serialsToDelete = actions[key][i];
             if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+/.test(serialsToDelete)) {
               let serial = serialsToDelete.split('@')[0];
               let model = serialsToDelete.split('@')[1];
@@ -218,4 +220,8 @@ class Controller {
   }
 }
 
+// meld.around(Controller, 'getAllInventory', function(methodCall) {
+//   console.log('captured from controller');
+//   return methodCall.proceed;
+// });
 module.exports = Controller;
