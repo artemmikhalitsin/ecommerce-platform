@@ -1,27 +1,44 @@
+const environment = process.env.NODE_ENV || 'development';
+const rootPath = require('app-root-dir').get();
+const configuration = require(rootPath + '/knexfile')[environment];
+const connection = require('knex')(configuration);
+
+/**
+ * Table Data Gateway for the Dimensions table
+ * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
+ */
 class DimensionsTDG {
-    constructor() {
-        this.environment = process.env.NODE_ENV || 'development';
-        this.rootPath = require('app-root-dir').get();
-        this.configuration = require(this.rootPath + '/knexfile')[this.environment];
-        this.connection = require('knex')(this.configuration);
-    }
+    /**
+     * Inserts a computer object into the Computer table
+     * @param {Object} dimension the dimensions of an object
+     * @return {Promise<number[]>} promise which resolves to the list containing
+     * the id of the new dimension record in the database
+     */
     add(dimension) {
-        return this.connection.insert({
+        return connection.insert({
           'depth': dimension.depth,
           'height': dimension.height,
-          'width': dimension.width
-        },'id')
+          'width': dimension.width,
+        }, 'id')
         .into('Dimensions');
     }
 
-    select(){
+    select() {
         // TODO
     }
-    update(dimension){
-        return this.connection.update({
+
+    /**
+     * Updates a dimensions row in the database
+     * @param {Object} dimension the dimensions of an object
+     * @return {Promise<number>} promise which resolves to the number of
+     * rows affected
+     */
+    update(dimension) {
+        return connection.update({
           'depth': dimension.depth,
           'height': dimension.height,
-          'width': dimension.width
+          'width': dimension.width,
         }).from('Dimensions').where({dimension_id: dimension.dimensions_id});
     }
 }

@@ -1,4 +1,26 @@
+/**
+ * Class representing a Laptop
+ * @extends {Computer}
+ * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
+ * ATTRIBUTE THIS TO YOURSELF
+ */
 class Laptop extends Computer {
+    /**
+     * Given attributes of a laptop, constructs a new object
+     * @param {string} processorType processor type
+     * @param {number} ramSize size of ram
+     * @param {number} numberCpuCores number of cores
+     * @param {string} harddriveSize size of hard drive
+     * @param {number} displaySize size of the display
+     * @param {string} batteryInfo info about the batteryInfo
+     * @param {string} os type of os
+     * @param {boolean} touchscreen whether the laptop has a touchscreen
+     * @param {boolean} camera whether the laptop has a camera
+     * @param {string} price price
+     * @param {string} weight weight
+     * @param {string} brandName brand name
+     * @param {string} modelNumber model number
+     */
     constructor(processorType, ramSize, numberCpuCores, harddriveSize,
                 displaySize, batteryInfo, os, touchscreen, camera, price,
                 weight, brandName, modelNumber) {
@@ -11,35 +33,75 @@ class Laptop extends Computer {
         this.camera = camera;
     }
 
+    /**
+     * displaySize accessor
+     * @return {number} size of the display
+     */
     getDisplaySize() {
       return this.displaySize;
     }
+    /**
+     * touchscreen accessor
+     * @return {boolean} true if laptop has a touschreen, otherwise false
+     */
     getTouchscreen() {
        return this.touchscreen;
     }
-    getBatteryInfo() {
-      return this.batteryInfo;
-    }
-    getOs() {
-      return this.os;
-    }
+    /**
+    * camera accessor
+    * @return {boolean} true if laptop has a camera, otherwise false
+    */
     getCamera() {
       return this.camera;
     }
+    /**
+     * batteryInfo accessor
+     * @return {string} battery info
+     */
+    getBatteryInfo() {
+      return this.batteryInfo;
+    }
+    /**
+     * os accessor
+     * @return {string} type of os
+     */
+    getOs() {
+      return this.os;
+    }
+    /**
+     * displaySize mutator
+     * @param {number} displaySize new size of the display
+     */
     setDisplaySize(displaySize) {
       this.displaySize = displaySize;
     }
+    /**
+     * touchscreen mutator
+     * @param {boolean} touchscreen new value for touchscreen
+     */
     setTouchscreen(touchscreen) {
       this.touchscreen = touchscreen;
     }
+    /**
+     * camera mutator
+     * @param {boolean} camera new value for camera
+     */
+    setCamera(camera) {
+      this.camera = camera;
+    }
+    /**
+     * batteryInfo mutator
+     * @param {string} batteryInfo new info about the battery
+     */
     setBatteryInfo(batteryInfo) {
       this.batteryInfo = batteryInfo;
     }
+    /**
+     * os mutator
+     * @param {string} os new type of os
+     */
     setOs(os) {
       this.os = os;
-    }
-    setCamera(camera) {
-      this.camera = camera;
     }
 }
 
