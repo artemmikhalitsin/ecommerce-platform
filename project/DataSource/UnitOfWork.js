@@ -26,6 +26,8 @@ const MonitorsTDG = require(rootPath +
   '/DataSource/TableDataGateway/MonitorsTDG.js');
 const TabletsTDG = require(rootPath +
   '/DataSource/TableDataGateway/TabletsTDG.js');
+const PurchaseCollectionTDG = require(rootPath +
+  '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
 
 /**
  * Unit of Work implementation
@@ -46,9 +48,11 @@ class UnitOfWork {
     this.laptopsTDG = new LaptopsTDG();
     this.monitorsTDG = new MonitorsTDG();
     this.tabletsTDG = new TabletsTDG();
+    this.purchaseTDG = new PurchaseCollectionTDG();
 
     this.dirtyElements = [];
     this.newElements = [];
+    this.newPurchases = [];
     this.deletedElements = [];
     this.newInventoryItems = [];
     this.deletedInventoryItems = [];
@@ -56,6 +60,10 @@ class UnitOfWork {
   registerNew(object) {
     this.newElements = [];
     this.newElements.push(object);
+  }
+  registerNewPurchase(object) {
+    this.newPurchases = [];
+    this.newPurchases.push(object);
   }
   registerDirty(object) {
     this.dirtyElements = [];
@@ -102,6 +110,18 @@ class UnitOfWork {
                console.log('added inventory item');
          })
        });}
+
+       //add purchases
+       let purchasedItems;
+       if (this.newPurchases[0] != null && this.newPurchases[0].length > 0) {
+         purchasedItems = Promise.each(this.newPurchases[0], (electronic) => {
+           return this.purchaseTDG.add(electronic.client, electronic.serial_number, electronic.model_number)
+                  .transacting(trx).then(() => {
+                    console.log("Added purchased items");
+                  })
+         })
+       }
+
       //update products
       let updateditems;
       if(this.dirtyElements[0] && this.dirtyElements[0].length > 0){
@@ -248,7 +268,7 @@ class UnitOfWork {
       }
       //add
       );}
-      Promise.props([newItems, deletedItems, updateditems, addeditems])
+      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems])
         .then(trx.commit)
         .catch(trx.rollback);
     });

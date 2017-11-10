@@ -9,7 +9,7 @@ const connection = require('knex')(configuration);
  * REVIEW: PLEASE MAKE SURE THE METHOD DESCRIPTIONS ARE correct
  * REVIEW: PLEASE VERIFY TYPES OF PROMISES - Artem
  */
-class InventoryItemsTDG {
+class PurchaseCollectionTDG {
     /**
      * Adds a new item into the table
      * @param {string} clientID The unique id of the client.
@@ -20,7 +20,7 @@ class InventoryItemsTDG {
      */
     add(clientID, serialNumber, modelNumber) {
         return connection.insert({
-            'client_id': clientID,
+            'user_id': clientID,
             'serial_number': serialNumber,
             'model_number': modelNumber,
           }, 'id')
@@ -52,4 +52,4 @@ class InventoryItemsTDG {
     }
     */
 }
-module.exports = InventoryItemsTDG;
+module.exports = PurchaseCollectionTDG;

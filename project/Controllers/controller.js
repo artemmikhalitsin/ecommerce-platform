@@ -5,8 +5,11 @@ const InventoryItemRepository = require(rootPath +
   '/DataSource/Repository/InventoryItemRepository.js');
 const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
+const PurchaseCollectionRepo = require(rootPath
+    + '/DataSource/Repository/PurchaseCollectionRepository.js');
 const ShoppingCart = require(rootPath +
     '/models/ShoppingCart.js');
+
 
 /**
  * Identity map of inventory items
@@ -21,6 +24,7 @@ class Controller {
     this.userRepo = new UserRepository();
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
+    this.purchaseCollectionRepo = new PurchaseCollectionRepo();
     this.clientInventory = {};
     this.shoppingCartList = {};
   }
@@ -139,17 +143,17 @@ class Controller {
     let user = req.session.user.toString();
     let cart = Object.values(this.shoppingCartList[user].getCart());
     console.log(cart);
-    let serialsAndModels = [];
+    let purchases = [];
     for (let i in Object.keys(cart)) {
       if (cart[i]) {
       console.log(cart[i]);
-      serialsAndModels.push({model: cart[i].model,
-                            serial: cart[i].serial});
+      purchases.push({client: user,
+                            model_number: cart[i].model,
+                            serial_number: cart[i].serial});
       }
     }
-    let purchasedItems = [req.session.user, serialsAndModels];
     // call repo using purchased items
-    res.status(200).send({message: 'Purchased!'});
+    this.purchaseCollectionRepo.save(purchases);
   }
 
   /**

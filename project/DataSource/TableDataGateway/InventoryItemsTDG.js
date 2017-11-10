@@ -44,8 +44,9 @@ class InventoryItemsTDG {
      * affected
      */
     delete(inventoryItem) {
-        // TODO
-        return connection.from('Inventory').where({id: inventoryItem.id}).del();
+        return connection.from('Inventory').where(
+          {serial_number: inventoryItem.serial_number}
+        ).del();
     }
 }
 module.exports = InventoryItemsTDG;

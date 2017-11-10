@@ -2,22 +2,22 @@ const rootPath = require('app-root-dir').get();
 const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 const InventoryItemsIdentityMap = require(rootPath +
   '/DataSource/IdentityMap/InventoryItemsIdentityMap.js');
-const InventoryItemsTDG = require(rootPath +
-  '/DataSource/TableDataGateway/purchaseColectionTDG.js');
+const PurchaseCollectionTDG = require(rootPath +
+  '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
 
 /**
  * Repository for Inventory Items
  * @author Michael Li
  * REVIEW: PLEASE MAKE SURE THE METHOD DESCRIPTIONS ARE CORRECT
  */
-class PurchaseCollection {
+class PurchaseCollectionRepo {
   /**
    * Constructor initializes the unit of work, identity map and the tdg
    */
   constructor() {
     this.uow = new UnitOfWork();
     this.inventoryItemsIM = new InventoryItemsIdentityMap();
-    this.purchaseColectionTDG = new purchaseCollectionTDG();
+    this.purchaseColectionTDG = new PurchaseCollectionTDG();
   }
   /**
    * Retrieves items from the identity map. If none are there,
@@ -93,12 +93,12 @@ class PurchaseCollection {
    * @param {Object[]} items a list of items against which the currently
    * inventory is to be compared
    */
-  save(clientID, items){
+  save(items) {
     // var electronicsToAdd = [];
-    var electronicsToDelete = [];
+    let electronicsToDelete = items;
+    let electronicsToAdd = items;
 
     // // Extracts the model numbers of given items
-    // let model_numbers = items.map(p => p.model_number);
     //
     // if(model_numbers.length > 0){
     //   // Retrieve the items corresponding to given ids
@@ -117,21 +117,20 @@ class PurchaseCollection {
     //   }
 
       // Any item in inventory that don't appear in new list are to be removed (from database?)
-      electronicsToDelete = allInventoryItems.filter(function(item){
-        console.log(item.model_number);
+      electronicsToDelete = items; /* .filter(function(item) {
         items.forEach(function(element){
          return element.serial_number.findIndex(e => e == item.serial_number) === -1;
         })
-      });
-    }
+      }); */
     // Process the new tasks
-    //this.uow.registerNewItem(electronicsToAdd);
-    this.uow.registerDeletedItem(electronicsToDelete);
+    // this.uow.registerNewItem(electronicsToAdd);
+    //this.uow.registerDeletedItem(electronicsToDelete);
     //Not Complete
-    items.forEach(this.purchaseColectionTDG.add(clientID, item[0], item[1]));
-
+    //items.forEach(this.purchaseColectionTDG.add(clientID, item[0], item[1]));
+   this.uow.registerDeletedItem(electronicsToDelete);
+    this.uow.registerNewPurchase(electronicsToAdd);
     this.uow.commitAll();
     this.inventoryItemsIM.add(electronicsToAdd);
   }
 }
-module.exports = InventoryItemRepository;
+module.exports = PurchaseCollectionRepo;
