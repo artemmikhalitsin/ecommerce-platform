@@ -1,3 +1,4 @@
+// require('babel-core').transform('code', {});
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
@@ -12,8 +13,8 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 
 const Controller = require(rootPath + '/Controllers/controller');
 let controller = new Controller();
-
 // allows use of static pages
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'top',
@@ -21,6 +22,7 @@ app.use(session({
   isAdmin: false,
   resave: false,
   saveUninitialized: true,
+  user: null,
 }));
 // let sess;
 app.engine('hbs', hbs({extname: 'hbs'}));
@@ -63,6 +65,10 @@ app.get('/addProduct', function(req, res) {
   }
 });
 
+app.get('/catalog', function(req, res) {
+  res.render('catalog');
+});
+
 // this should be implemented in the controller
 app.get('/logout', function(req, res) {
   if (req.session.exists) {
@@ -85,7 +91,7 @@ app.get('/getAllInventoryItems', function(req, res) {
 });
 
 // getting the client inventory from the database
-app.get('/clientInventory', function(req, res) {
+/* app.get('/clientInventory', function(req, res) {
   if (req.session.exists) {
     controller.getAllInventory(req, res);
     console.log('Successs');
@@ -93,7 +99,7 @@ app.get('/clientInventory', function(req, res) {
     console.log('login error');
     res.redirect('/login');
   }
-});
+});*/
 
 // making the registration request
 app.post('/registrationRequest', function(req, res) {
@@ -105,9 +111,32 @@ app.post('/loginRequest', function(req, res) {
    controller.loginRequest(req, res);
 });
 
-// making the login request
 app.post('/inventoryAction', function(req, res) {
      controller.inventoryAction(req, res);
+});
+
+app.post('/addToCart', function(req, res) {
+    controller.addToShoppingCart(req, res);
+});
+
+app.post('/removeFromCart', function(req, res) {
+    controller.removeFromShoppingCart(req, res);
+});
+
+app.post('/purchaseItems', function(req, res) {
+  controller.completePurchaseTransaction(req, res);
+});
+
+app.get('/viewShoppingCart', function(req, res) {
+  controller.viewShoppingCart(req, res);
+});
+
+app.post('/cancelTransaction', function(req, res) {
+  controller.cancelPurchaseTransaction(req, res);
+});
+
+app.get('/viewPurchaseCollection', function(req, res) {
+  controller.viewPurchaseCollection(req, res);
 });
 
 app.listen(8080, function() {

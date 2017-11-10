@@ -10,8 +10,10 @@
     "rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
     "make-seed": "knex seed:make",
-    "start": "nodemon -L index.js",
-    "conc": "node node_modules/concurrently/src/main.js -c \"bgBlue,bgRed\" -n \"Express,ESLint\" \"nodemon -L index.js\" \"nodemon -L node_modules/eslint/bin/eslint.js .\""
+    "lint": "node_modules/eslint/bin/eslint.js .",
+    "lint-fix": "node_modules/eslint/bin/eslint.js . --fix",
+    "make-docs": "node_modules/.bin/esdoc",
+    "start": "node node_modules/concurrently/src/main.js -c \"bgBlue,bgRed\" -n \"Express,ESLint\" \"nodemon -L index.js\" \"nodemon -L node_modules/eslint/bin/eslint.js .\""
   },
   "keywords": [],
   "author": "",
@@ -19,6 +21,8 @@
   "devDependencies": {
     "app-root-dir": "^1.0.2",
     "aspect.js": "^0.6.0",
+    "babel-core": "^6.26.0",
+    "babel-plugin-contracts": "^1.2.0",
     "chai": "^4.1.2",
     "cookie-parser": "^1.4.3",
     "eslint": "^4.8.0",
@@ -32,6 +36,9 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
+    "concurrently": "^3.5.0",
+    "contract-decorators": "^0.2.2",
+    "esdoc-standard-plugin": "^1.0.0",
     "express-session": "^1.15.6"
   },
   "description": "",

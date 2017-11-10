@@ -1,0 +1,19 @@
+{
+  "source": ".",
+  "destination": "./docs",
+  "plugins": [
+    {
+      "name": "esdoc-standard-plugin",
+      "option": {
+        "typeInference": {"enable": false},
+        "lint": {"enable": false},
+        "coverage": {"enable": false},
+        "undocumentIdentifier": {"enable": true},
+        "unexportedIdentifier": {"enable": true}
+      }
+    }
+  ],
+  "excludes": ["node_modules", "public\/", "test\/",
+	       "seeds\/", "docs\/", "migrations\/",
+               ".eslintrc.js", ".external-ecmascript.js"]
+}
