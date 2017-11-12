@@ -11,16 +11,6 @@ laptopForm.component('laptopForm', {
       $scope.$emit("newLaptop", $scope.laptop);
       $scope.laptop = {};
     }
-    $scope.addSerial = () => {
-      if($scope.serial_number === '') return;
-      if(!$scope.laptop.serial_numbers){
-        //make empty array
-        $scope.laptop.serial_numbers = [];
-      }
-      //append serial to array
-        $scope.laptop.serial_numbers.push($scope.serial_number);
-        $scope.serial_number = '';
-    }
     $scope.remove = (index) => {
       $scope.laptop.serial_numbers.splice(index,1);
     }

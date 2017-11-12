@@ -25,18 +25,6 @@
           <label class="control-label">Depth (cm): {[{ $ctrl.laptop.depth}]} </label><br />
         </div>
       </div>
-      <div class='col'>
-        <div class="card-body">
-          <div ng-show="$ctrl.laptop.serial_numbers.length > 0">
-            <p>Serial numbers</p>
-            <ul>
-              <li ng-repeat="serial in $ctrl.laptop.serial_numbers track by $index">
-                {[{ serial }]}  <button ng-click="removeSerial($index)">X</button>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </div>
     <button class="btn btn-primary" ng-click="removeLaptopEntry()">Delete</button>
   </div>

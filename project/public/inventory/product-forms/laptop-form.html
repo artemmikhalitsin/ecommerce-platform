@@ -89,27 +89,6 @@
               </div>
             </div>
           </div>
-          <div class="col">
-            <div class="form-group">
-              <div class="card-fluid"  style="height:auto;">
-                <div class="col"><br />
-                  <div class="row form-group">
-                    <label class="col-5 col-form-label">Serial Number(s)</label>
-                    <div class="col-md-7">
-                      <input type="text" ng-model="serial_number" ng-submit="addSerial()" class="form-control">
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <button ng-click="addSerial()" class="btn btn-primary">Add serial number</button>
-                  </div><br />
-                  <div class="card" style="height:auto;">
-                    <h6 ng-show="laptop.serial_numbers.length != 0" class="card-header text-center">Serial number(s) to be added</h6><br />
-                    <p ng-repeat="serial in laptop.serial_numbers track by $index">{{ serial }} <button ng-click="remove($index)">X</button></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="col-md-12">
             <button ng-click="submitLaptop()" class="btn btn-primary">Add Laptop</button>
           </div>

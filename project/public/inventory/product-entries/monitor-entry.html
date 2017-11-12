@@ -14,18 +14,6 @@
           <label class="control-label">Display size: {[{ $ctrl.monitor.display_size}]} </label><br />
         </div>
       </div>
-      <div class='col'>
-        <div class="card-body">
-          <div ng-show="$ctrl.monitor.serial_numbers.length > 0">
-            <p>Serial numbers</p>
-            <ul>
-              <li ng-repeat="serial in $ctrl.monitor.serial_numbers track by $index">
-                {[{ serial }]}  <button ng-click="removeSerial($index)">X</button>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </div>
     <button class="btn btn-primary" ng-click="removeMonitorEntry()">Delete</button>
   </div>
