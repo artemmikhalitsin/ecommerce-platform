@@ -1,3 +1,4 @@
+'use strict';
 const rootPath = require('app-root-dir').get();
 const ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
@@ -130,6 +131,8 @@ class Controller {
    * @return {Boolean} Returns whether or not the item was locked
   */
   lockItem(itemToLock) {
+    console.log('THE INVENTORY: ');
+    console.log(this.clientInventory);
     if (this.clientInventory[itemToLock] == null ||
         this.clientInventory[itemToLock].locked) {
       return false;
@@ -187,12 +190,11 @@ class Controller {
   returnPurchaseTransaction(req, res) {
     let returnItem = res;
 
-    res.forEach((product, serialNumber) => {
+    /* res.forEach((product, serialNumber) => {
 
-    })
+    }) */
 
     this.purchaseCollectionRepo.returnItems(returnItem);
-
   }
 
   viewPurchaseCollection(req, res) {
@@ -301,6 +303,8 @@ class Controller {
       if (req.session.exists==true && req.session.isAdmin==true) {
         res.render('inventory', {items: items});
       } else if (req.session.exists==true && req.session.isAdmin==false) {
+        console.log('UPDATING INVENTORY LIST');
+        console.log(values[0]);
         this.updateInventoryList(values[0]);
         res.render('clientInventory', {items: items});
       } else {

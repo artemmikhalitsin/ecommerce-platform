@@ -1,4 +1,5 @@
 /** Please take note that mocha advises again arrow functions! **/
+/*
 let assert = require('assert');
 
 describe('Array', function() {
@@ -8,3 +9,4 @@ describe('Array', function() {
     });
   });
 });
+*/

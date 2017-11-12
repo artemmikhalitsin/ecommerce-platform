@@ -3,7 +3,7 @@
 
 // REVIEW: I haven't docced this file yet cause it's a little overwhelming
 // Only fixed some formatting - Artem
-
+'use strict';
 const Promise = require('bluebird');
 const rootPath = require('app-root-dir').get();
 const environment = process.env.NODE_ENV || 'development';
@@ -71,7 +71,7 @@ class UnitOfWork {
     this.deletePurchases = [];
     this.deletedPurchase.push(object);
   }
-  
+
   registerDirty(object) {
     this.dirtyElements = [];
     this.dirtyElements.push(object);
@@ -305,7 +305,7 @@ class UnitOfWork {
 
       Promise.all([laptops, desktops, tablets, monitors])
       .then(((results) => {
-        let products = [].concat(...results);
+        let products = [].concat(...results); //[].concat.apply([], results); //
 
         // retrieve the model numbers present in the products
         let model_numbers = this.getAllModelNumbers(products);

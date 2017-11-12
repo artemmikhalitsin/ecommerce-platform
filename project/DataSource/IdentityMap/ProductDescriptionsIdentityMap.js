@@ -1,3 +1,4 @@
+'use strict';
 const rootPath = require('app-root-dir').get();
 // REVIEW: UnitOfWork is never used here, consider removing - Artem
 // const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
