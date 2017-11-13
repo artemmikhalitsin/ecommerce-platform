@@ -1,4 +1,17 @@
+
+// REVIEW: UnitOfWork is never used here, consider removing - Artem
+// const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
+
+/**
+ * Identity map of inventory items
+ * @author TODO: IF YOU WROTE THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * REVIEW: Please make sure the comments are correct - Artem
+ */
 class InventoryItemsIdentityMap {
+    /**
+     * Creates an inventory item identity map
+     * Loads all inventory items from database into memory
+     */
     constructor() {
         this.rootPath = require('app-root-dir').get();
         let UnitOfWork = require(this.rootPath + '/DataSource/UnitOfWork.js');
@@ -11,6 +24,11 @@ class InventoryItemsIdentityMap {
             this.InventoryItems = values[0];
         });
     }
+
+    /**
+     * Gets all the items currently stored in the Identity map
+     * @return {Object[]} an array containing the items
+     */
     getAll(){
         console.log("From GetAll " + this.InventoryItems);
         let result = this.InventoryItems;
@@ -26,6 +44,13 @@ class InventoryItemsIdentityMap {
             return result;
         }
     }
+
+    /**
+     * Gets a list of items matching given model numbers
+     * @param {string[]} modelNumbers a list of alpha-numberical model numbers
+     * @return {Object[]} a list of items corresponding to the given model
+     * numbers
+     */
     get(model_numbers) {
         return this.InventoryItems.filter(function(desc) {
             return model_numbers.findIndex(
@@ -33,6 +58,13 @@ class InventoryItemsIdentityMap {
             ) > -1;
         });
     }
+
+    // TODO: Is this the same method as above? - Artem
+    /**
+     * Gets a list of items matching given model numbers
+     * @param {string[]} modelNumbers a list of alpha-numberical model numbers
+     * @return {Object[]} a list of objects corresponding to the given model
+     */
     getByModelNumbers(model_numbers){
         var allItems = this.getAll();
         if(allItems != null){
@@ -43,9 +75,23 @@ class InventoryItemsIdentityMap {
         }
         else return [];
     }
+
+    /**
+     * Adds new objects into the identity map
+     * @param {Object[]} newInventoryItems a list containing new items
+     */
     add(newInventoryItems) {
-        this.InventoryItems.push(newInventoryItems);
+        for(var i = 0; i < newInventoryItems.length; i++){
+            if(this.InventoryItems.findIndex(p => p.serial_number == newInventoryItems[i].serial_number) === -1)
+                this.InventoryItems.push(newInventoryItems[i]);
+        }
     }
+
+    /**
+     * Deletes items from the identity map by filtering them out
+     * @param {string[]} inventoryItemsToRemove a list of alpha-numberical
+     * model numbers for which the items are to be removed
+     */
     delete(inventoryItemsToRemove) {
         this.InventoryItems.filter(function(desc) {
             return inventoryItemsToRemove.findIndex(

@@ -114,13 +114,37 @@ app.post('/registrationRequest', function(req, res) {
 });
 
 // making the login request
+app.post('/inventoryAction', function(req, res) {
+     controller.inventoryAction(req, res);
+});
+
+// making the login request
 app.post('/loginRequest', function(req, res) {
    controller.loginRequest(req, res);
 });
 
-// making the login request
-app.post('/inventoryAction', function(req, res) {
-     controller.inventoryAction(req, res);
+app.post('/addToCart', function(req, res) {
+    controller.addToShoppingCart(req, res);
+});
+
+app.post('/removeFromCart', function(req, res) {
+    controller.removeFromShoppingCart(req, res);
+});
+
+app.post('/purchaseItems', function(req, res) {
+  controller.completePurchaseTransaction(req, res);
+});
+
+app.get('/viewShoppingCart', function(req, res) {
+  controller.viewShoppingCart(req, res);
+});
+
+app.post('/cancelTransaction', function(req, res) {
+  controller.cancelPurchaseTransaction(req, res);
+});
+
+app.get('/viewPurchaseCollection', function(req, res) {
+  controller.viewPurchaseCollection(req, res);
 });
 
 app.listen(8080, function() {
@@ -140,8 +164,9 @@ meld.before(Controller, /[a-z]*.nventory[a-zA-z]*/, function(req, res) {
 meld.around(controller, 'getAllInventory', function(methodCall) {
   console.log('caughtPage');
   console.log(methodCall.args);
-  logger.write(stringy.stringify(methodCall.args));
-  logger.end();
+  // logger.write(stringy.stringify(methodCall.args));
+  // logger.end();
+  return methodCall.proceed();
   // if (methodCall.req.session.exists) {
   //   return methodCall.proceed;
   // } else {

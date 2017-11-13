@@ -17,6 +17,7 @@
           <li class="list-group-item">Weight: {[{ $ctrl.laptop.weight }]} </li>
         </ul></br>
         <a href="#" class="btn btn-primary" ng-click="rotate()">View Details</a>
+        <a href="#" class="btn btn-primary" ng-click="addToCart($ctrl.laptop.serialNumber, $ctrl.laptop.modelNumber)">Add to Shopping Cart</a>
       </div>
       <!--/.caption-->
     </div>
@@ -39,6 +40,7 @@
         <li class="list-group-item">Touch Screen: </li>
       </ul></br>
       <a href="#" class="btn btn-primary" ng-click="rotate()">Go Back</a>
+      <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.laptop.serialNumber, $ctrl.laptop.modelNumber)">Add to Shopping Cart</a>
     </div>
     <!--/.card-body-->
   </div>

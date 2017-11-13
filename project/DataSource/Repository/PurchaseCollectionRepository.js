@@ -2,22 +2,22 @@ const rootPath = require('app-root-dir').get();
 const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 const InventoryItemsIdentityMap = require(rootPath +
   '/DataSource/IdentityMap/InventoryItemsIdentityMap.js');
-const InventoryItemsTDG = require(rootPath +
-  '/DataSource/TableDataGateway/InventoryItemsTDG.js');
+const PurchaseCollectionTDG = require(rootPath +
+  '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
 
 /**
  * Repository for Inventory Items
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Michael Li
  * REVIEW: PLEASE MAKE SURE THE METHOD DESCRIPTIONS ARE CORRECT
  */
-class InventoryItemRepository {
+class PurchaseCollectionRepo {
   /**
    * Constructor initializes the unit of work, identity map and the tdg
    */
   constructor() {
     this.uow = new UnitOfWork();
     this.inventoryItemsIM = new InventoryItemsIdentityMap();
-    this.inventoryTDG = new InventoryItemsTDG();
+    this.purchaseColectionTDG = new PurchaseCollectionTDG();
   }
   /**
    * Retrieves items from the identity map. If none are there,
@@ -46,7 +46,7 @@ class InventoryItemRepository {
    * items in the database
    */
   get(args) {
-    return database('inventoryItem').select('*');
+    return database('PurchaseCollection').select('*');
   }
 
   /**
@@ -86,47 +86,61 @@ class InventoryItemRepository {
   getAllInventoryItems() {
     return this.uow.getAllInventoryItems();
   }
+
   /**
    * Given a list of items, compares to items currently in the inventory, and
    * sorts which are to be added, which to be updated and which to be removed
    * @param {Object[]} items a list of items against which the currently
    * inventory is to be compared
    */
-  save(items){
-    var electronicsToAdd = [];
-    var electronicsToDelete = [];
+  save(items) {
+    // var electronicsToAdd = [];
+    let electronicsToDelete = items;
+    let electronicsToAdd = items;
 
-    // Extracts the model numbers of given items
-    let model_numbers = items.map(p => p.model_number);
+    // // Extracts the model numbers of given items
+    //
+    // if(model_numbers.length > 0){
+    //   // Retrieve the items corresponding to given ids
+    //   let allInventoryItems = this.inventoryItemsIM.getByModelNumbers(model_numbers);
+    //
+    //   //Add items to database if not in database.
+    //   for(var i = 0; i < items.length; i++){
+    //     for(var j = 0; j < items[i].serial_number.length; j++){
+    //       if(allInventoryItems.findIndex(p => p.serial_number == items[i].serial_number[j]) === -1
+    //         && electronicsToAdd.findIndex(e => e.serial_number == items[i].serial_number[j] && e.model_number == items[i].model_number) === -1){
+    //           // Case: item is not in our inventory
+    //           // and hasn't already been processed
+    //           electronicsToAdd.push({'serial_number': items[i].serial_number[j], 'model_number': items[i].model_number});
+    //         }
+    //     }
+    //   }
 
-    if(model_numbers.length > 0){
-      // Retrieve the items corresponding to given ids
-      let allInventoryItems = this.inventoryItemsIM.getByModelNumbers(model_numbers);
-
-      for(var i = 0; i < items.length; i++){
-        for(var j = 0; j < items[i].serial_number.length; j++){
-          if(allInventoryItems.findIndex(p => p.serial_number == items[i].serial_number[j]) === -1
-            && electronicsToAdd.findIndex(e => e.serial_number == items[i].serial_number[j] && e.model_number == items[i].model_number) === -1){
-              // Case: item is not in our inventory
-              // and hasn't already been processed
-              electronicsToAdd.push({'serial_number': items[i].serial_number[j], 'model_number': items[i].model_number});
-            }
-        }
-      }
-      // Any item in inventory that don't appear in new list are to be removed
-      electronicsToDelete = allInventoryItems.filter(function(item){
-        console.log(item.model_number);
-       items.forEach(function(element){
+      // Any item in inventory that don't appear in new list are to be removed (from database?)
+      electronicsToDelete = items; /* .filter(function(item) {
+        items.forEach(function(element){
          return element.serial_number.findIndex(e => e == item.serial_number) === -1;
         })
-      });
-    }
+      }); */
     // Process the new tasks
-    this.uow.registerNewItem(electronicsToAdd);
+    // this.uow.registerNewItem(electronicsToAdd);
+    //this.uow.registerDeletedItem(electronicsToDelete);
+    //Not Complete
+    //items.forEach(this.purchaseColectionTDG.add(clientID, item[0], item[1]));
     this.uow.registerDeletedItem(electronicsToDelete);
+    this.uow.registerNewPurchase(electronicsToAdd);
+    this.uow.commitAll();
+    this.inventoryItemsIM.add(electronicsToAdd);
+  }
 
+  returnItems(items){
+    let electronicsToDelete = items;
+    let electronicsToAdd = items;
+
+    this.uow.registerReturn(electronicsToDelete);
+    this.uow.registerNewItem(electronicsToAdd);
     this.uow.commitAll();
     this.inventoryItemsIM.add(electronicsToAdd);
   }
 }
-module.exports = InventoryItemRepository;
+module.exports = PurchaseCollectionRepo;
