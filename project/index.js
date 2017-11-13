@@ -24,10 +24,29 @@ app.use(session({
   saveUninitialized: true,
   user: null,
 }));
+
 // let sess;
 app.engine('hbs', hbs({extname: 'hbs'}));
 app.set('views', path.join(__dirname, 'public'));
 app.set('view engine', 'hbs');
+
+
+app.use(function(req,res){
+if (req.session.exists == true) {
+  if (req.session.isAdmin == true){
+      console.log('logged as admin');
+
+  } else{
+      console.log('logged as customer');
+
+  }
+
+} else {
+  console.log('not logged in')
+
+}
+
+});
 
 // loading the home page
 app.get('/', function(req, res) {

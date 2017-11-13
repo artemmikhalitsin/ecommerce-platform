@@ -195,6 +195,10 @@ class Controller {
 
   }
 
+  loginstatus(req, res){
+
+  }
+
   viewPurchaseCollection(req, res) {
     let cart = this.purchaseCollectionRepo.get('*');
     Promise.all([cart])
