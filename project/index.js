@@ -23,7 +23,10 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 }));
 
 const Controller = require(rootPath + '/Controllers/controller');
+const UserRepository = require(rootPath +
+  '/DataSource/Repository/UserRepository.js');
 let controller = new Controller();
+let userRepo = new UserRepository();
 
 // allows use of static pages
 app.use(express.static(path.join(__dirname, 'public')));
@@ -120,19 +123,7 @@ app.post('/inventoryAction', function(req, res) {
 
 // making the login request
 app.post('/loginRequest', function(req, res) {
-   let data = req.body;
-   let session = req.session;
-   controller.loginRequestAOP(data, session).then((response)=>{
-     req.session = response.session;
-     req.session.save(function(err) {
-         if (err) console.error(err);
-     });
-     if (response.redirect) {
-        res.redirect(response.redirect);
-     } else {
-        res.render(response.render, response.json);
-     }
-   });
+   controller.loginRequest(req, res);
 });
 
 app.post('/addToCart', function(req, res) {
@@ -163,7 +154,7 @@ app.listen(8080, function() {
   console.log('Example app listening on port 8080!');
 });
 
-meld.before(Controller, /[a-z]*.nventory[a-zA-z]*/, function(req, res) {
+meld.before(controller, /[a-z]*.nventory[a-zA-z]*/, function(req, res) {
   console.log('capturing inventory access, testing access');
   console.log(req.body);
 });
@@ -171,19 +162,35 @@ meld.before(Controller, /[a-z]*.nventory[a-zA-z]*/, function(req, res) {
 // meld.around(app, 'render', function(page) {
 //   console.log('caught res! :' + page.args);
 //   return page.proceed();
-// });
+// });ghn
 
-meld.around(controller, 'getAllInventory', function(methodCall) {
-  console.log('caughtPage');
-  // console.log(methodCall.args);
-  // logger.write(stringy.stringify(methodCall.args));
-  // logger.end();
-  return methodCall.proceed();
-  // if (methodCall.req.session.exists) {
-  //   return methodCall.proceed;
-  // } else {
-  //   return methodCall.res.redirect('/login');
-  // }
+meld.around(controller, 'loginRequest', (joinpoint) => {
+  console.log('Caught by aspect, validating the user...');
+  let req = joinpoint.args[0];
+  let res = joinpoint.args[1];
+  let data = req.body;
+  return userRepo.authenticate(data).then((result) => {
+    if (result.length <= 0) {
+      console.log('Invalid username or password.');
+    } else if (result.length > 1) {
+      console.log('Duplicate users detected');
+    } else if (result.length == 1) {
+      req.session.exists=true;
+      if (result[0].is_admin == 1) {
+        // REVIEW: this should probably be removed - Artem
+        console.log('User is admin.');
+        req.session.isAdmin=true;
+        req.session.user = data.email;
+        return joinpoint.proceed(req, res);
+      } else {
+        // REVIEW: this should probably be removed - Artem
+        console.log('User is not admin.');
+        req.session.isAdmin=false;
+        req.session.user=data.email;
+        return joinpoint.proceed(req, res);
+      }
+    }
+  });
 });
 
 // meld.around(app, 'render', function(methodCall) {
