@@ -95,15 +95,14 @@ class PurchaseCollectionRepo {
    * inventory is to be compared
    */
   save(items) {
-    // var electronicsToAdd = [];
+    // var electronicsToAdd = []
     let electronicsToDelete = items;
     let electronicsToAdd = items;
 
-    electronicsToDelete = items;
     this.uow.registerDeletedItem(electronicsToDelete);
     this.uow.registerNewPurchase(electronicsToAdd);
     this.uow.commitAll();
-    this.inventoryItemsIM.add(electronicsToAdd);
+    // this.inventoryItemsIM.add(electronicsToAdd);
   }
 
   returnItems(items) {

@@ -107,12 +107,12 @@ class UnitOfWork {
 
       let deletedItems;
       //delete items
-      if(this.deletedInventoryItems[0] != null && this.deletedInventoryItems[0].length > 0){
+      /*if(this.deletedInventoryItems[0] != null && this.deletedInventoryItems[0].length > 0){
        deletedItems = Promise.each(this.deletedInventoryItems[0], (electronic) => {
         return this.inventoryItemsTDG.delete(electronic).transacting(trx).then(() => {
               console.log('deleted inventory item');
         })
-      });}
+      });}*/
       //end of delete
       //add items
       let newItems;
@@ -136,6 +136,7 @@ class UnitOfWork {
 
        //remove purchase
        let deletedPurchase;
+       console.log(deletedPurchase[0]);
        if(this.deletedPurchases[0] != null && this.deletedPurchases[0].length > 0){
         deletedPurchases = Promise.each(this.deletedPurchases[0], (electronic) => {
          return this.purchaseTDG.delete(electronic).transacting(trx).then(() => {

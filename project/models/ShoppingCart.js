@@ -30,8 +30,8 @@ class ShoppingCart {
         this.cartItemId++;
       }
       post: {
-        Object.keys(this.cartItems).length ===
-          old(Object.keys(this.cartItems).length) + 1;
+        Object.keys(this.cartItems).includes(item),
+          'Item was not added to cart';
       }
       return item;
     }
@@ -43,8 +43,8 @@ class ShoppingCart {
         delete this.cartItems[item];
         return item;
       post: {
-          !Object.keys(this.cartItems).includes(item);
-          this.cartItems.length === old(this.cartItems.length) - 1;
+          !Object.keys(this.cartItems).includes(item),
+            'Item was not removed from the cart';
       }
     }
 }
