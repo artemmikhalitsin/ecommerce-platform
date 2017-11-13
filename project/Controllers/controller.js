@@ -26,8 +26,8 @@ class Controller {
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
     this.purchaseCollectionRepo = new PurchaseCollectionRepo();
-    this.clientInventory = {}; // List of inventory items, key: serial number, value: locked or not locked
-    this.shoppingCartList = {}; // List of shopping carts associated to users key:user, value: shopping cart
+    this.clientInventory = {}; // Inv items, key: serial#, value: lock status
+    this.shoppingCartList = {}; // Shoppingcarts, key:user, value: shopping cart
   }
 
   /**

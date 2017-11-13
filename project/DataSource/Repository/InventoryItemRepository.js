@@ -93,33 +93,39 @@ class InventoryItemRepository {
    * @param {Object[]} items a list of items against which the currently
    * inventory is to be compared
    */
-  save(items){
-    var electronicsToAdd = [];
-    var electronicsToDelete = [];
+  save(items) {
+    let electronicsToAdd = [];
+    let electronicsToDelete = [];
 
     // Extracts the model numbers of given items
-    let model_numbers = items.map(p => p.model_number);
+    let model_numbers = items.map((p) => p.model_number);
 
-    if(model_numbers.length > 0){
+    if (model_numbers.length > 0) {
       // Retrieve the items corresponding to given ids
-      let allInventoryItems = this.inventoryItemsIM.getByModelNumbers(model_numbers);
+      let allInventoryItems = this.inventoryItemsIM
+                          .getByModelNumbers(model_numbers);
 
-      for(var i = 0; i < items.length; i++){
-        for(var j = 0; j < items[i].serial_number.length; j++){
-          if(allInventoryItems.findIndex(p => p.serial_number == items[i].serial_number[j]) === -1
-            && electronicsToAdd.findIndex(e => e.serial_number == items[i].serial_number[j] && e.model_number == items[i].model_number) === -1){
+      for (let i = 0; i < items.length; i++) {
+        for (let j = 0; j < items[i].serial_number.length; j++) {
+          if (allInventoryItems.findIndex((p) =>
+            p.serial_number == items[i].serial_number[j]) === -1
+            && electronicsToAdd.findIndex((e) =>
+              e.serial_number == items[i].serial_number[j]
+              && e.model_number == items[i].model_number) === -1) {
               // Case: item is not in our inventory
               // and hasn't already been processed
-              electronicsToAdd.push({'serial_number': items[i].serial_number[j], 'model_number': items[i].model_number});
+              electronicsToAdd.push({'serial_number': items[i].serial_number[j],
+                                      'model_number': items[i].model_number});
             }
         }
       }
       // Any item in inventory that don't appear in new list are to be removed
-      electronicsToDelete = allInventoryItems.filter(function(item){
+      electronicsToDelete = allInventoryItems.filter(function(item) {
         console.log(item.model_number);
-       items.forEach(function(element){
-         return element.serial_number.findIndex(e => e == item.serial_number) === -1;
-        })
+       items.forEach(function(element) {
+         return element.serial_number.findIndex((e) =>
+            e == item.serial_number) === -1;
+        });
       });
     }
     // Process the new tasks

@@ -52,7 +52,7 @@ class ProductDescriptionsTDG {
                 .where({model_number: modelNumber}).select('*');
   }
 
-  /**.
+  /** .
    * Updates the product specifications
    * @param {Object} productDescription description of a product
    * @return {Promise<number>} promise which resolves to the number of
