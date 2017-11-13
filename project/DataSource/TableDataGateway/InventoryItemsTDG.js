@@ -32,9 +32,6 @@ class InventoryItemsTDG {
     static select() {
         return connection('Inventory').select('*');
     }
-    // update is not in current requirements for inventory items
-    /* update(inventoryItems){
-    }*/
 
     /**
      * Deletes an item from the inventory given an id
@@ -43,16 +40,10 @@ class InventoryItemsTDG {
      * @return {Promise<number>} a promise which resolves to the number of rows
      * affected
      */
-<<<<<<< HEAD
     static delete(inventoryItem) {
-        // TODO
-        return connection.from('Inventory').where({id: inventoryItem.id}).del();
-=======
-    delete(inventoryItem) {
         return connection.from('Inventory').where(
-          {serial_number: inventoryItem.serial_number}
+          'serial_number', inventoryItem.serial_number}
         ).del();
->>>>>>> 3f6b6a4f2937135663f60fce5412b3cd4cef9518
     }
 }
 module.exports = InventoryItemsTDG;
