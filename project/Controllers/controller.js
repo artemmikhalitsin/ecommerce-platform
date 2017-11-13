@@ -96,6 +96,15 @@ class Controller {
     *@param {String} res item user wants to add to their cart
   */
   addToShoppingCart(req, res) {
+    pre: {
+      req.session.user != null, 'User is not logged in';
+      Object.keys(this.clientInventory).length != 0, 'Catalog is empty';
+      !this.clientInventory[req.body.serialNumber].locked, 'Item is locked';
+      if (this.shoppingCartList[req.session.user.toString()]) {
+        Object.keys(this.shoppingCartList[req.session.user.toString()]
+          .getCart()).length < 7, 'Cart has more than 7 items!';
+      }
+    }
     let item = req.body.serialNumber;
     let productNumber = req.body.modelNumber;
     if (this.lockItem(item)) {
@@ -108,12 +117,30 @@ class Controller {
     } else {
       res.status(500).send({error: 'item already in another cart'});
     }
+
+    post: {
+      this.shoppingCartList[req.session.user.toString()].getCartSerialNumbers()
+        .includes(req.body.serialNumber), 'Item was not added to the cart';
+      this.clientInventory[req.body.serialNumber].locked, 'Item isn\'t locked';
+    }
   }
 
   removeFromShoppingCart(req, res) {
+    pre : {
+      req.session.user != null, 'User is not logged in';
+      this.shoppingCartList[req.session.user.toString()] != null,
+        'Shopping cart doesn\'t exists';
+    }
+
     let item = req.body.serialNumber;
     this.shoppingCartList[user].removeFromCart(item);
     clearTimeout(this.clientInventory[item].timeout);
+    post : {
+      !this.shoppingCartList[req.session.user.toString()].getCartSerialNumbers()
+        .includes(req.body.serialNumber), 'Item was not removed from the cart';
+      !this.clientInventory[req.body.serialNumber].locked,
+        'Item is still locked';
+    }
   }
 
   /**
