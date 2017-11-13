@@ -1,7 +1,10 @@
-const preLogPages = ['/home', '/login', '/registration'];
-const postLogPages = ['/logout'];
-const clientPages = ['/clientInventory'];
-const adminPages = ['/getAllInventoryItems', '/addItem'];
+const authPages = ['loginRequest'];
+/*
+const authPages = ['home', 'login', 'registration',
+                    'logout',
+                    'clientInventory',
+                    'getAllInventoryItems', 'addItem'];
+                    */
 
 const fs = require('fs');
 const logger = fs.createWriteStream('log.txt', {
@@ -164,7 +167,7 @@ meld.before(controller, /[a-z]*.nventory[a-zA-z]*/, function(req, res) {
 //   return page.proceed();
 // });ghn
 
-meld.around(controller, 'loginRequest', (joinpoint) => {
+meld.around(controller, authPages, (joinpoint) => {
   console.log('Caught by aspect, validating the user...');
   let req = joinpoint.args[0];
   let res = joinpoint.args[1];
