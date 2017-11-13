@@ -74,15 +74,24 @@
     <option value="3">Monitor</option>
     <option value="4">Tablet</option>
   </select></br></br></br>-->
-
+      <div class="row">
+        <div class="col-lg-6 col-md-6 mb-4">
+          <ul id="temp_cart">
+          </ul>
+        </div>
+      </div>
       <div class="row">
         <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in items">
           <desktop-card ng-show="item.type==='desktop'" desktop="item"></desktop-card>
           <laptop-card ng-show="item.type==='laptop'" laptop="item"></laptop-card>
           <tablet-card ng-show="item.type==='tablet'" tablet="item"></tablet-card>
           <monitor-card ng-show="item.type==='monitor'" monitor="item"></monitor-card>
-
         </div>
+      </div>
+      <div class="row">
+        <button ng-click="purchase()">Purchase All</button>
+        <button ng-click="cancelTransaction()">Cancel Transaction</button>
+
       </div>
       <!--/.row-->
     </div>
