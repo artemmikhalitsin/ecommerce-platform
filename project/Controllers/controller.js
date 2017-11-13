@@ -189,10 +189,9 @@ class Controller {
 
     res.forEach((product, serialNumber) => {
 
-    })
+    });
 
     this.purchaseCollectionRepo.returnItems(returnItem);
-
   }
 
   viewPurchaseCollection(req, res) {

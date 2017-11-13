@@ -49,6 +49,5 @@ class PurchaseCollectionTDG {
           {serial_number: returnItem.serial_number}
         ).del();
     }
-
 }
 module.exports = PurchaseCollectionTDG;

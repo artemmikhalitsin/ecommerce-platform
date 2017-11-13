@@ -124,16 +124,16 @@ class PurchaseCollectionRepo {
       }); */
     // Process the new tasks
     // this.uow.registerNewItem(electronicsToAdd);
-    //this.uow.registerDeletedItem(electronicsToDelete);
-    //Not Complete
-    //items.forEach(this.purchaseColectionTDG.add(clientID, item[0], item[1]));
+    // this.uow.registerDeletedItem(electronicsToDelete);
+    // Not Complete
+    // items.forEach(this.purchaseColectionTDG.add(clientID, item[0], item[1]));
     this.uow.registerDeletedItem(electronicsToDelete);
     this.uow.registerNewPurchase(electronicsToAdd);
     this.uow.commitAll();
     this.inventoryItemsIM.add(electronicsToAdd);
   }
 
-  returnItems(items){
+  returnItems(items) {
     let electronicsToDelete = items;
     let electronicsToAdd = items;
 
