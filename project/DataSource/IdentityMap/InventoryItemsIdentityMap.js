@@ -44,10 +44,7 @@ class InventoryItemsIdentityMap {
         else return [];
     }
     add(newInventoryItems) {
-        for(var i = 0; i < newInventoryItems.length; i++){
-            if(this.InventoryItems.findIndex(p => p.serial_number == newInventoryItems[i].serial_number) === -1)
-                this.InventoryItems.push(newInventoryItems[i]);
-        }
+        this.InventoryItems.push(newInventoryItems);
     }
     delete(inventoryItemsToRemove) {
         this.InventoryItems.filter(function(desc) {

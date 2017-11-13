@@ -43,36 +43,36 @@ class InventoryItemRepository{
   }
   save(items){
     var electronicsToAdd = [];
+    var electronicsToUpdate = [];
     var electronicsToDelete = [];
  
-    let model_numbers = items.map(p => p.model_number);
-    console.log("model nums are: " + JSON.stringify(model_numbers));
-    if(model_numbers.length > 0){
-      let allInventoryItems = this.inventoryItemsIM.getByModelNumbers(model_numbers);
-      console.log("all electronic items are: " + JSON.stringify(allInventoryItems));
-      for(var i = 0; i < items.length; i++){
-        for(var j = 0; j < items[i].serial_number.length; j++){
-          if(allInventoryItems.findIndex(p => p.serial_number == items[i].serial_number[j]) === -1
-            && electronicsToAdd.findIndex(e => e.serial_number == items[i].serial_number[j] && e.model_number == items[i].model_number) === -1){
-              electronicsToAdd.push({'serial_number': items[i].serial_number[j], 'model_number': items[i].model_number});
-            }
-        }
+    let itemIds = products.map(p => p.model_number);
+    
+    if(itemIds.length > 0){
+    let context = this.getByIds(itemIds);
+    console.log("Context in repo is: " + JSON.stringify(context));
+    for(var i = 0; i < products.length; i++){
+      if(context.findIndex(p => p.model_number == products[i].model_number) !== -1
+          && electronicsToUpdate.findIndex(e => e.model_number == products[i].model_number) === -1){
+            electronicsToUpdate.push(products[i]);
       }
-      electronicsToDelete = allInventoryItems.filter(function(item){
-        console.log(item.model_number);
-       items.forEach(function(element){
-         console.log("serial numbers: " + JSON.stringify(element.serial_number));
-         return element.serial_number.findIndex(e => e == item.serial_number) === -1;
-        })
-      });
+      else if(context.findIndex(p => p.model_number == products[i].model_number) === -1
+              && electronicsToAdd.findIndex(e => e.model_number == products[i].model_number) === -1){
+                electronicsToAdd.push(products[i]);
+              }
+    }
+    electronicsToDelete = context.filter(function(desc){
+      console.log(desc.model_number);
+      return electronicsToUpdate.findIndex(e => e.model_number == desc.model_number) === -1;
+    });
   }
-  console.log("Items to add" + JSON.stringify(electronicsToAdd));
-    this.uow.registerNewItem(electronicsToAdd);
-    this.uow.registerDeletedItem(electronicsToDelete);
+    this.uow.registerNew(electronicsToAdd);
+    this.uow.registerDirty(electronicsToUpdate);
+    this.uow.registerDeleted(electronicsToDelete);
 
-    this.uow.commitAll();
+    this.uow.commitAll(electronicsToAdd);
     console.log("Affter commiting");
-    this.inventoryItemsIM.add(electronicsToAdd);
+    this.ProductDescriptionIM.add(electronicsToAdd);
   }
 }
 module.exports = InventoryItemRepository;
