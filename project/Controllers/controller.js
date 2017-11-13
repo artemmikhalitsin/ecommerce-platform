@@ -151,19 +151,28 @@ class Controller {
    * @param {Object} res
   */
   completePurchaseTransaction(req, res) {
+    pre: {
+      Object.keys(this.shoppingCartList[req.body.user.toString()]
+        .getCart()).length <= 7;
+    }
     let user = req.session.user.toString();
     let cart = Object.values(this.shoppingCartList[user].getCart());
     let purchases = [];
     for (let i in Object.keys(cart)) {
       if (cart[i]) {
-      console.log(cart[i]);
-      purchases.push({client: user,
+        console.log(cart[i]);
+        delete this.clientInventory[cart[i].serial];
+        purchases.push({client: user,
                             model_number: cart[i].model,
                             serial_number: cart[i].serial,
                             purchase_Id: cart[i].cartItemId});
       }
     }
     this.purchaseCollectionRepo.save(purchases);
+    delete this.shoppingCartList[user];
+    post: {
+      this.shoppingCartList[req.body.user.toString()] == null;
+    }
   }
 
   /**
@@ -172,6 +181,9 @@ class Controller {
    * @param {Object} res
   */
   cancelPurchaseTransaction(req, res) {
+    pre: {
+      this.shoppingCartList[req.body.user.toString()] != null;
+    }
     let user = req.session.user.toString();
     let cartItems = this.shoppingCartList[user].getCartSerialNumbers();
     for (let item = 0; item < cartItems.length; item++) {
@@ -180,6 +192,9 @@ class Controller {
     }
     delete this.shoppingCartList[user];
     res.status(200).send({success: 'Successfully canceled'});
+    post: {
+      this.shoppingCartList[req.body.user.toString()] == null;
+    }
   }
 
   /**
@@ -303,8 +318,6 @@ class Controller {
       if (req.session.exists==true && req.session.isAdmin==true) {
         res.render('inventory', {items: items});
       } else if (req.session.exists==true && req.session.isAdmin==false) {
-        console.log('UPDATING INVENTORY LIST');
-        console.log(values[0]);
         this.updateInventoryList(values[0]);
         res.render('clientInventory', {items: items});
       } else {
