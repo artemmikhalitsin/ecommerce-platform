@@ -120,7 +120,19 @@ app.post('/inventoryAction', function(req, res) {
 
 // making the login request
 app.post('/loginRequest', function(req, res) {
-   controller.loginRequest(req, res);
+   let data = req.body;
+   let session = req.session;
+   controller.loginRequestAOP(data, session).then((response)=>{
+     req.session = response.session;
+     req.session.save(function(err) {
+         if (err) console.error(err);
+     });
+     if (response.redirect) {
+        res.redirect(response.redirect);
+     } else {
+        res.render(response.render, response.json);
+     }
+   });
 });
 
 app.post('/addToCart', function(req, res) {
@@ -163,7 +175,7 @@ meld.before(Controller, /[a-z]*.nventory[a-zA-z]*/, function(req, res) {
 
 meld.around(controller, 'getAllInventory', function(methodCall) {
   console.log('caughtPage');
-  console.log(methodCall.args);
+  // console.log(methodCall.args);
   // logger.write(stringy.stringify(methodCall.args));
   // logger.end();
   return methodCall.proceed();

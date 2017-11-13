@@ -189,10 +189,9 @@ class Controller {
 
     res.forEach((product, serialNumber) => {
 
-    })
+    });
 
     this.purchaseCollectionRepo.returnItems(returnItem);
-
   }
 
   viewPurchaseCollection(req, res) {
@@ -442,7 +441,6 @@ class Controller {
     } else {
       console.log('Not admin, fool!');
     }
-    //
   }
 
   /**
@@ -450,6 +448,38 @@ class Controller {
    * @param {Object} req HTTP request containing login info
    * @param {Object} res HTTP response to be returned to the user
    */
+
+  loginRequestAOP(data, session) {
+    let response = {
+      session: session,
+      render: 'login',
+      redirect: null,
+      json: null,
+    };
+    return this.userRepo.authenticate(data).then((result) => {
+      if (result.length <= 0) {
+        console.log('Invalid username or password.');
+        response.json = {error: 'Invalid username/password'};
+      } else if (result.length > 1) {
+        console.log('Duplicate users detected');
+        response.json = {error: 'Duplicate users detected'};
+      } else if (result.length == 1) {
+        response.session.exists=true;
+        response.render = null;
+        response.redirect = '/getAllInventoryItems';
+        response.session.user=data.email;
+        if (result[0].is_admin == 1) {
+          response.session.isAdmin=true;
+        } else {
+          response.session.isAdmin=false;
+        }
+      }
+      console.log('json after controller');
+      console.log(response);
+      return response;
+    });
+  }
+
   loginRequest(req, res) {
     let data = req.body;
     this.userRepo.authenticate(data).then((result) => {
