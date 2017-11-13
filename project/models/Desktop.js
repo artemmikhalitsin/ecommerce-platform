@@ -1,3 +1,8 @@
+const rootPath = require('app-root-dir').get();
+const Dimensions = require(rootPath + 'models/Dimensions.js');
+const Computer = require(rootPath + 'models/Computer.js');
+
+
 /**
  * Class representing a Desktop
  * @extends {Computer}
@@ -17,11 +22,9 @@ class Desktop extends Computer {
    * @param {string} brandName brand name
    * @param {string} modelNumber model number
    */
-  constructor(processorType, ramSize, numberCpuCores, harddriveSize,
-              dimensions, price, weight, brandName, modelNumber) {
-    super(processorType, ramSize, numberCpuCores, harddriveSize,
-          price, weight, brandName, modelNumber);
-        this.dimensions = dimensions;
+  constructor(computerInfo, dimensionsInfo, productInfo) {
+        super(computerInfo, productInfo);
+        this.dimensions = new Dimensions(dimensionsInfo);
     }
     /**
      * dimensions accessor

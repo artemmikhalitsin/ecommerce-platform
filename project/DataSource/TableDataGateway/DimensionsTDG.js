@@ -24,8 +24,17 @@ class DimensionsTDG {
         .into('Dimensions');
     }
 
-    static select() {
-        // TODO
+    /**
+     * Selects a dimension row
+     * @param {string} dimensionId the id corresponding to the dimension row
+     * @return {Promise<Object[]>} the list containing the object describing
+     * the dimension row
+     */
+    static select(dimensionId) {
+      return connection
+      .select('*')
+      .where('dimension_id', dimensionId)
+      .from('Dimensions');
     }
 
     /**

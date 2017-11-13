@@ -1,96 +1,62 @@
 const rootPath = require('app-root-dir').get();
-// REVIEW: UnitOfWork is never used here, consider removing - Artem
-// const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
-const ProductDescriptionsTDG = require(rootPath +
-   '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
-
-
 /**
- * Identity map of product descriptions
+ * Identity map of product descriptions, implemented as a singleton
  * @author TODO: IF YOU WROTE THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Artem Mikhalitsin
  * REVIEW: Please make sure the comments are correct - Artem
  */
+let _instance;
 
 class ProductDescriptionsIdentityMap {
     /**
-     * Creates an product description identity map
-     * Loads all product descriptions from database into memory
+     * Creates a product description identity map
      */
     constructor() {
-        this.productDescTDG = new ProductDescriptionsTDG();
-        this.productDesc = [];
+        this.products = [];
+    }
 
-        let context = this.productDescTDG.select();
-        Promise.all([context])
-        .then((values) => {
-          this.productDesc = values[0];
-        });
+    static getInstance() {
+      if(!_instance){
+        _instance = new ProductDescriptionsIdentityMap;
+        return _instance;
+      }
+      return _instance;
     }
 
     /**
-     * Gets all the products currently stored in the Identity map
-     * @return {Object[]} an array containing the products
+     * Gets a products matching given model numbers form the map
+     * @param {string} modelNumber the model number corresponding to the product
+     * @return {Object} the object corresponding to the given model
+     * numbers in the identity map, if exists
      */
-    getAll() {
-        let result = this.productDesc;
-        if (this.productDesc.length > 0) {
-            return result;
-        } else {
-            let productsFromTDG = this.productDescTDG.select();
-            Promise.all([productsFromTDG])
-            .then((values) => {
-              result = values[0];
-            });
-            return result;
-        }
-    }
-
-    // TODO: Is this the same method as above? - Artem
-    /**
-     * Gets a list of products matching given model numbers
-     * @param {string[]} modelNumbers a list of alpha-numberical model numbers
-     * @return {Object[]} a list of products corresponding to the given model
-     * numbers
-     */
-    get(modelNumbers) {
-        let allProducts = this.getAll();
-        if (allProducts != null) {
-          let results = allProducts.filter(
-            (desc) => modelNumbers.includes(desc.model_number)
-          );
-          return results;
-        } else return [];
+    get(modelNumber) {
+      return this.products.find(
+        (element) => { return element.model_number == modelNumber }
+      )
     }
 
     /**
-     * Adds new objects into the identity map
-     * @param {Object[]} newProductDescriptions a list containing new products
+     * Adds a new product into the identity map
+     * @param {Object} newProductDescriptions a list containing new products
      */
-    add(newProductDescriptions) {
-        // If list contains no items, do no computation
-        if (newProductDescriptions.length > 0) {
-          // Extract model numbers of each product
-          let existingModelNumbers = this.productDesc.map(
-            (product) => product.model_number
-          );
-          for (let i = 0; i < newProductDescriptions.length; i++) {
-              let productToAdd = newProductDescriptions[i];
-              // Add only if item isn't already in the known model numbers
-              if (!existingModelNumbers.includes(productToAdd.model_number)) {
-                this.productDesc.push(productToAdd);
-              }
-          }
-        }
+    add(product) {
+      this.products.push(product);
     }
+
     /**
      * Deletes items from the identity map by filtering them out
-     * @param {string[]} productDescriptionsToRemove a list of alpha-numberical
+     * @param {string} modelNumber a list of alpha-numberical
      * model numbers, for which the products are to be removed
      */
-    delete(productDescriptionsToRemove) {
-        this.productDesc = this.productDesc.filter(
-          (desc) => !productDescriptionsToRemove.includes(desc.model_number)
-      );
+    delete(modelNumber) {
+      let index = this.products.findIndex(
+        (element) => { return element.model_number == modelNumber }
+      )
+
+      if(index > -1) {
+        this.products.splice(index, 1);
+      }
     }
 }
+
 module.exports = ProductDescriptionsIdentityMap;

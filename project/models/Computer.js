@@ -16,13 +16,12 @@ class Computer extends ProductDescription {
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
      */
-    constructor(processorType, ramSize, numberCpuCores,
-                harddriveSize, price, weight, brandName, modelNumber) {
-      super(price, weight, brandName, modelNumber);
-      this.processorType = processorType;
-      this.ramSize = ramSize;
-      this.numberCpuCores = numberCpuCores;
-      this.harddriveSize = harddriveSize;
+    constructor(computerInfo, productInfo) {
+      super(productInfo);
+      this.processorType = computerInfo.processorType;
+      this.ramSize = computerInfo.ramSize;
+      this.numberCpuCores = computerInfo.numberCpuCores;
+      this.harddriveSize = computerInfo.harddriveSize;
     }
     /**
      * processorType accessor

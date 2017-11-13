@@ -26,6 +26,8 @@ const MonitorsTDG = require(rootPath +
   '/DataSource/TableDataGateway/MonitorsTDG.js');
 const TabletsTDG = require(rootPath +
   '/DataSource/TableDataGateway/TabletsTDG.js');
+const PurchaseCollectionTDG = require(rootPath +
+  '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
 
 /**
  * Unit of Work implementation
@@ -46,15 +48,30 @@ class UnitOfWork {
     this.laptopsTDG = new LaptopsTDG();
     this.monitorsTDG = new MonitorsTDG();
     this.tabletsTDG = new TabletsTDG();
+    this.purchaseTDG = new PurchaseCollectionTDG();
 
     this.dirtyElements = [];
     this.newElements = [];
     this.deletedElements = [];
+    this.newInventoryItems = [];
+    this.deletedInventoryItems = [];
+    this.newPurchases = [];
+    this.deletePurchases = [];
   }
   registerNew(object) {
     this.newElements = [];
     this.newElements.push(object);
   }
+  registerNewPurchase(object) {
+    this.newPurchases = [];
+    this.newPurchases.push(object);
+  }
+
+  registerReturn(object){
+    this.deletePurchases = [];
+    this.deletedPurchase.push(object);
+  }
+  
   registerDirty(object) {
     this.dirtyElements = [];
     this.dirtyElements.push(object);
@@ -63,31 +80,73 @@ class UnitOfWork {
     this.deletedElements = [];
     this.deletedElements.push(object);
   }
-  commitAll(object) {
+  registerNewItem(object){
+    this.newInventoryItems = [];
+    this.newInventoryItems.push(object);
+  }
+  registerDeletedItem(object){
+    this.deletedInventoryItems = [];
+    this.deletedInventoryItems.push(object);
+  }
+  commitAll() {
+
     let electronics = [];
     return connection.transaction((trx) => {
       console.log('Electronics new Elements: ');
       console.log(this.newElements[0]);
       console.log('Electronics to update ');
       console.log(this.dirtyElements[0]);
-      console.log('Electronics to delete: ');
-      console.log(this.deletedElements[0]);
-      let deletedItems;
-      // delete items
-      if (this.deletedElements[0].length > 0) {
-       deletedItems = Promise.each(this.deletedElements[0], (electronic) => {
-        return this.inventoryItemsTDG.delete(electronic).transacting(trx).then(
-          () => {
-              console.log('deleted inventory item');
-            }
-        );
-      });
-}
-      // end of delete
+      console.log("Inventory items to add");
+      console.log(this.newInventoryItems[0]);
+      console.log("Inventory items to delete: ");
+      console.log(this.deletedInventoryItems[0]);
+      console.log("Purchase to add:");;
+      console.log(this.newPurchases[0]);
+      console.log("Purchase to delete:");
+      console.log(this.deletePurchases[0]);
 
-      // update
+      let deletedItems;
+      //delete items
+      if(this.deletedInventoryItems[0] != null && this.deletedInventoryItems[0].length > 0){
+       deletedItems = Promise.each(this.deletedInventoryItems[0], (electronic) => {
+        return this.inventoryItemsTDG.delete(electronic).transacting(trx).then(() => {
+              console.log('deleted inventory item');
+        })
+      });}
+      //end of delete
+      //add items
+      let newItems;
+      if(this.newInventoryItems[0] != null && this.newInventoryItems[0].length > 0){
+        newItems = Promise.each(this.newInventoryItems[0], (electronic) => {
+          return this.inventoryItemsTDG.add(electronic.serial_number, electronic.model_number).transacting(trx).then(() => {
+               console.log('added inventory item');
+         })
+       });}
+
+       //add purchases
+       let purchasedItems;
+       if (this.newPurchases[0] != null && this.newPurchases[0].length > 0) {
+         purchasedItems = Promise.each(this.newPurchases[0], (electronic) => {
+           return this.purchaseTDG.add(electronic.client, electronic.serial_number, electronic.model_number, electronic.purchase_Id)
+                  .transacting(trx).then(() => {
+                    console.log("Added purchased items");
+                  })
+         })
+       }
+
+       //remove purchase
+       let deletedPurchase;
+       if(this.deletedPurchases[0] != null && this.deletedPurchases[0].length > 0){
+        deletedPurchases = Promise.each(this.deletedPurchases[0], (electronic) => {
+         return this.purchaseTDG.delete(electronic).transacting(trx).then(() => {
+               console.log('deleted purchase item');
+         })
+       });}
+
+      //update products
       let updateditems;
-      if (this.dirtyElements[0].length > 0) {
+      if(this.dirtyElements[0] && this.dirtyElements[0].length > 0){
+
       updateditems = Promise.each(this.dirtyElements[0], (electronic) => {
         return this.productDescTDG.update(electronic).transacting(trx).then(
           (model_number) => {
@@ -100,46 +159,47 @@ class UnitOfWork {
                     .then(
                       (dimensionsId) => {
                         return this.computersTDG
-                        .update(electronic)
-                        .transacting(trx)
-                        .then((compId) => {
-                          return this.desktopsTDG
-                          .update(compId, dimensionsId, electronic)
-                          .transacting(trx);
-                        });
-                      });
+                          .update(electronic)
+                          .transacting(trx)
+                          .then(
+                            (compId) => {
+                              return this.desktopsTDG
+                                .update(compId, dimensionsId, electronic)
+                                .transacting(trx);
+                          });
+                    });
                  };
                  break;
                case 'Laptop':
                  {
                    return this.computersTDG
-                   .update(electronic)
-                   .transacting(trx)
-                   .then(
-                     (compId) => {
-                       return this.laptopsTDG
-                       .update(compId, electronic)
-                       .transacting(trx);
-                   });
+                    .update(electronic)
+                    .transacting(trx)
+                    .then(
+                      (compId) => {
+                        return this.laptopsTDG
+                          .update(compId, electronic)
+                          .transacting(trx);
+                    });
                  };
                  break;
                case 'Tablet':
                  {
                    return this.dimensionsTDG
-                   .update(electronic.dimension)
-                   .transacting(trx)
-                   .then(
-                     (dimensionsId) => {
-                       return this.computersTDG
-                       .update(electronic)
-                       .transacting(trx)
-                       .then(
-                         (compId) => {
-                           return this.tabletsTDG
-                           .update(compId, dimensionsId, electronic)
-                           .transacting(trx);
-                     });
-                   });
+                    .update(electronic.dimension)
+                    .transacting(trx)
+                    .then(
+                      (dimensionsId) => {
+                        return this.computersTDG
+                          .update(electronic)
+                          .transacting(trx)
+                          .then(
+                            (compId) => {
+                              return this.tabletsTDG
+                                .update(compId, dimensionsId, electronic)
+                                .transacting(trx);
+                          });
+                    });
                  };
                  break;
                case 'Monitor':
@@ -153,23 +213,20 @@ class UnitOfWork {
       }
       // end of update
 
-      // add items
-      let addeditems = Promise.each(this.newElements[0], (electronic) => {
+      //add products
+      let addeditems;
+      if(this.newElements[0] != null){
+      addeditems = Promise.each(this.newElements[0], (electronic) => {
         return this.productDescTDG
           .add(electronic)
           .transacting(trx)
           .then(
             (model_number) => {
-              Promise.each(electronic.serial_number, (item_serial_number) => {
-                return this.inventoryItemsTDG
-                .add(item_serial_number, electronic.model_number)
-                .transacting(trx)
-                .then(
-                  (id) => {
-                    console.log('added inventory item ');
-                  });
-              });
-
+          /*Promise.each(electronic.serial_number, (item_serial_number) => {
+            return this.inventoryItemsTDG.add(item_serial_number, electronic.model_number).transacting(trx).then((id) => {
+              console.log('added inventory item ');
+            });
+          });*/
               switch (electronic.type) {
                 case 'Desktop':
                   {
@@ -179,28 +236,28 @@ class UnitOfWork {
                       .then(
                         (dimensionsId) => {
                           return this.computersTDG
-                          .add(electronic)
-                          .transacting(trx)
-                          .then(
-                            (compId) => {
-                              return this.desktopsTDG
-                              .add(compId, dimensionsId, electronic)
-                              .transacting(trx);
+                            .add(electronic)
+                            .transacting(trx)
+                            .then(
+                              (compId) => {
+                                return this.desktopsTDG
+                                  .add(compId, dimensionsId, electronic)
+                                  .transacting(trx);
                             });
-                          });
+                      });
                   };
                   break;
                 case 'Laptop':
                   {
                     return this.computersTDG
-                    .add(electronic)
-                    .transacting(trx)
-                    .then(
-                      (compId) => {
-                        return this.laptopsTDG
-                        .add(compId, electronic)
-                        .transacting(trx);
-                      });
+                      .add(electronic)
+                      .transacting(trx)
+                      .then(
+                        (compId) => {
+                          return this.laptopsTDG
+                            .add(compId, electronic)
+                            .transacting(trx);
+                        });
                   };
                   break;
                 case 'Tablet':
@@ -211,14 +268,15 @@ class UnitOfWork {
                       .then(
                         (dimensionsId) => {
                           return this.computersTDG
-                          .add(electronic)
-                          .transacting(trx)
-                          .then((compId) => {
-                            return this.tabletsTDG
-                            .add(compId, dimensionsId, electronic)
-                            .transacting(trx);
-                      });
-                    });
+                            .add(electronic)
+                            .transacting(trx)
+                            .then(
+                              (compId) => {
+                                return this.tabletsTDG
+                                  .add(compId, dimensionsId, electronic)
+                                  .transacting(trx);
+                              });
+                        });
                   };
                   break;
                 case 'Monitor':
@@ -227,11 +285,13 @@ class UnitOfWork {
                   };
                   break;
               }
-            });
-      }); // add
-      Promise.props([deletedItems, updateditems, addeditems])
-      .then(trx.commit)
-      .catch(trx.rollback);
+        });
+      }
+      //add
+      );}
+      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems])
+        .then(trx.commit)
+        .catch(trx.rollback);
     });
   }
 

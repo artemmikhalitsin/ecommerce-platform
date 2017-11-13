@@ -6,7 +6,6 @@ const connection = require('knex')(configuration);
 /**
  * Table Data Gateway for the Computer table
  * @author TODO: IF YOU'RE AN AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
- * @author Artem Mikhalitsin
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class ComputersTDG {
@@ -28,14 +27,14 @@ class ComputersTDG {
     /**
      * Retrieves computers from the database, which have an id that appears
      * in the given list
-     * @param {number[]} idList a list of computer ids
-     * @return {Promise<Object[]>} a promise which resolves to the list of
-     * computers matching the query
+     * @param {string} modelNumber the number
+     * @return {Promise<Object[]>} a promise which resolves to the list which
+     * contains the matching object
      */
-    static select(idList) {
+    static select(computerId) {
         return connection.select('*')
-                         .from('Computer')
-                         .whereIn('id', idList);
+                         .where('comp_id', computerId)
+                         .from('Computer');
     }
     /**
      * Updates the specifications of a computer in the database

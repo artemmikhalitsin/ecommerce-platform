@@ -6,16 +6,14 @@
 class ProductDescription {
     /**
      * Given info common to all products, creates an object
-     * @param {string} price price
-     * @param {string} weight weight
-     * @param {string} brandName brand name
-     * @param {string} modelNumber model number
+     * @param {Object} productInfo an object containing the specification of
+     * the product
      */
-    constructor(price, weight, brandName, modelNumber) {
-        this.price = price;
-        this.weight = weight;
-        this.brandName = brandName;
-        this.modelNumber = modelNumber;
+    constructor(productInfo) {
+        this.price = productInfo.price;
+        this.weight = productInfo.weight;
+        this.brandName = productInfo.brandName;
+        this.modelNumber = productInfo.modelNumber;
     }
 
     /**

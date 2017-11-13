@@ -20,21 +20,24 @@ class DesktopsTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new desktop record in the database
      */
-    static add(compId, dimensionsId, desktop) {
+    static add(compId, dimensionsId, desktopInfo) {
         return connection.insert({
             'comp_id': compId,
             'dimension_id': dimensionsId,
-            'model_number': desktop.model_number,
+            'model_number': desktopInfo.model_number,
         }, 'id')
         .into('Desktop');
     }
     /**
      * Retrieves desktop entries from the database given a list of id's to match
-     * @param {number[]} idList a list of desktop ids
-     * @return {Object[]}
+     * @param {number} modelNumber model number of the item to retrieve
+     * @return {Promise<Object[]>} array containing the matching item
      */
-    static select(idList) {
-
+    static select(modelNumber) {
+      return connection
+      .select('*')
+      .where('model_number', modelNumber)
+      .from('Desktop');
     }
 
     /**

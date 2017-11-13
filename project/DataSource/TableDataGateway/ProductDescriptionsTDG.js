@@ -6,6 +6,7 @@ const connection = require('knex')(configuration);
 /**
  * Table Data Gateway for the ProductDescription table
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Artem Mikhalitsin
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class ProductDescriptionsTDG {
@@ -26,29 +27,17 @@ class ProductDescriptionsTDG {
   }
 
   /**
-   * Retrieves all product descriptions from the database
-   * @return {Promise<Object[]>} promise which resolves to the list containing
-   * all products in the ProductDescription table
-   */
-  static select() {
-    return connection('ProductDescription').select('*');
-  }
-
-  /*
-    REVIEW: I believe select and selectById can be unified into a single method
-    with a signature select(model_numbers), where model_numbers is a list.
-    If the function is called with no arguments (select()) - retrieve all,
-    otherwise, retrieve all corresponding to models in the list - Artem
-  */
-  /**
-   * Retrieves a product associated with the specified model number
+   * Retrieves all product descriptions from the database corresponding to a
+   * given model number
    * @param {string} modelNumber the model number of the product
    * @return {Promise<Object[]>} promise which resolves to the list containing
-   * the product associated to the specified model number
+   * the appropriate object
    */
-  static selectById(modelNumber) {
+  static select(modelNumber) {
     return connection('ProductDescription')
-                .where({model_number: modelNumber}).select('*');
+    .select('*')
+    .where('model_number', modelNumber)
+    .from('ProductDescription');
   }
 
   /**

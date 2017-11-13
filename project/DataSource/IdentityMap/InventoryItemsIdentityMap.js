@@ -1,8 +1,6 @@
-const rootPath = require('app-root-dir').get();
+
 // REVIEW: UnitOfWork is never used here, consider removing - Artem
 // const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
-const InventoryItemsTDG = require(rootPath +
-  '/DataSource/TableDataGateway/InventoryItemsTDG.js');
 
 /**
  * Identity map of inventory items
@@ -15,11 +13,12 @@ class InventoryItemsIdentityMap {
      * Loads all inventory items from database into memory
      */
     constructor() {
-        // Instance variables
+        this.rootPath = require('app-root-dir').get();
+        let UnitOfWork = require(this.rootPath + '/DataSource/UnitOfWork.js');
+        let InventoryItemsTDG = require(this.rootPath + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
         this.inventoryTDG = new InventoryItemsTDG();
-        this.InventoryItems = [];
-
         let context = this.inventoryTDG.select();
+        this.InventoryItems = [];
         Promise.all([context])
         .then((values) => {
             this.InventoryItems = values[0];
@@ -30,16 +29,18 @@ class InventoryItemsIdentityMap {
      * Gets all the items currently stored in the Identity map
      * @return {Object[]} an array containing the items
      */
-    getAll() {
+    getAll(){
+        console.log("From GetAll " + this.InventoryItems);
         let result = this.InventoryItems;
-        if (this.InventoryItems.length > 0) {
+        if(this.InventoryItems.length > 0){
             return result;
-        } else {
-            let itemsFromTDG = this.inventoryTDG.select();
+        }
+        else{
+            var itemsFromTDG = this.inventoryTDG.select();
             Promise.all([itemsFromTDG])
             .then((values) => {
               result = values[0];
-            });
+            })
             return result;
         }
     }
@@ -50,10 +51,12 @@ class InventoryItemsIdentityMap {
      * @return {Object[]} a list of items corresponding to the given model
      * numbers
      */
-    get(modelNumbers) {
-        return this.InventoryItems.filter(
-          (item) => modelNumbers.includes(item.model_number)
-        );
+    get(model_numbers) {
+        return this.InventoryItems.filter(function(desc) {
+            return model_numbers.findIndex(
+              (x) => x == desc.model_number
+            ) > -1;
+        });
     }
 
     // TODO: Is this the same method as above? - Artem
@@ -62,14 +65,15 @@ class InventoryItemsIdentityMap {
      * @param {string[]} modelNumbers a list of alpha-numberical model numbers
      * @return {Object[]} a list of objects corresponding to the given model
      */
-    getByModelNumbers(modelNumbers) {
-        let allItems = this.getAll();
-        if (allItems != null) {
-        let results = allItems.filter(
-          (item) => modelNumbers.includes(item.model_number)
-        );
+    getByModelNumbers(model_numbers){
+        var allItems = this.getAll();
+        if(allItems != null){
+        var results = allItems.filter(function(item){
+            return model_numbers.findIndex(x => x == item.model_number) > -1;
+        });
         return results;
-        } else return [];
+        }
+        else return [];
     }
 
     /**
@@ -77,7 +81,10 @@ class InventoryItemsIdentityMap {
      * @param {Object[]} newInventoryItems a list containing new items
      */
     add(newInventoryItems) {
-        this.InventoryItems.push(newInventoryItems);
+        for(var i = 0; i < newInventoryItems.length; i++){
+            if(this.InventoryItems.findIndex(p => p.serial_number == newInventoryItems[i].serial_number) === -1)
+                this.InventoryItems.push(newInventoryItems[i]);
+        }
     }
 
     /**
@@ -86,10 +93,11 @@ class InventoryItemsIdentityMap {
      * model numbers for which the items are to be removed
      */
     delete(inventoryItemsToRemove) {
-        // Keep only the items which are not marked for deletion
-        this.InventoryItems = this.InventoryItems.filter(
-          (item) => !inventoryItemsToRemove.includes(item.model_number)
-        );
+        this.InventoryItems.filter(function(desc) {
+            return inventoryItemsToRemove.findIndex(
+              (x) => x == desc.model_number
+            ) === -1;
+        });
     }
 }
 module.exports = InventoryItemsIdentityMap;
