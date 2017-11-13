@@ -1,6 +1,4 @@
-
-// REVIEW: UnitOfWork is never used here, consider removing - Artem
-// const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
+const rootPath = require('app-root-dir').get();
 
 /**
  * Identity map of inventory items
@@ -10,19 +8,9 @@
 class InventoryItemsIdentityMap {
     /**
      * Creates an inventory item identity map
-     * Loads all inventory items from database into memory
      */
     constructor() {
-        this.rootPath = require('app-root-dir').get();
-        let UnitOfWork = require(this.rootPath + '/DataSource/UnitOfWork.js');
-        let InventoryItemsTDG = require(this.rootPath + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
-        this.inventoryTDG = new InventoryItemsTDG();
-        let context = this.inventoryTDG.select();
         this.InventoryItems = [];
-        Promise.all([context])
-        .then((values) => {
-            this.InventoryItems = values[0];
-        });
     }
 
     /**
