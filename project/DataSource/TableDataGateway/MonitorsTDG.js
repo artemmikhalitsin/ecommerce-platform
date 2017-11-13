@@ -15,14 +15,14 @@ class MonitorsTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new monitor record in the database
      */
-    add(monitor) {
+    static add(monitor) {
         return connection.insert({
             'model_number': monitor.model_number,
             'display_size': monitor.display_size,
         }, 'id')
         .into('Monitor');
     }
-    select() {
+    static select() {
         // TODO
     }
 
@@ -32,7 +32,7 @@ class MonitorsTDG {
      * @return {Promise<number>} promise which resolves to the number of
      * rows affected
      */
-    update(monitor) {
+    static update(monitor) {
       // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
           'model_number': monitor.model_number,

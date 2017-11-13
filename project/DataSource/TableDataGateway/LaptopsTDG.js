@@ -17,7 +17,7 @@ class LaptopsTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new laptop record in the database
      */
-    add(compId, laptop) {
+    static add(compId, laptop) {
         return connection.insert({
             'comp_id': compId,
             'model_number': laptop.model_number,
@@ -30,7 +30,7 @@ class LaptopsTDG {
         .into('Laptop');
     }
 
-    select() {
+    static select() {
         // TODO
     }
 
@@ -42,7 +42,7 @@ class LaptopsTDG {
      * @return {Promise<number>} promise which resolves to the number of
      * rows affected
      */
-    update(compId, laptop) {
+    static update(compId, laptop) {
       // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
           'comp_id': laptop.comp_id,

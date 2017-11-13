@@ -5,7 +5,8 @@ const connection = require('knex')(configuration);
 
 /**
  * Table Data Gateway for the Desktop table
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author TODO: IF YOU'RE AN AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Artem Mikhalitsin
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class DesktopsTDG {
@@ -19,17 +20,21 @@ class DesktopsTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new desktop record in the database
      */
-    add(compId, dimensionsId, desktop) {
+    static add(compId, dimensionsId, desktop) {
         return connection.insert({
             'comp_id': compId,
-            'model_number': desktop.model_number,
             'dimension_id': dimensionsId,
+            'model_number': desktop.model_number,
         }, 'id')
         .into('Desktop');
     }
+    /**
+     * Retrieves desktop entries from the database given a list of id's to match
+     * @param {number[]} idList a list of desktop ids
+     * @return {Object[]}
+     */
+    static select(idList) {
 
-    select() {
-        // TODO
     }
 
     /**
@@ -42,7 +47,7 @@ class DesktopsTDG {
      * @return {Promise<number>} promise which resolves to the number of
      * rows affected
      */
-    update(compId, dimensionsId, desktop) {
+    static update(compId, dimensionsId, desktop) {
         return connection.update({
         'model_number': desktop.model_number,
         'dimension_id': desktop.dimension.dimensions_id,

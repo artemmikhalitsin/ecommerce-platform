@@ -15,7 +15,7 @@ class ProductDescriptionsTDG {
    * @return {Promise<number[]>} promise which resolves to the list containing
    * the id of the new product record in the database
    */
-  add(productDescription) {
+  static add(productDescription) {
     return connection.insert({
       'model_number': productDescription.model_number,
       'brand_name': productDescription.brand_name,
@@ -30,7 +30,7 @@ class ProductDescriptionsTDG {
    * @return {Promise<Object[]>} promise which resolves to the list containing
    * all products in the ProductDescription table
    */
-  select() {
+  static select() {
     return connection('ProductDescription').select('*');
   }
 
@@ -46,7 +46,7 @@ class ProductDescriptionsTDG {
    * @return {Promise<Object[]>} promise which resolves to the list containing
    * the product associated to the specified model number
    */
-  selectById(modelNumber) {
+  static selectById(modelNumber) {
     return connection('ProductDescription')
                 .where({model_number: modelNumber}).select('*');
   }
@@ -57,8 +57,7 @@ class ProductDescriptionsTDG {
    * @return {Promise<number>} promise which resolves to the number of
    * rows affected
    */
-  update(productDescription) {
-    // TODO
+  static update(productDescription) {
     return connection
       .update({
         'brand_name': productDescription.brand_name,

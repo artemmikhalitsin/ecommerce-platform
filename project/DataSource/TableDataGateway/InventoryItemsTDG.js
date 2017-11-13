@@ -17,7 +17,7 @@ class InventoryItemsTDG {
      * @return {Promise<number[]>} a promise which resolves to an array
      * containing the id of the inserted item in the table
      */
-    add(serialNumber, modelNumber) {
+    static add(serialNumber, modelNumber) {
         return connection.insert({
             'serial_number': serialNumber,
             'model_number': modelNumber,
@@ -29,7 +29,7 @@ class InventoryItemsTDG {
      * Gets all items from the table
      * @return {Promise<Object[]>} a promise which resolves to an array of items
      */
-    select() {
+    static select() {
         return connection('Inventory').select('*');
     }
     // update is not in current requirements for inventory items
@@ -43,7 +43,7 @@ class InventoryItemsTDG {
      * @return {Promise<number>} a promise which resolves to the number of rows
      * affected
      */
-    delete(inventoryItem) {
+    static delete(inventoryItem) {
         // TODO
         return connection.from('Inventory').where({id: inventoryItem.id}).del();
     }

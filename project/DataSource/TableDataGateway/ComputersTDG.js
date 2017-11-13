@@ -5,7 +5,8 @@ const connection = require('knex')(configuration);
 
 /**
  * Table Data Gateway for the Computer table
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author TODO: IF YOU'RE AN AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Artem Mikhalitsin
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class ComputersTDG {
@@ -15,7 +16,7 @@ class ComputersTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new computer record in the database
      */
-    add(computer) {
+    static add(computer) {
         return connection.insert({
             'processor_type': computer.processor_type,
             'ram_size': computer.ram_size,
@@ -24,9 +25,17 @@ class ComputersTDG {
         }, 'comp_id')
         .into('Computer');
     }
-
-    select() {
-        // TODO
+    /**
+     * Retrieves computers from the database, which have an id that appears
+     * in the given list
+     * @param {number[]} idList a list of computer ids
+     * @return {Promise<Object[]>} a promise which resolves to the list of
+     * computers matching the query
+     */
+    static select(idList) {
+        return connection.select('*')
+                         .from('Computer')
+                         .whereIn('id', idList);
     }
     /**
      * Updates the specifications of a computer in the database
@@ -34,8 +43,7 @@ class ComputersTDG {
      * @return {Promise<number>} promise which resolves to the number of
      * rows affected
      */
-    update(computer) {
-        // REVIEW: This was marked as todo - is this still the case? - Artem
+    static update(computer) {
         return connection.update({
           'processor_type': computer.processor_type,
           'ram_size': computer.ram_size,
