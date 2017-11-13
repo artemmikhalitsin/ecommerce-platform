@@ -126,7 +126,18 @@ app.post('/inventoryAction', function(req, res) {
 
 // making the login request
 app.post('/loginRequest', function(req, res) {
+<<<<<<< HEAD
    controller.loginRequest(req, res);
+=======
+   controller.loginRequestAOP(req, res).then((response)=>{
+     console.log(response);
+     if (response.redirect) {
+        res.redirect(response.redirect);
+     } else {
+        res.render(response.render, response.json);
+     }
+   });
+>>>>>>> a6414324901dbc941e5d6860bde69f4d4453ef96
 });
 
 app.post('/addToCart', function(req, res) {
@@ -167,8 +178,13 @@ meld.before(controller, /[a-z]*.nventory[a-zA-z]*/, function(req, res) {
 //   return page.proceed();
 // });ghn
 
+<<<<<<< HEAD
 meld.around(controller, authPages, (joinpoint) => {
   console.log('Caught by aspect, validating the user...');
+=======
+meld.around(controller, 'loginRequestAOP', (joinpoint) => {
+  console.log('Caught by aspect, validating the cookie...');
+>>>>>>> a6414324901dbc941e5d6860bde69f4d4453ef96
   let req = joinpoint.args[0];
   let res = joinpoint.args[1];
   let data = req.body;
@@ -194,6 +210,22 @@ meld.around(controller, authPages, (joinpoint) => {
       }
     }
   });
+<<<<<<< HEAD
+=======
+});
+
+meld.around(controller, 'getAllInventory', function(methodCall) {
+  console.log('caughtPage' + methodCall.method);
+  // console.log(methodCall.args);
+  // logger.write(stringy.stringify(methodCall.args));
+  // logger.end();
+  return methodCall.proceed();
+  // if (methodCall.req.session.exists) {
+  //   return methodCall.proceed;
+  // } else {
+  //   return methodCall.res.redirect('/login');
+  // }
+>>>>>>> a6414324901dbc941e5d6860bde69f4d4453ef96
 });
 
 // meld.around(app, 'render', function(methodCall) {
