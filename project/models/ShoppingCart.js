@@ -14,7 +14,7 @@ class ShoppingCart {
     }
 
     getCartSerialNumbers() {
-      return Object.values(this.cartItems);
+      return Object.keys(this.cartItems);
     }
 
 

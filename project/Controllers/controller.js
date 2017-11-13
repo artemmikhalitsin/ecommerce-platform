@@ -179,8 +179,7 @@ class Controller {
   */
   completePurchaseTransaction(req, res) {
     pre: {
-      Object.keys(this.shoppingCartList[req.body.user.toString()]
-        .getCart()).length <= 7;
+      Object.keys(this.shoppingCartList[req.session.user.toString()].getCart()).length <= 7;
     }
     let user = req.session.user.toString();
     let cart = Object.values(this.shoppingCartList[user].getCart());
@@ -198,7 +197,7 @@ class Controller {
     this.purchaseCollectionRepo.save(purchases);
     delete this.shoppingCartList[user];
     post: {
-      this.shoppingCartList[req.body.user.toString()] == null;
+      this.shoppingCartList[req.session.user.toString()] == null;
     }
   }
 
@@ -209,7 +208,7 @@ class Controller {
   */
   cancelPurchaseTransaction(req, res) {
     pre: {
-      this.shoppingCartList[req.body.user.toString()] != null;
+      this.shoppingCartList[req.session.user.toString()] != null;
     }
     let user = req.session.user.toString();
     let cartItems = this.shoppingCartList[user].getCartSerialNumbers();
@@ -220,7 +219,7 @@ class Controller {
     delete this.shoppingCartList[user];
     res.status(200).send({success: 'Successfully canceled'});
     post: {
-      this.shoppingCartList[req.body.user.toString()] == null;
+      this.shoppingCartList[req.session.user.toString()] == null;
     }
   }
 
