@@ -50,14 +50,24 @@ class ProductDescriptionRepository {
     let monitors = this.MonitorsTDG.getAll();
     let tablets = this.TabletsTDG.getAll();
     let result = [];
-    Promise.props(desktops, laptops, monitors, tablets).then((values)=>{
-      for(let n = 0; n < 4; n++){
-        for(let i = 0; i < values[n].length; i++){
-          result.push(values[n][i]);
+    Promise.props([desktops, laptops, monitors, tablets]).then((values)=>{
+        for(let i = 0; i < values.length; i++){
+          result.push(values[i]);
         }
-      }
       
-      console.log("I am in get all includes" + JSON.stringify(result));
+    return result;
+    });
+  }
+  getByModelNumbers(modelNumbers){
+    let desktops = this.DesktopsTDG.getByModelNumbers(modelNumbers);
+    let laptops = this.LaptopsTDG.getByModelNumbers(modelNumbers);
+    let monitors = this.MonitorsTDG.getByModelNumbers(modelNumbers);
+    let tablets = this.TabletsTDG.getByModelNumbers(modelNumbers);
+    let result = [];
+    Promise.props([desktops, laptops, monitors, tablets]).then((values)=>{
+        for(let i = 0; i < values.length; i++){
+          result.push(values[i]);
+        }
       return result;
     });
   }

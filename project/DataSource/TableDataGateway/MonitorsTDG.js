@@ -38,10 +38,10 @@ class MonitorsTDG {
                                         return result;
                                     });
     }
-    getAllByModelNumber(modelNumber){
+    getAllByModelNumber(modelNumbers){
         let result = [];
         return connection('Monitor').select('*')
-                                    .where({model_number: modelNumber})
+                                    .whereIn('model_number', modelNumbers)
                                     .leftJoin('ProductDescription', 'Monitor.model_number','ProductDescription.model_number')
                                     .then((monitors) => {
                                         monitors.forEach(function(monitor){

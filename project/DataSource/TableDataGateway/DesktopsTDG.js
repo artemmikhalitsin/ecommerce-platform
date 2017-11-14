@@ -38,7 +38,7 @@ class DesktopsTDG {
                                 .leftJoin('ProductDescription', 'Desktop.model_number','ProductDescription.model_number')
                                 .then((desktops) => {
                                     desktops.forEach(function(desktop){
-                                        result.push(new Desktop(
+                                        let d = new Desktop(
                                             desktop.processor_type, 
                                             desktop.ram_size, 
                                             desktop.number_cpu_cores, 
@@ -52,15 +52,19 @@ class DesktopsTDG {
                                             desktop.weight, 
                                             desktop.brand_name, 
                                             desktop.model_number, 
-                                            desktop.comp_id));
+                                            desktop.comp_id)
+                                            
+                                        console.log("The deskto pobject is: " + JSON.stringify(d));
+                                        result.push(d);
                                     });
+                                    console.log(result + "This is from the tdg");
                                     return result;
                                 });
     }
-    getByModelNumber(modelNumber){
+    getByModelNumbers(modelNumbers){
         let result = [];
         return connection('Desktop').select('*')
-                                    .where({model_number: modelNumber})
+                                    .whereIn('model_number', modelNumbers)
                                     .innerJoin('Computer', 'Desktop.comp_id', 'Computer.comp_id')
                                     .innerJoin('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
                                     .leftJoin('ProductDescription', 'Desktop.model_number','ProductDescription.model_number')

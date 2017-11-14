@@ -64,10 +64,10 @@ class TabletsTDG {
                                         return result;
                                     });
     }
-    getByModelNumber(modelNumber){
+    getByModelNumber(modelNumbers){
         let result = [];
         return connection('Tablet').select('*')
-                                    .where({model_number: modelNumber})
+                                    .whereIn('model_number', modelNumbers)
                                     .leftJoin('Computer', 'Tablet.comp_id', 'Computer.comp_id')
                                     .leftJoin('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
                                     .leftJoin('ProductDescription', 'Tablet.model_number','ProductDescription.model_number')

@@ -56,10 +56,10 @@ class LaptopsTDG {
                                         return result;
                                     });
     }
-    getByModelNumber(modelNumber){
+    getByModelNumbers(modelNumbers){
         let result = [];
         return connection('Laptop').select('*')
-                                    .where({model_number: modelNumber})
+                                    .whereIn('model_number', modelNumbers)
                                     .leftJoin('Computer', 'Laptop.comp_id', 'Computer.comp_id')
                                     .leftJoin('ProductDescription', 'Laptop.model_number','ProductDescription.model_number')
                                     .then((laptops) => {

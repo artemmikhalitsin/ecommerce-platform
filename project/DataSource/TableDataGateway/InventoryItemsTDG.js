@@ -32,6 +32,9 @@ class InventoryItemsTDG {
     select() {
         return connection('Inventory').select('*');
     }
+    getByModelNumbers(modelNumbers){
+        return connection('Inventory').select('*').whereIn('model_number', modelNumbers);
+    }
     // update is not in current requirements for inventory items
     /* update(inventoryItems){
     }*/
