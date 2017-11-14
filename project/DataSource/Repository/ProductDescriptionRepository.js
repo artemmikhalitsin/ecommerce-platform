@@ -1,13 +1,18 @@
 'use strict';
 const rootPath = require('app-root-dir').get();
-
+const Promise = require('bluebird');
 let UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 let ProductDescriptionIdentityMap = require(rootPath + '/DataSource/IdentityMap/ProductDescriptionsIdentityMap.js');
 let ProductDescriptionsTDG = require(rootPath + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
+let DesktopsTDG = require(rootPath + '/DataSource/TableDataGateway/DesktopsTDG.js');
+let LaptopsTDG = require(rootPath + '/DataSource/TableDataGateway/LaptopsTDG.js');
+let MonitorsTDG = require(rootPath + '/DataSource/TableDataGateway/MonitorsTDG.js');
+let TabletsTDG = require(rootPath + '/DataSource/TableDataGateway/TabletsTDG.js');
+let ProductDescription = require(rootPath + '/models/ProductDescription.js');
 
 /**
  * Repository for product descrptions
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Ekaterina Ruhlin
  * REVIEW: PLEASE MAKE SURE METHOD DESCRIPTIONS ARE CORRECT - Artem
  */
 class ProductDescriptionRepository {
@@ -19,6 +24,10 @@ class ProductDescriptionRepository {
     this.uow = new UnitOfWork();
     this.ProductDescriptionIM = new ProductDescriptionIdentityMap();
     this.productDescTDG = new ProductDescriptionsTDG();
+    this.DesktopsTDG = new DesktopsTDG();
+    this.LaptopsTDG = new LaptopsTDG();
+    this.MonitorsTDG = new MonitorsTDG();
+    this.TabletsTDG = new TabletsTDG();
   }
 
   /**
@@ -27,15 +36,31 @@ class ProductDescriptionRepository {
    * @return {Object[]} the complete list of product description objects
    */
   getAll() {
-      let context = this.productDescTDG.select();
-
-      Promise.all([context]).then((values)=>{
-        context = values[0];
+      let context = this.productDescTDG.getAll();
+      
+      Promise.all(context).then((values)=>{
+        context = values;
       });
       this.ProductDescriptionIM.add(context);
     return context;
   }
-
+  getAllWithIncludes(){
+    let desktops = this.DesktopsTDG.getAll();
+    let laptops = this.LaptopsTDG.getAll();
+    let monitors = this.MonitorsTDG.getAll();
+    let tablets = this.TabletsTDG.getAll();
+    let result = [];
+    Promise.props(desktops, laptops, monitors, tablets).then((values)=>{
+      for(let n = 0; n < 4; n++){
+        for(let i = 0; i < values[n].length; i++){
+          result.push(values[n][i]);
+        }
+      }
+      
+      console.log("I am in get all includes" + JSON.stringify(result));
+      return result;
+    });
+  }
   /**
    * Retrieves the product description from the identity map given a single ID
    * @param {number} id the id of the product description to be retrieved
@@ -58,7 +83,7 @@ class ProductDescriptionRepository {
     // will instead return all the products in the table? I believe this method
     // requires rework - Artem
     if (products.length <= 0 || products.length < ids.length) {
-      let prodDescFromTDG = this.productDescTDG.select();
+      let prodDescFromTDG = this.productDescTDG.getAll();
             Promise.all([prodDescFromTDG]).then((values)=>{
               products = values[0];
               // REVIEW: This function has a side effect,

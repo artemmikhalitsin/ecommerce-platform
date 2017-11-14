@@ -287,10 +287,10 @@ class Controller {
        },
      }];
     // let results = this.productDescriptionRepo.save(toSave);
-    // this.manageProductCatalog();
-    this.manageInventory();
+     this.manageProductCatalog();
+    //this.manageInventory();
 
-
+  this.productDescriptionRepo.getAllWithIncludes();
     let prodDesc = this.inventoryRepo.getAllInventoryItems();
     Promise.all([prodDesc])
     .then((values) => {

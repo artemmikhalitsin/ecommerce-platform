@@ -4,6 +4,9 @@
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
  * ATTRIBUTE THIS TO YOURSELF
  */
+const rootPath = require('app-root-dir').get();
+const Computer = require(rootPath + '/models/Computer.js');
+
 class Desktop extends Computer {
   /**
    * Given attributes of a desktop, constructs a new object
@@ -18,10 +21,11 @@ class Desktop extends Computer {
    * @param {string} modelNumber model number
    */
   constructor(processorType, ramSize, numberCpuCores, harddriveSize,
-              dimensions, price, weight, brandName, modelNumber) {
+              dimensions, price, weight, brandName, modelNumber, computerId) {
     super(processorType, ramSize, numberCpuCores, harddriveSize,
           price, weight, brandName, modelNumber);
         this.dimensions = dimensions;
+        this.computerId = computerId;
     }
     /**
      * dimensions accessor

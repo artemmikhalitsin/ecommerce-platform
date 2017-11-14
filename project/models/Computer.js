@@ -4,6 +4,9 @@
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
  * ATTRIBUTE THIS TO YOURSELF
  */
+const rootPath = require('app-root-dir').get();
+const ProductDescription = require(rootPath + '/models/ProductDescription.js');
+
 class Computer extends ProductDescription {
     /**
      * Given attributes of a computer, consutrcts a Computer object
@@ -16,9 +19,10 @@ class Computer extends ProductDescription {
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
      */
-    constructor(processorType, ramSize, numberCpuCores,
+    constructor(id, processorType, ramSize, numberCpuCores,
                 harddriveSize, price, weight, brandName, modelNumber) {
       super(price, weight, brandName, modelNumber);
+      this.computerId = id;
       this.processorType = processorType;
       this.ramSize = ramSize;
       this.numberCpuCores = numberCpuCores;

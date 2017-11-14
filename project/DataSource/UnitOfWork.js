@@ -31,7 +31,7 @@ const PurchaseCollectionTDG = require(rootPath +
 
 /**
  * Unit of Work implementation
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Ekaterina Ruhlin
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class UnitOfWork {
@@ -56,7 +56,7 @@ class UnitOfWork {
     this.newInventoryItems = [];
     this.deletedInventoryItems = [];
     this.newPurchases = [];
-    this.deletePurchases = [];
+    this.deletedPurchases = [];
   }
   registerNew(object) {
     this.newElements = [];
@@ -68,8 +68,8 @@ class UnitOfWork {
   }
 
   registerReturn(object){
-    this.deletePurchases = [];
-    this.deletedPurchase.push(object);
+    this.deletedPurchases = [];
+    this.deletedPurchases.push(object);
   }
   
   registerDirty(object) {
@@ -103,7 +103,7 @@ class UnitOfWork {
       console.log("Purchase to add:");;
       console.log(this.newPurchases[0]);
       console.log("Purchase to delete:");
-      console.log(this.deletePurchases[0]);
+      console.log(this.deletedPurchases[0]);
 
       let deletedItems;
       //delete items

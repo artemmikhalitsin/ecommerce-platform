@@ -20,7 +20,7 @@ class ProductDescriptionsIdentityMap {
         this.productDescTDG = new ProductDescriptionsTDG();
         this.productDesc = [];
 
-        let context = this.productDescTDG.select();
+        let context = this.productDescTDG.getAll();
         Promise.all([context])
         .then((values) => {
           this.productDesc = values[0];

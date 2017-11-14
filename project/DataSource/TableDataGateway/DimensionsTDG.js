@@ -20,7 +20,7 @@ class DimensionsTDG {
           'depth': dimension.depth,
           'height': dimension.height,
           'width': dimension.width,
-        }, 'id')
+        }, 'dimension_id')
         .into('Dimensions');
     }
 
