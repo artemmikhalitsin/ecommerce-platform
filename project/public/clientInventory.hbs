@@ -33,12 +33,12 @@
 <body ng-controller="ClientInventoryController">
   <div ng-include="'includes/header.hbs'"></div>
 
-
     <!-- Start your project here-->
     <!-- Page content -->
   </br>
     <div class="container">
      <!-- Page features -->
+
 
       <div class="row">
         <div class="col-lg-6 col-md-6 mb-4">
@@ -47,11 +47,11 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in items | orderBy : 'type'">
-          <desktop-card ng-show="item.type==='desktop'" desktop="item"></desktop-card>
-          <laptop-card ng-show="item.type==='laptop'" laptop="item"></laptop-card>
-          <tablet-card ng-show="item.type==='tablet'" tablet="item"></tablet-card>
-          <monitor-card ng-show="item.type==='monitor'" monitor="item"></monitor-card>
+        <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in items">
+          <desktop-card ng-show="item.type==='desktop' && item.type==='{{search}}'" desktop="item"></desktop-card>
+          <laptop-card ng-show="item.type==='laptop' && item.type==='{{search}}'" laptop="item"></laptop-card>
+          <tablet-card ng-show="item.type==='tablet' && item.type==='{{search}}'" tablet="item"></tablet-card>
+          <monitor-card ng-show="item.type==='monitor' && item.type==='{{search}}'" monitor="item"></monitor-card>
         </div>
       </div>
       <div class="row">
@@ -61,8 +61,19 @@
       </div>
       <!--/.row-->
     </div>
-    <!--/.container-->
+    <!--/.container
+    <div ng-repeat="item in items">
 
+             <div ng-show="item.type==={search}}"> <script> console.log("success")</script> </div>
+
+              <div ng-show="item.type===search"> pa </div>
+
+               <div ng-show="item.type===search"> ci </div>
+
+                <div ng-show="item.type===search"> to </div>
+               </div>
+
+-->
 
     <!-- /Start your project here-->
 
