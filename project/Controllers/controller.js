@@ -10,10 +10,9 @@ const PurchaseCollectionRepo = require(rootPath
 const ShoppingCart = require(rootPath +
     '/models/ShoppingCart.js');
 
-
 /**
  * Identity map of inventory items
- * @author TODO: IF YOU WROTE THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Wai Lau, Amanda Wai
  * REVIEW: Please make sure the comments are correct - Artem
  */
 class Controller {
@@ -27,7 +26,7 @@ class Controller {
     this.purchaseCollectionRepo = new PurchaseCollectionRepo();
     this.clientInventory = {}; // List of inventory items, key: serial number, value: locked or not locked
     this.shoppingCartList = {}; // List of shopping carts associated to users key:user, value: shopping cart
-    this.url = require('url');
+    this.crypto = require('crypto');
   }
 
   /**
@@ -39,6 +38,9 @@ class Controller {
     let userData = req.body;
     let password = userData['password'];
     let confirmPassword = userData['confirmPassword'];
+    let hash = this.crypto.createHash('sha256');
+    let salted = userData['email'] + password + 'salt';
+    userData['password'] = hash.update(salted).digest('hex');
     if (password != confirmPassword) {
       console.log('password confirmation failed. try again...');
       res.redirect('/registration');
@@ -49,11 +51,7 @@ class Controller {
         console.log(result);
         if (result.length == 0) {
           console.log('adding new user');
-          if (userData['is_admin'] == 'on') {
-            userData['is_admin'] = true;
-          } else {
-            userData['is_admin'] = false;
-          }
+          userData['is_admin'] = false;
           console.log(userData);
           this.userRepo.save(userData).then( (result) => {
             console.log('success: ' + result);
@@ -236,6 +234,8 @@ class Controller {
       console.log(err);
     });
   }
+
+  /*
   manageInventory() {
     let toSave = [{
       serial_number: ['1'],
@@ -324,12 +324,20 @@ class Controller {
      }];
     let results = this.productDescriptionRepo.save(toSave);
   }
-
+  */
   /**
    * Processes an inventory action initiated by the user
    * @param {Object} req HTTP request object containing action info
    * @param {Object} res HTTP response object to be returned to the user
    */
+
+  logout(req, res) {
+    if (req.session.exists) {
+      req.session.destroy();
+      res.redirect('/');
+    }
+  }
+
   inventoryAction(req, res) {
     if (req.session.exists==true && req.session.isAdmin==true) {
       let request = req.body;
@@ -381,36 +389,6 @@ class Controller {
     } else {
       res.render('login', {error: 'Invalid username/password'});
     }
-  }
-
-  loginRequestDeprecated(req, res) {
-    let data = req.body;
-    this.userRepo.authenticate(data).then((result) => {
-      if (result.length <= 0) {
-        console.log('Invalid username or password.');
-        res.render('login', {error: 'Invalid username/password'});
-      } else if (result.length > 1) {
-        console.log('Duplicate users detected');
-        res.render('login', {error: 'Duplicate users detected'});
-      } else if (result.length == 1) {
-        req.session.exists=true;
-        if (result[0].is_admin == 1) {
-          // REVIEW: this should probably be removed - Artem
-          console.log('You an admin broo');
-          req.session.isAdmin=true;
-        } else {
-          // REVIEW: this should probably be removed - Artem
-          console.log('user not admin');
-          req.session.isAdmin= false;
-          req.session.user = data.email;
-        }
-        console.log('displaying items');
-        req.session.save(function(err) {
-            if (err) console.error(err);
-            res.redirect('/getAllInventoryItems');
-        });
-      }
-    });
   }
 }
 
