@@ -1,17 +1,19 @@
-const authPages = ['loginRequest'];
 /*
 const authPages = ['home', 'login', 'registration',
                     'logout',
                     'clientInventory',
                     'getAllInventoryItems', 'addItem'];
                     */
-
+/*
 const fs = require('fs');
 const logger = fs.createWriteStream('log.txt', {
   flags: 'a', // 'a' means appending (old data will be preserved)
 });
+*/
 
-const stringy = require('stringy');
+// const stringy = require('stringy');
+const authPages = ['loginRequest'];
+
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
@@ -126,18 +128,7 @@ app.post('/inventoryAction', function(req, res) {
 
 // making the login request
 app.post('/loginRequest', function(req, res) {
-<<<<<<< HEAD
    controller.loginRequest(req, res);
-=======
-   controller.loginRequestAOP(req, res).then((response)=>{
-     console.log(response);
-     if (response.redirect) {
-        res.redirect(response.redirect);
-     } else {
-        res.render(response.render, response.json);
-     }
-   });
->>>>>>> a6414324901dbc941e5d6860bde69f4d4453ef96
 });
 
 app.post('/addToCart', function(req, res) {
@@ -178,21 +169,20 @@ meld.before(controller, /[a-z]*.nventory[a-zA-z]*/, function(req, res) {
 //   return page.proceed();
 // });ghn
 
-<<<<<<< HEAD
 meld.around(controller, authPages, (joinpoint) => {
   console.log('Caught by aspect, validating the user...');
-=======
-meld.around(controller, 'loginRequestAOP', (joinpoint) => {
-  console.log('Caught by aspect, validating the cookie...');
->>>>>>> a6414324901dbc941e5d6860bde69f4d4453ef96
   let req = joinpoint.args[0];
   let res = joinpoint.args[1];
   let data = req.body;
   return userRepo.authenticate(data).then((result) => {
     if (result.length <= 0) {
-      console.log('Invalid username or password.');
+      console.log('Ses sion rejected by aspect. Reason: No such accuont.');
+      req.session.destroy();
+      res.redirect('/');
     } else if (result.length > 1) {
-      console.log('Duplicate users detected');
+      console.log('Session rejected by aspect. Reason: Duplicate users detected');
+      req.session.destroy();
+      res.redirect('/');
     } else if (result.length == 1) {
       req.session.exists=true;
       if (result[0].is_admin == 1) {
@@ -210,24 +200,7 @@ meld.around(controller, 'loginRequestAOP', (joinpoint) => {
       }
     }
   });
-<<<<<<< HEAD
-=======
 });
-
-meld.around(controller, 'getAllInventory', function(methodCall) {
-  console.log('caughtPage' + methodCall.method);
-  // console.log(methodCall.args);
-  // logger.write(stringy.stringify(methodCall.args));
-  // logger.end();
-  return methodCall.proceed();
-  // if (methodCall.req.session.exists) {
-  //   return methodCall.proceed;
-  // } else {
-  //   return methodCall.res.redirect('/login');
-  // }
->>>>>>> a6414324901dbc941e5d6860bde69f4d4453ef96
-});
-
 // meld.around(app, 'render', function(methodCall) {
 //   const dest = '/'+methodCall.args[0];
 //   // console.log('dest: '+ dest);
