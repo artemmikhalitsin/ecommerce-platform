@@ -1,0 +1,41 @@
+<!--Card-->
+<div class="card" style="height:48rem;" ng-class="{false:'flip-to-front', true:'flip-to-back'}[rotated]">
+  <div class="front">
+    <!--Card image-->
+    <div class="view overlay hm-white-slight">
+        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20%287%29.jpg" class="img-fluid" alt="">
+    </div>
+    <!--Card content-->
+    <div class="card-body">
+      <div class="caption">
+        <h4 class="pull-right">${[{ $ctrl.monitor.price }]}</h4>
+        <h4> Monitor </h4></br>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Model Number: {[{ $ctrl.monitor.modelNumber }]}</li>
+          <li class="list-group-item">Serial Number: {[{ $ctrl.monitor.serialNumber }]}</li>
+          <li class="list-group-item">Brand Name: {[{ $ctrl.monitor.brand }]}</li>
+          <li class="list-group-item">Weight: {[{ $ctrl.monitor.weight }]} </li>
+        </ul></br>
+        <a href="#" class="btn btn-primary" ng-click="rotate()">View Details</a>
+        <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.monitor.serialNumber, $ctrl.monitor.modelNumber)">Add to Shopping Cart</a>
+      </div>
+      <!--/.caption-->
+    </div>
+    <!--/.card-body-->
+  </div>
+  <!--/.front-->
+
+  <div class="back"></br>
+    <h2 class="text-center">Detailed Info</h2>
+    <div class="card-body">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Dicplay Size (inches): </li>
+      </ul></br>
+      <a href="#" class="btn btn-primary" ng-click="rotate()">Go Back</a>
+      <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.monitor.serialNumber, $ctrl.monitor.modelNumber)">Add to Shopping Cart</a>
+    </div>
+    <!--/.card-body-->
+  </div>
+  <!--/.back-->
+</div>
+<!--/.Camoderd-->

@@ -1,0 +1,38 @@
+<div class="container"  style="height:auto;">
+  <div class="card" style="height: auto;">
+    <div class="row text-left">
+      <div class='col'>
+        <div class="card-body">
+          <label class="control-label">Brand: {[{ $ctrl.desktop.brand }]}  </label><br />
+          <label class="control-label">Model: {[{ $ctrl.desktop.model}]} </label><br />
+          <label class="control-label">Price: {[{ $ctrl.desktop.price}]} </label><br />
+          <label class="control-label">Weight (g): {[{ $ctrl.desktop.weight}]} </label>
+        </div>
+      </div>
+      <div class='col'>
+        <div class="card-body">
+          <label class="control-label">Processor Type: {[{ $ctrl.desktop.processor_type}]} </label><br />
+          <label class="control-label">RAM Size: {[{ $ctrl.desktop.ram_size}]} </label><br />
+          <label class="control-label"># of CPU cores: {[{ $ctrl.desktop.number_cpu_cores}]} </label><br />
+          <label class="control-label">Harddrive size: {[{ $ctrl.desktop.harddrive_size}]} </label><br />
+          <label class="control-label">Height (cm): {[{ $ctrl.desktop.height}]} </label><br />
+          <label class="control-label">Width (cm): {[{ $ctrl.desktop.width}]} </label><br />
+          <label class="control-label">Depth (cm): {[{ $ctrl.desktop.depth}]} </label><br />
+        </div>
+      </div>
+      <div class='col'>
+        <div class="card-body">
+          <div ng-show="$ctrl.desktop.serial_numbers.length > 0">
+            <p>Serial numbers</p>
+            <ul>
+              <li ng-repeat="serial in $ctrl.desktop.serial_numbers track by $index">
+                {[{ serial }]}  <button ng-click="removeSerial($index)">X</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" ng-click="removeDesktopEntry()">Delete</button>
+  </div>
+</div>
