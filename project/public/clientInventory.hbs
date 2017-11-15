@@ -36,6 +36,13 @@
     <!-- Start your project here-->
     <!-- Page content -->
   </br>
+  <select ng-model="search" ng-init="search = '{{search}}'">
+  <option value="Desktop">Desktop
+  <option value="Laptop">Laptop
+  <option value="Tablet">Tablet
+  <option value="Monitor">Monitor
+  <option value="default">View All
+</select>
     <div class="container">
      <!-- Page features -->
 
@@ -48,10 +55,39 @@
       </div>
       <div class="row">
         <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in items">
-          <desktop-card ng-show="item.type==='desktop' && item.type==='{{search}}'" desktop="item"></desktop-card>
-          <laptop-card ng-show="item.type==='laptop' && item.type==='{{search}}'" laptop="item"></laptop-card>
-          <tablet-card ng-show="item.type==='tablet' && item.type==='{{search}}'" tablet="item"></tablet-card>
-          <monitor-card ng-show="item.type==='monitor' && item.type==='{{search}}'" monitor="item"></monitor-card>
+
+          <div ng-switch ="search">
+            <div ng-switch-when="Desktop">
+              <desktop-card ng-show="item.type==='desktop'" desktop="item"></desktop-card>
+            </div>
+
+            <div ng-switch-when='Laptop'>
+              <laptop-card ng-show="item.type==='laptop'" laptop="item"></laptop-card>
+            </div>
+
+            <div ng-switch-when='Tablet'>
+              <tablet-card ng-show="item.type==='tablet'" tablet="item"></tablet-card>
+            </div>
+
+            <div ng-switch-when='Monitor'>
+              <monitor-card ng-show="item.type==='monitor'" monitor="item"></monitor-card>
+            </div>
+
+            <div ng-switch-default>
+              <desktop-card ng-show="item.type==='desktop'" desktop="item"></desktop-card>
+            <laptop-card ng-show="item.type==='laptop'" laptop="item"></laptop-card>
+            <tablet-card ng-show="item.type==='tablet'" tablet="item"></tablet-card>
+            <monitor-card ng-show="item.type==='monitor'" monitor="item"></monitor-card>
+          </div>
+
+          </div>
+
+          <!--
+          <desktop-card ng-show="item.type==='desktop' && item.type==='{search}}'" desktop="item"></desktop-card>
+          <laptop-card ng-show="item.type==='laptop' && item.type==='{search}}'" laptop="item"></laptop-card>
+          <tablet-card ng-show="item.type==='tablet' && item.type==='{search}}'" tablet="item"></tablet-card>
+          <monitor-card ng-show="item.type==='monitor' && item.type==='{search}}'" monitor="item"></monitor-card>
+        -->
         </div>
       </div>
       <div class="row">
@@ -61,19 +97,7 @@
       </div>
       <!--/.row-->
     </div>
-    <!--/.container
-    <div ng-repeat="item in items">
-
-             <div ng-show="item.type==={search}}"> <script> console.log("success")</script> </div>
-
-              <div ng-show="item.type===search"> pa </div>
-
-               <div ng-show="item.type===search"> ci </div>
-
-                <div ng-show="item.type===search"> to </div>
-               </div>
-
--->
+    <!--/.container-->
 
     <!-- /Start your project here-->
 
