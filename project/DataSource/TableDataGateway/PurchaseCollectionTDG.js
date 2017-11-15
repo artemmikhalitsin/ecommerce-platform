@@ -25,7 +25,7 @@ class PurchaseCollectionTDG {
             'user_id': clientID,
             'serial_number': serialNumber,
             'model_number': modelNumber,
-            'purchase_Id': purchaseId,
+            'purchase_id': purchaseId,
           }, 'id')
         .into('PurchaseCollection');
     }
@@ -47,7 +47,7 @@ class PurchaseCollectionTDG {
      */
     delete(returnItem) {
         return connection.from('PurchaseCollection').where(
-          {serial_number: returnItem.serial_number}
+          {'serial_number': returnItem.serial_number}
         ).del();
     }
 }

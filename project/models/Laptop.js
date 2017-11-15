@@ -4,9 +4,13 @@
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
  * ATTRIBUTE THIS TO YOURSELF
  */
+const rootPath = require('app-root-dir').get();
+const Computer = require(rootPath + '/models/Computer.js');
+
 class Laptop extends Computer {
     /**
      * Given attributes of a laptop, constructs a new object
+     * @param {Object} computerId id of the computer
      * @param {string} processorType processor type
      * @param {number} ramSize size of ram
      * @param {number} numberCpuCores number of cores
@@ -21,11 +25,12 @@ class Laptop extends Computer {
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
      */
-    constructor(processorType, ramSize, numberCpuCores, harddriveSize,
+    constructor(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
                 displaySize, batteryInfo, os, touchscreen, camera, price,
                 weight, brandName, modelNumber) {
         super(processorType, ramSize, numberCpuCores, harddriveSize, price,
               weight, brandName, modelNumber);
+        this.computerId = computerId;
         this.displaySize = displaySize;
         this.batteryInfo = batteryInfo;
         this.os = os;

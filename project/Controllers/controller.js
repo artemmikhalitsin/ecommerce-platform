@@ -184,6 +184,14 @@ class Controller {
   }
 
   /**
+  * Deletes the user's shopping cart
+  * @param {String} user This user will have their shopping cart removed
+  */
+  deleteShoppingCart(user) {
+    delete this.shoppingCartList[user];
+  }
+
+  /**
    * Submits purchase transaction to database
    * @param {Object} req
    * @param {Object} res
@@ -195,7 +203,6 @@ class Controller {
     }
 
     let user = req.session.user.toString();
-    console.log(user);
     let cart = Object.values(this.shoppingCartList[user].getCart());
     let purchases = [];
     for (let i in Object.keys(cart)) {
@@ -206,19 +213,17 @@ class Controller {
                             serial_number: cart[i].serial,
                             purchase_Id: cart[i].cartItemId});
 
-        // delete this.clientInventory[cart[i].serial];
+        delete this.clientInventory[cart[i].serial];
       }
     }
     this.purchaseCollectionRepo.save(purchases);
-    deleteShoppingCart(user);
+    this.deleteShoppingCart(user);
+    console.log('purchase completed successfully');
+    res.status(200).send({success: 'Successful purchase'});
     post: {
       this.shoppingCartList[req.session.user.toString()] == null,
         'Shopping cart still exists';
     }
-  }
-
-  deleteShoppingCart(user) {
-    delete this.shoppingCartList[user];
   }
 
   /**
@@ -256,7 +261,7 @@ class Controller {
 
     /* res.forEach((product, serialNumber) => {
 
-    }) */
+    });*/
 
     this.purchaseCollectionRepo.returnItems(returnItem);
   }
@@ -354,10 +359,10 @@ class Controller {
        },
      }];
     // let results = this.productDescriptionRepo.save(toSave);
-    // this.manageProductCatalog();
-    this.manageInventory();
+     this.manageProductCatalog();
+    //this.manageInventory();
 
-
+  this.productDescriptionRepo.getAllWithIncludes();
     let prodDesc = this.inventoryRepo.getAllInventoryItems();
     Promise.all([prodDesc])
     .then((values) => {

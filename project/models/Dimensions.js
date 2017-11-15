@@ -8,11 +8,13 @@
 class Dimensions {
     /**
      * Given depth, height and width creates a dimension object
+     * @param {String} id id
      * @param {number} depth depth a product
      * @param {number} height height of a product
      * @param {number} width width of a product
      */
-    constructor(depth, height, width) {
+    constructor(id, depth, height, width) {
+        this.id = id;
         this.depth = depth;
         this.height = height;
         this.width = width;

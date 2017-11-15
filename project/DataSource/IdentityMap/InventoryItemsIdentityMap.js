@@ -14,8 +14,8 @@ class InventoryItemsIdentityMap {
      */
     constructor() {
         this.rootPath = require('app-root-dir').get();
-        let InventoryItemsTDG = require(this.rootPath
-            + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
+        let UnitOfWork = require(this.rootPath + '/DataSource/UnitOfWork.js');
+        let InventoryItemsTDG = require(this.rootPath + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
         this.inventoryTDG = new InventoryItemsTDG();
         let context = this.inventoryTDG.select();
         this.InventoryItems = [];
@@ -46,7 +46,7 @@ class InventoryItemsIdentityMap {
 
     /**
      * Gets a list of items matching given model numbers
-     * @param {string[]} model_numbers a list of alpha-numberical model numbers
+     * @param {string[]} modelNumbers a list of alpha-numberical model numbers
      * @return {Object[]} a list of items corresponding to the given model
      * numbers
      */
@@ -79,11 +79,10 @@ class InventoryItemsIdentityMap {
      * @param {Object[]} newInventoryItems a list containing new items
      */
     add(newInventoryItems) {
-        for (let i = 0; i < newInventoryItems.length; i++) {
-            if (this.InventoryItems.findIndex((p) =>
-              p.serial_number == newInventoryItems[i].serial_number) === -1) {
-                this.InventoryItems.push(newInventoryItems[i]);
-              }
+        for (var i = 0; i < newInventoryItems.length; i++) {
+            if (this.InventoryItems.findIndex((p) => p.serial_number == newInventoryItems[i].serial_number) === -1) {
+this.InventoryItems.push(newInventoryItems[i]);
+}
         }
     }
 

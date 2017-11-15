@@ -23,7 +23,7 @@
     "make-seed": "knex seed:make",
     "lint-fix": "node_modules/eslint/bin/eslint.js . --fix",
     "make-docs": "node_modules/.bin/esdoc",
-    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./npm-debug.log --copy-files",
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore knexfile.js,./public,./seeds,./test,./migrations,./DataSource,./node_modules,./npm-debug.log --copy-files",
     "start": "node node_modules/concurrently/src/main.js -c \"bgBlue,bgRed\" -n \"Express,ESLint\" \"nodemon -L node_modules/eslint/bin/eslint.js .\" \"npm run build && nodemon index.js --exec babel-node --presets es2015 --plugins contracts transform-object-rest-spread\""
   },
   "keywords": [],

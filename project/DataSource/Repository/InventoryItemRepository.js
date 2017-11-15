@@ -8,7 +8,7 @@ const InventoryItemsTDG = require(rootPath +
 
 /**
  * Repository for Inventory Items
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Ekaterina Ruhlin
  * REVIEW: PLEASE MAKE SURE THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class InventoryItemRepository {
@@ -39,7 +39,14 @@ class InventoryItemRepository {
     }
     return context;
   }
-
+  getByModelNumbers(modelNumbers){
+    let inventory = this.inventoryTDG.getByModelNumbers(modelNumbers);
+    let result;
+    Promise.all(inventory).then((values) => {
+          result = values;
+        });
+    return result;
+  }
   /**
    * Retrieves all items from the database table
    * @param {string} args TODO: Not sure what this argument is doing here??
@@ -105,13 +112,10 @@ class InventoryItemRepository {
       let allInventoryItems = this.inventoryItemsIM
                           .getByModelNumbers(model_numbers);
 
-      for (let i = 0; i < items.length; i++) {
-        for (let j = 0; j < items[i].serial_number.length; j++) {
-          if (allInventoryItems.findIndex((p) =>
-            p.serial_number == items[i].serial_number[j]) === -1
-            && electronicsToAdd.findIndex((e) =>
-              e.serial_number == items[i].serial_number[j]
-              && e.model_number == items[i].model_number) === -1) {
+      for (var i = 0; i < items.length; i++) {
+        for (var j = 0; j < items[i].serial_number.length; j++) {
+          if (allInventoryItems.findIndex((p) => p.serial_number == items[i].serial_number[j]) === -1
+            && electronicsToAdd.findIndex((e) => e.serial_number == items[i].serial_number[j] && e.model_number == items[i].model_number) === -1) {
               // Case: item is not in our inventory
               // and hasn't already been processed
               electronicsToAdd.push({'serial_number': items[i].serial_number[j],
