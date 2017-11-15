@@ -189,10 +189,9 @@ class Controller {
 
     res.forEach((product, serialNumber) => {
 
-    })
+    });
 
     this.purchaseCollectionRepo.returnItems(returnItem);
-
   }
 
   viewPurchaseCollection(req, res) {
@@ -442,7 +441,6 @@ class Controller {
     } else {
       console.log('Not admin, fool!');
     }
-    //
   }
 
   /**
@@ -450,7 +448,16 @@ class Controller {
    * @param {Object} req HTTP request containing login info
    * @param {Object} res HTTP response to be returned to the user
    */
+
   loginRequest(req, res) {
+    if (req.session.exists) {
+      res.redirect('/getAllInventoryItems');
+    } else {
+      res.render('login', {error: 'Invalid username/password'});
+    }
+  }
+
+  loginRequestDeprecated(req, res) {
     let data = req.body;
     this.userRepo.authenticate(data).then((result) => {
       if (result.length <= 0) {
