@@ -17,6 +17,7 @@
 		try{
 			error = JSON.parse('{{{error}}}');
 			console.log(error);
+			console.log("hello" + search);
 		} catch (err){
 			error = false;
 		}
@@ -33,6 +34,8 @@
   </style>
 	<script type="text/javascript">
 		let data = JSON.parse('{{{items}}}');
+		let search = '{{{search}}}';
+		console.log(search);
 	</script>
 </head>
 

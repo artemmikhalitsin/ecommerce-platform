@@ -27,6 +27,7 @@ class Controller {
     this.purchaseCollectionRepo = new PurchaseCollectionRepo();
     this.clientInventory = {}; // List of inventory items, key: serial number, value: locked or not locked
     this.shoppingCartList = {}; // List of shopping carts associated to users key:user, value: shopping cart
+    this.url = require('url');
   }
 
   /**
@@ -212,93 +213,21 @@ class Controller {
    * @param {Object} req HTTP Request object containing query info
    * @param {Object} res HTTP Response object to be send back to the user
    */
+
   getAllInventory(req, res) {
-    let toSave = [{
-      serial_number: ['1'],
-      model_number: '1',
-      brand_name: 'b',
-      price: 1,
-      weight: 1,
-      id: 1,
-      type: 'Desktop',
-      processor_type: 'r',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      comp_id: 3,
-      dimension: {depth: 1,
-         height: 1,
-         width: 1,
-         dimensions_id: 2,
-      },
-     }, {
-      serial_number: ['2'],
-      model_number: '2',
-      brand_name: 'changed',
-      price: 1,
-      weight: 1,
-      type: 'Desktop',
-      id: 2,
-      processor_type: 'q',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      comp_id: 2,
-      dimension: {depth: 1,
-         height: 1,
-         width: 1,
-         dimensions_id: 3,
-      },
-     }, {
-      serial_number: ['3', '4'],
-      model_number: '3',
-      brand_name: 'b',
-      price: 1,
-      weight: 1,
-      type: 'Desktop',
-      id: 3,
-      processor_type: 'n',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      comp_id: 1,
-      dimension: {depth: 1,
-         height: 1,
-         width: 1,
-         dimensions_id: 1,
-       },
-     }, {
-      serial_number: ['7'],
-      model_number: '5',
-      brand_name: 'b',
-      price: 1,
-      weight: 1,
-      type: 'Monitor',
-      id: 3,
-      processor_type: 'n',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      comp_id: 1,
-      dimension: {depth: 1,
-         height: 1,
-         width: 1,
-         dimensions_id: 1,
-       },
-     }];
-    // let results = this.productDescriptionRepo.save(toSave);
-    // this.manageProductCatalog();
-    this.manageInventory();
-
-
+    let query = this.url.parse(req.url, true).query;
+    console.log(query);
+    let search = query.search;
+    console.log(search);
     let prodDesc = this.inventoryRepo.getAllInventoryItems();
     Promise.all([prodDesc])
     .then((values) => {
       let items = JSON.stringify(values[0]);
       // items = JSON.stringify(toSave);
-      console.log('Values: ', items);
+      // console.log('Values: ', items);
+      
       if (req.session.exists==true && req.session.isAdmin==true) {
-        res.render('inventory', {items: items});
+        res.render('inventory', {items: items, search: search});
       } else if (req.session.exists==true && req.session.isAdmin==false) {
         this.updateInventoryList(values[0]);
         res.render('clientInventory', {items: items});
