@@ -216,23 +216,19 @@ class Controller {
 
   getAllInventory(req, res) {
     let query = this.url.parse(req.url, true).query;
-    console.log(query);
     let search = query.search;
-    console.log(search);
     let prodDesc = this.inventoryRepo.getAllInventoryItems();
     Promise.all([prodDesc])
     .then((values) => {
       let items = JSON.stringify(values[0]);
       // items = JSON.stringify(toSave);
       // console.log('Values: ', items);
-      
+
       if (req.session.exists==true && req.session.isAdmin==true) {
         res.render('inventory', {items: items, search: search});
-      } else if (req.session.exists==true && req.session.isAdmin==false) {
+      } else {
         this.updateInventoryList(values[0]);
         res.render('clientInventory', {items: items});
-      } else {
-        res.redirect('/login');
       }
     })
     .catch((err) => {

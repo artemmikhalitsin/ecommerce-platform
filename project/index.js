@@ -82,7 +82,7 @@ app.get('/addProduct', function(req, res) {
   } else {
     res.redirect('/login');
   }
-});
+})
 
 // this should be implemented in the controller
 app.get('/logout', function(req, res) {
@@ -101,19 +101,16 @@ app.get('/getAllInventoryItems', function(req, res) {
     controller.getAllInventory(req, res);
   } else {
     console.log('login error');
-    res.redirect('/login');
+    controller.getAllInventory(req, res);
   }
 });
 
 // getting the client inventory from the database
 app.get('/clientInventory', function(req, res) {
-  if (req.session.exists) {
+
     controller.getAllInventory(req, res);
     console.log('Successs');
- } else {
-    console.log('login error');
-    res.redirect('/login');
-  }
+
 });
 
 // making the registration request
