@@ -169,6 +169,7 @@ class Controller {
    * @param {Object} req
    * @param {Object} res
   */
+
   cancelPurchaseTransaction(req, res) {
     let user = req.session.user.toString();
     let cartItems = this.shoppingCartList[user].getCartSerialNumbers();
@@ -228,7 +229,7 @@ class Controller {
         res.render('inventory', {items: items, search: search});
       } else {
         this.updateInventoryList(values[0]);
-        res.render('clientInventory', {items: items});
+        res.render('clientInventory', {items: items, search: search});
       }
     })
     .catch((err) => {

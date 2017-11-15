@@ -50,10 +50,7 @@ app.set('view engine', 'hbs');
 
 // loading the home page
 app.get('/', function(req, res) {
-  if (req.session.exists) {
-    console.log('already logged in, redirecting to inventory');
-    res.redirect('/getAllInventoryItems');
-  } else res.render('home');
+ res.render('home');
 });
 
 // getting the login page
