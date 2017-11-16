@@ -71,7 +71,7 @@ class UnitOfWork {
     this.deletedPurchases = [];
     this.deletedPurchases.push(object);
   }
-  
+
   registerDirty(object) {
     this.dirtyElements = [];
     this.dirtyElements.push(object);
@@ -92,6 +92,7 @@ class UnitOfWork {
 
     let electronics = [];
     return connection.transaction((trx) => {
+      /*
       console.log('Electronics new Elements: ');
       console.log(this.newElements[0]);
       console.log('Electronics to update ');
@@ -103,7 +104,8 @@ class UnitOfWork {
       console.log("Purchase to add:");;
       console.log(this.newPurchases[0]);
       console.log("Purchase to delete:");
-      console.log(this.deletedPurchases[0]);
+      console.log(this.deletePurchases[0]);
+      */
 
       let deletedItems;
       //delete items
