@@ -17,3 +17,5 @@ $(document).ready(function() {
         {'data': 'phone_number'}
       ],
     });
+    $('input[type="search"]').val(search).keyup();
+});

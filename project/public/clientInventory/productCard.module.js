@@ -59,6 +59,8 @@ function remove(http) {
 }
 
 function addToShoppingCart(serialNumber,modelNumber, http) {
+  console.log('PLEASE');
+  console.log(serialNumber);
   http({
     method: 'POST',
     url: '/addToCart',

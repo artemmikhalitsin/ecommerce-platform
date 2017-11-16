@@ -1,0 +1,72 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "babel": {
+    "presets": [
+      "env",
+      "es2015",
+      "node8"
+    ],
+    "plugins": [
+      "transform-object-rest-spread",
+      "contracts"
+    ]
+  },
+  "scripts": {
+    "test": "mocha",
+    "dev": "docker run -v $(pwd):/usr/src/project -p 8080:8080 -it 343docker/express",
+    "make-migration": "knex migrate:make",
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback",
+    "seed": "knex seed:run",
+    "make-seed": "knex seed:make",
+    "lint-fix": "node_modules/eslint/bin/eslint.js . --fix",
+    "make-docs": "node_modules/.bin/esdoc",
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore knexfile.js,./public,./seeds,./test,./migrations,./DataSource,./node_modules,./npm-debug.log --copy-files",
+    "start": "node node_modules/concurrently/src/main.js -c \"bgBlue,bgRed\" -n \"Express,ESLint\" \"nodemon -L node_modules/eslint/bin/eslint.js .\" \"npm run build && nodemon index.js --exec babel-node --presets es2015 --plugins contracts transform-object-rest-spread\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "app-root-dir": "^1.0.2",
+    "aspect.js": "^0.6.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-plugin-contracts": "^1.2.0",
+    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
+    "babel-plugin-transform-es2015-parameters": "^6.24.1",
+    "babel-plugin-transform-es2015-spread": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-node8": "^1.2.0",
+    "chai": "^4.1.2",
+    "cookie-parser": "^1.4.3",
+    "eslint": "^4.8.0",
+    "eslint-config-google": "^0.9.1",
+    "express": "^4.15.4",
+    "express-handlebars": "^3.0.0",
+    "knex": "^0.13.0",
+    "meld": "^1.3.2",
+    "mocha": "^4.0.1",
+    "mysql": "^2.14.1",
+    "nodemon": "^1.12.1",
+    "stringy": "0.1.0"
+  },
+  "dependencies": {
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "body-parser": "^1.18.2",
+    "concurrently": "^3.5.0",
+    "esdoc-standard-plugin": "^1.0.0",
+    "express-session": "^1.15.6"
+  },
+  "description": "",
+  "nodemonConfig": {
+    "ignore": [
+      "public/*"
+    ]
+  }
+}

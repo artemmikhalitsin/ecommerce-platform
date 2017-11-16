@@ -23,9 +23,6 @@
 
     <title>Inventory Page</title>
     <!-- Font Awesome -->
-    <script type="text/javascript">
-      let mock = JSON.parse('{{{items}}}');
-    </script>
 </head>
 
 <body ng-controller="ClientInventoryController">
@@ -35,6 +32,13 @@
     <!-- Start your project here-->
     <!-- Page content -->
   </br>
+  <select ng-model="search">
+    <option value="Desktop">Desktop
+    <option value="Laptop">Laptop
+    <option value="Tablet">Tablet
+    <option value="Monitor">Monitor
+    <option value="all">View All
+  </select>
     <div class="container">
      <!-- Page features -->
       <!--<fieldset class="form-group">
@@ -81,11 +85,11 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in items">
-          <desktop-card ng-show="item.type==='desktop'" desktop="item"></desktop-card>
-          <laptop-card ng-show="item.type==='laptop'" laptop="item"></laptop-card>
-          <tablet-card ng-show="item.type==='tablet'" tablet="item"></tablet-card>
-          <monitor-card ng-show="item.type==='monitor'" monitor="item"></monitor-card>
+        <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in itemsShown">
+              <desktop-card ng-if="item.type==='Desktop'" desktop="item"></desktop-card>
+              <laptop-card ng-if="item.type==='Laptop'" laptop="item"></laptop-card>
+              <tablet-card ng-if="item.type==='Tablet'" tablet="item"></tablet-card>
+              <monitor-card ng-if="item.type==='Monitor'" monitor="item"></monitor-card>
         </div>
       </div>
       <div class="row">
