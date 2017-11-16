@@ -6,7 +6,6 @@
 class ShoppingCart {
     constructor() {
       this.cartItems = {}; // The key is a serial id
-      this.cartItemId = 0;
     }
 
     getCart() {
@@ -17,17 +16,20 @@ class ShoppingCart {
       return Object.keys(this.cartItems);
     }
 
+    generatePurchaseId() {
+        return Math.round((Math.pow(36, 17) - Math.random()
+              * Math.pow(36, 16))).toString(36).slice(1).toUpperCase();
+    }
 
     addToCart(item, modelNumber) {
       pre: {
         Object.keys(this.cartItems).length < 7;
       }
       if (!this.cartItems[item]) {
-        this.cartItems[item] = {cartItemId: this.cartItemId,
+        this.cartItems[item] = {cartItemId: this.generatePurchaseId(),
                               model: modelNumber,
                               serial: item,
                               };
-        this.cartItemId++;
       }
       post: {
         Object.keys(this.cartItems).includes(item),

@@ -9,7 +9,8 @@ const PurchaseCollectionRepo = require(rootPath
     + '/DataSource/Repository/PurchaseCollectionRepository.js');
 const ShoppingCart = require(rootPath +
     '/models/ShoppingCart.js');
-
+const TransactionLogRepository = require(rootPath
+    + '/DataSource/Repository/TransactionLogRepository.js');
 /**
  * Identity map of inventory items
  * @author Wai Lau, Amanda Wai
@@ -24,6 +25,7 @@ class Controller {
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
     this.purchaseCollectionRepo = new PurchaseCollectionRepo();
+    this.transactionRepo = new TransactionLogRepository();
     this.clientInventory = {}; // List of inventory items, key: serial number, value: locked or not locked
     this.shoppingCartList = {}; // List of shopping carts associated to users key:user, value: shopping cart
     this.url = require('url');
@@ -96,11 +98,11 @@ class Controller {
   */
   addToShoppingCart(req, res) {
     pre: {
-      req.session.user != null, 'User is not logged in';
+      req.session.email != null, 'User is not logged in';
       Object.keys(this.clientInventory).length != 0, 'Catalog is empty';
       !this.clientInventory[req.body.serialNumber].locked, 'Item is locked';
-      if (this.shoppingCartList[req.session.user.toString()]) {
-        Object.keys(this.shoppingCartList[req.session.user.toString()]
+      if (this.shoppingCartList[req.session.email.toString()]) {
+        Object.keys(this.shoppingCartList[req.session.email.toString()]
           .getCart()).length < 7, 'Cart has more than 7 items!';
       }
     }
@@ -108,7 +110,7 @@ class Controller {
     let item = req.body.serialNumber;
     let productNumber = req.body.modelNumber;
     if (this.lockItem(item)) {
-      let user = req.session.user.toString();
+      let user = req.session.email.toString();
       if (!this.shoppingCartList[user]) {
         this.shoppingCartList[user] = new ShoppingCart();
       }
@@ -119,7 +121,7 @@ class Controller {
     }
 
     post: {
-      this.shoppingCartList[req.session.user.toString()].getCartSerialNumbers()
+      this.shoppingCartList[req.session.email.toString()].getCartSerialNumbers()
         .includes(req.body.serialNumber), 'Item was not added to the cart';
       this.clientInventory[req.body.serialNumber].locked, 'Item isn\'t locked';
     }
@@ -127,8 +129,8 @@ class Controller {
 
   removeFromShoppingCart(req, res) {
     pre : {
-      req.session.user != null, 'User is not logged in';
-      this.shoppingCartList[req.session.user.toString()] != null,
+      req.session.email != null, 'User is not logged in';
+      this.shoppingCartList[req.session.email.toString()] != null,
         'Shopping cart doesn\'t exists';
     }
 
@@ -137,7 +139,7 @@ class Controller {
     clearTimeout(this.clientInventory[item].timeout);
 
     post : {
-      !this.shoppingCartList[req.session.user.toString()].getCartSerialNumbers()
+      !this.shoppingCartList[req.session.email.toString()].getCartSerialNumbers()
         .includes(req.body.serialNumber), 'Item was not removed from the cart';
       !this.clientInventory[req.body.serialNumber].locked,
         'Item is still locked';
@@ -177,7 +179,7 @@ class Controller {
       this.clientInventory[itemToLock].locked = true;
       // Store pointer of timeout function
       this.clientInventory[itemToLock].timeout = setTimeout(
-        this.unlockItem.bind(this), 100000, itemToLock);
+        this.unlockItem.bind(this), 300000, itemToLock);
       return true;
     }
     post: {
@@ -201,11 +203,11 @@ class Controller {
   */
   completePurchaseTransaction(req, res) {
     pre: {
-      Object.keys(this.shoppingCartList[req.session.user.toString()]
+      Object.keys(this.shoppingCartList[req.session.email.toString()]
         .getCart()).length <= 7, 'Cart size too big';
     }
 
-    let user = req.session.user.toString();
+    let user = req.session.email.toString();
     let cart = Object.values(this.shoppingCartList[user].getCart());
     let purchases = [];
     for (let i in Object.keys(cart)) {
@@ -219,12 +221,15 @@ class Controller {
         delete this.clientInventory[cart[i].serial];
       }
     }
+    let transaction = [{client: user,
+                        timestamp: new Date().toISOString()}];
+
     this.purchaseCollectionRepo.save(purchases);
+    this.transactionRepo.save(transaction);
     this.deleteShoppingCart(user);
-    console.log('purchase completed successfully');
     res.status(200).send({success: 'Successful purchase'});
     post: {
-      this.shoppingCartList[req.session.user.toString()] == null,
+      this.shoppingCartList[req.session.email.toString()] == null,
         'Shopping cart still exists';
     }
   }
@@ -236,10 +241,10 @@ class Controller {
   */
   cancelPurchaseTransaction(req, res) {
     pre: {
-      this.shoppingCartList[req.session.user.toString()] != null;
+      this.shoppingCartList[req.session.email.toString()] != null;
     }
 
-    let user = req.session.user.toString();
+    let user = req.session.email.toString();
     let cartItems = this.shoppingCartList[user].getCartSerialNumbers();
     for (let item = 0; item < cartItems.length; item++) {
       console.log(cartItems[item]);
@@ -250,7 +255,7 @@ class Controller {
     res.status(200).send({success: 'Successfully canceled'});
 
     post: {
-      this.shoppingCartList[req.session.user.toString()] == null;
+      this.shoppingCartList[req.session.email.toString()] == null;
     }
   }
 
