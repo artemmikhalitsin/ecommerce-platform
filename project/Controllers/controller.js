@@ -153,10 +153,6 @@ class Controller {
     pre: {
       this.clientInventory[itemToUnlock].locked, 'Item isn\'t locked';
     }
-    console.log(this.clientInventory);
-    console.log(itemToUnlock);
-    console.log(typeof itemToUnlock === 'string');
-    console.log(this.clientInventory[itemToUnlock]);
     this.clientInventory[itemToUnlock].locked = false;
     this.clientInventory[itemToUnlock].timeout = null;
 
@@ -171,6 +167,10 @@ class Controller {
    * @return {Boolean} Returns whether or not the item was locked
   */
   lockItem(itemToLock) {
+    pre: {
+      this.clientInventory[itemToLock] != null,
+        'Inventory item doesn\'t exists!';
+    }
     if (this.clientInventory[itemToLock] == null ||
         this.clientInventory[itemToLock].locked) {
       return false;
@@ -180,6 +180,10 @@ class Controller {
       this.clientInventory[itemToLock].timeout = setTimeout(
         this.unlockItem.bind(this), 100000, itemToLock);
       return true;
+    }
+    post: {
+      this.clientInventory[itemToLock].locked === true,
+        'Item was not successfully locked';
     }
   }
 
@@ -239,9 +243,9 @@ class Controller {
     let user = req.session.user.toString();
     let cartItems = this.shoppingCartList[user].getCartSerialNumbers();
     for (let item = 0; item < cartItems.length; item++) {
-      console.log(cartItems[item].serial);
-      this.unlockItem(cartItems[item].serial);
-      clearTimeout(this.clientInventory[cartItems[item].serial].timeout);
+      console.log(cartItems[item]);
+      this.unlockItem(cartItems[item]);
+      clearTimeout(this.clientInventory[cartItems[item]].timeout);
     }
     delete this.shoppingCartList[user];
     res.status(200).send({success: 'Successfully canceled'});
