@@ -10,6 +10,7 @@ const ProductDescription = require(rootPath + '/models/ProductDescription.js');
 class Computer extends ProductDescription {
     /**
      * Given attributes of a computer, consutrcts a Computer object
+     * @param {String} id id
      * @param {string} processorType processor type
      * @param {number} ramSize size of ram
      * @param {number} numberCpuCores number of cores

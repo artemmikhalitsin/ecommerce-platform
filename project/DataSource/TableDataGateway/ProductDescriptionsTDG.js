@@ -1,3 +1,4 @@
+'use strict';
 const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
@@ -33,8 +34,10 @@ class ProductDescriptionsTDG {
   getAll() {
     return connection('ProductDescription').select('*');
   }
-  getByModelNumber(modelNumber){
-    return connection('ProductDescription').select('*').where({model_number: modelNumber});
+  getByModelNumber(modelNumber) {
+    return connection('ProductDescription')
+      .select('*')
+      .where({model_number: modelNumber});
   }
 
   /*
@@ -54,7 +57,7 @@ class ProductDescriptionsTDG {
                 .where({model_number: modelNumber}).select('*');
   }
 
-  /**
+  /** .
    * Updates the product specifications
    * @param {Object} productDescription description of a product
    * @return {Promise<number>} promise which resolves to the number of

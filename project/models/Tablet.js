@@ -10,6 +10,7 @@ const Computer = require(rootPath + '/models/Computer.js');
 class Tablet extends Computer {
     /**
      * Given attributes of a laptop, constructs a new object
+     * @param {String} computerId
      * @param {string} processorType processor type
      * @param {number} ramSize size of ram
      * @param {number} numberCpuCores number of cores

@@ -1,3 +1,4 @@
+'use strict';
 const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
@@ -36,65 +37,65 @@ class TabletsTDG {
     getAll() {
         let result = [];
         return connection('Tablet').select('*')
-                                    .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
-                                    .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
-                                    .join('ProductDescription', 'Tablet.model_number','ProductDescription.model_number')
-                                    .then((tablets) => {
-                                        tablets.forEach(function(tablet){
-                                            result.push(new Tablet( 
-                                                tablet.comp_id,
-                                                tablet.processor_type, 
-                                                tablet.ram_size, 
-                                                tablet.number_cpu_cores, 
-                                                tablet.harddrive_size,
-                                                tablet.display_size,
-                                                new Dimensions(
-                                                    tablet.dimension_id, 
-                                                    tablet.depth, 
-                                                    tablet.height, 
-                                                    tablet.width), 
-                                                tablet.battery_info,
-                                                tablet.os,
-                                                tablet.camera_info,
-                                                tablet.price, 
-                                                tablet.weight, 
-                                                tablet.brand_name, 
-                                                tablet.model_number));
-                                        });
-                                        return result;
-                                    });
+          .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
+          .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
+          .join('ProductDescription', 'Tablet.model_number','ProductDescription.model_number')
+          .then((tablets) => {
+              tablets.forEach(function(tablet){
+                  result.push(new Tablet(
+                      tablet.comp_id,
+                      tablet.processor_type,
+                      tablet.ram_size,
+                      tablet.number_cpu_cores,
+                      tablet.harddrive_size,
+                      tablet.display_size,
+                      new Dimensions(
+                          tablet.dimension_id,
+                          tablet.depth,
+                          tablet.height,
+                          tablet.width),
+                      tablet.battery_info,
+                      tablet.os,
+                      tablet.camera_info,
+                      tablet.price,
+                      tablet.weight,
+                      tablet.brand_name,
+                      tablet.model_number));
+              });
+              return result;
+          });
     }
-    getByModelNumber(modelNumbers){
+    getByModelNumber(modelNumbers) {
         let result = [];
         return connection('Tablet').select('*')
-                                    .whereIn('model_number', modelNumbers)
-                                    .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
-                                    .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
-                                    .join('ProductDescription', 'Tablet.model_number','ProductDescription.model_number')
-                                    .then((tablets) => {
-                                        tablets.forEach(function(tablet){
-                                            result.push(new Tablet( 
-                                                tablet.comp_id,
-                                                tablet.processor_type, 
-                                                tablet.ram_size, 
-                                                tablet.number_cpu_cores, 
-                                                tablet.harddrive_size,
-                                                tablet.display_size,
-                                                new Dimensions(
-                                                    tablet.dimension_id, 
-                                                    tablet.depth, 
-                                                    tablet.height, 
-                                                    tablet.width), 
-                                                tablet.battery_info,
-                                                tablet.os,
-                                                tablet.camera_info,
-                                                tablet.price, 
-                                                tablet.weight, 
-                                                tablet.brand_name, 
-                                                tablet.model_number));
-                                        });
-                                        return result;
-                                    });
+          .whereIn('model_number', modelNumbers)
+          .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
+          .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
+          .join('ProductDescription', 'Tablet.model_number','ProductDescription.model_number')
+          .then((tablets) => {
+              tablets.forEach(function(tablet){
+                  result.push(new Tablet(
+                      tablet.comp_id,
+                      tablet.processor_type,
+                      tablet.ram_size,
+                      tablet.number_cpu_cores,
+                      tablet.harddrive_size,
+                      tablet.display_size,
+                      new Dimensions(
+                          tablet.dimension_id,
+                          tablet.depth,
+                          tablet.height,
+                          tablet.width), 
+                      tablet.battery_info,
+                      tablet.os,
+                      tablet.camera_info,
+                      tablet.price,
+                      tablet.weight,
+                      tablet.brand_name,
+                      tablet.model_number));
+              });
+              return result;
+          });
     }
 
     /**

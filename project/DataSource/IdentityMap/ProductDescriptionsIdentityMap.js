@@ -1,3 +1,4 @@
+'use strict';
 const rootPath = require('app-root-dir').get();
 // REVIEW: UnitOfWork is never used here, consider removing - Artem
 // const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
@@ -36,7 +37,7 @@ class ProductDescriptionsIdentityMap {
         if (this.productDesc.length > 0) {
             return result;
         } else {
-            let productsFromTDG = this.productDescTDG.select();
+            let productsFromTDG = this.productDescTDG.getAll();
             Promise.all([productsFromTDG])
             .then((values) => {
               result = values[0];

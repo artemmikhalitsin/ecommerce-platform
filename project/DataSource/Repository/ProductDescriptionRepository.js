@@ -2,12 +2,18 @@
 const rootPath = require('app-root-dir').get();
 const Promise = require('bluebird');
 let UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
-let ProductDescriptionIdentityMap = require(rootPath + '/DataSource/IdentityMap/ProductDescriptionsIdentityMap.js');
-let ProductDescriptionsTDG = require(rootPath + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
-let DesktopsTDG = require(rootPath + '/DataSource/TableDataGateway/DesktopsTDG.js');
-let LaptopsTDG = require(rootPath + '/DataSource/TableDataGateway/LaptopsTDG.js');
-let MonitorsTDG = require(rootPath + '/DataSource/TableDataGateway/MonitorsTDG.js');
-let TabletsTDG = require(rootPath + '/DataSource/TableDataGateway/TabletsTDG.js');
+let ProductDescriptionIdentityMap = require(rootPath
+  + '/DataSource/IdentityMap/ProductDescriptionsIdentityMap.js');
+let ProductDescriptionsTDG = require(rootPath
+  + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
+let DesktopsTDG = require(rootPath
+  + '/DataSource/TableDataGateway/DesktopsTDG.js');
+let LaptopsTDG = require(rootPath
+  + '/DataSource/TableDataGateway/LaptopsTDG.js');
+let MonitorsTDG = require(rootPath
+  + '/DataSource/TableDataGateway/MonitorsTDG.js');
+let TabletsTDG = require(rootPath
+  + '/DataSource/TableDataGateway/TabletsTDG.js');
 let ProductDescription = require(rootPath + '/models/ProductDescription.js');
 
 /**
@@ -37,14 +43,14 @@ class ProductDescriptionRepository {
    */
   getAll() {
       let context = this.productDescTDG.getAll();
-      
+
       Promise.all(context).then((values)=>{
         context = values;
       });
       this.ProductDescriptionIM.add(context);
     return context;
   }
-  getAllWithIncludes(){
+  getAllWithIncludes() {
     let desktops = this.DesktopsTDG.getAll();
     let laptops = this.LaptopsTDG.getAll();
     let monitors = this.MonitorsTDG.getAll();
@@ -58,9 +64,9 @@ class ProductDescriptionRepository {
       console.log("Result from repo: " + JSON.stringify(products));
     return result;
     });
-    
+
   }
-  getByModelNumbers(modelNumbers){ 
+  getByModelNumbers(modelNumbers){
     let desktops = this.DesktopsTDG.getByModelNumbers(modelNumbers);
     let laptops = this.LaptopsTDG.getByModelNumbers(modelNumbers);
     let monitors = this.MonitorsTDG.getByModelNumbers(modelNumbers);
@@ -126,14 +132,18 @@ class ProductDescriptionRepository {
     if (productIds.length > 0) {
     let context = this.getByIds(productIds);
     let allRecords = this.ProductDescriptionIM.getAll();
-    for (var i = 0; i < products.length; i++) {
-      if (context.findIndex((p) => p.model_number == products[i].model_number) !== -1
-          && electronicsToUpdate.findIndex((e) => e.model_number == products[i].model_number) === -1) {
+    for (let i = 0; i < products.length; i++) {
+      if (context.findIndex(
+        (p) => p.model_number == products[i].model_number) !== -1
+          && electronicsToUpdate.findIndex(
+            (e) => e.model_number == products[i].model_number) === -1) {
             // Case: the product exists in our list of products
             // and hasn't already been processed
             electronicsToUpdate.push(products[i]);
-      } else if (allRecords.findIndex((p) => p.model_number == products[i].model_number) === -1
-              && electronicsToAdd.findIndex((e) => e.model_number == products[i].model_number) === -1) {
+      } else if (allRecords.findIndex(
+        (p) => p.model_number == products[i].model_number) === -1
+              && electronicsToAdd.findIndex(
+                (e) => e.model_number == products[i].model_number) === -1) {
                 // Case: the product doesn't exist in our list of products
                 // and hasn't already been processed
                 electronicsToAdd.push(products[i]);

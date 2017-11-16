@@ -1,3 +1,4 @@
+'use strict';
 const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
@@ -25,35 +26,37 @@ class MonitorsTDG {
     getAll() {
         let result = [];
         return connection('Monitor').select('*')
-                                    .join('ProductDescription', 'Monitor.model_number','ProductDescription.model_number')
-                                    .then((monitors) => {
-                                        monitors.forEach(function(monitor){
-                                            result.push(new Monitor(   
-                                                monitor.display_size,
-                                                monitor.price, 
-                                                monitor.weight, 
-                                                monitor.brand_name, 
-                                                monitor.model_number));
-                                        });
-                                        return result;
-                                    });
+          .join('ProductDescription', 'Monitor.model_number',
+                'ProductDescription.model_number')
+          .then((monitors) => {
+              monitors.forEach(function(monitor){
+                  result.push(new Monitor(
+                      monitor.display_size,
+                      monitor.price,
+                      monitor.weight,
+                      monitor.brand_name,
+                      monitor.model_number));
+              });
+              return result;
+          });
     }
-    getAllByModelNumber(modelNumbers){
+    getAllByModelNumber(modelNumbers) {
         let result = [];
         return connection('Monitor').select('*')
-                                    .whereIn('model_number', modelNumbers)
-                                    .join('ProductDescription', 'Monitor.model_number','ProductDescription.model_number')
-                                    .then((monitors) => {
-                                        monitors.forEach(function(monitor){
-                                            result.push(new Monitor(   
-                                                monitor.display_size,
-                                                monitor.price, 
-                                                monitor.weight, 
-                                                monitor.brand_name, 
-                                                monitor.model_number));
-                                        });
-                                        return result;
-                                    });
+          .whereIn('model_number', modelNumbers)
+          .join('ProductDescription', 'Monitor.model_number',
+                'ProductDescription.model_number')
+          .then((monitors) => {
+              monitors.forEach(function(monitor){
+                  result.push(new Monitor(
+                      monitor.display_size,
+                      monitor.price,
+                      monitor.weight,
+                      monitor.brand_name,
+                      monitor.model_number));
+              });
+              return result;
+          });
     }
 
     /**

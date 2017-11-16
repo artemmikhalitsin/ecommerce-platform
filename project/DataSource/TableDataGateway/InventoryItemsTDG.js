@@ -1,3 +1,4 @@
+'use strict';
 const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
@@ -36,17 +37,17 @@ class InventoryItemsTDG {
     getByModelNumbers(modelNumbers){
         let results = [];
         return connection('Inventory').select('*')
-                                    .whereIn('model_number', [modelNumbers])
-                                    .then((inventoryItems)=>{
-                                        inventoryItems.forEach(function(item){
-                                            results.push(new InventoryItem(
-                                                item.id, 
-                                                item.serial_number, 
-                                                item.model_number, 
-                                                new ProductDescription()));
-                                        });
-                                        return results;
-                                    });
+          .whereIn('model_number', [modelNumbers])
+          .then((inventoryItems)=>{
+              inventoryItems.forEach(function(item){
+                  results.push(new InventoryItem(
+                      item.id,
+                      item.serial_number,
+                      item.model_number,
+                      new ProductDescription()));
+              });
+              return results;
+          });
     }
     // update is not in current requirements for inventory items
     /* update(inventoryItems){
@@ -60,8 +61,11 @@ class InventoryItemsTDG {
      * affected
      */
     delete(inventoryItem) {
+        console.log(inventoryItem);
+        console.log('in inventoryIemTDG');
         return connection.from('Inventory').where(
-          {serial_number: inventoryItem.serial_number}
+          {'serial_number': inventoryItem.serial_number,
+           'model_number': inventoryItem.model_number}
         ).del();
     }
 }
