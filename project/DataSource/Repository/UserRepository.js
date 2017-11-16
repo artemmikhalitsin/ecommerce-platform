@@ -36,6 +36,24 @@ class UserRepository {
   }
 
   /**
+   * Retrieves all clients from the database
+   * @return {Promise<Object[]>} promise which resolves to the list of clients
+   * in the database
+   */
+  getClients() {
+    return database('User').where('is_admin', 0).select('*');
+  }
+
+  /**
+   * Retrieves all admins from the database
+   * @return {Promise<Object[]>} promise which resolves to the list of admins
+   * in the database
+   */
+  getAdmins() {
+    return database('User').where('is_admin', 1).select('*');
+  }
+
+  /**
    * Attempts to find the a user in the database with the given credentials
    * @param {Object} user contains the user's email and password
    * @return {Promise<Object[]>} promise which resolves to the list containing

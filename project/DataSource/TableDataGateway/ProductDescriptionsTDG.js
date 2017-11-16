@@ -34,8 +34,9 @@ class ProductDescriptionsTDG {
   getAll() {
     return connection('ProductDescription').select('*');
   }
-  getByModelNumber(modelNumber){
-    return connection('ProductDescription').select('*').where({model_number: modelNumber});
+  getByModelNumber(modelNumber) {
+    return connection('ProductDescription').select('*')
+      .where({model_number: modelNumber});
   }
 
   /*
