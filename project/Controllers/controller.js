@@ -241,13 +241,18 @@ class Controller {
     });
   }
 
-  manageInventory() {
-    let results = this.inventoryRepo.save(toSave);
+  manageInventory(inventoryItems) {
+    let results = this.inventoryRepo.save(inventoryItems);
   }
-  manageProductCatalog() {
-    let results = this.productDescriptionRepo.save(toSave);
+  manageProductCatalog(productDescriptions) {
+    let results = this.productDescriptionRepo.save(productDescriptions);
   }
+  mapInventoryItems(inventory){
 
+  }
+  mapRPoductDescriptions(catalog){
+
+  }
   /**
    * Processes an inventory action initiated by the user
    * @param {Object} req HTTP request object containing action info
