@@ -40,10 +40,7 @@ app.set('view engine', 'hbs');
 
 // loading the home page
 app.get('/', function(req, res) {
-  if (req.session.exists) {
-    console.log('already logged in, redirecting to inventory');
-    res.redirect('/getAllInventoryItems');
-  } else res.render('home');
+ res.render('home');
 });
 
 // getting the login page
@@ -85,19 +82,14 @@ app.get('/getAllInventoryItems', function(req, res) {
     controller.getAllInventory(req, res);
   } else {
     console.log('login error');
-    res.redirect('/login');
+    controller.getAllInventory(req, res);
   }
 });
 
 // getting the client inventory from the database
 app.get('/clientInventory', function(req, res) {
-  if (req.session.exists) {
     controller.getAllInventory(req, res);
     console.log('Successs');
- } else {
-    console.log('login error');
-    res.redirect('/login');
-  }
 });
 
 // making the registration request

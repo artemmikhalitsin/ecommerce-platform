@@ -159,6 +159,7 @@ $(document).ready(function() {
             tr.addClass('shown');
         }
     });
+    $('input[type="search"]').val(search).keyup();
 });
 
 function submitData(){
