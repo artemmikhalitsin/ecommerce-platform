@@ -1,3 +1,4 @@
+'use strict';
 const rootPath = require('app-root-dir').get();
 // REVIEW: UnitOfWork is never used here, consider removing - Artem
 // const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
@@ -22,9 +23,17 @@ class ProductDescriptionsIdentityMap {
 
   }
 
+<<<<<<< HEAD
   static instance() {
     if (!_instance) {
       _instance = new ProductDescriptionsIdentityMap();
+=======
+        let context = this.productDescTDG.getAll();
+        Promise.all([context])
+        .then((values) => {
+          this.productDesc = values[0];
+        });
+>>>>>>> 0f1196a47120b144c6edc1ad5ef079dd05edfd9b
     }
     return _instance;
   }
@@ -33,9 +42,25 @@ class ProductDescriptionsIdentityMap {
      * Gets all the products currently stored in the Identity map
      * @return {Object[]} an array containing the products
      */
+<<<<<<< HEAD
   getAll() {
     let result = this.productDesc;
     return result;
+=======
+    getAll() {
+        let result = this.productDesc;
+        if (this.productDesc.length > 0) {
+            return result;
+        } else {
+            let productsFromTDG = this.productDescTDG.getAll();
+            Promise.all([productsFromTDG])
+            .then((values) => {
+              result = values[0];
+            });
+            return result;
+        }
+    }
+>>>>>>> 0f1196a47120b144c6edc1ad5ef079dd05edfd9b
 
   }
 

@@ -1,3 +1,4 @@
+'use strict';
 const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
@@ -20,7 +21,7 @@ class DimensionsTDG {
           'depth': dimension.depth,
           'height': dimension.height,
           'width': dimension.width,
-        }, 'id')
+        }, 'dimension_id')
         .into('Dimensions');
     }
 
