@@ -23,10 +23,9 @@ class Desktop extends Computer {
    */
   constructor(processorType, ramSize, numberCpuCores, harddriveSize,
               dimensions, price, weight, brandName, modelNumber, computerId) {
-    super(processorType, ramSize, numberCpuCores, harddriveSize,
+    super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
           price, weight, brandName, modelNumber);
         this.dimensions = dimensions;
-        this.computerId = computerId;
     }
     /**
      * dimensions accessor

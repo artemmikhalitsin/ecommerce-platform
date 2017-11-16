@@ -42,7 +42,6 @@ var Laptop = function (_Computer) {
 
     var _this = _possibleConstructorReturn(this, (Laptop.__proto__ || Object.getPrototypeOf(Laptop)).call(this, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber));
 
-    _this.computerId = computerId;
     _this.displaySize = displaySize;
     _this.batteryInfo = batteryInfo;
     _this.os = os;

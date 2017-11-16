@@ -36,10 +36,9 @@ var Desktop = function (_Computer) {
   function Desktop(processorType, ramSize, numberCpuCores, harddriveSize, dimensions, price, weight, brandName, modelNumber, computerId) {
     _classCallCheck(this, Desktop);
 
-    var _this = _possibleConstructorReturn(this, (Desktop.__proto__ || Object.getPrototypeOf(Desktop)).call(this, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber));
+    var _this = _possibleConstructorReturn(this, (Desktop.__proto__ || Object.getPrototypeOf(Desktop)).call(this, computerId, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber));
 
     _this.dimensions = dimensions;
-    _this.computerId = computerId;
     return _this;
   }
   /**

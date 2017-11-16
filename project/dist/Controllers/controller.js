@@ -4,12 +4,14 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var Promise = require('bluebird');
 var rootPath = require('app-root-dir').get();
 var ProductDescriptionRepository = require(rootPath + '/DataSource/Repository/ProductDescriptionRepository.js');
 var InventoryItemRepository = require(rootPath + '/DataSource/Repository/InventoryItemRepository.js');
 var UserRepository = require(rootPath + '/DataSource/Repository/UserRepository.js');
 var PurchaseCollectionRepo = require(rootPath + '/DataSource/Repository/PurchaseCollectionRepository.js');
 var ShoppingCart = require(rootPath + '/models/ShoppingCart.js');
+var InventoryItem = require(rootPath + '/models/InventoryItem.js');
 
 /**
  * Identity map of inventory items
@@ -390,14 +392,25 @@ var Controller = function () {
 
       var query = this.url.parse(req.url, true).query;
       var search = query.search;
-      // the following statement is not used anywhere yet
-      this.productDescriptionRepo.getAllWithInclues();
-      var prodDesc = this.inventoryRepo.getAllInventoryItems();
-      Promise.all([prodDesc]).then(function (values) {
-        var items = JSON.stringify(values[0]);
-
+      var inventory = [];
+      var productDescriptions = this.productDescriptionRepo.getAllWithIncludes().then(function (results) {
+        console.log("all the products are: " + JSON.stringify(results));
+        return Promise.each(results, function (product) {
+          return _this9.inventoryRepo.getByModelNumbers([product.modelNumber]).then(function (values) {
+            console.log("inventory item is " + JSON.stringify(values));
+            product.serial_numbers = values.map(function (p) {
+              return p.serialNumber;
+            });
+            inventory.push(product);
+          });
+        });
+      }).then(function (val) {
+        console.log('Values: ', JSON.stringify(inventory));
         if (req.session.exists == true && req.session.isAdmin == true) {
-          res.render('inventory', { items: items, search: search });
+          res.render('inventory', { items: JSON.stringify(inventory) });
+        } else if (req.session.exists == true && req.session.isAdmin == false) {
+          _this9.updateInventoryList(inventory);
+          res.render('clientInventory', { items: JSON.stringify(inventory) });
         } else {
           _this9.updateInventoryList(values[0]);
           res.render('clientInventory', { items: items, search: search });
@@ -409,99 +422,12 @@ var Controller = function () {
 
     /*
     manageInventory() {
-      let toSave = [{
-        serial_number: ['1'],
-        model_number: '1',
-       }, {
-        serial_number: ['2'],
-        model_number: '2',
-       }, {
-        serial_number: ['3', '34'],
-        model_number: '3',
-       }, {
-        serial_number: ['7'],
-        model_number: '5',
-       }];
       let results = this.inventoryRepo.save(toSave);
     }
     manageProductCatalog() {
-      let toSave = [{
-        model_number: '1',
-        brand_name: 'b',
-        price: 1,
-        weight: 1,
-        id: 1,
-        type: 'Desktop',
-        processor_type: 'adding',
-        ram_size: 1,
-        number_cpu_cores: 2,
-        harddrive_size: 3,
-        comp_id: 3,
-        dimension: {depth: 1,
-           height: 1,
-           width: 1,
-           dimensions_id: 2,
-        },
-       }, {
-        model_number: '2',
-        brand_name: 'changed product desc',
-        price: 1,
-        weight: 1,
-        type: 'Desktop',
-        id: 2,
-        processor_type: 'q',
-        ram_size: 1,
-        number_cpu_cores: 2,
-        harddrive_size: 3,
-        comp_id: 2,
-        dimension: {depth: 1,
-           height: 1,
-           width: 1,
-           dimensions_id: 3,
-        },
-       }, {
-        model_number: '3',
-        brand_name: 'b',
-        price: 1,
-        weight: 1,
-        type: 'Desktop',
-        id: 3,
-        processor_type: 'n',
-        ram_size: 1,
-        number_cpu_cores: 2,
-        harddrive_size: 3,
-        comp_id: 1,
-        dimension: {depth: 1,
-           height: 1,
-           width: 1,
-           dimensions_id: 1,
-         },
-       }, {
-        model_number: '5',
-        brand_name: 'b',
-        price: 1,
-        weight: 1,
-        type: 'Monitor',
-        id: 3,
-        processor_type: 'n',
-        ram_size: 1,
-        number_cpu_cores: 2,
-        harddrive_size: 3,
-        comp_id: 1,
-        dimension: {depth: 1,
-           height: 1,
-           width: 1,
-           dimensions_id: 1,
-         },
-       }];
       let results = this.productDescriptionRepo.save(toSave);
     }
     */
-    /**
-     * Processes an inventory action initiated by the user
-     * @param {Object} req HTTP request object containing action info
-     * @param {Object} res HTTP response object to be returned to the user
-     */
 
   }, {
     key: 'logout',
@@ -511,6 +437,13 @@ var Controller = function () {
         res.redirect('/');
       }
     }
+
+    /**
+     * Processes an inventory action initiated by the user
+     * @param {Object} req HTTP request object containing action info
+     * @param {Object} res HTTP response object to be returned to the user
+     */
+
   }, {
     key: 'inventoryAction',
     value: function inventoryAction(req, res) {

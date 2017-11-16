@@ -56,23 +56,26 @@ class ProductDescriptionRepository {
     let monitors = this.MonitorsTDG.getAll();
     let tablets = this.TabletsTDG.getAll();
     let result = [];
-    Promise.props([desktops, laptops, monitors, tablets]).then((values)=>{
-        for (let i = 0; i < values.length; i++) {
-          result.push(values[i]);
+    return Promise.all([desktops, laptops, monitors, tablets]).then((values)=>{
+      let products = [].concat(...values);
+        for(let i = 0; i < products.length; i++){
+          result.push(products[i]);
         }
-
+      console.log("Result from repo: " + JSON.stringify(products));
     return result;
     });
+
   }
-  getByModelNumbers(modelNumbers) {
+  getByModelNumbers(modelNumbers){
     let desktops = this.DesktopsTDG.getByModelNumbers(modelNumbers);
     let laptops = this.LaptopsTDG.getByModelNumbers(modelNumbers);
     let monitors = this.MonitorsTDG.getByModelNumbers(modelNumbers);
     let tablets = this.TabletsTDG.getByModelNumbers(modelNumbers);
     let result = [];
-    Promise.props([desktops, laptops, monitors, tablets]).then((values)=>{
-        for (let i = 0; i < values.length; i++) {
-          result.push(values[i]);
+    return Promise.all([desktops, laptops, monitors, tablets]).then((values)=>{
+      let products = [].concat(...values);
+        for(let i = 0; i < products.length; i++){
+          result.push(products[i]);
         }
       return result;
     });

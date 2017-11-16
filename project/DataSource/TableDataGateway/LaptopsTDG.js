@@ -34,11 +34,11 @@ class LaptopsTDG {
     getAll() {
         let result = [];
         return connection('Laptop').select('*')
-          .leftJoin('Computer', 'Laptop.comp_id', 'Computer.comp_id')
-          .leftJoin('ProductDescription', 'Laptop.model_number',
-            'ProductDescription.model_number')
+          .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
+          .join('ProductDescription', 'Laptop.model_number',
+                'ProductDescription.model_number')
           .then((laptops) => {
-              laptops.forEach(function(laptop) {
+              laptops.forEach(function(laptop){
                   result.push(new Laptop(
                       laptop.comp_id,
                       laptop.processor_type,
@@ -55,18 +55,18 @@ class LaptopsTDG {
                       laptop.brand_name,
                       laptop.model_number));
               });
-          return result;
-        });
+              return result;
+          });
     }
     getByModelNumbers(modelNumbers) {
         let result = [];
         return connection('Laptop').select('*')
           .whereIn('model_number', modelNumbers)
-          .leftJoin('Computer', 'Laptop.comp_id', 'Computer.comp_id')
-          .leftJoin('ProductDescription', 'Laptop.model_number',
-            'ProductDescription.model_number')
+          .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
+          .join('ProductDescription', 'Laptop.model_number',
+                'ProductDescription.model_number')
           .then((laptops) => {
-              laptops.forEach(function(laptop) {
+              laptops.forEach(function(laptop){
                   result.push(new Laptop(
                       laptop.comp_id,
                       laptop.processor_type,
@@ -82,9 +82,9 @@ class LaptopsTDG {
                       laptop.weight,
                       laptop.brand_name,
                       laptop.model_number));
+              });
+              return result;
           });
-          return result;
-        });
     }
 
     /**

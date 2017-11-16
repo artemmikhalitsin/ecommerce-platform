@@ -42,7 +42,6 @@ var Tablet = function (_Computer) {
 
     var _this = _possibleConstructorReturn(this, (Tablet.__proto__ || Object.getPrototypeOf(Tablet)).call(this, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber));
 
-    _this.computerId = computerId;
     _this.displaySize = displaySize;
     _this.dimensions = dimensions;
     _this.batteryInfo = batteryInfo;

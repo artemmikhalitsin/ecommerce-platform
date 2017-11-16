@@ -25,14 +25,11 @@ class MonitorsTDG {
     }
     getAll() {
         let result = [];
-        return connection('Monitor')
-          .select('*')
-          .leftJoin(
-            'ProductDescription',
-            'Monitor.model_number',
-            'ProductDescription.model_number')
+        return connection('Monitor').select('*')
+          .join('ProductDescription', 'Monitor.model_number',
+                'ProductDescription.model_number')
           .then((monitors) => {
-              monitors.forEach(function(monitor) {
+              monitors.forEach(function(monitor){
                   result.push(new Monitor(
                       monitor.display_size,
                       monitor.price,
@@ -45,15 +42,12 @@ class MonitorsTDG {
     }
     getAllByModelNumber(modelNumbers) {
         let result = [];
-        return connection('Monitor')
-          .select('*')
+        return connection('Monitor').select('*')
           .whereIn('model_number', modelNumbers)
-          .leftJoin(
-            'ProductDescription',
-            'Monitor.model_number',
-            'ProductDescription.model_number')
+          .join('ProductDescription', 'Monitor.model_number',
+                'ProductDescription.model_number')
           .then((monitors) => {
-              monitors.forEach(function(monitor) {
+              monitors.forEach(function(monitor){
                   result.push(new Monitor(
                       monitor.display_size,
                       monitor.price,
