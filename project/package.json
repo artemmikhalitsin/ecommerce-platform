@@ -53,10 +53,7 @@
     "mocha": "^4.0.1",
     "mysql": "^2.14.1",
     "nodemon": "^1.12.1",
-<<<<<<< HEAD
-    "rimraf": "^2.6.2"
-=======
->>>>>>> d67e1d93899902e1989e506e5c4d369abe87ebc1
+    "rimraf": "^2.6.2",
     "stringy": "0.1.0"
   },
   "dependencies": {
