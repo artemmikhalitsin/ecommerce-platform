@@ -14,9 +14,11 @@ class UsersTDG{
     return connnection.inser({
       'first_name': user.first_name,
       'last_name': user.last_name,
-      'address': user.address,
+      'full_address': user.full_address,
       'email': user.email,
       'phone_number': user.phone_number,
+      'password': user.password,
+    //  'is_admin' : user.is_admin = false,
     }, 'id').into('Users');
   }
   /**
