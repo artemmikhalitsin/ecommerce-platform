@@ -39,7 +39,7 @@ class InventoryItemRepository {
     }
     return context;
   }
-  getByModelNumbers(modelNumbers){
+  getByModelNumbers(modelNumbers) {
     let inventory = this.inventoryTDG.getByModelNumbers(modelNumbers);
     let result;
     Promise.all(inventory).then((values) => {
@@ -112,10 +112,13 @@ class InventoryItemRepository {
       let allInventoryItems = this.inventoryItemsIM
                           .getByModelNumbers(model_numbers);
 
-      for (var i = 0; i < items.length; i++) {
-        for (var j = 0; j < items[i].serial_number.length; j++) {
-          if (allInventoryItems.findIndex((p) => p.serial_number == items[i].serial_number[j]) === -1
-            && electronicsToAdd.findIndex((e) => e.serial_number == items[i].serial_number[j] && e.model_number == items[i].model_number) === -1) {
+      for (let i = 0; i < items.length; i++) {
+        for (let j = 0; j < items[i].serial_number.length; j++) {
+          if (allInventoryItems.findIndex(
+            (p) => p.serial_number == items[i].serial_number[j]) === -1
+            && electronicsToAdd.findIndex(
+              (e) => e.serial_number == items[i].serial_number[j]
+              && e.model_number == items[i].model_number) === -1) {
               // Case: item is not in our inventory
               // and hasn't already been processed
               electronicsToAdd.push({'serial_number': items[i].serial_number[j],

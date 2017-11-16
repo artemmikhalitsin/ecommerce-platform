@@ -24,8 +24,10 @@ class Controller {
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
     this.purchaseCollectionRepo = new PurchaseCollectionRepo();
-    this.clientInventory = {}; // List of inventory items, key: serial number, value: locked or not locked
-    this.shoppingCartList = {}; // List of shopping carts associated to users key:user, value: shopping cart
+    // List of inventory items, key: serial number, value: locked or not locked
+    this.clientInventory = {};
+    // List of shopping carts associated to users key:user, value: shopping cart
+    this.shoppingCartList = {};
     this.url = require('url');
     this.crypto = require('crypto');
   }
@@ -43,7 +45,7 @@ class Controller {
     let salted = userData['email'] + password + 'salt';
     userData['password'] = hash.update(salted).digest('hex');
     if (password != confirmPassword) {
-      console.log('password confirmation failed. try again...');
+      console.log('password confirmation failed. please try again...');
       res.redirect('/registration');
     } else {
       delete userData['confirmPassword'];
@@ -292,7 +294,8 @@ class Controller {
   getAllInventory(req, res) {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;
-    this.productDescriptionRepo.getAllWithInclues(); // will use this instead of the following statement
+    // the following statement is not used anywhere yet
+    this.productDescriptionRepo.getAllWithInclues();
     let prodDesc = this.inventoryRepo.getAllInventoryItems();
     Promise.all([prodDesc])
     .then((values) => {

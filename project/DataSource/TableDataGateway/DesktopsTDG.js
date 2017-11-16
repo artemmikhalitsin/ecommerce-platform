@@ -55,7 +55,7 @@ class DesktopsTDG {
                       desktop.weight,
                       desktop.brand_name,
                       desktop.model_number,
-                      desktop.comp_id)
+                      desktop.comp_id);
 
                   console.log('The deskto pobject is: ' + JSON.stringify(d));
                   result.push(d);
