@@ -38,6 +38,22 @@ function ClientInventoryController($scope, $http) {
       price: '1000.00',
       weight: '850 gram',
       type: 'monitor'
+    },
+    {
+      brand:'laptopz',
+      modelNumber:'swagybots',
+      serialNumber: 'HHV9-B52E-YGA7-HSSH',
+      price: '9999.00',
+      weight: '850 gram',
+      type: 'laptop'
+    },
+    {
+      brand:'HP2',
+      modelNumber:'N1C3R1D3',
+      serialNumber: 'HHV9-B52E-YGA7-HSSH',
+      price: '1000.00',
+      weight: '850 gram',
+      type: 'monitor'
     }
   ];
 
