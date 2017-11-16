@@ -1,7 +1,10 @@
+'use strict';
 const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
+const Desktop = require(rootPath + '/models/Desktop.js');
+const Dimensions = require(rootPath + '/models/Dimensions.js');
 
 /**
  * Table Data Gateway for the Desktop table
@@ -28,10 +31,62 @@ class DesktopsTDG {
         .into('Desktop');
     }
 
-    select() {
-        // TODO
+    getAll() {
+        let result = [];
+        return connection('Desktop').select('*')
+          .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
+          .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
+          .join('ProductDescription', 'Desktop.model_number','ProductDescription.model_number')
+          .then((desktops) => {
+              desktops.forEach(function(desktop){
+                  let d = new Desktop(
+                      desktop.processor_type,
+                      desktop.ram_size,
+                      desktop.number_cpu_cores,
+                      desktop.harddrive_size,
+                      new Dimensions(
+                          desktop.dimension_id,
+                          desktop.depth,
+                          desktop.height,
+                          desktop.width),
+                      desktop.price,
+                      desktop.weight,
+                      desktop.brand_name,
+                      desktop.model_number,
+                      desktop.comp_id)
+                  result.push(d);
+              });
+              return result;
+          });
     }
-
+    getByModelNumbers(modelNumbers) {
+        let result = [];
+        return connection('Desktop').select('*')
+          .whereIn('model_number', modelNumbers)
+          .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
+          .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
+          .join('ProductDescription', 'Desktop.model_number','ProductDescription.model_number')
+          .then((desktops) => {
+              desktops.forEach(function(desktop){
+                  result.push(new Desktop(
+                      desktop.processor_type,
+                      desktop.ram_size,
+                      desktop.number_cpu_cores,
+                      desktop.harddrive_size,
+                      new Dimensions(
+                          desktop.dimension_id,
+                          desktop.depth,
+                          desktop.height,
+                          desktop.width),
+                      desktop.price,
+                      desktop.weight,
+                      desktop.brand_name,
+                      desktop.model_number,
+                      desktop.comp_id));
+          });
+          return result;
+      });
+    }
     /**
      * Updates the specifications of a desktop in the database
      * @param {number} compId the id of the Computer portion specification in
