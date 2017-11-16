@@ -93,11 +93,6 @@ app.get('/clientInventory', function (req, res) {
   console.log('Successs');
 });
 
-// getting the client inventory from the database
-app.get('/catalog', function (req, res) {
-  res.render('catalog');
-});
-
 // making the registration request
 app.post('/registrationRequest', function (req, res) {
   controller.registrationRequest(req, res);

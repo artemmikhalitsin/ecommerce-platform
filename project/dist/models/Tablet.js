@@ -40,7 +40,7 @@ var Tablet = function (_Computer) {
   function Tablet(computerId, processorType, ramSize, numberCpuCores, harddriveSize, displaySize, dimensions, batteryInfo, os, cameraInfo, price, weight, brandName, modelNumber) {
     _classCallCheck(this, Tablet);
 
-    var _this = _possibleConstructorReturn(this, (Tablet.__proto__ || Object.getPrototypeOf(Tablet)).call(this, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber));
+    var _this = _possibleConstructorReturn(this, (Tablet.__proto__ || Object.getPrototypeOf(Tablet)).call(this, computerId, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber));
 
     _this.displaySize = displaySize;
     _this.dimensions = dimensions;

@@ -407,13 +407,12 @@ var Controller = function () {
       }).then(function (val) {
         console.log('Values: ', JSON.stringify(inventory));
         if (req.session.exists == true && req.session.isAdmin == true) {
-          res.render('inventory', { items: JSON.stringify(inventory) });
+          res.render('inventory', { items: JSON.stringify(inventory), search: search });
         } else if (req.session.exists == true && req.session.isAdmin == false) {
           _this9.updateInventoryList(inventory);
-          res.render('clientInventory', { items: JSON.stringify(inventory) });
+          res.render('clientInventory', { items: JSON.stringify(inventory), search: search });
         } else {
-          _this9.updateInventoryList(values[0]);
-          res.render('clientInventory', { items: items, search: search });
+          res.redirect('/login');
         }
       }).catch(function (err) {
         console.log(err);

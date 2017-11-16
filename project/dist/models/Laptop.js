@@ -40,7 +40,7 @@ var Laptop = function (_Computer) {
   function Laptop(computerId, processorType, ramSize, numberCpuCores, harddriveSize, displaySize, batteryInfo, os, touchscreen, camera, price, weight, brandName, modelNumber) {
     _classCallCheck(this, Laptop);
 
-    var _this = _possibleConstructorReturn(this, (Laptop.__proto__ || Object.getPrototypeOf(Laptop)).call(this, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber));
+    var _this = _possibleConstructorReturn(this, (Laptop.__proto__ || Object.getPrototypeOf(Laptop)).call(this, computerId, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber));
 
     _this.displaySize = displaySize;
     _this.batteryInfo = batteryInfo;

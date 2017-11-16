@@ -315,7 +315,7 @@ class Controller {
         this.updateInventoryList(inventory);
         res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
       } else {
-        res.redirect('/login');
+        res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
       }
       }).catch((err) => {
       console.log(err);
