@@ -141,6 +141,10 @@ app.get('/api/getAllProducts', function(req, res) {
   controller.getProductInfo(req, res);
 })
 
+app.get('/api/getAllClients', function(req, res) {
+  controller.getClients(req, res);
+})
+
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');
 });

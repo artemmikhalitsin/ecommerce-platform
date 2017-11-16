@@ -1,6 +1,6 @@
 $(document).ready(function() {
     let inventory_table = $('#table_inventory').DataTable({
-      data: data,
+    ajax: '/api/getAllClients'
       columns: [
         {
             'className': 'details-control',
@@ -16,6 +16,5 @@ $(document).ready(function() {
         {'data': 'full_adress'},
         {'data': 'phone_number'}
       ],
-    });
-    $('input[type="search"]').val(search).keyup();
+    })
 });

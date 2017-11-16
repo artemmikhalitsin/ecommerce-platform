@@ -313,7 +313,8 @@ class Controller {
   getClients(req, res) {
     this.userRepo.getAdmins().then(
       (result) => {
-        res.json(result);
+        //res.json(result);
+        console.log(result);
       }
     )
   }

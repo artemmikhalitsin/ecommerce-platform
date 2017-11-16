@@ -1,8 +1,8 @@
 const rootPath = require('app-root-dir').get();
-const userRepo = require(rootPath + '/DataSource/Repository/InventoryItemRepository.js');
+const userRepo = require(rootPath + '/DataSource/Repository/UserRepository.js');
 
 let repo = new userRepo();
 
-repo.getAllInventoryItems().then(
+repo.getAdmins().then(
   (result) => { console.log(`Response from server: ${JSON.stringify(result)}`)}
 )
