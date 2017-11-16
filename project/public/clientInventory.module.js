@@ -1,8 +1,7 @@
-console.log('loaded')
-
 var clientInventory = angular.module('clientInventory', ['desktopCard', 'monitorCard', 'tabletCard', 'laptopCard']);
 
 function ClientInventoryController($scope, $http) {
+<<<<<<< HEAD
   $scope.fruit = 'banana', 'mango'
   //Load items from inventory
   //Split into arrays of 4 at a time to make a grid
@@ -38,13 +37,48 @@ function ClientInventoryController($scope, $http) {
       price: '1000.00',
       weight: '850 gram',
       type: 'monitor'
-    }
-  ];
-
+=======
+  //Get any search parameters
+  let search = new URLSearchParams(window.location.search).get('search');
+  $scope.search = search ? search : "all";
   $scope.itemsShown = [];
+  //Load items from api call
+  $scope.items = [];
+  $http({
+    method: 'GET',
+    url: '/api/getAllProducts'
+  })
+  .then(
+    (res) => {
+      $scope.items = res.data;
+      $scope.itemsShown = res.data;
+      filterShown($scope.search)
+>>>>>>> e97fede8bb326a4320e1f1dc50d96e3b3bcfe495
+    }
+  )
+  .catch(
+    (err) => {
+      window.alert("Error loading inventory items.\n"
+    + `Please contact the admin. Error code: ${err}`);
+  });
 
-  $scope.itemsPerPage = 4;
-  $scope.pages = Math.ceil($scope.items.length * 1.0/ $scope.itemsPerPage);
+  //Helper function that filters shown items, based on current search JQuery
+  let filterShown = function(query) {
+    if (query == "all")
+    {
+      $scope.itemsShown = $scope.items;
+    }
+    else {
+      $scope.itemsShown = $scope.items.filter(
+        item => item.type == query
+      );
+    }
+  }
+
+  //Any time search query is changed, re-filter results
+  $scope.$watch('search', function(newVal, oldVal) {
+    filterShown(newVal)
+  });
 
   $scope.purchase = function(){
     $http({

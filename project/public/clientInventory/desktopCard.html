@@ -8,16 +8,16 @@
     <!--Card content-->
     <div class="card-body">
       <div class="caption">
-        <h4 class="pull-right">${[{ $ctrl.desktop.price }]}</h4>
+        <h4 class="pull-right">${[{ $ctrl.desktop.price.toFixed(2) }]}</h4>
         <h4> Desktop </h4></br>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Model Number: {[{ $ctrl.desktop.modelNumber }]}</li>
-          <li class="list-group-item">Serial Number: {[{ $ctrl.desktop.serialNumber }]}</li>
-          <li class="list-group-item">Brand Name: {[{ $ctrl.desktop.brand }]}</li>
-          <li class="list-group-item">Weight: {[{ $ctrl.desktop.weight }]} </li>
+          <li class="list-group-item">Model Number: {[{ $ctrl.desktop.model_number }]}</li>
+          <li class="list-group-item">Serial Number: {[{ $ctrl.desktop.serial_number }]}</li>
+          <li class="list-group-item">Brand Name: {[{ $ctrl.desktop.brand_name }]}</li>
+          <li class="list-group-item">Weight: {[{ $ctrl.desktop.weight }]} gram </li>
         </ul></br>
         <a href="#" class="btn btn-primary" ng-click="rotate()">View Details</a>
-        <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.desktop.serialNumber, $ctrl.desktop.modelNumber)">Add to Shopping Cart</a>
+        <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.desktop.serial_number, $ctrl.desktop.model_number)">Add to Shopping Cart</a>
       </div>
       <!--/.caption-->
     </div>
@@ -38,7 +38,7 @@
         <li class="list-group-item">Depth (cm): </li>
       </ul></br>
       <a href="#" class="btn btn-primary" ng-click="rotate()">Go Back</a>
-      <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.desktop.serialNumber, $ctrl.desktop.modelNumber)">Add to Shopping Cart</a>
+      <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.desktop.serial_number, $ctrl.desktop.model_number)">Add to Shopping Cart</a>
     </div>
     <!--/.card-body-->
   </div>
