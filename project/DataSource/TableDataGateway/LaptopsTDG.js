@@ -1,11 +1,12 @@
+'use strict';
 const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
-
+const Laptop = require(rootPath + '/models/Laptop.js');
 /**
  * Table Data Gateway for the Laptop table
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Eaterina Ruhlin
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class LaptopsTDG {
@@ -30,8 +31,60 @@ class LaptopsTDG {
         .into('Laptop');
     }
 
-    select() {
-        // TODO
+    getAll() {
+        let result = [];
+        return connection('Laptop').select('*')
+          .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
+          .join('ProductDescription', 'Laptop.model_number',
+                'ProductDescription.model_number')
+          .then((laptops) => {
+              laptops.forEach(function(laptop){
+                  result.push(new Laptop(
+                      laptop.comp_id,
+                      laptop.processor_type,
+                      laptop.ram_size,
+                      laptop.number_cpu_cores,
+                      laptop.harddrive_size,
+                      laptop.display_size,
+                      laptop.battery_info,
+                      laptop.os,
+                      laptop.touch_screen,
+                      laptop.camera,
+                      laptop.price,
+                      laptop.weight,
+                      laptop.brand_name,
+                      laptop.model_number));
+              });
+              return result;
+          });
+    }
+    getByModelNumbers(modelNumbers) {
+        let result = [];
+        return connection('Laptop').select('*')
+          .whereIn('model_number', modelNumbers)
+          .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
+          .join('ProductDescription', 'Laptop.model_number',
+                'ProductDescription.model_number')
+          .then((laptops) => {
+              laptops.forEach(function(laptop){
+                  result.push(new Laptop(
+                      laptop.comp_id,
+                      laptop.processor_type,
+                      laptop.ram_size,
+                      laptop.number_cpu_cores,
+                      laptop.harddrive_size,
+                      laptop.display_size,
+                      laptop.battery_info,
+                      laptop.os,
+                      laptop.touch_screen,
+                      laptop.camera,
+                      laptop.price,
+                      laptop.weight,
+                      laptop.brand_name,
+                      laptop.model_number));
+              });
+              return result;
+          });
     }
 
     /**

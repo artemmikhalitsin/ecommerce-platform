@@ -1,3 +1,4 @@
+'use strict';
 const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
@@ -5,7 +6,7 @@ const connection = require('knex')(configuration);
 
 /**
  * Table Data Gateway for the ProductDescription table
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Ekaterina Ruhlin
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class ProductDescriptionsTDG {
@@ -30,8 +31,13 @@ class ProductDescriptionsTDG {
    * @return {Promise<Object[]>} promise which resolves to the list containing
    * all products in the ProductDescription table
    */
-  select() {
+  getAll() {
     return connection('ProductDescription').select('*');
+  }
+  getByModelNumber(modelNumber) {
+    return connection('ProductDescription')
+      .select('*')
+      .where({model_number: modelNumber});
   }
 
   /*
@@ -51,7 +57,7 @@ class ProductDescriptionsTDG {
                 .where({model_number: modelNumber}).select('*');
   }
 
-  /**
+  /** .
    * Updates the product specifications
    * @param {Object} productDescription description of a product
    * @return {Promise<number>} promise which resolves to the number of

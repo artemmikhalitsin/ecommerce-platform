@@ -1,8 +1,10 @@
+'use strict';
 const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
-
+const InventoryItem = require(rootPath + '/models/InventoryItem.js');
+const ProductDescription = require(rootPath + '/models/ProductDescription.js');
 /**
  * Table Data Gateway of inventory items table
  * @author TODO: IF YOU WROTE THIS PLEASE ADD YOUR NAME
@@ -32,6 +34,21 @@ class InventoryItemsTDG {
     select() {
         return connection('Inventory').select('*');
     }
+    getByModelNumbers(modelNumbers){
+        let results = [];
+        return connection('Inventory').select('*')
+          .whereIn('model_number', [modelNumbers])
+          .then((inventoryItems)=>{
+              inventoryItems.forEach(function(item){
+                  results.push(new InventoryItem(
+                      item.id,
+                      item.serial_number,
+                      item.model_number,
+                      new ProductDescription()));
+              });
+              return results;
+          });
+    }
     // update is not in current requirements for inventory items
     /* update(inventoryItems){
     }*/
@@ -44,8 +61,11 @@ class InventoryItemsTDG {
      * affected
      */
     delete(inventoryItem) {
+        console.log(inventoryItem);
+        console.log('in inventoryIemTDG');
         return connection.from('Inventory').where(
-          {serial_number: inventoryItem.serial_number}
+          {'serial_number': inventoryItem.serial_number,
+           'model_number': inventoryItem.model_number}
         ).del();
     }
 }
