@@ -2,10 +2,10 @@
 <div class="card">
   <div ng-click="toggle()" class='row'>
       <div class='col'>
-          {[{$ctrl.product.brand_name}]}
+          {[{$ctrl.product.brandName}]}
       </div>
       <div class='col'>
-          {[{$ctrl.product.model_number}]}
+          {[{$ctrl.product.modelNumber}]}
       </div>
       <div class='col'>
           {[{$ctrl.product.type}]}
@@ -55,15 +55,15 @@
       </div>
     </div>
     <div class='col'>
-      <div ng-show= "isTablet() || isDesktop()">
+      <div ng-show= "isTablet() || isDesktop()">  
         <label class="control-label">Height:&nbsp;</label>
-        <span ng-show='!editMode'>{[{$ctrl.product.height}]}</span>
+        <span ng-show='!editMode'>{[{$ctrl.product.dimensions.height}]}</span>
         <input ng-show='editMode' type="number" step="0.01" min="0" class="form-control" ng-model="$ctrl.product.height"></input>
         <br><label class="control-label">Depth:&nbsp;</label>
-        <span ng-show='!editMode'>{[{$ctrl.product.depth}]}</span>
+        <span ng-show='!editMode'>{[{$ctrl.product.dimensions.depth}]}</span>
         <input ng-show='editMode' type="number" step="0.01" min="0" class="form-control" ng-model="$ctrl.product.depth"></input>
         <br><label class="control-label">Width:&nbsp;</label>
-        <span ng-show='!editMode'>{[{$ctrl.product.width}]}</span>
+        <span ng-show='!editMode'>{[{$ctrl.product.dimensions.width}]}</span>
         <input ng-show='editMode' type="number" step="0.01" min="0" class="form-control" ng-model="$ctrl.product.width"></input>
       </div>
     </div>

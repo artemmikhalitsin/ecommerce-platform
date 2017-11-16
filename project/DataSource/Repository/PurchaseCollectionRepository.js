@@ -95,46 +95,17 @@ class PurchaseCollectionRepo {
    * inventory is to be compared
    */
   save(items) {
-    // var electronicsToAdd = [];
+    // var electronicsToAdd = []
     let electronicsToDelete = items;
     let electronicsToAdd = items;
 
-    // // Extracts the model numbers of given items
-    //
-    // if(model_numbers.length > 0){
-    //   // Retrieve the items corresponding to given ids
-    //   let allInventoryItems = this.inventoryItemsIM.getByModelNumbers(model_numbers);
-    //
-    //   //Add items to database if not in database.
-    //   for(var i = 0; i < items.length; i++){
-    //     for(var j = 0; j < items[i].serial_number.length; j++){
-    //       if(allInventoryItems.findIndex(p => p.serial_number == items[i].serial_number[j]) === -1
-    //         && electronicsToAdd.findIndex(e => e.serial_number == items[i].serial_number[j] && e.model_number == items[i].model_number) === -1){
-    //           // Case: item is not in our inventory
-    //           // and hasn't already been processed
-    //           electronicsToAdd.push({'serial_number': items[i].serial_number[j], 'model_number': items[i].model_number});
-    //         }
-    //     }
-    //   }
-
-      // Any item in inventory that don't appear in new list are to be removed (from database?)
-      electronicsToDelete = items; /* .filter(function(item) {
-        items.forEach(function(element){
-         return element.serial_number.findIndex(e => e == item.serial_number) === -1;
-        })
-      }); */
-    // Process the new tasks
-    // this.uow.registerNewItem(electronicsToAdd);
-    //this.uow.registerDeletedItem(electronicsToDelete);
-    //Not Complete
-    //items.forEach(this.purchaseColectionTDG.add(clientID, item[0], item[1]));
     this.uow.registerDeletedItem(electronicsToDelete);
     this.uow.registerNewPurchase(electronicsToAdd);
     this.uow.commitAll();
-    this.inventoryItemsIM.add(electronicsToAdd);
+    // this.inventoryItemsIM.add(electronicsToAdd);
   }
 
-  returnItems(items){
+  returnItems(items) {
     let electronicsToDelete = items;
     let electronicsToAdd = items;
 

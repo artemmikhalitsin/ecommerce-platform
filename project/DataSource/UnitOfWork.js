@@ -31,7 +31,7 @@ const PurchaseCollectionTDG = require(rootPath +
 
 /**
  * Unit of Work implementation
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Ekaterina Ruhlin
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class UnitOfWork {
@@ -56,7 +56,7 @@ class UnitOfWork {
     this.newInventoryItems = [];
     this.deletedInventoryItems = [];
     this.newPurchases = [];
-    this.deletePurchases = [];
+    this.deletedPurchases = [];
   }
   registerNew(object) {
     this.newElements = [];
@@ -68,8 +68,8 @@ class UnitOfWork {
   }
 
   registerReturn(object){
-    this.deletePurchases = [];
-    this.deletedPurchase.push(object);
+    this.deletedPurchases = [];
+    this.deletedPurchases.push(object);
   }
 
   registerDirty(object) {
@@ -297,8 +297,8 @@ class UnitOfWork {
     });
   }
 
-  // the following function is getting all the items along with their descriptions
-  getAllInventoryItems() {
+  // TODO: DELETE
+ /* getAllInventoryItems() {
     return new Promise((resolve, reject) => {
       let desktops = this.getAllDesktops();
       let laptops = this.getAllLaptops();
@@ -335,7 +335,7 @@ class UnitOfWork {
       }))
       .catch((err) => reject(err));
     });
-  }
+  }*/
 
   // this function is getting all the model numbers from all the products
   getAllModelNumbers(products) {
