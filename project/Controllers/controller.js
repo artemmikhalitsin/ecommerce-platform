@@ -295,7 +295,7 @@ class Controller {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;
     // the following statement is not used anywhere yet
-    this.productDescriptionRepo.getAllWithInclues();
+    this.productDescriptionRepo.getAllWithIncludes();
     let prodDesc = this.inventoryRepo.getAllInventoryItems();
     Promise.all([prodDesc])
     .then((values) => {
