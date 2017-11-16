@@ -5,7 +5,7 @@ const connection = require('knex')(configuration);
 
 /**
  * Table Data Gateway for the Laptop table
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author TODO: Ekaterina Ruhlin, Phuong-Thao Nguyen
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class MonitorsTDG {
@@ -33,7 +33,6 @@ class MonitorsTDG {
      * rows affected
      */
     update(monitor) {
-      // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
           'model_number': monitor.model_number,
           'display_size': monitor.display_size,

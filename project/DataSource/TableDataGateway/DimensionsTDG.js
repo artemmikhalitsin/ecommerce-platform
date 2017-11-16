@@ -5,7 +5,7 @@ const connection = require('knex')(configuration);
 
 /**
  * Table Data Gateway for the Dimensions table
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author TODO: Ekaterina Ruhlin, Phuong-Thao Nguyen
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class DimensionsTDG {

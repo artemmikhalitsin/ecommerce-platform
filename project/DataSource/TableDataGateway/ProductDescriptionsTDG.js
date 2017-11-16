@@ -5,7 +5,7 @@ const connection = require('knex')(configuration);
 
 /**
  * Table Data Gateway for the ProductDescription table
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author TODO: Ekaterina Ruhlin, Phuong-Thao Nguyen
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class ProductDescriptionsTDG {
@@ -58,7 +58,6 @@ class ProductDescriptionsTDG {
    * rows affected
    */
   update(productDescription) {
-    // TODO
     return connection
       .update({
         'brand_name': productDescription.brand_name,

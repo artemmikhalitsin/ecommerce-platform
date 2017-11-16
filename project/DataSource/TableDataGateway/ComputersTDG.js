@@ -5,7 +5,7 @@ const connection = require('knex')(configuration);
 
 /**
  * Table Data Gateway for the Computer table
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author TODO: Ekaterina Ruhlin, Phuong-Thao Nguyen
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class ComputersTDG {
@@ -35,7 +35,6 @@ class ComputersTDG {
      * rows affected
      */
     update(computer) {
-        // REVIEW: This was marked as todo - is this still the case? - Artem
         return connection.update({
           'processor_type': computer.processor_type,
           'ram_size': computer.ram_size,
