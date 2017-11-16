@@ -27,13 +27,14 @@ class ProductDescriptionRepository {
    * @return {Object[]} the complete list of product description objects
    */
   getAll(){
-      let context = this.productDescTDG.select();
+      let items = this.productDescTDG.select();
 
-      Promise.all([context]).then((values)=>{
+      /*Promise.all([context]).then((values)=>{
         context = values[0];
+        console.log(values[0])
       });
-      this.ProductDescriptionIM.add(context);
-    return context;
+      this.ProductDescriptionIM.add(context);*/
+      return items;
   }
 
   /**

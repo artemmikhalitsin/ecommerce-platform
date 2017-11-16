@@ -89,7 +89,7 @@ class Controller {
       });
     });
   }
-  
+
   /**
     *@param {String} req user who added an item to their cart
     *@param {String} res item user wants to add to their cart
@@ -227,105 +227,14 @@ class Controller {
       if (req.session.exists==true && req.session.isAdmin==true) {
         res.render('inventory', {items: items, search: search});
       } else {
-        this.updateInventoryList(values[0]);
-        res.render('clientInventory', {items: items, search: search});
+        //this.updateInventoryList(values[0]);
+        res.render('clientInventory', {search: search});
       }
     })
     .catch((err) => {
       console.log(err);
     });
   }
-
-  /*
-  manageInventory() {
-    let toSave = [{
-      serial_number: ['1'],
-      model_number: '1',
-     }, {
-      serial_number: ['2'],
-      model_number: '2',
-     }, {
-      serial_number: ['3', '34'],
-      model_number: '3',
-     }, {
-      serial_number: ['7'],
-      model_number: '5',
-     }];
-    let results = this.inventoryRepo.save(toSave);
-  }
-  manageProductCatalog() {
-    let toSave = [{
-      model_number: '1',
-      brand_name: 'b',
-      price: 1,
-      weight: 1,
-      id: 1,
-      type: 'Desktop',
-      processor_type: 'adding',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      comp_id: 3,
-      dimension: {depth: 1,
-         height: 1,
-         width: 1,
-         dimensions_id: 2,
-      },
-     }, {
-      model_number: '2',
-      brand_name: 'changed product desc',
-      price: 1,
-      weight: 1,
-      type: 'Desktop',
-      id: 2,
-      processor_type: 'q',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      comp_id: 2,
-      dimension: {depth: 1,
-         height: 1,
-         width: 1,
-         dimensions_id: 3,
-      },
-     }, {
-      model_number: '3',
-      brand_name: 'b',
-      price: 1,
-      weight: 1,
-      type: 'Desktop',
-      id: 3,
-      processor_type: 'n',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      comp_id: 1,
-      dimension: {depth: 1,
-         height: 1,
-         width: 1,
-         dimensions_id: 1,
-       },
-     }, {
-      model_number: '5',
-      brand_name: 'b',
-      price: 1,
-      weight: 1,
-      type: 'Monitor',
-      id: 3,
-      processor_type: 'n',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      comp_id: 1,
-      dimension: {depth: 1,
-         height: 1,
-         width: 1,
-         dimensions_id: 1,
-       },
-     }];
-    let results = this.productDescriptionRepo.save(toSave);
-  }
-  */
   /**
    * Processes an inventory action initiated by the user
    * @param {Object} req HTTP request object containing action info
@@ -338,6 +247,7 @@ class Controller {
       res.redirect('/');
     }
   }
+
 
   inventoryAction(req, res) {
     if (req.session.exists==true && req.session.isAdmin==true) {
@@ -390,6 +300,22 @@ class Controller {
     } else {
       res.render('login', {error: 'Invalid username/password'});
     }
+  }
+
+  getProductInfo(req, res) {
+    this.productDescriptionRepo.getAll().then(
+      (result) => {
+        res.json(result);
+      }
+    )
+  }
+
+  getClients(req, res) {
+    this.userRepo.getAdmins().then(
+      (result) => {
+        res.json(result);
+      }
+    )
   }
 }
 

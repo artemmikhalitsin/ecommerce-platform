@@ -31,7 +31,7 @@ class ProductDescriptionsTDG {
    * all products in the ProductDescription table
    */
   select() {
-    return connection('ProductDescription').select('*');
+    return connection('ProductDescription');
   }
 
   /*

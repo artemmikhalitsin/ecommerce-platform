@@ -76,6 +76,10 @@ app.get('/logout', function(req, res) {
   controller.logout(req, res);
 });
 
+app.get('/users', function(req, res) {
+  res.render('/userTable');
+});
+
 // getting the inventory from the database
 app.get('/getAllInventoryItems', function(req, res) {
   if (req.session.exists) {
@@ -132,6 +136,10 @@ app.post('/cancelTransaction', function(req, res) {
 app.get('/viewPurchaseCollection', function(req, res) {
   controller.viewPurchaseCollection(req, res);
 });
+
+app.get('/api/getAllProducts', function(req, res) {
+  controller.getProductInfo(req, res);
+})
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');
