@@ -1,3 +1,4 @@
+'use strict';
 const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
@@ -33,55 +34,57 @@ class LaptopsTDG {
     getAll() {
         let result = [];
         return connection('Laptop').select('*')
-                                    .leftJoin('Computer', 'Laptop.comp_id', 'Computer.comp_id')
-                                    .leftJoin('ProductDescription', 'Laptop.model_number','ProductDescription.model_number')
-                                    .then((laptops) => {
-                                        laptops.forEach(function(laptop){
-                                            result.push(new Laptop( 
-                                                laptop.comp_id,
-                                                laptop.processor_type, 
-                                                laptop.ram_size, 
-                                                laptop.number_cpu_cores, 
-                                                laptop.harddrive_size,
-                                                laptop.display_size,
-                                                laptop.battery_info,
-                                                laptop.os,
-                                                laptop.touch_screen,
-                                                laptop.camera,
-                                                laptop.price, 
-                                                laptop.weight, 
-                                                laptop.brand_name, 
-                                                laptop.model_number));
-                                        });
-                                        return result;
-                                    });
+          .leftJoin('Computer', 'Laptop.comp_id', 'Computer.comp_id')
+          .leftJoin('ProductDescription', 'Laptop.model_number',
+            'ProductDescription.model_number')
+          .then((laptops) => {
+              laptops.forEach(function(laptop) {
+                  result.push(new Laptop(
+                      laptop.comp_id,
+                      laptop.processor_type,
+                      laptop.ram_size,
+                      laptop.number_cpu_cores,
+                      laptop.harddrive_size,
+                      laptop.display_size,
+                      laptop.battery_info,
+                      laptop.os,
+                      laptop.touch_screen,
+                      laptop.camera,
+                      laptop.price,
+                      laptop.weight,
+                      laptop.brand_name,
+                      laptop.model_number));
+              });
+          return result;
+        });
     }
-    getByModelNumbers(modelNumbers){
+    getByModelNumbers(modelNumbers) {
         let result = [];
         return connection('Laptop').select('*')
-                                    .whereIn('model_number', modelNumbers)
-                                    .leftJoin('Computer', 'Laptop.comp_id', 'Computer.comp_id')
-                                    .leftJoin('ProductDescription', 'Laptop.model_number','ProductDescription.model_number')
-                                    .then((laptops) => {
-                                        laptops.forEach(function(laptop){
-                                            result.push(new Laptop( 
-                                                laptop.comp_id,
-                                                laptop.processor_type, 
-                                                laptop.ram_size, 
-                                                laptop.number_cpu_cores, 
-                                                laptop.harddrive_size,
-                                                laptop.display_size,
-                                                laptop.battery_info,
-                                                laptop.os,
-                                                laptop.touch_screen,
-                                                laptop.camera,
-                                                laptop.price, 
-                                                laptop.weight, 
-                                                laptop.brand_name, 
-                                                laptop.model_number));
-                                        });
-                                        return result;
-                                    });
+          .whereIn('model_number', modelNumbers)
+          .leftJoin('Computer', 'Laptop.comp_id', 'Computer.comp_id')
+          .leftJoin('ProductDescription', 'Laptop.model_number',
+            'ProductDescription.model_number')
+          .then((laptops) => {
+              laptops.forEach(function(laptop) {
+                  result.push(new Laptop(
+                      laptop.comp_id,
+                      laptop.processor_type,
+                      laptop.ram_size,
+                      laptop.number_cpu_cores,
+                      laptop.harddrive_size,
+                      laptop.display_size,
+                      laptop.battery_info,
+                      laptop.os,
+                      laptop.touch_screen,
+                      laptop.camera,
+                      laptop.price,
+                      laptop.weight,
+                      laptop.brand_name,
+                      laptop.model_number));
+          });
+          return result;
+        });
     }
 
     /**

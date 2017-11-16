@@ -10,6 +10,7 @@ const Computer = require(rootPath + '/models/Computer.js');
 class Tablet extends Computer {
     /**
      * Given attributes of a laptop, constructs a new object
+     * @param {String} computerId
      * @param {string} processorType processor type
      * @param {number} ramSize size of ram
      * @param {number} numberCpuCores number of cores
@@ -24,9 +25,9 @@ class Tablet extends Computer {
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
      */
-    constructor(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
-                displaySize, dimensions, batteryInfo, os, cameraInfo,
-                price, weight, brandName, modelNumber) {
+    constructor(computerId, processorType, ramSize, numberCpuCores,
+                harddriveSize, displaySize, dimensions, batteryInfo,
+                os, cameraInfo, price, weight, brandName, modelNumber) {
         super(processorType, ramSize, numberCpuCores, harddriveSize,
               price, weight, brandName, modelNumber);
         this.computerId = computerId;

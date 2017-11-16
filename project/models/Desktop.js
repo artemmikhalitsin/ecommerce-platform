@@ -19,6 +19,7 @@ class Desktop extends Computer {
    * @param {string} weight weight
    * @param {string} brandName brand name
    * @param {string} modelNumber model number
+   * @param {Object} computerId computer id
    */
   constructor(processorType, ramSize, numberCpuCores, harddriveSize,
               dimensions, price, weight, brandName, modelNumber, computerId) {

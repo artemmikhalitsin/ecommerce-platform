@@ -69,7 +69,7 @@ app.get('/addProduct', function(req, res) {
   } else {
     res.redirect('/login');
   }
-})
+});
 
 // this should be implemented in the controller
 app.get('/logout', function(req, res) {
@@ -88,10 +88,8 @@ app.get('/getAllInventoryItems', function(req, res) {
 
 // getting the client inventory from the database
 app.get('/clientInventory', function(req, res) {
-
     controller.getAllInventory(req, res);
     console.log('Successs');
-
 });
 
 // making the registration request

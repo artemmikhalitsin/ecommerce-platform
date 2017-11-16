@@ -37,7 +37,7 @@ class ProductDescriptionRepository {
    */
   getAll() {
       let context = this.productDescTDG.getAll();
-      
+
       Promise.all(context).then((values)=>{
         context = values;
       });
@@ -54,7 +54,7 @@ class ProductDescriptionRepository {
         for(let i = 0; i < values.length; i++){
           result.push(values[i]);
         }
-      
+
     return result;
     });
   }

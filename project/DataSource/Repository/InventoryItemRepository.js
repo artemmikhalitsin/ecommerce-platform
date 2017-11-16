@@ -1,3 +1,4 @@
+'use strict';
 const rootPath = require('app-root-dir').get();
 const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 const InventoryItemsIdentityMap = require(rootPath +
@@ -108,7 +109,8 @@ class InventoryItemRepository {
 
     if (model_numbers.length > 0) {
       // Retrieve the items corresponding to given ids
-      let allInventoryItems = this.inventoryItemsIM.getByModelNumbers(model_numbers);
+      let allInventoryItems = this.inventoryItemsIM
+                          .getByModelNumbers(model_numbers);
 
       for (var i = 0; i < items.length; i++) {
         for (var j = 0; j < items[i].serial_number.length; j++) {
@@ -116,7 +118,8 @@ class InventoryItemRepository {
             && electronicsToAdd.findIndex((e) => e.serial_number == items[i].serial_number[j] && e.model_number == items[i].model_number) === -1) {
               // Case: item is not in our inventory
               // and hasn't already been processed
-              electronicsToAdd.push({'serial_number': items[i].serial_number[j], 'model_number': items[i].model_number});
+              electronicsToAdd.push({'serial_number': items[i].serial_number[j],
+                                      'model_number': items[i].model_number});
             }
         }
       }
@@ -124,7 +127,8 @@ class InventoryItemRepository {
       electronicsToDelete = allInventoryItems.filter(function(item) {
         console.log(item.model_number);
        items.forEach(function(element) {
-         return element.serial_number.findIndex((e) => e == item.serial_number) === -1;
+         return element.serial_number.findIndex((e) =>
+            e == item.serial_number) === -1;
         });
       });
     }

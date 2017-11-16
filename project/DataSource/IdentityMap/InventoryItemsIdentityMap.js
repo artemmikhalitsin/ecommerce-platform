@@ -1,4 +1,4 @@
-
+'use strict';
 // REVIEW: UnitOfWork is never used here, consider removing - Artem
 // const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 
@@ -61,7 +61,7 @@ class InventoryItemsIdentityMap {
     // TODO: Is this the same method as above? - Artem
     /**
      * Gets a list of items matching given model numbers
-     * @param {string[]} modelNumbers a list of alpha-numberical model numbers
+     * @param {string[]} model_numbers a list of alpha-numberical model numbers
      * @return {Object[]} a list of objects corresponding to the given model
      */
     getByModelNumbers(model_numbers) {

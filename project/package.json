@@ -2,6 +2,17 @@
   "name": "app",
   "version": "1.0.0",
   "main": "index.js",
+  "babel": {
+    "presets": [
+      "env",
+      "es2015",
+      "node8"
+    ],
+    "plugins": [
+      "transform-object-rest-spread",
+      "contracts"
+    ]
+  },
   "scripts": {
     "test": "mocha",
     "dev": "docker run -v $(pwd):/usr/src/project -p 8080:8080 -it 343docker/express",
@@ -10,10 +21,10 @@
     "rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
     "make-seed": "knex seed:make",
-    "lint": "node_modules/eslint/bin/eslint.js .",
     "lint-fix": "node_modules/eslint/bin/eslint.js . --fix",
     "make-docs": "node_modules/.bin/esdoc",
-    "start": "node node_modules/concurrently/src/main.js -c \"bgBlue,bgRed\" -n \"Express,ESLint\" \"nodemon -L index.js\" \"nodemon -L node_modules/eslint/bin/eslint.js .\""
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore knexfile.js,./public,./seeds,./test,./migrations,./DataSource,./node_modules,./npm-debug.log --copy-files",
+    "start": "node node_modules/concurrently/src/main.js -c \"bgBlue,bgRed\" -n \"Express,ESLint\" \"nodemon -L node_modules/eslint/bin/eslint.js .\" \"npm run build && nodemon index.js --exec babel-node --presets es2015 --plugins contracts transform-object-rest-spread\""
   },
   "keywords": [],
   "author": "",
@@ -21,8 +32,16 @@
   "devDependencies": {
     "app-root-dir": "^1.0.2",
     "aspect.js": "^0.6.0",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-plugin-contracts": "^1.2.0",
+    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
+    "babel-plugin-transform-es2015-parameters": "^6.24.1",
+    "babel-plugin-transform-es2015-spread": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-node8": "^1.2.0",
     "chai": "^4.1.2",
     "cookie-parser": "^1.4.3",
     "eslint": "^4.8.0",
@@ -37,9 +56,10 @@
     "stringy": "0.1.0"
   },
   "dependencies": {
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "body-parser": "^1.18.2",
     "concurrently": "^3.5.0",
-    "contract-decorators": "^0.2.2",
     "esdoc-standard-plugin": "^1.0.0",
     "express-session": "^1.15.6"
   },
