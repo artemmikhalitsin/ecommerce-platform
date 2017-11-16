@@ -1,3 +1,6 @@
+const rootPath = require('app-root-dir').get();
+const ProductDescription = require(rootPath + '/models/ProductDescription.js');
+
 class Monitor extends ProductDescription {
     constructor(displaySize, touchescreen, price, weight,
                 brandName, modelNumber) {

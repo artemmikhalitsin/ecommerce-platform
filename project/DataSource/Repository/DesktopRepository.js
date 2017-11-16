@@ -1,29 +1,31 @@
 'use strict';
-
-const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
-const configuration = require(rootPath + '/knexfile')[environment];
-const database = require('knex')(configuration);
-let uow = require(rootPath + '/DataSource/UnitOfWork.js');
+const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 
-function constructor(uow) {
-  this.uow = uow;
-}
+// TODO: I don't think this class is properly implemented - it has inconsistent
+// variable usage and incomplete get method - Artem
 
-function save(desktop) {
-  // return database('Desktop').insert(desktop);
-  return uow.commit(desktop, 'Desktop');
-};
-function save2(object){
-  return uow.commitAll(object);
-}
-function get(args) {
-  return database('Desktop').select('*');
-}
+/**
+ * Repository for Desktops
+ * @author TODO: IF YOU'RE THE AUTHOR, ATTRIBUTE THIS CLASS TO YOURSELF
+ * REVIEW: PLEASE MAKE SURE THE METHOD DESCRIPTIONS ARE CORRECT - Artem
+ */
+class DesktopRepository {
+  /**
+   * Constructor initializes the repo's unit of work
+   */
+  constructor() {
+    this.uow = new UnitOfWork();
+  }
 
-module.exports = {
-  constructor: constructor,
-  save: save,
-  get: get,
-  save2: save2,
-};
+  /**
+   * Retrieves all items from the Dekstop table of the database
+   * @param {string} args TODO: Not sure what this argument is doing here??
+   * @return {Promise} promise which resolves to the list of desktops in the
+   * database
+   */
+  get(args) {
+    return this.database('Desktop').select('*');
+  }
+}
+module.exports = DesktopRepository;

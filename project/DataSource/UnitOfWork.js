@@ -1,322 +1,426 @@
+/* eslint-disable */
+// Eslint disabled for this file only until it is documented
 
-const environment = process.env.NODE_ENV || 'development';
+// REVIEW: I haven't docced this file yet cause it's a little overwhelming
+// Only fixed some formatting - Artem
+'use strict';
+const Promise = require('bluebird');
 const rootPath = require('app-root-dir').get();
+const environment = process.env.NODE_ENV || 'development';
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
-var Promise = require('bluebird');
 
-    function constructor(connection) {
-       this.connection = connection;
-    }
+const ProductDescriptionsTDG = require(rootPath +
+  '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
+const InventoryItemsTDG = require(rootPath +
+  '/DataSource/TableDataGateway/InventoryItemsTDG.js');
+const ComputersTDG = require(rootPath +
+  '/DataSource/TableDataGateway/ComputersTDG.js');
+const DesktopsTDG = require(rootPath +
+  '/DataSource/TableDataGateway/DesktopsTDG.js');
+const DimensionsTDG = require(rootPath +
+  '/DataSource/TableDataGateway/DimensionsTDG.js');
+const LaptopsTDG = require(rootPath +
+  '/DataSource/TableDataGateway/LaptopsTDG.js');
+const MonitorsTDG = require(rootPath +
+  '/DataSource/TableDataGateway/MonitorsTDG.js');
+const TabletsTDG = require(rootPath +
+  '/DataSource/TableDataGateway/TabletsTDG.js');
+const PurchaseCollectionTDG = require(rootPath +
+  '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
 
-   function commit(object, tableName){
-       var descriptions = [{
-        model_number: '56',
-        brand_name: "b",
-        price: 1,
-        weight: 1
-       },{
-        model_number: '57',
-        brand_name: "b",
-        price: 1,
-        weight: 1
-       },{
-        model_number: '58',
-        brand_name: "b",
-        price: 1,
-        weight: 1
-       }];
-       var computersObj = [{
-        processor_type: 'r',
-        ram_size: 1,
-        number_cpu_cores: 2,
-        harddrive_size: 3
-       },{
-        processor_type: 'q',
-        ram_size: 1,
-        number_cpu_cores: 2,
-        harddrive_size: 3
-       },{
-        processor_type: 'n',
-        ram_size: 1,
-        number_cpu_cores: 2,
-        harddrive_size: 3
-       }];
-       var electronics = [{
-        comp_id: 0,
-        model_number: 0,
-        dimension_id: 0
-       },{
-        comp_id: 0,
-        model_number: 0,
-        dimension_id: 0
-       },{
-        comp_id: 0,
-        model_number: 0,
-        dimension_id: 0
-       }];
-       var dimensions = [{
-        depth: 1,
-        height: 1,
-        width: 1
-       }];
-       if(tableName == 'Desktop' || tableName == 'Laptop' || tableName == 'Tablet')
-       return connection.transaction(function(trx){
-            connection.insert(descriptions, 'model_number')
-                    .into('ProductDescription')
-                    .transacting(trx)
-                    .then(function(modelNumbers){
-                        console.log(modelNumbers);
-                        return connection.insert(computersObj, 'comp_id')
-                                .into('Computer')
-                                .transacting(trx)
-                                .then(function(compIds){
-                                    return connection.insert(dimensions, 'dimensions_id')
-                                        .into('Dimensions')
-                                        .transacting(trx)
-                                        .then(function(dimensionIds){
-                                            electronics[0].comp_id = compIds[0];
-                                            electronics[0].dimension_id = dimensionIds[0];
-                                            electronics[0].model_number = '56';
+/**
+ * Unit of Work implementation
+ * @author Ekaterina Ruhlin
+ * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
+ */
+class UnitOfWork {
+  /**
+   * Constructor initiates all table data gateways
+   */
+  // REVIEW: TDGS have no instance variables - do we need to instantiate them? - Artem
+  constructor() {
+    this.productDescTDG = new ProductDescriptionsTDG();
+    this.inventoryItemsTDG = new InventoryItemsTDG();
+    this.computersTDG = new ComputersTDG();
+    this.desktopsTDG = new DesktopsTDG();
+    this.dimensionsTDG = new DimensionsTDG();
+    this.laptopsTDG = new LaptopsTDG();
+    this.monitorsTDG = new MonitorsTDG();
+    this.tabletsTDG = new TabletsTDG();
+    this.purchaseTDG = new PurchaseCollectionTDG();
 
-                                            return connection.insert(electronics[0])
-                                                    .into(tableName)
-                                                    .transacting(trx);
-                                        });
-                                });
-                    })
-                    .then(trx.commit)
-                    .catch(trx.rollback);
-       });
-       else return connection.transaction(function(trx){
-        connection.insert(object)
-                .into(tableName)
-                .transacting(trx)
-                .then(trx.commit)
-                .catch(trx.rollback);
-   });
-}
+    this.dirtyElements = [];
+    this.newElements = [];
+    this.deletedElements = [];
+    this.newInventoryItems = [];
+    this.deletedInventoryItems = [];
+    this.newPurchases = [];
+    this.deletedPurchases = [];
+  }
+  registerNew(object) {
+    this.newElements = [];
+    this.newElements.push(object);
+  }
+  registerNewPurchase(object) {
+    this.newPurchases = [];
+    this.newPurchases.push(object);
+  }
 
-function commitAll(object){
-    var electronics = [{
-     model_number: '56',
-     brand_name: "b",
-     price: 1,
-     weight: 1,
-     type: 'Desktop',
-     processor_type: 'r',
-     ram_size: 1,
-     number_cpu_cores: 2,
-     harddrive_size: 3,
-     dimensions: {depth: 1,
-        height: 1,
-        width: 1}
-    },{
-     model_number: '57',
-     brand_name: "b",
-     price: 1,
-     weight: 1,
-     type: 'Desktop',
-     processor_type: 'q',
-     ram_size: 1,
-     number_cpu_cores: 2,
-     harddrive_size: 3,
-     dimensions: {depth: 1,
-        height: 1,
-        width: 1}
-    },{
-     model_number: '58',
-     brand_name: "b",
-     price: 1,
-     weight: 1,
-     type: 'Laptop',
-     processor_type: 'n',
-     ram_size: 1,
-     number_cpu_cores: 2,
-     harddrive_size: 3,
-     display_size: 1,
-     battery_info: "info about battery",
-     os: "os info",
-     camera: true,
-     touch_screen: false
-   },{
-     model_number: '59',
-     brand_name: "b",
-     price: 1,
-     weight: 1,
-     type: 'Tablet',
-     processor_type: 'n',
-     ram_size: 1,
-     number_cpu_cores: 2,
-     harddrive_size: 3,
-     dimensions: {depth: 1,
-        height: 1,
-        width: 1},
-     display_size: 1,
-     battery_info: "info about battery",
-     os: "os info",
-     camera: "camera info"
-   },{
-     model_number: '60',
-     brand_name: "b",
-     price: 1,
-     weight: 1,
-     type: 'Monitor',
-     display_size: 1
-   },{
-     model_number: '61',
-     brand_name: "b",
-     price: 1,
-     weight: 1,
-     type: 'TV',
-     dimensions: {depth: 1,
-        height: 1,
-        width: 1},
-     category_name: "HD"
-   }];
-    return connection.transaction(function(trx){
-        Promise.each(electronics, function(electronic){
-            return addProductDescription(electronic)
-              .then(function(model_number){
-              switch(electronic.type){
-                case 'Desktop':{
-                  return addDimensions(electronic)
-                  .transacting(trx)
-                  .then(function(dimensionsId){
-                    return addComputer(electronic)
-                    .transacting(trx)
-                    .then(function(compId){
-                      return addDesktop(compId, dimensionsId, electronic)
-                      .transacting(trx);
-                    });
-                  });
-                };break;
-                case 'Laptop': {
-                  return addComputer(electronic)
-                  .transacting(trx)
-                  .then(function(compId){
-                    return addLaptop(compId, electronic)
-                    .transacting(trx);
-                  });
-                };break;
-                case 'Tablet': {
-                  return addDimensions(electronic)
-                  .transacting(trx)
-                  .then(function(dimensionsId){
-                    return addComputer(electronic)
-                    .transacting(trx)
-                    .then(function(compId){
-                      return addTablet(compId, dimensionsId, electronic)
-                      .transacting(trx);
-                    });
-                  });
-                };break;
-                case 'TV': {
-                  return addDimensions(electronic)
-                  .transacting(trx)
-                  .then(function(dimensionsId){
-                    return addTV(dimensionsId, electronic)
-                    .transacting(trx);
-                  });
-                };break;
-                case 'Monitor': {
-                  return addMonitor(electronic)
-                  .transacting(trx);
-                };break;
-              }
-            })
+  registerReturn(object){
+    this.deletedPurchases = [];
+    this.deletedPurchases.push(object);
+  }
+
+  registerDirty(object) {
+    this.dirtyElements = [];
+    this.dirtyElements.push(object);
+  }
+  registerDeleted(object) {
+    this.deletedElements = [];
+    this.deletedElements.push(object);
+  }
+  registerNewItem(object){
+    this.newInventoryItems = [];
+    this.newInventoryItems.push(object);
+  }
+  registerDeletedItem(object){
+    this.deletedInventoryItems = [];
+    this.deletedInventoryItems.push(object);
+  }
+  commitAll() {
+
+    let electronics = [];
+    return connection.transaction((trx) => {
+      /*
+      console.log('Electronics new Elements: ');
+      console.log(this.newElements[0]);
+      console.log('Electronics to update ');
+      console.log(this.dirtyElements[0]);
+      console.log("Inventory items to add");
+      console.log(this.newInventoryItems[0]);
+      console.log("Inventory items to delete: ");
+      console.log(this.deletedInventoryItems[0]);
+      console.log("Purchase to add:");;
+      console.log(this.newPurchases[0]);
+      console.log("Purchase to delete:");
+      console.log(this.deletePurchases[0]);
+      */
+
+      let deletedItems;
+      //delete items
+      if(this.deletedInventoryItems[0] != null && this.deletedInventoryItems[0].length > 0){
+       deletedItems = Promise.each(this.deletedInventoryItems[0], (electronic) => {
+        return this.inventoryItemsTDG.delete(electronic).transacting(trx).then(() => {
+              console.log('deleted inventory item');
         })
+      });}
+      //end of delete
+      //add items
+      let newItems;
+      if(this.newInventoryItems[0] != null && this.newInventoryItems[0].length > 0){
+        newItems = Promise.each(this.newInventoryItems[0], (electronic) => {
+          return this.inventoryItemsTDG.add(electronic.serial_number, electronic.model_number).transacting(trx).then(() => {
+               console.log('added inventory item');
+         })
+       });}
+
+       //add purchases
+       let purchasedItems;
+       if (this.newPurchases[0] != null && this.newPurchases[0].length > 0) {
+         purchasedItems = Promise.each(this.newPurchases[0], (electronic) => {
+           return this.purchaseTDG.add(electronic.client, electronic.serial_number, electronic.model_number, electronic.purchase_Id)
+                  .transacting(trx).then(() => {
+                    console.log("Added purchased items");
+                  })
+         })
+       }
+
+       //remove purchase
+       let deletedPurchase;
+       if(this.deletedPurchases[0] != null && this.deletedPurchases[0].length > 0){
+        deletedPurchases = Promise.each(this.deletedPurchases[0], (electronic) => {
+         return this.purchaseTDG.delete(electronic).transacting(trx).then(() => {
+               console.log('deleted purchase item');
+         })
+       });}
+
+      //update products
+      let updateditems;
+      if(this.dirtyElements[0] && this.dirtyElements[0].length > 0){
+
+      updateditems = Promise.each(this.dirtyElements[0], (electronic) => {
+        return this.productDescTDG.update(electronic).transacting(trx).then(
+          (model_number) => {
+             switch (electronic.type) {
+               case 'Desktop':
+                 {
+                   return this.dimensionsTDG
+                    .update(electronic.dimension)
+                    .transacting(trx)
+                    .then(
+                      (dimensionsId) => {
+                        return this.computersTDG
+                          .update(electronic)
+                          .transacting(trx)
+                          .then(
+                            (compId) => {
+                              return this.desktopsTDG
+                                .update(compId, dimensionsId, electronic)
+                                .transacting(trx);
+                          });
+                    });
+                 };
+                 break;
+               case 'Laptop':
+                 {
+                   return this.computersTDG
+                    .update(electronic)
+                    .transacting(trx)
+                    .then(
+                      (compId) => {
+                        return this.laptopsTDG
+                          .update(compId, electronic)
+                          .transacting(trx);
+                    });
+                 };
+                 break;
+               case 'Tablet':
+                 {
+                   return this.dimensionsTDG
+                    .update(electronic.dimension)
+                    .transacting(trx)
+                    .then(
+                      (dimensionsId) => {
+                        return this.computersTDG
+                          .update(electronic)
+                          .transacting(trx)
+                          .then(
+                            (compId) => {
+                              return this.tabletsTDG
+                                .update(compId, dimensionsId, electronic)
+                                .transacting(trx);
+                          });
+                    });
+                 };
+                 break;
+               case 'Monitor':
+                 {
+                   return this.monitorsTDG.update(electronic).transacting(trx);
+                 };
+                 break;
+             }
+       });
+     });
+      }
+      // end of update
+
+      //add products
+      let addeditems;
+      if(this.newElements[0] != null){
+      addeditems = Promise.each(this.newElements[0], (electronic) => {
+        return this.productDescTDG
+          .add(electronic)
+          .transacting(trx)
+          .then(
+            (model_number) => {
+          /*Promise.each(electronic.serial_number, (item_serial_number) => {
+            return this.inventoryItemsTDG.add(item_serial_number, electronic.model_number).transacting(trx).then((id) => {
+              console.log('added inventory item ');
+            });
+          });*/
+              switch (electronic.type) {
+                case 'Desktop':
+                  {
+                    return this.dimensionsTDG
+                      .add(electronic)
+                      .transacting(trx)
+                      .then(
+                        (dimensionsId) => {
+                          return this.computersTDG
+                            .add(electronic)
+                            .transacting(trx)
+                            .then(
+                              (compId) => {
+                                return this.desktopsTDG
+                                  .add(compId, dimensionsId, electronic)
+                                  .transacting(trx);
+                            });
+                      });
+                  };
+                  break;
+                case 'Laptop':
+                  {
+                    return this.computersTDG
+                      .add(electronic)
+                      .transacting(trx)
+                      .then(
+                        (compId) => {
+                          return this.laptopsTDG
+                            .add(compId, electronic)
+                            .transacting(trx);
+                        });
+                  };
+                  break;
+                case 'Tablet':
+                  {
+                    return this.dimensionsTDG
+                      .add(electronic)
+                      .transacting(trx)
+                      .then(
+                        (dimensionsId) => {
+                          return this.computersTDG
+                            .add(electronic)
+                            .transacting(trx)
+                            .then(
+                              (compId) => {
+                                return this.tabletsTDG
+                                  .add(compId, dimensionsId, electronic)
+                                  .transacting(trx);
+                              });
+                        });
+                  };
+                  break;
+                case 'Monitor':
+                  {
+                    return this.monitorsTDG.add(electronic).transacting(trx);
+                  };
+                  break;
+              }
+        });
+      }
+      //add
+      );}
+      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems])
         .then(trx.commit)
         .catch(trx.rollback);
+    });
+  }
 
-   });
+  // the following function is getting all the items along with their descriptions
+  getAllInventoryItems() {
+    return new Promise((resolve, reject) => {
+      let desktops = this.getAllDesktops();
+      let laptops = this.getAllLaptops();
+      let tablets = this.getAllTablets();
+      let monitors = this.getAllMonitors();
+
+      Promise.all([laptops, desktops, tablets, monitors])
+      .then(((results) => {
+        let products = [].concat(...results); //[].concat.apply([], results); //
+
+        // retrieve the model numbers present in the products
+        let model_numbers = this.getAllModelNumbers(products);
+
+        // getting the serial numbers associated with the model numbers
+        connection('Inventory')
+        .select('*')
+        .havingIn('model_number', model_numbers)
+        .then((serials) => {
+            products = products.map((product) => {
+              let serial_numbers = serials.filter((serial) => {
+                return serial.model_number === product.model_number;
+              })
+              .map((serial) => {
+                return serial.serial_number;
+              });
+
+              product.serial_numbers = serial_numbers;
+              return product;
+            });
+
+            resolve(products);
+          }
+        );
+      }))
+      .catch((err) => reject(err));
+    });
+  }
+
+  // this function is getting all the model numbers from all the products
+  getAllModelNumbers(products) {
+    return products.map((obj) => {
+      return obj.model_number;
+    });
+  }
+
+  // this function already exists in the ProductDescriptionsTDG so it should be removed
+  getAllProductsDescription() {
+    return connection('ProductDescription').select('*');
+  }
+
+  // the following getter function will need to be moved to their respective TDGs
+  getAllDesktops() {
+    return connection('ProductDescription')
+               .innerJoin('Desktop', 'Desktop.model_number',
+                          'ProductDescription.model_number')
+               .innerJoin('Computer', 'Desktop.comp_id', 'Computer.comp_id')
+               .innerJoin('Dimensions', 'Desktop.dimension_id',
+                          'Dimensions.dimension_id')
+               .select('ProductDescription.model_number', 'brand_name', 'price',
+                       'type', 'weight', 'is_available', 'processor_type',
+                       'ram_size', 'number_cpu_cores', 'harddrive_size',
+                       'depth', 'height', 'width');
+  }
+
+  getAllLaptops() {
+    return connection('ProductDescription')
+               .innerJoin('Laptop', 'Laptop.model_number',
+                          'ProductDescription.model_number')
+               .innerJoin('Computer', 'Laptop.comp_id', 'Computer.comp_id')
+               .select('ProductDescription.model_number', 'brand_name', 'price',
+                       'type', 'weight', 'is_available', 'processor_type',
+                       'ram_size', 'number_cpu_cores', 'harddrive_size', 'os',
+                       'touch_screen', 'camera', 'display_size',
+                       'battery_info');
+  }
+
+  getAllTablets() {
+    return connection('ProductDescription')
+               .innerJoin('Tablet', 'Tablet.model_number',
+                          'ProductDescription.model_number')
+               .innerJoin('Computer', 'Tablet.comp_id', 'Computer.comp_id')
+               .innerJoin('Dimensions', 'Tablet.dimension_id',
+                          'Dimensions.dimension_id')
+               .select('ProductDescription.model_number', 'brand_name', 'price',
+                       'type', 'weight', 'is_available', 'processor_type',
+                       'ram_size', 'number_cpu_cores', 'harddrive_size',
+                       'display_size', 'battery_info', 'camera_info',
+                       'os', 'depth', 'height', 'width');
+  }
+
+  getAllMonitors() {
+    return connection('ProductDescription')
+               .innerJoin('Monitor', 'Monitor.model_number',
+                          'ProductDescription.model_number')
+               .select('ProductDescription.model_number', 'brand_name', 'price',
+                       'type', 'weight', 'is_available', 'display_size');
+  }
+
+  // NOTE if we are not using this function then it should be removed. If we gonna use it later then ignore this comment
+  compareWithContext(productDescriptions, electronics) {
+    let electronicsToAdd = [];
+    let electronicsToUpdate = [];
+    let electronicsToDelete = [];
+    for (var i = 0; i < productDescriptions.length; i++) {
+      for (var j = 0; j < electronics.length; j++) {
+        if (productDescriptions[i].model_number == electronics[j].model_number && electronicsToUpdate.findIndex((x) => x.model_number == electronics[j].model_number) === -1) {
+          electronicsToUpdate.push(electronics[j]);
+        }
+      }
+    }
+
+    for (var i = 0; i < productDescriptions.length; i++) {
+      if (electronicsToUpdate.findIndex((x) => x.model_number == productDescriptions[i].model_number) === -1 && electronicsToDelete.findIndex((x) => x.model_number == productDescriptions[i].model_number) === -1) {
+        electronicsToDelete.push(productDescriptions[i]);
+      }
+    }
+    for (var i = 0; i < electronics.length; i++) {
+      if (productDescriptions.findIndex((x) => x.model_number == electronics[i].model_number) === -1 && electronicsToAdd.findIndex((x) => x.model_number == electronics[i].model_number) === -1) {
+        electronicsToAdd.push(electronics[i]);
+      }
+    }
+    return [electronicsToAdd, electronicsToUpdate, electronicsToDelete];
+  }
 }
-
-function getAllProductsDescription(){
-  return connection('ProductDescription').select('*');
-}
-
-function addProductDescription(electronic){
-  return connection.insert({
-      'model_number': electronic.model_number,
-      'brand_name': electronic.brand_name,
-      'weight': electronic.weight,
-      'price': electronic.price,
-      'type': electronic.type
-    }, 'model_number')
-  .into('ProductDescription');
-}
-
-function addDimensions(electronic){
-  return connection.insert(electronic.dimensions, 'dimension_id')
-  .into('Dimensions');
-}
-
-function addComputer(electronic){
-  return connection.insert({
-      'processor_type': electronic.processor_type,
-      'ram_size': electronic.ram_size,
-      'number_cpu_cores': electronic.number_cpu_cores,
-      'harddrive_size': electronic.harddrive_size
-  },'comp_id')
-  .into('Computer');
-}
-
-function addDesktop(compId, dimensionsId, electronic){
-  return connection.insert({
-      'comp_id': compId,
-      'model_number': electronic.model_number,
-      'dimension_id': dimensionsId
-  }, 'id')
-  .into('Desktop');
-}
-
-function addLaptop(compId, electronic){
-  return connection.insert({
-      'comp_id': compId,
-      'model_number': electronic.model_number,
-      'display_size': electronic.display_size,
-      'battery_info': electronic.battery_info,
-      'os': electronic.os,
-      'camera': electronic.camera,
-      'touch_screen': electronic.touch_screen
-  }, 'id')
-  .into('Laptop');
-}
-
-function addTablet(compId, dimensionsId, electronic){
-  return connection.insert({
-      'comp_id': compId,
-      'model_number': electronic.model_number,
-      'dimension_id': dimensionsId,
-      'display_size': electronic.display_size,
-      'battery_info': electronic.battery_info,
-      'os': electronic.os,
-      'camera_info': electronic.camera_info
-  }, 'id')
-  .into('Tablet');
-}
-
-function addMonitor(electronic){
-  return connection.insert({
-      'model_number': electronic.model_number,
-      'display_size': electronic.display_size
-  }, 'id')
-  .into('Monitor');
-}
-
-function addTV(dimensionsId, electronic){
-  return connection.insert({
-      'model_number': electronic.model_number,
-      'dimension_id': dimensionsId,
-      'category_name': electronic.category_name
-  }, 'id')
-  .into('TV');
-}
-
-module.exports = {
-  constructor: constructor,
-  commit: commit,
-  commitAll: commitAll,
-  getAllProductsDescription: getAllProductsDescription,
-};
+module.exports = UnitOfWork;
