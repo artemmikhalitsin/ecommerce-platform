@@ -5,7 +5,7 @@ const connection = require('knex')(configuration);
 
 /**
  * Table Data Gateway for the Desktop table
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author TODO: Ekaterina Ruhlin, Phuong-Thao Nguyen
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class DesktopsTDG {
@@ -47,7 +47,6 @@ class DesktopsTDG {
         'model_number': desktop.model_number,
         'dimension_id': desktop.dimension.dimensions_id,
       }).from('Desktop').where({id: desktop.id});
-      // REVIEW: This was marked todo, is this still the case? - Artem
     }
 }
 module.exports = DesktopsTDG;

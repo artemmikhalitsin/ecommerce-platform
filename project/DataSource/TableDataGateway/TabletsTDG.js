@@ -6,7 +6,7 @@ const connection = require('knex')(configuration);
 
 /**
  * Table Data Gateway for the Tablet table
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author TODO: Ekaterina Ruhlin, Phuong-Thao Nguyen
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class TabletsTDG {
@@ -47,7 +47,6 @@ class TabletsTDG {
      * rows affected
      */
     update(compId, dimensionsId, tablet) {
-      // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
           'comp_id': tablet.comp_id,
           'model_number': tablet.model_number,

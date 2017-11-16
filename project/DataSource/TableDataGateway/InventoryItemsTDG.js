@@ -5,7 +5,7 @@ const connection = require('knex')(configuration);
 
 /**
  * Table Data Gateway of inventory items table
- * @author TODO: IF YOU WROTE THIS PLEASE ADD YOUR NAME
+ * @author TODO: Ekaterina Ruhlin, Phuong-Thao Nguyen
  * REVIEW: PLEASE MAKE SURE THE METHOD DESCRIPTIONS ARE correct
  * REVIEW: PLEASE VERIFY TYPES OF PROMISES - Artem
  */
