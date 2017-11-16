@@ -242,91 +242,9 @@ class Controller {
   }
 
   manageInventory() {
-    let toSave = [{
-      serial_number: ['1'],
-      model_number: '1',
-     }, {
-      serial_number: ['2'],
-      model_number: '2',
-     }, {
-      serial_number: ['3', '34'],
-      model_number: '3',
-     }, {
-      serial_number: ['7'],
-      model_number: '5',
-     }];
     let results = this.inventoryRepo.save(toSave);
   }
   manageProductCatalog() {
-    let toSave = [{
-      model_number: '1',
-      brand_name: 'b',
-      price: 1,
-      weight: 1,
-      id: 1,
-      type: 'Desktop',
-      processor_type: 'adding',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      comp_id: 3,
-      dimension: {depth: 1,
-         height: 1,
-         width: 1,
-         dimensions_id: 2,
-      },
-     }, {
-      model_number: '2',
-      brand_name: 'changed product desc',
-      price: 1,
-      weight: 1,
-      type: 'Desktop',
-      id: 2,
-      processor_type: 'q',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      comp_id: 2,
-      dimension: {depth: 1,
-         height: 1,
-         width: 1,
-         dimensions_id: 3,
-      },
-     }, {
-      model_number: '3',
-      brand_name: 'b',
-      price: 1,
-      weight: 1,
-      type: 'Desktop',
-      id: 3,
-      processor_type: 'n',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      comp_id: 1,
-      dimension: {depth: 1,
-         height: 1,
-         width: 1,
-         dimensions_id: 1,
-       },
-     }, {
-      model_number: '5',
-      brand_name: 'b',
-      price: 1,
-      weight: 1,
-      type: 'Monitor',
-      id: 3,
-      processor_type: 'n',
-      ram_size: 1,
-      number_cpu_cores: 2,
-      harddrive_size: 3,
-      comp_id: 1,
-      dimension: {depth: 1,
-         height: 1,
-         width: 1,
-         dimensions_id: 1,
-       },
-     }];
     let results = this.productDescriptionRepo.save(toSave);
   }
 

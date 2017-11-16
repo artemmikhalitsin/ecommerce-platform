@@ -295,8 +295,8 @@ class UnitOfWork {
     });
   }
 
-  // the following function is getting all the items along with their descriptions
-  getAllInventoryItems() {
+  // TODO: DELETE
+ /* getAllInventoryItems() {
     return new Promise((resolve, reject) => {
       let desktops = this.getAllDesktops();
       let laptops = this.getAllLaptops();
@@ -333,7 +333,7 @@ class UnitOfWork {
       }))
       .catch((err) => reject(err));
     });
-  }
+  }*/
 
   // this function is getting all the model numbers from all the products
   getAllModelNumbers(products) {
