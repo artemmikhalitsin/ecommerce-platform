@@ -2,11 +2,10 @@ const rootPath = require('app-root-dir').get();
 const ProductDescription = require(rootPath + '/models/ProductDescription.js');
 
 class Monitor extends ProductDescription {
-    constructor(displaySize, touchescreen, price, weight,
+    constructor(displaySize, price, weight,
                 brandName, modelNumber) {
         super(price, weight, brandName, modelNumber);
         this.displaySize = displaySize;
-        this.touchescreen = touchescreen;
     }
     getDisplaySize() {
       return this.displaySize;
