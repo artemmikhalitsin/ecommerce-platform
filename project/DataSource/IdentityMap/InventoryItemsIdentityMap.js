@@ -1,16 +1,24 @@
-const rootPath = require('app-root-dir').get();
-
 /**
  * Identity map of inventory items
  * @author TODO: IF YOU WROTE THIS CLASS, ATTRIBUTE IT TO YOURSELF
  * REVIEW: Please make sure the comments are correct - Artem
  */
+//Singleton class
+let _instance;
+
 class InventoryItemsIdentityMap {
     /**
      * Creates an inventory item identity map
      */
     constructor() {
-        this.InventoryItems = [];
+        this.inventoryItems = [];
+    }
+
+    static instance() {
+      if (!_instance){
+        _instance = new InventoryItemsIdentityMap();
+      }
+      return _instance;
     }
 
     /**
@@ -18,19 +26,7 @@ class InventoryItemsIdentityMap {
      * @return {Object[]} an array containing the items
      */
     getAll(){
-        console.log("From GetAll " + this.InventoryItems);
-        let result = this.InventoryItems;
-        if(this.InventoryItems.length > 0){
-            return result;
-        }
-        else{
-            var itemsFromTDG = this.inventoryTDG.select();
-            Promise.all([itemsFromTDG])
-            .then((values) => {
-              result = values[0];
-            })
-            return result;
-        }
+        return this.inventoryItems;
     }
 
     /**
@@ -39,29 +35,11 @@ class InventoryItemsIdentityMap {
      * @return {Object[]} a list of items corresponding to the given model
      * numbers
      */
-    get(model_numbers) {
-        return this.InventoryItems.filter(function(desc) {
-            return model_numbers.findIndex(
-              (x) => x == desc.model_number
-            ) > -1;
-        });
-    }
-
-    // TODO: Is this the same method as above? - Artem
-    /**
-     * Gets a list of items matching given model numbers
-     * @param {string[]} modelNumbers a list of alpha-numberical model numbers
-     * @return {Object[]} a list of objects corresponding to the given model
-     */
-    getByModelNumbers(model_numbers){
-        var allItems = this.getAll();
-        if(allItems != null){
-        var results = allItems.filter(function(item){
-            return model_numbers.findIndex(x => x == item.model_number) > -1;
-        });
-        return results;
-        }
-        else return [];
+    get(modelNumbers) {
+        //Filters to only items whos model number appears in the given list
+        return this.inventoryItems.filter(
+          (item) => { return modelNumbers.includes(item.serial_number) }
+        );
     }
 
     /**
@@ -69,10 +47,12 @@ class InventoryItemsIdentityMap {
      * @param {Object[]} newInventoryItems a list containing new items
      */
     add(newInventoryItems) {
-        for(var i = 0; i < newInventoryItems.length; i++){
-            if(this.InventoryItems.findIndex(p => p.serial_number == newInventoryItems[i].serial_number) === -1)
-                this.InventoryItems.push(newInventoryItems[i]);
+      for(var i = 0; i < newInventoryItems.length; i++){
+        let item = newInventoryItems[i];
+        if(!this.inventoryItems.includes(item.serial_number)){
+          this.inventoryItems.push(newInventoryItems[i]);
         }
+      }
     }
 
     /**
@@ -80,12 +60,10 @@ class InventoryItemsIdentityMap {
      * @param {string[]} inventoryItemsToRemove a list of alpha-numberical
      * model numbers for which the items are to be removed
      */
-    delete(inventoryItemsToRemove) {
-        this.InventoryItems.filter(function(desc) {
-            return inventoryItemsToRemove.findIndex(
-              (x) => x == desc.model_number
-            ) === -1;
-        });
+    delete(toRemove) {
+        this.inventoryItems = this.inventoryItems.filter(
+          (item) => { return !toRemove.includes(item.serial_number) }
+        )
     }
 }
 module.exports = InventoryItemsIdentityMap;
