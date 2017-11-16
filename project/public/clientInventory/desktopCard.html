@@ -12,7 +12,7 @@
         <h4> Desktop </h4></br>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">Model Number: {[{ $ctrl.desktop.model_number }]}</li>
-          <li class="list-group-item">Serial Number: {[{ $ctrl.desktop.serial_number }]}</li>
+          <!--<li class="list-group-item">Serial Number: {[{ $ctrl.desktop.serial_number }]}</li>-->
           <li class="list-group-item">Brand Name: {[{ $ctrl.desktop.brand_name }]}</li>
           <li class="list-group-item">Weight: {[{ $ctrl.desktop.weight }]} gram </li>
         </ul></br>
@@ -29,13 +29,13 @@
     <h2 class="text-center">Detailed Info</h2>
     <div class="card-body">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">Processor Type: </li>
-        <li class="list-group-item">RAM size: </li>
-        <li class="list-group-item"># of CPU core: </li>
-        <li class="list-group-item">Hard Drive Size: </li>
-        <li class="list-group-item">Height (cm): </li>
-        <li class="list-group-item">Width (cm): </li>
-        <li class="list-group-item">Depth (cm): </li>
+        <li class="list-group-item">Processor Type: {[{ $ctrl.desktop.processor_type }]}</li>
+        <li class="list-group-item">RAM size: {[{ $ctrl.desktop.ram_size }]}</li>
+        <li class="list-group-item"># of CPU core: {[{ $ctrl.desktop.number_cpu_cores }]}</li>
+        <li class="list-group-item">Hard Drive Size: {[{ $ctrl.desktop.harddrive_size }]}</li>
+        <li class="list-group-item">Height (cm): {[{ $ctrl.desktop.height }]} </li>
+        <li class="list-group-item">Width (cm): {[{ $ctrl.desktop.width }]}</li>
+        <li class="list-group-item">Depth (cm): {[{ $ctrl.desktop.depth }]}</li>
       </ul></br>
       <a href="#" class="btn btn-primary" ng-click="rotate()">Go Back</a>
       <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.desktop.serial_number, $ctrl.desktop.model_number)">Add to Shopping Cart</a>
