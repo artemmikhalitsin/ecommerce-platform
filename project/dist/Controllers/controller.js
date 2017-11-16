@@ -394,10 +394,8 @@ var Controller = function () {
       var search = query.search;
       var inventory = [];
       var productDescriptions = this.productDescriptionRepo.getAllWithIncludes().then(function (results) {
-        console.log("all the products are: " + JSON.stringify(results));
         return Promise.each(results, function (product) {
           return _this9.inventoryRepo.getByModelNumbers([product.modelNumber]).then(function (values) {
-            console.log("inventory item is " + JSON.stringify(values));
             product.serial_numbers = values.map(function (p) {
               return p.serialNumber;
             });
@@ -422,6 +420,44 @@ var Controller = function () {
     key: 'manageInventory',
     value: function manageInventory(inventoryItems) {
       var results = this.inventoryRepo.save(inventoryItems);
+    }
+  }, {
+    key: 'getProductDescription',
+    value: function getProductDescription(req, res) {
+      var query = this.url.parse(req.url, true).query;
+      var search = query.search;
+      var catalog = [];
+      var productDescriptions = this.productDescriptionRepo.getAllWithIncludes().then(function (results) {
+        console.log('Product Descriptions: ', JSON.stringify(results));
+        //res.render('catalog', {items: JSON.stringify(results), search: search});
+        if (req.session.exists == true && req.session.isAdmin == true) {
+          return res.send({ items: results, search: search });
+        }
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+  }, {
+    key: 'getCatalog',
+    value: function getCatalog(req, res) {
+      var query = this.url.parse(req.url, true).query;
+      var search = query.search;
+      var catalog = [];
+      var productDescriptions = this.productDescriptionRepo.getAllWithIncludes().then(function (results) {
+        console.log('Product Descriptions: ', JSON.stringify(results));
+        //res.render('catalog', {items: JSON.stringify(results), search: search});
+        if (req.session.exists == true && req.session.isAdmin == true) {
+          res.render('catalog', { items: JSON.stringify(results), search: search });
+        } else if (req.session.exists == true && req.session.isAdmin == false) {
+          //update descriptions?
+          //this.updateInventoryList(results);
+          res.render('catalog', { items: JSON.stringify(results), search: search });
+        } else {
+          res.render('catalog', { items: JSON.stringify(results), search: search });
+        }
+      }).catch(function (err) {
+        console.log(err);
+      });
     }
     /*
     manageInventory() {

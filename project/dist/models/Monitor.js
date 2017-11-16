@@ -14,10 +14,10 @@ var ProductDescription = require(rootPath + '/models/ProductDescription.js');
 var Monitor = function (_ProductDescription) {
   _inherits(Monitor, _ProductDescription);
 
-  function Monitor(displaySize, price, weight, brandName, modelNumber) {
+  function Monitor(displaySize, price, weight, brandName, modelNumber, type) {
     _classCallCheck(this, Monitor);
 
-    var _this = _possibleConstructorReturn(this, (Monitor.__proto__ || Object.getPrototypeOf(Monitor)).call(this, price, weight, brandName, modelNumber));
+    var _this = _possibleConstructorReturn(this, (Monitor.__proto__ || Object.getPrototypeOf(Monitor)).call(this, price, weight, brandName, modelNumber, type));
 
     _this.displaySize = displaySize;
     return _this;

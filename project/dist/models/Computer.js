@@ -32,10 +32,10 @@ var Computer = function (_ProductDescription) {
    * @param {string} brandName brand name
    * @param {string} modelNumber model number
    */
-  function Computer(id, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber) {
+  function Computer(id, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber, type) {
     _classCallCheck(this, Computer);
 
-    var _this = _possibleConstructorReturn(this, (Computer.__proto__ || Object.getPrototypeOf(Computer)).call(this, price, weight, brandName, modelNumber));
+    var _this = _possibleConstructorReturn(this, (Computer.__proto__ || Object.getPrototypeOf(Computer)).call(this, price, weight, brandName, modelNumber, type));
 
     _this.computerId = id;
     _this.processorType = processorType;

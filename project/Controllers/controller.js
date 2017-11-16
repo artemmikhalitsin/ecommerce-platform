@@ -299,10 +299,8 @@ class Controller {
     let inventory = [];
     let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
     .then((results)=>{
-      console.log("all the products are: " + JSON.stringify(results));
        return Promise.each(results, (product)=>{
         return this.inventoryRepo.getByModelNumbers([product.modelNumber]).then((values)=>{
-                  console.log("inventory item is " + JSON.stringify(values));
                   product.serial_numbers = values.map((p) => p.serialNumber);
                   inventory.push(product);
                 });
@@ -318,13 +316,49 @@ class Controller {
         res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
       }
       }).catch((err) => {
-      console.log(err);
+      console.log(err); 
     });
   }
 
   manageInventory(inventoryItems) {
     let results = this.inventoryRepo.save(inventoryItems);
-    }
+  }
+  getProductDescription(req, res){
+    let query = this.url.parse(req.url, true).query;
+    let search = query.search;
+    let catalog = [];
+    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
+    .then((results)=>{
+        console.log('Product Descriptions: ', JSON.stringify(results));
+        //res.render('catalog', {items: JSON.stringify(results), search: search});
+      if (req.session.exists==true && req.session.isAdmin==true) {
+        return res.send({items: results, search: search});
+      } 
+      }).catch((err) => {
+      console.log(err);
+    });
+  }
+  getCatalog(req, res) {
+    let query = this.url.parse(req.url, true).query;
+    let search = query.search;
+    let catalog = [];
+    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
+    .then((results)=>{
+        console.log('Product Descriptions: ', JSON.stringify(results));
+        //res.render('catalog', {items: JSON.stringify(results), search: search});
+      if (req.session.exists==true && req.session.isAdmin==true) {
+        res.render('catalog', {items: JSON.stringify(results), search: search});
+      } else if (req.session.exists==true && req.session.isAdmin==false) {
+        //update descriptions?
+        //this.updateInventoryList(results);
+        res.render('catalog', {items: JSON.stringify(results), search: search});
+      } else {
+        res.render('catalog', {items: JSON.stringify(results), search: search});
+      }
+      }).catch((err) => {
+      console.log(err);
+    });
+  }
   /*
   manageInventory() {
     let results = this.inventoryRepo.save(toSave);

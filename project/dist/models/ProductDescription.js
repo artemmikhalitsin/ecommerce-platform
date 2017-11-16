@@ -17,13 +17,14 @@ var ProductDescription = function () {
    * @param {string} brandName brand name
    * @param {string} modelNumber model number
    */
-  function ProductDescription(price, weight, brandName, modelNumber) {
+  function ProductDescription(price, weight, brandName, modelNumber, type) {
     _classCallCheck(this, ProductDescription);
 
     this.price = price;
     this.weight = weight;
     this.brandName = brandName;
     this.modelNumber = modelNumber;
+    this.type = type;
   }
 
   /**

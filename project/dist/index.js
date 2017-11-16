@@ -86,13 +86,23 @@ app.get('/getAllInventoryItems', function (req, res) {
     controller.getAllInventory(req, res);
   }
 });
+app.get('/catalog', function (req, res) {
+  if (req.session.exists) {
+    controller.getCatalog(req, res);
+  } else {
+    console.log('login error');
+    controller.getCatalog(req, res);
+  }
+});
 
 // getting the client inventory from the database
 app.get('/clientInventory', function (req, res) {
   controller.getAllInventory(req, res);
   console.log('Successs');
 });
-
+app.get('/getProductDescription', function (req, res) {
+  controller.getProductDescription(req, res);
+});
 // making the registration request
 app.post('/registrationRequest', function (req, res) {
   controller.registrationRequest(req, res);

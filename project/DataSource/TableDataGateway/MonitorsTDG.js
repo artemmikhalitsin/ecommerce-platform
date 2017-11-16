@@ -35,7 +35,8 @@ class MonitorsTDG {
                       monitor.price,
                       monitor.weight,
                       monitor.brand_name,
-                      monitor.model_number));
+                      monitor.model_number, 
+                      monitor.type));
               });
               return result;
           });
@@ -53,7 +54,8 @@ class MonitorsTDG {
                       monitor.price,
                       monitor.weight,
                       monitor.brand_name,
-                      monitor.model_number));
+                      monitor.model_number, 
+                      monitor.type));
               });
               return result;
           });
