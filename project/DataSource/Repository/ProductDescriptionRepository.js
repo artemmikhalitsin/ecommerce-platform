@@ -128,11 +128,8 @@ class ProductDescriptionRepository {
     let electronicsToUpdate = [];
 
     let productIds = products.map((p) => p.modelNumber);
-    console.log(JSON.stringify(productIds) + "Are product ids");
-    console.log(JSON.stringify(products));
     if (productIds.length > 0) {
     let context = this.getByIds(productIds);
-    console.log("The context is: " + JSON.stringify(context));
     let allRecords = this.ProductDescriptionIM.getAll();
     for (let i = 0; i < products.length; i++) {
       if (context.findIndex(
