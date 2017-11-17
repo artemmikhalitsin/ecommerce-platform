@@ -1,6 +1,6 @@
 var clientInventory = angular.module('clientInventory', ['desktopCard', 'monitorCard', 'tabletCard', 'laptopCard']);
 
-function ClientInventoryController($scope, $http) {
+function ClientInventoryController($scope, $http, $compile) {
   //Get any search parameters
   let search = new URLSearchParams(window.location.search).get('search');
   $scope.search = search ? search : "all";

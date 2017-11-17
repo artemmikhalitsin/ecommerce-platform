@@ -76,6 +76,8 @@ class Controller {
     }
   }
 
+
+
   /**
    * Updates the Controller's list of current items
    * @param {Object} newInventory Inventory items
@@ -91,6 +93,7 @@ class Controller {
       });
     });
   }
+
 
   /**
     *@param {String} req user who added an item to their cart
@@ -132,17 +135,21 @@ class Controller {
   removeFromShoppingCart(req, res) {
     pre : {
       req.session.email != null, 'User is not logged in';
+      this.clientInventory[req.body.serialNumber].locked,
+        'Item is not locked';
       this.shoppingCartList[req.session.email.toString()] != null,
         'Shopping cart doesn\'t exists';
     }
-
+    let user = req.session.email;
     let item = req.body.serialNumber;
     this.shoppingCartList[user].removeFromCart(item);
+    this.clientInventory[item].locked = false;
     clearTimeout(this.clientInventory[item].timeout);
-
+    res.status(200).send({success: 'Hurray!'});
     post : {
-      !this.shoppingCartList[req.session.email.toString()].getCartSerialNumbers()
-        .includes(req.body.serialNumber), 'Item was not removed from the cart';
+      !this.shoppingCartList[req.session.email.toString()]
+        .getCartSerialNumbers().includes(req.body.serialNumber),
+        'Item was not removed from the cart';
       !this.clientInventory[req.body.serialNumber].locked,
         'Item is still locked';
     }
