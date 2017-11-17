@@ -36,9 +36,9 @@ class DesktopsTDG {
         return connection('Desktop').select('*')
           .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Desktop.model_number','ProductDescription.model_number')
+          .join('ProductDescription', 'Desktop.model_number', 'ProductDescription.model_number')
           .then((desktops) => {
-              desktops.forEach(function(desktop){
+              desktops.forEach(function(desktop) {
                   let d = new Desktop(
                       desktop.processor_type,
                       desktop.ram_size,
@@ -53,7 +53,7 @@ class DesktopsTDG {
                       desktop.weight,
                       desktop.brand_name,
                       desktop.model_number,
-                      desktop.comp_id)
+                      desktop.comp_id);
                   result.push(d);
               });
               return result;
@@ -65,9 +65,9 @@ class DesktopsTDG {
           .whereIn('model_number', modelNumbers)
           .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Desktop.model_number','ProductDescription.model_number')
+          .join('ProductDescription', 'Desktop.model_number', 'ProductDescription.model_number')
           .then((desktops) => {
-              desktops.forEach(function(desktop){
+              desktops.forEach(function(desktop) {
                   result.push(new Desktop(
                       desktop.processor_type,
                       desktop.ram_size,

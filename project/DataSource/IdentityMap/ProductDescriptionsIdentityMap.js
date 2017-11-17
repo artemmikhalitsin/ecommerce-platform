@@ -4,7 +4,7 @@
  * @author TODO: IF YOU WROTE THIS CLASS, ATTRIBUTE IT TO YOURSELF
  * REVIEW: Please make sure the comments are correct - Artem
  */
-//Singleton CLASS
+// Singleton class
 let _instance;
 
 class ProductDescriptionsIdentityMap {
@@ -31,7 +31,6 @@ class ProductDescriptionsIdentityMap {
     return this.productDescriptions;
   }
 
-  // TODO: Is this the same method as above? - Artem
   /**
      * Gets a list of products matching given model numbers
      * @param {string[]} modelNumbers a list of alpha-numberical model numbers
@@ -40,7 +39,7 @@ class ProductDescriptionsIdentityMap {
      */
   get(modelNumbers) {
     return this.productDescriptions.filter((item) => {
-      return modelNumbers.includes(item.model_number)
+      return modelNumbers.includes(item.model_number);
     });
   }
 
@@ -49,26 +48,36 @@ class ProductDescriptionsIdentityMap {
      * @param {Object[]} newProductDescriptions a list containing new products
      */
   add(newProductDescriptions) {
-    for (var i = 0; i < newProductDescriptions.length; i++) {
+    for (let i = 0; i < newProductDescriptions.length; i++) {
       let item = newProductDescriptions[i];
       if (!this.productDescriptions.includes(item.model_number)) {
-        this.productDescriptions.push(newProductDescriptions[i]);
+        this.productDescriptions.push(
+          // Push a copy of the object
+          Object.assign({}, newProductDescriptions[i])
+        );
       }
     }
   }
 
-  update(updatedProductDescription) {
-    for (var i = 0; i < updatedProductDescription.length; i++) {
-      let item = updatedProductDescription[i];
-      if (this.productDescriptions.includes(item.model_number)) {
-        for (var j = 0; j < this.productDescriptions.length; j++) {
-          let updateItem = this.productDescriptions[j];
-          if (upadateItem.model_number == item.model_number) {
-            this.productDescriptions[j] = item;
-          }
+  /**
+   * Updates a single item in the identity map
+   * @param updatedProductDescriptions list of objects, each specifying new
+   * descriptions of products
+   */
+  update(updatedProductDescriptions) {
+    for (let i = 0; i< updatedProductDescriptions.length; i++) {
+      let newDescription = updatedProductDescriptions[i];
+      let index = this.productDescriptions.findIndex(
+        (product) => {
+          // Get the index of the model_number
+          return product.model_number == newDescription.model_number;
         }
-      } else {
-        this.productDescriptions.push(newProductDescriptions[i]);
+      );
+
+      // If model number exists in the map, replace the description with
+      // a copy of the new one
+      if (index > -1) {
+        this.productDescriptions[index] = Object.assign({}, newDescription);
       }
     }
   }

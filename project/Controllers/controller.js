@@ -299,10 +299,10 @@ class Controller {
     let inventory = [];
     let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
     .then((results)=>{
-      console.log("all the products are: " + JSON.stringify(results));
+      console.log('all the products are: ' + JSON.stringify(results));
        return Promise.each(results, (product)=>{
         return this.inventoryRepo.getByModelNumbers([product.modelNumber]).then((values)=>{
-                  console.log("inventory item is " + JSON.stringify(values));
+                  console.log('inventory item is ' + JSON.stringify(values));
                   product.serial_numbers = values.map((p) => p.serialNumber);
                   inventory.push(product);
                 });
@@ -337,7 +337,7 @@ class Controller {
       res.redirect('/');
     }
   }
-  
+
   /**
    * Processes an inventory action initiated by the user
    * @param {Object} req HTTP request object containing action info

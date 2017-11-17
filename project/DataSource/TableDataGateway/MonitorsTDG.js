@@ -29,7 +29,7 @@ class MonitorsTDG {
           .join('ProductDescription', 'Monitor.model_number',
                 'ProductDescription.model_number')
           .then((monitors) => {
-              monitors.forEach(function(monitor){
+              monitors.forEach(function(monitor) {
                   result.push(new Monitor(
                       monitor.display_size,
                       monitor.price,
@@ -47,7 +47,7 @@ class MonitorsTDG {
           .join('ProductDescription', 'Monitor.model_number',
                 'ProductDescription.model_number')
           .then((monitors) => {
-              monitors.forEach(function(monitor){
+              monitors.forEach(function(monitor) {
                   result.push(new Monitor(
                       monitor.display_size,
                       monitor.price,

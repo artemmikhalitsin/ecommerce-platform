@@ -39,9 +39,9 @@ class TabletsTDG {
         return connection('Tablet').select('*')
           .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Tablet.model_number','ProductDescription.model_number')
+          .join('ProductDescription', 'Tablet.model_number', 'ProductDescription.model_number')
           .then((tablets) => {
-              tablets.forEach(function(tablet){
+              tablets.forEach(function(tablet) {
                   result.push(new Tablet(
                       tablet.comp_id,
                       tablet.processor_type,
@@ -71,9 +71,9 @@ class TabletsTDG {
           .whereIn('model_number', modelNumbers)
           .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Tablet.model_number','ProductDescription.model_number')
+          .join('ProductDescription', 'Tablet.model_number', 'ProductDescription.model_number')
           .then((tablets) => {
-              tablets.forEach(function(tablet){
+              tablets.forEach(function(tablet) {
                   result.push(new Tablet(
                       tablet.comp_id,
                       tablet.processor_type,
@@ -85,7 +85,7 @@ class TabletsTDG {
                           tablet.dimension_id,
                           tablet.depth,
                           tablet.height,
-                          tablet.width), 
+                          tablet.width),
                       tablet.battery_info,
                       tablet.os,
                       tablet.camera_info,

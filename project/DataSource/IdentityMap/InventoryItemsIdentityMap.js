@@ -4,7 +4,7 @@
  * @author TODO: IF YOU WROTE THIS CLASS, ATTRIBUTE IT TO YOURSELF
  * REVIEW: Please make sure the comments are correct - Artem
  */
-//Singleton class
+// Singleton class
 let _instance;
 
 class InventoryItemsIdentityMap {
@@ -37,9 +37,9 @@ class InventoryItemsIdentityMap {
      * numbers
      */
   get(modelNumbers) {
-    //Filters to only items whos model number appears in the given list
+    // Filters to only items whos model number appears in the given list
     return this.inventoryItems.filter((item) => {
-      return modelNumbers.includes(item.serial_number)
+      return modelNumbers.includes(item.serial_number);
     });
   }
 
@@ -48,10 +48,13 @@ class InventoryItemsIdentityMap {
      * @param {Object[]} newInventoryItems a list containing new items
      */
   add(newInventoryItems) {
-    for (var i = 0; i < newInventoryItems.length; i++) {
+    for (let i = 0; i < newInventoryItems.length; i++) {
       let item = newInventoryItems[i];
+      // Add the item only if it doesn't already exist
       if (!this.inventoryItems.includes(item.serial_number)) {
-        this.inventoryItems.push(newInventoryItems[i]);
+        this.inventoryItems.push(
+          Object.assign({}, newInventoryItems[i])
+        );
       }
     }
   }
@@ -63,8 +66,8 @@ class InventoryItemsIdentityMap {
      */
   delete(toRemove) {
     this.inventoryItems = this.inventoryItems.filter((item) => {
-      return !toRemove.includes(item.serial_number)
-    })
+      return !toRemove.includes(item.serial_number);
+    });
   }
 }
 module.exports = InventoryItemsIdentityMap;

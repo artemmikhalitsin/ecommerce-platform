@@ -34,12 +34,12 @@ class InventoryItemsTDG {
     select() {
         return connection('Inventory').select('*');
     }
-    getByModelNumbers(modelNumbers){
+    getByModelNumbers(modelNumbers) {
         let results = [];
         return connection('Inventory').select('*')
           .whereIn('model_number', [modelNumbers])
           .then((inventoryItems)=>{
-              inventoryItems.forEach(function(item){
+              inventoryItems.forEach(function(item) {
                   results.push(new InventoryItem(
                       item.id,
                       item.serial_number,
