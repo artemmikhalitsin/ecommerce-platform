@@ -24,12 +24,13 @@ class Laptop extends Computer {
      * @param {string} weight weight
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
+     * @param {string} type type of product
      */
-    constructor(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
-                displaySize, batteryInfo, os, touchscreen, camera, price,
-                weight, brandName, modelNumber) {
-        super(computerId, processorType, ramSize, numberCpuCores, harddriveSize, price,
-              weight, brandName, modelNumber);
+    constructor(computerId, processorType, ramSize, numberCpuCores,
+                harddriveSize, displaySize, batteryInfo, os, touchscreen,
+                camera, price, weight, brandName, modelNumber, type) {
+        super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
+          price, weight, brandName, modelNumber, type);
         this.displaySize = displaySize;
         this.batteryInfo = batteryInfo;
         this.os = os;

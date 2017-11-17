@@ -41,14 +41,17 @@ class InventoryItemRepository {
   }
   getByModelNumbers(modelNumbers) {
     let inventory = this.inventoryTDG.getByModelNumbers(modelNumbers);
-    console.log("The models numbers passed" + JSON.stringify(modelNumbers));
+    console.log('The models numbers passed' + JSON.stringify(modelNumbers));
     let result = [];
     return Promise.all([inventory]).then((values) => {
           result = values[0];
-          console.log("the inventory items repo gives: " + JSON.stringify(result));
-          
+          console.log('the inventory items repo gives: '
+                      + JSON.stringify(result));
+
     return result;
-        }).catch((err) => {console.log(err)});
+        }).catch((err) => {
+console.log(err);
+});
   }
   /**
    * Retrieves all items from the database table
@@ -108,12 +111,12 @@ class InventoryItemRepository {
     let electronicsToDelete = [];
 
     // Extracts the model numbers of given items
-    let model_numbers = items.map((p) => p.model_number);
+    let modelNumbers = items.map((p) => p.model_number);
 
-    if (model_numbers.length > 0) {
+    if (modelNumbers.length > 0) {
       // Retrieve the items corresponding to given ids
       let allInventoryItems = this.inventoryItemsIM
-                          .getByModelNumbers(model_numbers);
+                          .getByModelNumbers(modelNumbers);
 
       for (let i = 0; i < items.length; i++) {
         for (let j = 0; j < items[i].serial_number.length; j++) {

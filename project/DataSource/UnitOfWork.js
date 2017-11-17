@@ -28,6 +28,8 @@ const TabletsTDG = require(rootPath +
   '/DataSource/TableDataGateway/TabletsTDG.js');
 const PurchaseCollectionTDG = require(rootPath +
   '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
+const TransactionLogTDG = require(rootPath +
+  '/DataSource/TableDataGateway/TransactionLogTDG.js');
 
 /**
  * Unit of Work implementation
@@ -49,6 +51,7 @@ class UnitOfWork {
     this.monitorsTDG = new MonitorsTDG();
     this.tabletsTDG = new TabletsTDG();
     this.purchaseTDG = new PurchaseCollectionTDG();
+    this.transactionTDG = new TransactionLogTDG();
 
     this.dirtyElements = [];
     this.newElements = [];
@@ -57,6 +60,7 @@ class UnitOfWork {
     this.deletedInventoryItems = [];
     this.newPurchases = [];
     this.deletedPurchases = [];
+    this.transactionItems = [];
   }
   registerNew(object) {
     this.newElements = [];
@@ -87,6 +91,10 @@ class UnitOfWork {
   registerDeletedItem(object){
     this.deletedInventoryItems = [];
     this.deletedInventoryItems.push(object);
+  }
+  registerTransaction(object){
+    this.transactionItems = [];
+    this.transactionItems.push(object);
   }
   commitAll() {
 
@@ -142,6 +150,15 @@ class UnitOfWork {
         deletedPurchases = Promise.each(this.deletedPurchases[0], (electronic) => {
          return this.purchaseTDG.delete(electronic).transacting(trx).then(() => {
                console.log('deleted purchase item');
+         })
+       });}
+
+       //add(log) transaction
+       let addedTransaction;
+       if(this.transactionItems[0] != null && this.transactionItems[0].length > 0){
+        addedTransaction = Promise.each(this.transactionItems[0], (transaction) => {
+         return this.transactionTDG.add(transaction).transacting(trx).then(() => {
+               console.log('added transaction');
          })
        });}
 
@@ -291,14 +308,14 @@ class UnitOfWork {
       }
       //add
       );}
-      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems])
+      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems, addedTransaction])
         .then(trx.commit)
         .catch(trx.rollback);
     });
   }
 
-  // TODO: DELETE
- /* getAllInventoryItems() {
+  // the following function is getting all the items along with their descriptions
+  getAllInventoryItems() {
     return new Promise((resolve, reject) => {
       let desktops = this.getAllDesktops();
       let laptops = this.getAllLaptops();
@@ -335,7 +352,7 @@ class UnitOfWork {
       }))
       .catch((err) => reject(err));
     });
-  }*/
+  }
 
   // this function is getting all the model numbers from all the products
   getAllModelNumbers(products) {

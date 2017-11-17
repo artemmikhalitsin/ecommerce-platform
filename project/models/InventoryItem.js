@@ -9,7 +9,7 @@ class InventoryItem {
      * @param {number} id id
      * @param {string} serialNumber brand name
      * @param {string} modelNumber model number
-     * @param {Object} productDescrition productDescription
+     * @param {Object} productDescription productDescription
      */
     constructor(id, serialNumber, modelNumber, productDescription) {
         this.id = id;

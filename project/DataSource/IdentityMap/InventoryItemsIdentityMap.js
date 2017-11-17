@@ -1,7 +1,4 @@
 'use strict';
-// REVIEW: UnitOfWork is never used here, consider removing - Artem
-// const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
-
 /**
  * Identity map of inventory items
  * @author TODO: IF YOU WROTE THIS CLASS, ATTRIBUTE IT TO YOURSELF
@@ -14,7 +11,6 @@ class InventoryItemsIdentityMap {
      */
     constructor() {
         this.rootPath = require('app-root-dir').get();
-        let UnitOfWork = require(this.rootPath + '/DataSource/UnitOfWork.js');
         let InventoryItemsTDG = require(this.rootPath
           + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
         this.inventoryTDG = new InventoryItemsTDG();

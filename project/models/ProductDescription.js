@@ -10,12 +10,14 @@ class ProductDescription {
      * @param {string} weight weight
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
+     * @param {string} type type of product
      */
-    constructor(price, weight, brandName, modelNumber) {
+    constructor(price, weight, brandName, modelNumber, type) {
         this.price = price;
         this.weight = weight;
         this.brandName = brandName;
         this.modelNumber = modelNumber;
+        this.type = type;
     }
 
     /**

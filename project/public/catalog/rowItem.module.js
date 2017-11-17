@@ -22,10 +22,10 @@ controller: function($scope) {
     $scope.editMode = false;
   }
 
-  $scope.isLaptop = () => { return $scope.$ctrl.product.type === 'laptop' }
-  $scope.isDesktop = () => { return $scope.$ctrl.product.type === 'desktop' }
-  $scope.isTablet = () => { return $scope.$ctrl.product.type === 'tablet' }
-  $scope.isMonitor = () => { return $scope.$ctrl.product.type === 'monitor' }
+  $scope.isLaptop = () => { return $scope.$ctrl.product.type === 'Laptop' }
+  $scope.isDesktop = () => { return $scope.$ctrl.product.type === 'Desktop' }
+  $scope.isTablet = () => { return $scope.$ctrl.product.type === 'Tablet' }
+  $scope.isMonitor = () => { return $scope.$ctrl.product.type === 'Monitor' }
 }
 
 })

@@ -1,6 +1,7 @@
 _commonProps = ["model_number", "brand_name", "price", "weight",
-                "type", "is_available", "serial_numbers"];
+                "type", "serial_numbers"];
 _requestJSON = {"deleteSerials":[], "addSerials":[]};
+
 
 // This is to check if there is symbols in what the client entered
 function validateValue(value){
@@ -141,7 +142,6 @@ $(document).ready(function() {
         {'data': 'price'},
         {'data': 'weight'},
         {'data': 'type'},
-        {'data': 'is_available'},
       ],
     });
     $('#table_inventory tbody').on('click', 'td.details-control', function() {

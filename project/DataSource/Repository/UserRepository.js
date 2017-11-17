@@ -4,6 +4,7 @@ const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
 const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 
+
 /**
  * Repository for users
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
@@ -33,6 +34,24 @@ class UserRepository {
    */
   get() {
     return database('User').select('*');
+  }
+
+  /**
+   * Retrieves all clients from the database
+   * @return {Promise<Object[]>} promise which resolves to the list of clients
+   * in the database
+   */
+  getClients() {
+    return database('User').where('is_admin', 0).select('*');
+  }
+
+  /**
+   * Retrieves all admins from the database
+   * @return {Promise<Object[]>} promise which resolves to the list of admins
+   * in the database
+   */
+  getAdmins() {
+    return database('User').where('is_admin', 1).select('*');
   }
 
   /**
