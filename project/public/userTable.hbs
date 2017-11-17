@@ -1,0 +1,55 @@
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Users</title>
+
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+  <script type="text/javascript" src="/js/userTable.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+<!-- CSS styles (temporary because it will be moved to a CSS file) -->
+  <style>
+    td.details-control {
+        background: url('../images/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('../images/details_close.png') no-repeat center center;
+    }
+  </style>
+
+</head>
+
+<body ng-app="">
+	<div ng-include="'includes/header.hbs'"></div>
+	<!--div ng-include="'includes/sidebar.hbs'" id="left"></div-->
+	<!--div style="margin-left:10%"-->
+				<div class="text-center">
+					<h2>List of Users</h2>
+					<div id="error-box" class="row justify-content-center" style="display: none; margin-bottom: 1em;">
+						<div class="card" style="height: auto; width: 30rem; background-color: #ffcccc;">
+					</div>
+				</div>
+			  <table id="table_inventory" class="table table-striped table-bordered" cellspacing="0" width="100%">
+			    <thead>
+			      <th></th>
+			      <th>Model Number</th>
+			      <th>Brand Name</th>
+			      <th>Price</th>
+			      <th>Weight</th>
+						<th>Type</th>
+			      <th>Availability</th>
+			    </thead>
+			  </table>
+		<div class="text-center">
+			<button type="button" onclick="submitData();" class="btn btn-danger">Submit Changes</button>
+		</div>
+	<div ng-include="'includes/footer.hbs'"></div>
+</body>
+</html>

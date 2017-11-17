@@ -1,5 +1,5 @@
-_commonProps = ["modelNumber", "brandName", "price", "weight",
-                "type", "isAvailable", "serial_numbers"];
+_commonProps = ["model_number", "brand_name", "price", "weight",
+                "type", "serial_numbers"];
 _requestJSON = {"deleteSerials":[], "addSerials":[]};
 
 // This is to check if there is symbols in what the client entered
@@ -136,8 +136,8 @@ $(document).ready(function() {
             'data': null,
             'defaultContent': '',
         },
-        {'data': 'modelNumber'},
-        {'data': 'brandName'},
+        {'data': 'model_number'},
+        {'data': 'brand_name'},
         {'data': 'price'},
         {'data': 'weight'},
         {'data': 'type'},

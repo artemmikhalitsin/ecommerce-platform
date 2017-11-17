@@ -76,6 +76,10 @@ app.get('/logout', function(req, res) {
   controller.logout(req, res);
 });
 
+app.get('/users', function(req, res) {
+  res.render('/userTable');
+});
+
 // getting the inventory from the database
 app.get('/getAllInventoryItems', function(req, res) {
   if (req.session.exists) {
@@ -85,30 +89,13 @@ app.get('/getAllInventoryItems', function(req, res) {
     controller.getAllInventory(req, res);
   }
 });
-app.get('/catalog', function(req, res) {
-  if (req.session.exists) {
-    controller.getCatalog(req, res);
-  } else {
-    console.log('login error');
-    controller.getAllInventory(req, res);
-  }
-});
-app.post('/manageProductCatalog', function(req, res){
-   if (req.session.exists) {
-    controller.manageProductCatalog(req, res);
-  } else {
-    console.log('login error');
-    controller.getAllInventory(req, res);
-  }
-});
+
 // getting the client inventory from the database
 app.get('/clientInventory', function(req, res) {
     controller.getAllInventory(req, res);
     console.log('Successs');
 });
-app.get('/getProductDescription', function(req, res){
-  controller.getProductDescription(req, res);
-});
+
 // making the registration request
 app.post('/registrationRequest', function(req, res) {
   controller.registrationRequest(req, res);
@@ -146,6 +133,10 @@ app.post('/cancelTransaction', function(req, res) {
 
 app.get('/viewPurchaseCollection', function(req, res) {
   controller.viewPurchaseCollection(req, res);
+});
+
+app.get('/api/getAllProducts', function(req, res) {
+  controller.getProductInfo(req, res);
 });
 
 app.listen(8080, function() {
