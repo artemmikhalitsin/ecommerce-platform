@@ -1,3 +1,4 @@
+
 /* eslint-disable */
 // Eslint disabled for this file only until it is documented
 
@@ -424,3 +425,4 @@ class UnitOfWork {
   }
 }
 module.exports = UnitOfWork;
+

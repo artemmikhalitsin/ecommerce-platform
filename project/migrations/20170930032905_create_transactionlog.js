@@ -1,8 +1,8 @@
 /**
-  @author Michael Li
-  Creates the PurchaseCollection Table in the 343DB Database.
+  @author Amanda Wai
+  Creates the TransactionLog Table in the 343DB Database.
 */
-const tablename='PurchaseCollection';
+const tablename='TransactionLog';
 
 exports.up = function(knex, Promise) {
   return knex.schema.createTable(tablename, (table) => {
@@ -11,10 +11,7 @@ exports.up = function(knex, Promise) {
     } else {
       table.increments('id').unsigned().primary();
       table.string('user_id').notNullable();
-      table.string('serial_number').notNullable().unique();
-      table.string('model_number').notNullable();
-      table.foreign('model_number').references('ProductDescription.model_number');
-      table.string('purchase_id').notNullable();
+      table.timestamp('timestamp').defaultTo(knex.fn.now());
     }
   });
 };

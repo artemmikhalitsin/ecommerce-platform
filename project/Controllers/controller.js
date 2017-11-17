@@ -1,4 +1,7 @@
 const Promise = require('bluebird');
+const InventoryItem = require(rootPath +
+  '/models/InventoryItem.js');
+
 const rootPath = require('app-root-dir').get();
 const ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
@@ -6,12 +9,12 @@ const InventoryItemRepository = require(rootPath +
   '/DataSource/Repository/InventoryItemRepository.js');
 const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
-const PurchaseCollectionRepo = require(rootPath +
-  '/DataSource/Repository/PurchaseCollectionRepository.js');
+const PurchaseCollectionRepo = require(rootPath
+    + '/DataSource/Repository/PurchaseCollectionRepository.js');
 const ShoppingCart = require(rootPath +
-  '/models/ShoppingCart.js');
-const InventoryItem = require(rootPath +
-  '/models/InventoryItem.js');
+    '/models/ShoppingCart.js');
+const TransactionLogRepository = require(rootPath
+      + '/DataSource/Repository/TransactionLogRepository.js');
 
 /**
  * Identity map of inventory items
@@ -27,10 +30,9 @@ class Controller {
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
     this.purchaseCollectionRepo = new PurchaseCollectionRepo();
-    // List of inventory items, key: serial number, value: locked or not locked
-    this.clientInventory = {};
-    // List of shopping carts associated to users key:user, value: shopping cart
-    this.shoppingCartList = {};
+    this.transactionRepo = new TransactionLogRepository();
+    this.clientInventory = {}; // key: serial, value: locked or not locked
+    this.shoppingCartList = {}; // carts associated to users k:user, v: cart
     this.url = require('url');
     this.crypto = require('crypto');
   }
@@ -48,7 +50,7 @@ class Controller {
     let salted = userData['email'] + password + 'salt';
     userData['password'] = hash.update(salted).digest('hex');
     if (password != confirmPassword) {
-      console.log('password confirmation failed. please try again...');
+      console.log('password confirmation failed. try again...');
       res.redirect('/registration');
     } else {
       delete userData['confirmPassword'];
@@ -79,6 +81,7 @@ class Controller {
     }
   }
 
+
   /**
    * Updates the Controller's list of current items
    * @param {Object} newInventory Inventory items
@@ -95,17 +98,18 @@ class Controller {
     });
   }
 
+
   /**
     *@param {String} req user who added an item to their cart
     *@param {String} res item user wants to add to their cart
   */
   addToShoppingCart(req, res) {
     pre: {
-      req.session.user != null, 'User is not logged in';
+      req.session.email != null, 'User is not logged in';
       Object.keys(this.clientInventory).length != 0, 'Catalog is empty';
       !this.clientInventory[req.body.serialNumber].locked, 'Item is locked';
-      if (this.shoppingCartList[req.session.user.toString()]) {
-        Object.keys(this.shoppingCartList[req.session.user.toString()]
+      if (this.shoppingCartList[req.session.email.toString()]) {
+        Object.keys(this.shoppingCartList[req.session.email.toString()]
           .getCart()).length < 7, 'Cart has more than 7 items!';
       }
     }
@@ -113,7 +117,7 @@ class Controller {
     let item = req.body.serialNumber;
     let productNumber = req.body.modelNumber;
     if (this.lockItem(item)) {
-      let user = req.session.user.toString();
+      let user = req.session.email.toString();
       if (!this.shoppingCartList[user]) {
         this.shoppingCartList[user] = new ShoppingCart();
       }
@@ -124,30 +128,37 @@ class Controller {
     }
 
     post: {
-      this.shoppingCartList[req.session.user.toString()].getCartSerialNumbers()
+      this.shoppingCartList[req.session.email.toString()]
+        .getCartSerialNumbers()
         .includes(req.body.serialNumber), 'Item was not added to the cart';
-      this.clientInventory[req.body.serialNumber].locked, 'Item isn\'t locked';
+      this.clientInventory[req.body.serialNumber].locked,
+        'Item isn\'t locked';
     }
   }
 
   removeFromShoppingCart(req, res) {
     pre : {
-      req.session.user != null, 'User is not logged in';
-      this.shoppingCartList[req.session.user.toString()] != null,
+      req.session.email != null, 'User is not logged in';
+      this.clientInventory[req.body.serialNumber].locked,
+        'Item is not locked';
+      this.shoppingCartList[req.session.email.toString()] != null,
         'Shopping cart doesn\'t exists';
     }
-
+    let user = req.session.email;
     let item = req.body.serialNumber;
     this.shoppingCartList[user].removeFromCart(item);
+    this.clientInventory[item].locked = false;
     clearTimeout(this.clientInventory[item].timeout);
-
+    res.status(200).send({success: 'Hurray!'});
     post : {
-      !this.shoppingCartList[req.session.user.toString()].getCartSerialNumbers()
-        .includes(req.body.serialNumber), 'Item was not removed from the cart';
+      !this.shoppingCartList[req.session.email.toString()]
+        .getCartSerialNumbers().includes(req.body.serialNumber),
+        'Item was not removed from the cart';
       !this.clientInventory[req.body.serialNumber].locked,
         'Item is still locked';
     }
   }
+
 
   /**
     * Unlocks a previously locked items
@@ -182,7 +193,7 @@ class Controller {
       this.clientInventory[itemToLock].locked = true;
       // Store pointer of timeout function
       this.clientInventory[itemToLock].timeout = setTimeout(
-        this.unlockItem.bind(this), 100000, itemToLock);
+        this.unlockItem.bind(this), 300000, itemToLock);
       return true;
     }
     post: {
@@ -206,11 +217,11 @@ class Controller {
   */
   completePurchaseTransaction(req, res) {
     pre: {
-      Object.keys(this.shoppingCartList[req.session.user.toString()]
+      Object.keys(this.shoppingCartList[req.session.email.toString()]
         .getCart()).length <= 7, 'Cart size too big';
     }
 
-    let user = req.session.user.toString();
+    let user = req.session.email.toString();
     let cart = Object.values(this.shoppingCartList[user].getCart());
     let purchases = [];
     for (let i in Object.keys(cart)) {
@@ -224,12 +235,15 @@ class Controller {
         delete this.clientInventory[cart[i].serial];
       }
     }
+    let transaction = [{client: user,
+                        timestamp: new Date().toISOString()}];
+
     this.purchaseCollectionRepo.save(purchases);
+    this.transactionRepo.save(transaction);
     this.deleteShoppingCart(user);
-    console.log('purchase completed successfully');
     res.status(200).send({success: 'Successful purchase'});
     post: {
-      this.shoppingCartList[req.session.user.toString()] == null,
+      this.shoppingCartList[req.session.email.toString()] == null,
         'Shopping cart still exists';
     }
   }
@@ -241,10 +255,10 @@ class Controller {
   */
   cancelPurchaseTransaction(req, res) {
     pre: {
-      this.shoppingCartList[req.session.user.toString()] != null;
+      this.shoppingCartList[req.session.email.toString()] != null;
     }
 
-    let user = req.session.user.toString();
+    let user = req.session.email.toString();
     let cartItems = this.shoppingCartList[user].getCartSerialNumbers();
     for (let item = 0; item < cartItems.length; item++) {
       console.log(cartItems[item]);
@@ -255,7 +269,7 @@ class Controller {
     res.status(200).send({success: 'Successfully canceled'});
 
     post: {
-      this.shoppingCartList[req.session.user.toString()] == null;
+      this.shoppingCartList[req.session.email.toString()] == null;
     }
   }
 
@@ -285,7 +299,6 @@ class Controller {
       console.log(err);
     });
   }
-
 
   /**
    * Retrieves a complete list of products and serial numbers from
@@ -367,17 +380,20 @@ class Controller {
     });
   }
 
+  /**
+   * Processes an inventory action initiated by the user
+   * @param {Object} req HTTP request object containing action info
+   * @param {Object} res HTTP response object to be returned to the user
+   */
+
   logout(req, res) {
     if (req.session.exists) {
       req.session.destroy();
       res.redirect('/');
     }
   }
-  /**
-   * Processes an inventory action initiated by the user
-   * @param {Object} req HTTP request object containing action info
-   * @param {Object} res HTTP response object to be returned to the user
-   */
+
+
   inventoryAction(req, res) {
     if (req.session.exists==true && req.session.isAdmin==true) {
       let request = req.body;
@@ -429,6 +445,22 @@ class Controller {
     } else {
       res.render('login', {error: 'Invalid username/password'});
     }
+  }
+
+  getProductInfo(req, res, other) {
+    this.inventoryRepo.getAllInventoryItems().then(
+      (result) => {
+        res.json(result);
+      }
+    );
+  }
+
+  getClients(req, res) {
+    this.userRepo.getAdmins().then(
+      (result) => {
+        res.json(result);
+      }
+    );
   }
 }
 
