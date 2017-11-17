@@ -53,7 +53,8 @@ class LaptopsTDG {
                       laptop.price,
                       laptop.weight,
                       laptop.brand_name,
-                      laptop.model_number));
+                      laptop.model_number, 
+                      laptop.type));
               });
               return result;
           });
@@ -81,7 +82,8 @@ class LaptopsTDG {
                       laptop.price,
                       laptop.weight,
                       laptop.brand_name,
-                      laptop.model_number));
+                      laptop.model_number, 
+                      laptop.type));
               });
               return result;
           });

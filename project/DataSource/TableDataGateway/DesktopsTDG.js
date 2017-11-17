@@ -53,7 +53,8 @@ class DesktopsTDG {
                       desktop.weight,
                       desktop.brand_name,
                       desktop.model_number,
-                      desktop.comp_id)
+                      desktop.comp_id, 
+                      desktop.type)
                   result.push(d);
               });
               return result;
@@ -82,7 +83,8 @@ class DesktopsTDG {
                       desktop.weight,
                       desktop.brand_name,
                       desktop.model_number,
-                      desktop.comp_id));
+                      desktop.comp_id, 
+                      desktop.type));
           });
           return result;
       });

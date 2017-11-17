@@ -60,7 +60,8 @@ class TabletsTDG {
                       tablet.price,
                       tablet.weight,
                       tablet.brand_name,
-                      tablet.model_number));
+                      tablet.model_number, 
+                      tablet.type));
               });
               return result;
           });
@@ -92,7 +93,8 @@ class TabletsTDG {
                       tablet.price,
                       tablet.weight,
                       tablet.brand_name,
-                      tablet.model_number));
+                      tablet.model_number, 
+                      tablet.type));
               });
               return result;
           });
