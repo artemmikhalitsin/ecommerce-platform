@@ -412,7 +412,7 @@ var Controller = function () {
           _this9.updateInventoryList(inventory);
           res.render('clientInventory', { items: JSON.stringify(inventory), search: search });
         } else {
-          res.redirect('/login');
+          res.render('clientInventory', { items: JSON.stringify(inventory), search: search });
         }
       }).catch(function (err) {
         console.log(err);
