@@ -11,6 +11,7 @@ var UserRepository = require(rootPath + '/DataSource/Repository/UserRepository.j
 var PurchaseCollectionRepo = require(rootPath + '/DataSource/Repository/PurchaseCollectionRepository.js');
 var ShoppingCart = require(rootPath + '/models/ShoppingCart.js');
 var TransactionLogRepository = require(rootPath + '/DataSource/Repository/TransactionLogRepository.js');
+
 /**
  * Identity map of inventory items
  * @author Wai Lau, Amanda Wai

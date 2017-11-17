@@ -11,6 +11,7 @@ const ShoppingCart = require(rootPath +
     '/models/ShoppingCart.js');
 const TransactionLogRepository = require(rootPath
       + '/DataSource/Repository/TransactionLogRepository.js');
+
 /**
  * Identity map of inventory items
  * @author Wai Lau, Amanda Wai
@@ -75,7 +76,6 @@ class Controller {
       });
     }
   }
-
 
 
   /**
