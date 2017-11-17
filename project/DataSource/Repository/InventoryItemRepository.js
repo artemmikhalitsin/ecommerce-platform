@@ -1,3 +1,4 @@
+'use strict';
 const rootPath = require('app-root-dir').get();
 const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 const InventoryItemsIdentityMap = require(rootPath +
@@ -7,7 +8,7 @@ const InventoryItemsTDG = require(rootPath +
 
 /**
  * Repository for Inventory Items
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Ekaterina Ruhlin
  * REVIEW: PLEASE MAKE SURE THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class InventoryItemRepository {
@@ -38,7 +39,19 @@ class InventoryItemRepository {
     }
     return context;
   }
+  getByModelNumbers(modelNumbers) {
+    let inventory = this.inventoryTDG.getByModelNumbers(modelNumbers);
+    console.log('The models numbers passed' + JSON.stringify(modelNumbers));
+    let result = [];
+    return Promise.all([inventory]).then((values) => {
+          result = values[0];
+          console.log('the inventory items repo gives: ' + JSON.stringify(result));
 
+    return result;
+        }).catch((err) => {
+console.log(err);
+});
+  }
   /**
    * Retrieves all items from the database table
    * @param {string} args TODO: Not sure what this argument is doing here??
@@ -101,15 +114,20 @@ class InventoryItemRepository {
 
     if (model_numbers.length > 0) {
       // Retrieve the items corresponding to given ids
-      let allInventoryItems = this.inventoryItemsIM.getByModelNumbers(model_numbers);
+      let allInventoryItems = this.inventoryItemsIM
+                          .getByModelNumbers(model_numbers);
 
-      for (var i = 0; i < items.length; i++) {
-        for (var j = 0; j < items[i].serial_number.length; j++) {
-          if (allInventoryItems.findIndex((p) => p.serial_number == items[i].serial_number[j]) === -1
-            && electronicsToAdd.findIndex((e) => e.serial_number == items[i].serial_number[j] && e.model_number == items[i].model_number) === -1) {
+      for (let i = 0; i < items.length; i++) {
+        for (let j = 0; j < items[i].serial_number.length; j++) {
+          if (allInventoryItems.findIndex(
+            (p) => p.serial_number == items[i].serial_number[j]) === -1
+            && electronicsToAdd.findIndex(
+              (e) => e.serial_number == items[i].serial_number[j]
+              && e.model_number == items[i].model_number) === -1) {
               // Case: item is not in our inventory
               // and hasn't already been processed
-              electronicsToAdd.push({'serial_number': items[i].serial_number[j], 'model_number': items[i].model_number});
+              electronicsToAdd.push({'serial_number': items[i].serial_number[j],
+                                      'model_number': items[i].model_number});
             }
         }
       }
@@ -117,7 +135,8 @@ class InventoryItemRepository {
       electronicsToDelete = allInventoryItems.filter(function(item) {
         console.log(item.model_number);
        items.forEach(function(element) {
-         return element.serial_number.findIndex((e) => e == item.serial_number) === -1;
+         return element.serial_number.findIndex((e) =>
+            e == item.serial_number) === -1;
         });
       });
     }

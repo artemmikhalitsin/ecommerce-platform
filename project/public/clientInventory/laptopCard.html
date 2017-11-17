@@ -1,23 +1,23 @@
 <!--Card-->
-<div class="card" style="height:48rem;">
-  <div class="front">
+<div class="card" style="height:48rem;" ng-class="{false:'flip-to-front', true:'flip-to-back'}[rotated]">
+  <div class="front" style="width: 100%;">
     <!--Card image-->
     <div class="view overlay hm-white-slight">
-        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20%287%29.jpg" class="img-fluid" alt="">
+        <!--img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20%287%29.jpg" class="img-fluid" alt=""-->
     </div>
     <!--Card content-->
     <div class="card-body">
       <div class="caption">
-        <h4 class="pull-right">${[{ $ctrl.laptop.price }]}</h4>
+        <h4 class="pull-right">${[{ $ctrl.laptop.price.toFixed(2) }]}</h4>
         <h4> Laptop </h4></br>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Model Number: {[{ $ctrl.laptop.modelNumber }]}</li>
-          <li class="list-group-item">Serial Number: {[{ $ctrl.laptop.serialNumber }]}</li>
-          <li class="list-group-item">Brand Name: {[{ $ctrl.laptop.brand }]}</li>
-          <li class="list-group-item">Weight: {[{ $ctrl.laptop.weight }]} </li>
+          <li class="list-group-item">Model Number: {[{ $ctrl.laptop.model_number }]}</li>
+          <li class="list-group-item" ng-repeat="serial in $ctrl.laptop.serial_numbers">{{serial}}
+              <a href="#" class="btn btn-primary pull-right" ng-click="addToShoppingCart(serial, $ctrl.laptop.model_number)">Add to Cart</a></li>
+          <li class="list-group-item">Brand Name: {[{ $ctrl.laptop.brand_name }]}</li>
+          <li class="list-group-item">Weight: {[{ $ctrl.laptop.weight }]} gram </li>
         </ul></br>
         <a href="#" class="btn btn-primary" ng-click="rotate()">View Details</a>
-        <a href="#" class="btn btn-primary" ng-click="addToCart($ctrl.laptop.serialNumber, $ctrl.laptop.modelNumber)">Add to Shopping Cart</a>
       </div>
       <!--/.caption-->
     </div>
@@ -25,22 +25,21 @@
   </div>
   <!--/.front-->
 
-  <div class="back"></br>
+  <div class="back">
     <h2 class="text-center">Detailed Info</h2>
     <div class="card-body">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">Processor Type: </li>
-        <li class="list-group-item">RAM size: </li>
-        <li class="list-group-item"># of CPU core: </li>
-        <li class="list-group-item">Hard Drive Size: </li>
-        <li class="list-group-item">Display Size (inches): </li>
-        <li class="list-group-item">Battery Info: </li>
-        <li class="list-group-item">OS: </li>
-        <li class="list-group-item">Camera: </li>
-        <li class="list-group-item">Touch Screen: </li>
+        <li class="list-group-item">Processor Type:{[{ $ctrl.laptop.processor_type }]} </li>
+        <li class="list-group-item">RAM size: {[{ $ctrl.laptop.ram_size }]}</li>
+        <li class="list-group-item"># of CPU core:{[{ $ctrl.laptop.number_cpu_cores }]} </li>
+        <li class="list-group-item">Hard Drive Size:{[{ $ctrl.laptop.harddrive_size }]} </li>
+        <li class="list-group-item">Display Size (inches):{[{ $ctrl.laptop.display_size }]} </li>
+        <li class="list-group-item">Battery Info:{[{ $ctrl.laptop.battery_info }]} </li>
+        <li class="list-group-item">OS: {[{ $ctrl.laptop.os }]}</li>
+        <li class="list-group-item">Camera:{[{ $ctrl.laptop.camera }]} </li>
+        <li class="list-group-item">Touch Screen:{[{ $ctrl.laptop.touch_screen }]} </li>
       </ul></br>
       <a href="#" class="btn btn-primary" ng-click="rotate()">Go Back</a>
-      <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.laptop.serialNumber, $ctrl.laptop.modelNumber)">Add to Shopping Cart</a>
     </div>
     <!--/.card-body-->
   </div>

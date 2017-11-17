@@ -1,13 +1,24 @@
 'use strict';
 const rootPath = require('app-root-dir').get();
-
+const Promise = require('bluebird');
 let UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
-let ProductDescriptionIdentityMap = require(rootPath + '/DataSource/IdentityMap/ProductDescriptionsIdentityMap.js');
-let ProductDescriptionsTDG = require(rootPath + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
+let ProductDescriptionIdentityMap = require(rootPath
+  + '/DataSource/IdentityMap/ProductDescriptionsIdentityMap.js');
+let ProductDescriptionsTDG = require(rootPath
+  + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
+let DesktopsTDG = require(rootPath
+  + '/DataSource/TableDataGateway/DesktopsTDG.js');
+let LaptopsTDG = require(rootPath
+  + '/DataSource/TableDataGateway/LaptopsTDG.js');
+let MonitorsTDG = require(rootPath
+  + '/DataSource/TableDataGateway/MonitorsTDG.js');
+let TabletsTDG = require(rootPath
+  + '/DataSource/TableDataGateway/TabletsTDG.js');
+let ProductDescription = require(rootPath + '/models/ProductDescription.js');
 
 /**
  * Repository for product descrptions
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Ekaterina Ruhlin
  * REVIEW: PLEASE MAKE SURE METHOD DESCRIPTIONS ARE CORRECT - Artem
  */
 class ProductDescriptionRepository {
@@ -19,6 +30,10 @@ class ProductDescriptionRepository {
     this.uow = new UnitOfWork();
     this.ProductDescriptionIM = new ProductDescriptionIdentityMap();
     this.productDescTDG = new ProductDescriptionsTDG();
+    this.DesktopsTDG = new DesktopsTDG();
+    this.LaptopsTDG = new LaptopsTDG();
+    this.MonitorsTDG = new MonitorsTDG();
+    this.TabletsTDG = new TabletsTDG();
   }
 
   /**
@@ -27,15 +42,43 @@ class ProductDescriptionRepository {
    * @return {Object[]} the complete list of product description objects
    */
   getAll() {
-      let context = this.productDescTDG.select();
+      let context = this.productDescTDG.getAll();
 
-      Promise.all([context]).then((values)=>{
-        context = values[0];
+      Promise.all(context).then((values)=>{
+        context = values;
       });
       this.ProductDescriptionIM.add(context);
     return context;
   }
-
+  getAllWithIncludes() {
+    let desktops = this.DesktopsTDG.getAll();
+    let laptops = this.LaptopsTDG.getAll();
+    let monitors = this.MonitorsTDG.getAll();
+    let tablets = this.TabletsTDG.getAll();
+    let result = [];
+    return Promise.all([desktops, laptops, monitors, tablets]).then((values)=>{
+      let products = [].concat(...values);
+        for (let i = 0; i < products.length; i++) {
+          result.push(products[i]);
+        }
+      console.log('Result from repo: ' + JSON.stringify(products));
+    return result;
+    });
+  }
+  getByModelNumbers(modelNumbers) {
+    let desktops = this.DesktopsTDG.getByModelNumbers(modelNumbers);
+    let laptops = this.LaptopsTDG.getByModelNumbers(modelNumbers);
+    let monitors = this.MonitorsTDG.getByModelNumbers(modelNumbers);
+    let tablets = this.TabletsTDG.getByModelNumbers(modelNumbers);
+    let result = [];
+    return Promise.all([desktops, laptops, monitors, tablets]).then((values)=>{
+      let products = [].concat(...values);
+        for (let i = 0; i < products.length; i++) {
+          result.push(products[i]);
+        }
+      return result;
+    });
+  }
   /**
    * Retrieves the product description from the identity map given a single ID
    * @param {number} id the id of the product description to be retrieved
@@ -58,7 +101,7 @@ class ProductDescriptionRepository {
     // will instead return all the products in the table? I believe this method
     // requires rework - Artem
     if (products.length <= 0 || products.length < ids.length) {
-      let prodDescFromTDG = this.productDescTDG.select();
+      let prodDescFromTDG = this.productDescTDG.getAll();
             Promise.all([prodDescFromTDG]).then((values)=>{
               products = values[0];
               // REVIEW: This function has a side effect,
@@ -88,14 +131,18 @@ class ProductDescriptionRepository {
     if (productIds.length > 0) {
     let context = this.getByIds(productIds);
     let allRecords = this.ProductDescriptionIM.getAll();
-    for (var i = 0; i < products.length; i++) {
-      if (context.findIndex((p) => p.model_number == products[i].model_number) !== -1
-          && electronicsToUpdate.findIndex((e) => e.model_number == products[i].model_number) === -1) {
+    for (let i = 0; i < products.length; i++) {
+      if (context.findIndex(
+        (p) => p.model_number == products[i].model_number) !== -1
+          && electronicsToUpdate.findIndex(
+            (e) => e.model_number == products[i].model_number) === -1) {
             // Case: the product exists in our list of products
             // and hasn't already been processed
             electronicsToUpdate.push(products[i]);
-      } else if (allRecords.findIndex((p) => p.model_number == products[i].model_number) === -1
-              && electronicsToAdd.findIndex((e) => e.model_number == products[i].model_number) === -1) {
+      } else if (allRecords.findIndex(
+        (p) => p.model_number == products[i].model_number) === -1
+              && electronicsToAdd.findIndex(
+                (e) => e.model_number == products[i].model_number) === -1) {
                 // Case: the product doesn't exist in our list of products
                 // and hasn't already been processed
                 electronicsToAdd.push(products[i]);

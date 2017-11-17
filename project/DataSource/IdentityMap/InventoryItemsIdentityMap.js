@@ -1,4 +1,4 @@
-
+'use strict';
 // REVIEW: UnitOfWork is never used here, consider removing - Artem
 // const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 
@@ -15,7 +15,8 @@ class InventoryItemsIdentityMap {
     constructor() {
         this.rootPath = require('app-root-dir').get();
         let UnitOfWork = require(this.rootPath + '/DataSource/UnitOfWork.js');
-        let InventoryItemsTDG = require(this.rootPath + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
+        let InventoryItemsTDG = require(this.rootPath
+          + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
         this.inventoryTDG = new InventoryItemsTDG();
         let context = this.inventoryTDG.select();
         this.InventoryItems = [];
@@ -50,9 +51,9 @@ class InventoryItemsIdentityMap {
      * @return {Object[]} a list of items corresponding to the given model
      * numbers
      */
-    get(model_numbers) {
+    get(modelNumbers) {
         return this.InventoryItems.filter(function(desc) {
-            return model_numbers.findIndex(
+            return modelNumbers.findIndex(
               (x) => x == desc.model_number
             ) > -1;
         });
@@ -64,11 +65,11 @@ class InventoryItemsIdentityMap {
      * @param {string[]} modelNumbers a list of alpha-numberical model numbers
      * @return {Object[]} a list of objects corresponding to the given model
      */
-    getByModelNumbers(model_numbers) {
+    getByModelNumbers(modelNumbers) {
         let allItems = this.getAll();
         if (allItems != null) {
         let results = allItems.filter(function(item) {
-            return model_numbers.findIndex((x) => x == item.model_number) > -1;
+            return modelNumbers.findIndex((x) => x == item.model_number) > -1;
         });
         return results;
         } else return [];
@@ -79,10 +80,12 @@ class InventoryItemsIdentityMap {
      * @param {Object[]} newInventoryItems a list containing new items
      */
     add(newInventoryItems) {
-        for (var i = 0; i < newInventoryItems.length; i++) {
-            if (this.InventoryItems.findIndex((p) => p.serial_number == newInventoryItems[i].serial_number) === -1) {
-this.InventoryItems.push(newInventoryItems[i]);
-}
+        for (let i = 0; i < newInventoryItems.length; i++) {
+            if (this.InventoryItems.findIndex(
+              (p) =>
+                p.serial_number == newInventoryItems[i].serial_number) === -1) {
+                this.InventoryItems.push(newInventoryItems[i]);
+              }
         }
     }
 
