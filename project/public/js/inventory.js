@@ -141,7 +141,6 @@ $(document).ready(function() {
         {'data': 'price'},
         {'data': 'weight'},
         {'data': 'type'},
-        {'data': 'isAvailable'},
       ],
     });
     $('#table_inventory tbody').on('click', 'td.details-control', function() {
