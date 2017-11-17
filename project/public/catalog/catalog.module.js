@@ -26,7 +26,7 @@ function catalogController($scope) {
     $.ajax({
       url:'/manageProductCatalog',
       type: 'post',
-      data: {'productDescriptions':$scope.products},
+      data: {"productDescriptions":JSON.stringify($scope.products)},
       dataType: 'json',
       success: function(response){
 

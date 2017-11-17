@@ -451,9 +451,9 @@ var Controller = function () {
         } else if (req.session.exists == true && req.session.isAdmin == false) {
           //update descriptions?
           //this.updateInventoryList(results);
-          res.render('catalog', { items: JSON.stringify(results), search: search });
+          res.render('/login');
         } else {
-          res.render('catalog', { items: JSON.stringify(results), search: search });
+          res.render('/login');
         }
       }).catch(function (err) {
         console.log(err);
@@ -462,23 +462,14 @@ var Controller = function () {
   }, {
     key: 'manageProductCatalog',
     value: function manageProductCatalog(req, res) {
-      console.log(JSON.stringify(req.body));
-      var results = this.productDescriptionRepo.save(productDescriptions);
-    }
-    /*
-    manageInventory() {
-      let results = this.inventoryRepo.save(toSave);
-    >>>>>>> 2413f9c6a06c9a687673fe13e9b0e25e5630ad9b
-    }
-    
-    <<<<<<< HEAD
-    mapInventoryItems(inventory){
-      }
-    mapRPoductDescriptions(catalog){
-      }
-    =======
-    */
+      var _this10 = this;
 
+      var productDescriptions = JSON.parse(req.body.productDescriptions);
+      var results = this.productDescriptionRepo.save(productDescriptions).then(function (results) {
+        console.log('Success saving the Product descriptions!');
+        _this10.getCatalog(req, res);
+      });
+    }
   }, {
     key: 'logout',
     value: function logout(req, res) {

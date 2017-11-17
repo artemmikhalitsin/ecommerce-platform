@@ -57,7 +57,7 @@ class ProductDescriptionsIdentityMap {
         let allProducts = this.getAll();
         if (allProducts != null) {
           let results = allProducts.filter(
-            (desc) => modelNumbers.includes(desc.model_number)
+            (desc) => modelNumbers.includes(desc.modelNumber)
           );
           return results;
         } else return [];
@@ -72,12 +72,12 @@ class ProductDescriptionsIdentityMap {
         if (newProductDescriptions.length > 0) {
           // Extract model numbers of each product
           let existingModelNumbers = this.productDesc.map(
-            (product) => product.model_number
+            (product) => product.modelNumber
           );
           for (let i = 0; i < newProductDescriptions.length; i++) {
               let productToAdd = newProductDescriptions[i];
               // Add only if item isn't already in the known model numbers
-              if (!existingModelNumbers.includes(productToAdd.model_number)) {
+              if (!existingModelNumbers.includes(productToAdd.modelNumber)) {
                 this.productDesc.push(productToAdd);
               }
           }
@@ -90,7 +90,7 @@ class ProductDescriptionsIdentityMap {
      */
     delete(productDescriptionsToRemove) {
         this.productDesc = this.productDesc.filter(
-          (desc) => !productDescriptionsToRemove.includes(desc.model_number)
+          (desc) => !productDescriptionsToRemove.includes(desc.modelNumber)
       );
     }
 }

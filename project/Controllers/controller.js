@@ -351,33 +351,21 @@ class Controller {
       } else if (req.session.exists==true && req.session.isAdmin==false) {
         //update descriptions?
         //this.updateInventoryList(results);
-        res.render('catalog', {items: JSON.stringify(results), search: search});
+        res.render('/login');
       } else {
-        res.render('catalog', {items: JSON.stringify(results), search: search});
+        res.render('/login');
       }
       }).catch((err) => {
       console.log(err);
     });
   }
   manageProductCatalog(req, res) {
-    console.log(JSON.stringify(req.body.productDescriptions));
-    let results = this.productDescriptionRepo.save(productDescriptions);
+    let productDescriptions = JSON.parse(req.body.productDescriptions);
+    let results = this.productDescriptionRepo.save(productDescriptions).then((results) => {
+      console.log('Success saving the Product descriptions!');
+      this.getCatalog(req, res);
+    });
   }
-  /*
-  manageInventory() {
-    let results = this.inventoryRepo.save(toSave);
->>>>>>> 2413f9c6a06c9a687673fe13e9b0e25e5630ad9b
-  }
-  
-<<<<<<< HEAD
-  mapInventoryItems(inventory){
-
-  }
-  mapRPoductDescriptions(catalog){
-
-  }
-=======
-  */
 
   logout(req, res) {
     if (req.session.exists) {

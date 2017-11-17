@@ -18,8 +18,8 @@ class MonitorsTDG {
      */
     add(monitor) {
         return connection.insert({
-            'model_number': monitor.model_number,
-            'display_size': monitor.display_size,
+            'model_number': monitor.modelNumber,
+            'display_size': monitor.displaySize,
         }, 'id')
         .into('Monitor');
     }
@@ -70,9 +70,9 @@ class MonitorsTDG {
     update(monitor) {
       // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
-          'model_number': monitor.model_number,
-          'display_size': monitor.display_size,
-        }).from('Monitor').where({id: monitor.id});
+          //'model_number': monitor.modelNumber,
+          'display_size': monitor.displaySize,
+        }).from('Monitor').where({'model_number': monitor.modelNumber});
     }
 }
 module.exports = MonitorsTDG;

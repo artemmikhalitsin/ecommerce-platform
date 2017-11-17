@@ -104,6 +104,7 @@ class ProductDescriptionRepository {
     if (products.length <= 0 || products.length < ids.length) {
       let prodDescFromTDG = this.productDescTDG.getAll();
             Promise.all([prodDescFromTDG]).then((values)=>{
+              console.log("The tdg returns: " + JSON.stringify(values));
               products = values[0];
               // REVIEW: This function has a side effect,
               // even though it is an accessor - is this intended functionality?
@@ -125,36 +126,41 @@ class ProductDescriptionRepository {
   save(products) {
     let electronicsToAdd = [];
     let electronicsToUpdate = [];
-    let electronicsToDelete = [];
 
-    let productIds = products.map((p) => p.model_number);
-
+    let productIds = products.map((p) => p.modelNumber);
+    console.log(JSON.stringify(productIds) + "Are product ids");
+    console.log(JSON.stringify(products));
     if (productIds.length > 0) {
     let context = this.getByIds(productIds);
+    console.log("The context is: " + JSON.stringify(context));
     let allRecords = this.ProductDescriptionIM.getAll();
     for (let i = 0; i < products.length; i++) {
       if (context.findIndex(
-        (p) => p.model_number == products[i].model_number) !== -1
+        (p) => p.modelNumber == products[i].modelNumber) !== -1
           && electronicsToUpdate.findIndex(
-            (e) => e.model_number == products[i].model_number) === -1) {
+            (e) => e.modelNumber == products[i].modelNumber) === -1) {
             // Case: the product exists in our list of products
             // and hasn't already been processed
             electronicsToUpdate.push(products[i]);
       } else if (allRecords.findIndex(
-        (p) => p.model_number == products[i].model_number) === -1
+        (p) => p.modelNumber == products[i].modelNumber) === -1
               && electronicsToAdd.findIndex(
-                (e) => e.model_number == products[i].model_number) === -1) {
+                (e) => e.modelNumber == products[i].modelNumber) === -1) {
                 // Case: the product doesn't exist in our list of products
                 // and hasn't already been processed
                 electronicsToAdd.push(products[i]);
               }
     }
   }
+  console.log("The new elements; " + JSON.stringify(electronicsToAdd));
+  console.log("The elements to update" + JSON.stringify(electronicsToUpdate));
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);
 
-    this.uow.commitAll();
-    this.ProductDescriptionIM.add(electronicsToAdd);
+    return this.uow.commitAll().then((result) => {
+      this.ProductDescriptionIM.add(electronicsToAdd);
+      return true;
+    });
   }
 }
 

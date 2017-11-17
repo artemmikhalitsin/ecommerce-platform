@@ -17,10 +17,10 @@ class ComputersTDG {
      */
     add(computer) {
         return connection.insert({
-            'processor_type': computer.processor_type,
-            'ram_size': computer.ram_size,
-            'number_cpu_cores': computer.number_cpu_cores,
-            'harddrive_size': computer.harddrive_size,
+            'processor_type': computer.processorType,
+            'ram_size': computer.ramSize,
+            'number_cpu_cores': computer.numberCpuCores,
+            'harddrive_size': computer.harddriveSize,
         }, 'comp_id')
         .into('Computer');
     }
@@ -37,11 +37,11 @@ class ComputersTDG {
     update(computer) {
         // REVIEW: This was marked as todo - is this still the case? - Artem
         return connection.update({
-          'processor_type': computer.processor_type,
-          'ram_size': computer.ram_size,
-          'number_cpu_cores': computer.number_cpu_cores,
-          'harddrive_size': computer.harddrive_size,
-        }).from('Computer').where({comp_id: computer.comp_id});
+          'processor_type': computer.processorType,
+          'ram_size': computer.ramSize,
+          'number_cpu_cores': computer.numberCpuCores,
+          'harddrive_size': computer.harddriveSize,
+        }).from('Computer').where({comp_id: computer.computerId});
     }
 }
 module.exports = ComputersTDG;
