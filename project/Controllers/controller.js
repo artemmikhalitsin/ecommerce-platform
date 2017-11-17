@@ -359,14 +359,16 @@ class Controller {
       console.log(err);
     });
   }
+  manageProductCatalog(req, res) {
+    console.log(JSON.stringify(req.body));
+    let results = this.productDescriptionRepo.save(productDescriptions);
+  }
   /*
   manageInventory() {
     let results = this.inventoryRepo.save(toSave);
 >>>>>>> 2413f9c6a06c9a687673fe13e9b0e25e5630ad9b
   }
-  manageProductCatalog(productDescriptions) {
-    let results = this.productDescriptionRepo.save(productDescriptions);
-  }
+  
 <<<<<<< HEAD
   mapInventoryItems(inventory){
 

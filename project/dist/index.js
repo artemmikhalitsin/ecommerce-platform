@@ -91,10 +91,17 @@ app.get('/catalog', function (req, res) {
     controller.getCatalog(req, res);
   } else {
     console.log('login error');
-    controller.getCatalog(req, res);
+    controller.getAllInventory(req, res);
   }
 });
-
+app.post('/manageProductCatalog', function (req, res) {
+  if (req.session.exists) {
+    controller.manageProductCatalog(req, res);
+  } else {
+    console.log('login error');
+    controller.getAllInventory(req, res);
+  }
+});
 // getting the client inventory from the database
 app.get('/clientInventory', function (req, res) {
   controller.getAllInventory(req, res);

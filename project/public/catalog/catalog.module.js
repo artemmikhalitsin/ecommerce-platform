@@ -22,6 +22,22 @@ function catalogController($scope) {
         }
     });
   };
+  $scope.submit = function(){
+    $.ajax({
+      url:'/manageProductCatalog',
+      type: 'post',
+      data: $scope.products,
+      dataType: 'json',
+      success: function(response){
+
+      },
+      error: function(error){
+        $('#error-box').show();
+        $('#error-message').html(error);
+        console.log(error);
+      }
+    });
+  };
 }
 
 catalog.controller('CatalogController', ['$scope', catalogController]);
