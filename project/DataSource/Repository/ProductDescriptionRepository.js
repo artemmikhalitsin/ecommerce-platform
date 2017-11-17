@@ -14,7 +14,7 @@ let MonitorsTDG = require(rootPath
   + '/DataSource/TableDataGateway/MonitorsTDG.js');
 let TabletsTDG = require(rootPath
   + '/DataSource/TableDataGateway/TabletsTDG.js');
-let ProductDescription = require(rootPath + '/models/ProductDescription.js');
+// let ProductDescription = require(rootPath + '/models/ProductDescription.js');
 
 /**
  * Repository for product descrptions
@@ -124,7 +124,7 @@ class ProductDescriptionRepository {
   save(products) {
     let electronicsToAdd = [];
     let electronicsToUpdate = [];
-    let electronicsToDelete = [];
+    // let electronicsToDelete = [];
 
     let productIds = products.map((p) => p.model_number);
 

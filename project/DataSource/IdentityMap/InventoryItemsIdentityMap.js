@@ -14,7 +14,6 @@ class InventoryItemsIdentityMap {
      */
     constructor() {
         this.rootPath = require('app-root-dir').get();
-        let UnitOfWork = require(this.rootPath + '/DataSource/UnitOfWork.js');
         let InventoryItemsTDG = require(this.rootPath
           + '/DataSource/TableDataGateway/InventoryItemsTDG.js');
         this.inventoryTDG = new InventoryItemsTDG();
