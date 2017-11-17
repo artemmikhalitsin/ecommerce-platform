@@ -298,7 +298,7 @@ class UnitOfWork {
   }
 
   // TODO: DELETE
- /* getAllInventoryItems() {
+  getAllInventoryItems() {
     return new Promise((resolve, reject) => {
       let desktops = this.getAllDesktops();
       let laptops = this.getAllLaptops();
@@ -335,7 +335,7 @@ class UnitOfWork {
       }))
       .catch((err) => reject(err));
     });
-  }*/
+  }
 
   // this function is getting all the model numbers from all the products
   getAllModelNumbers(products) {

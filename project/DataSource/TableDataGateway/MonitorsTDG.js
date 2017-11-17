@@ -70,7 +70,7 @@ class MonitorsTDG {
     update(monitor) {
       // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
-          //'model_number': monitor.modelNumber,
+          // 'model_number': monitor.modelNumber,
           'display_size': monitor.displaySize,
         }).from('Monitor').where({'model_number': monitor.modelNumber});
     }

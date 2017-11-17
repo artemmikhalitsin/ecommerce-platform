@@ -103,7 +103,7 @@ class ProductDescriptionRepository {
     if (products.length <= 0 || products.length < ids.length) {
       let prodDescFromTDG = this.productDescTDG.getAll();
             Promise.all([prodDescFromTDG]).then((values)=>{
-              console.log("The tdg returns: " + JSON.stringify(values));
+              console.log('The tdg returns: ' + JSON.stringify(values));
               products = values[0];
               // REVIEW: This function has a side effect,
               // even though it is an accessor - is this intended functionality?
@@ -127,11 +127,11 @@ class ProductDescriptionRepository {
     let electronicsToUpdate = [];
 
     let productIds = products.map((p) => p.modelNumber);
-    console.log(JSON.stringify(productIds) + "Are product ids");
+    console.log(JSON.stringify(productIds) + 'Are product ids');
     console.log(JSON.stringify(products));
     if (productIds.length > 0) {
     let context = this.getByIds(productIds);
-    console.log("The context is: " + JSON.stringify(context));
+    console.log('The context is: ' + JSON.stringify(context));
     let allRecords = this.ProductDescriptionIM.getAll();
     for (let i = 0; i < products.length; i++) {
       if (context.findIndex(
@@ -151,8 +151,8 @@ class ProductDescriptionRepository {
               }
     }
   }
-  console.log("The new elements; " + JSON.stringify(electronicsToAdd));
-  console.log("The elements to update" + JSON.stringify(electronicsToUpdate));
+  console.log('The new elements; ' + JSON.stringify(electronicsToAdd));
+  console.log('The elements to update' + JSON.stringify(electronicsToUpdate));
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);
 

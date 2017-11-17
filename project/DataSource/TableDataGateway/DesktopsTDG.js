@@ -102,14 +102,14 @@ class DesktopsTDG {
      * rows affected
      */
     update(compId, dimensionsId, desktop) {
-        console.log("the comp id: " + compId + " or " + desktop.computerId);
-        console.log("the model _ number: " + desktop.modelNumber);
-        console.log("the dimensions id: " + dimensionsId + " or "
+        console.log('the comp id: ' + compId + ' or ' + desktop.computerId);
+        console.log('the model _ number: ' + desktop.modelNumber);
+        console.log('the dimensions id: ' + dimensionsId + ' or '
                     + desktop.dimensions.id);
         console.log('id' + desktop.id);
         return connection.update({
         'comp_id': compId,
-        //'model_number': desktop.modelNumber,
+        // 'model_number': desktop.modelNumber,
         'dimension_id': dimensionsId,
       }).from('Desktop').where({'model_number': desktop.modelNumber});
     }

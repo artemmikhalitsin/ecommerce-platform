@@ -126,7 +126,6 @@ function formatChildRows( data ) {
   </div>`;
 }
 
-
 $(document).ready(function() {
     let inventory_table = $('#table_inventory').DataTable({
       data: data,
@@ -137,8 +136,8 @@ $(document).ready(function() {
             'data': null,
             'defaultContent': '',
         },
-        {'data': 'model_number'},
-        {'data': 'brand_name'},
+        {'data': 'modelNumber'},
+        {'data': 'brandName'},
         {'data': 'price'},
         {'data': 'weight'},
         {'data': 'type'},

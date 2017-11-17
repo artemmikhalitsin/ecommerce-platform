@@ -1,3 +1,4 @@
+const Promise = require('bluebird');
 const rootPath = require('app-root-dir').get();
 const ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
@@ -5,12 +6,14 @@ const InventoryItemRepository = require(rootPath +
   '/DataSource/Repository/InventoryItemRepository.js');
 const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
-const PurchaseCollectionRepo = require(rootPath
-    + '/DataSource/Repository/PurchaseCollectionRepository.js');
+const PurchaseCollectionRepo = require(rootPath +
+  '/DataSource/Repository/PurchaseCollectionRepository.js');
 const ShoppingCart = require(rootPath +
-    '/models/ShoppingCart.js');
-const TransactionLogRepository = require(rootPath
-      + '/DataSource/Repository/TransactionLogRepository.js');
+  '/models/ShoppingCart.js');
+const TransactionLogRepository = require(rootPath +
+  '/DataSource/Repository/TransactionLogRepository.js');
+const InventoryItem = require(rootPath +
+  '/models/InventoryItem.js');
 
 /**
  * Identity map of inventory items
@@ -365,25 +368,35 @@ class Controller {
   getAllInventory(req, res) {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;
-    let prodDesc = this.inventoryRepo.getAllInventoryItems();
-    Promise.all([prodDesc])
-    .then((values) => {
-      let items = JSON.stringify(values[0]);
-      // items = JSON.stringify(toSave);
-      // console.log('Values: ', items);
-
+    let inventory = [];
+    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
+    .then((results)=>{
+       return Promise.each(results, (product)=>{
+        return this.inventoryRepo.getByModelNumbers([product.modelNumber]).then(
+          (values)=>{
+            console.log('PRINTING THE VALUES: ');
+            console.log(values);
+            product.serial_numbers = values.map((p) => p.serial_number);
+            inventory.push(product);
+            console.log('PRINGTING THE PRODUCT');
+            console.log(product);
+          });
+        });
+      }).then((val)=>{
+        console.log('Values: ', JSON.stringify(inventory));
       if (req.session.exists==true && req.session.isAdmin==true) {
-        res.render('inventory', {items: items, search: search});
+        res.render('inventory', {items: JSON.stringify(inventory), search: search});
+      } else if (req.session.exists==true && req.session.isAdmin==false) {
+        this.updateInventoryList(inventory);
+        res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
       } else {
-        this.updateInventoryList(values[0]); // Populate shopping inventory list
-        res.render('clientInventory', {search: search});
+        res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
       }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      }).catch((err) => {
+        console.log(err);
+      });
   }
-  
+
   manageProductCatalog(req, res) {
     let productDescriptions = JSON.parse(req.body.productDescriptions);
     let results = this.productDescriptionRepo.save(productDescriptions).then(

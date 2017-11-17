@@ -62,6 +62,8 @@ app.get('/registration', function(req, res) {
   }
 });
 
+// NOTE: THIS ROUTE DOES NOT WORK ANYMORE DUE TO THE FILE NAME CHANGES
+// MAYBE IT GOT REPLACED BY SOMETHING ELSE
 app.get('/addProduct', function(req, res) {
   if (req.session.exists) {
     res.render('inventory/new-product');

@@ -116,7 +116,7 @@ class TabletsTDG {
       // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
           'comp_id': tablet.computerId,
-          //'model_number': tablet.modelNumber,
+          // 'model_number': tablet.modelNumber,
           'dimension_id': tablet.dimensions.id,
           'display_size': tablet.displaySize,
           'battery_info': tablet.batteryInfo,

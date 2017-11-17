@@ -36,7 +36,7 @@ class ProductDescriptionsTDG {
     let results = [];
     return connection('ProductDescription').select('*')
       .then((productDescriptions) => {
-        productDescriptions.forEach(function(description){
+        productDescriptions.forEach(function(description) {
           results.push(new ProductDescription(
             description.price,
             description.weight,
@@ -54,7 +54,7 @@ class ProductDescriptionsTDG {
       .select('*')
       .where({model_number: modelNumber})
       .then((productDescriptions) => {
-      productDescriptions.forEach(function(description){
+      productDescriptions.forEach(function(description) {
         results.push(new ProductDescription(
           description.price,
           description.weight,
