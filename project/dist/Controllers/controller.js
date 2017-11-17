@@ -4,14 +4,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Promise = require('bluebird');
 var rootPath = require('app-root-dir').get();
 var ProductDescriptionRepository = require(rootPath + '/DataSource/Repository/ProductDescriptionRepository.js');
 var InventoryItemRepository = require(rootPath + '/DataSource/Repository/InventoryItemRepository.js');
 var UserRepository = require(rootPath + '/DataSource/Repository/UserRepository.js');
 var PurchaseCollectionRepo = require(rootPath + '/DataSource/Repository/PurchaseCollectionRepository.js');
 var ShoppingCart = require(rootPath + '/models/ShoppingCart.js');
-var InventoryItem = require(rootPath + '/models/InventoryItem.js');
+var TransactionLogRepository = require(rootPath + '/DataSource/Repository/TransactionLogRepository.js');
 
 /**
  * Identity map of inventory items
@@ -30,10 +29,9 @@ var Controller = function () {
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
     this.purchaseCollectionRepo = new PurchaseCollectionRepo();
-    // List of inventory items, key: serial number, value: locked or not locked
-    this.clientInventory = {};
-    // List of shopping carts associated to users key:user, value: shopping cart
-    this.shoppingCartList = {};
+    this.transactionRepo = new TransactionLogRepository();
+    this.clientInventory = {}; // key: serial, value: locked or not locked
+    this.shoppingCartList = {}; // carts associated to users k:user, v: cart
     this.url = require('url');
     this.crypto = require('crypto');
   }
@@ -57,7 +55,7 @@ var Controller = function () {
       var salted = userData['email'] + password + 'salt';
       userData['password'] = hash.update(salted).digest('hex');
       if (password != confirmPassword) {
-        console.log('password confirmation failed. please try again...');
+        console.log('password confirmation failed. try again...');
         res.redirect('/registration');
       } else {
         delete userData['confirmPassword'];
@@ -118,7 +116,7 @@ var Controller = function () {
       var _this3 = this;
 
       var _checkPostcondition = function _checkPostcondition(it) {
-        if (!_this3.shoppingCartList[req.session.user.toString()].getCartSerialNumbers().includes(req.body.serialNumber)) {
+        if (!_this3.shoppingCartList[req.session.email.toString()].getCartSerialNumbers().includes(req.body.serialNumber)) {
           throw new Error('Item was not added to the cart');
         }
 
@@ -129,7 +127,7 @@ var Controller = function () {
         return it;
       };
 
-      if (!(req.session.user != null)) {
+      if (!(req.session.email != null)) {
         throw new Error('User is not logged in');
       }
 
@@ -141,8 +139,8 @@ var Controller = function () {
         throw new Error('Item is locked');
       }
 
-      if (this.shoppingCartList[req.session.user.toString()]) {
-        if (!(Object.keys(this.shoppingCartList[req.session.user.toString()].getCart()).length < 7)) {
+      if (this.shoppingCartList[req.session.email.toString()]) {
+        if (!(Object.keys(this.shoppingCartList[req.session.email.toString()].getCart()).length < 7)) {
           throw new Error('Cart has more than 7 items!');
         }
       }
@@ -151,11 +149,11 @@ var Controller = function () {
       var item = req.body.serialNumber;
       var productNumber = req.body.modelNumber;
       if (this.lockItem(item)) {
-        var _user = req.session.user.toString();
-        if (!this.shoppingCartList[_user]) {
-          this.shoppingCartList[_user] = new ShoppingCart();
+        var user = req.session.email.toString();
+        if (!this.shoppingCartList[user]) {
+          this.shoppingCartList[user] = new ShoppingCart();
         }
-        this.shoppingCartList[_user].addToCart(item, productNumber);
+        this.shoppingCartList[user].addToCart(item, productNumber);
         res.status(200).send({ success: 'successfully added' });
       } else {
         res.status(500).send({ error: 'item already in another cart' });
@@ -169,7 +167,7 @@ var Controller = function () {
       var _this4 = this;
 
       var _checkPostcondition2 = function _checkPostcondition2(it) {
-        if (!!_this4.shoppingCartList[req.session.user.toString()].getCartSerialNumbers().includes(req.body.serialNumber)) {
+        if (!!_this4.shoppingCartList[req.session.email.toString()].getCartSerialNumbers().includes(req.body.serialNumber)) {
           throw new Error('Item was not removed from the cart');
         }
 
@@ -180,17 +178,24 @@ var Controller = function () {
         return it;
       };
 
-      if (!(req.session.user != null)) {
+      if (!(req.session.email != null)) {
         throw new Error('User is not logged in');
       }
 
-      if (!(this.shoppingCartList[req.session.user.toString()] != null)) {
+      if (!this.clientInventory[req.body.serialNumber].locked) {
+        throw new Error('Item is not locked');
+      }
+
+      if (!(this.shoppingCartList[req.session.email.toString()] != null)) {
         throw new Error('Shopping cart doesn\'t exists');
       }
 
+      var user = req.session.email;
       var item = req.body.serialNumber;
       this.shoppingCartList[user].removeFromCart(item);
+      this.clientInventory[item].locked = false;
       clearTimeout(this.clientInventory[item].timeout);
+      res.status(200).send({ success: 'Hurray!' });
 
       _checkPostcondition2();
     }
@@ -251,7 +256,7 @@ var Controller = function () {
       } else {
         this.clientInventory[itemToLock].locked = true;
         // Store pointer of timeout function
-        this.clientInventory[itemToLock].timeout = setTimeout(this.unlockItem.bind(this), 100000, itemToLock);
+        this.clientInventory[itemToLock].timeout = setTimeout(this.unlockItem.bind(this), 300000, itemToLock);
         return _checkPostcondition4(true);
       }
 
@@ -281,18 +286,18 @@ var Controller = function () {
       var _this7 = this;
 
       var _checkPostcondition5 = function _checkPostcondition5(it) {
-        if (!(_this7.shoppingCartList[req.session.user.toString()] == null)) {
+        if (!(_this7.shoppingCartList[req.session.email.toString()] == null)) {
           throw new Error('Shopping cart still exists');
         }
 
         return it;
       };
 
-      if (!(Object.keys(this.shoppingCartList[req.session.user.toString()].getCart()).length <= 7)) {
+      if (!(Object.keys(this.shoppingCartList[req.session.email.toString()].getCart()).length <= 7)) {
         throw new Error('Cart size too big');
       }
 
-      var user = req.session.user.toString();
+      var user = req.session.email.toString();
       var cart = Object.values(this.shoppingCartList[user].getCart());
       var purchases = [];
       for (var i in Object.keys(cart)) {
@@ -306,9 +311,12 @@ var Controller = function () {
           delete this.clientInventory[cart[i].serial];
         }
       }
+      var transaction = [{ client: user,
+        timestamp: new Date().toISOString() }];
+
       this.purchaseCollectionRepo.save(purchases);
+      this.transactionRepo.save(transaction);
       this.deleteShoppingCart(user);
-      console.log('purchase completed successfully');
       res.status(200).send({ success: 'Successful purchase' });
 
       _checkPostcondition5();
@@ -326,18 +334,18 @@ var Controller = function () {
       var _this8 = this;
 
       var _checkPostcondition6 = function _checkPostcondition6(it) {
-        if (!(_this8.shoppingCartList[req.session.user.toString()] == null)) {
-          throw new Error('Function  postcondition failed: this.shoppingCartList[req.session.user.toString()] == null');
+        if (!(_this8.shoppingCartList[req.session.email.toString()] == null)) {
+          throw new Error('Function  postcondition failed: this.shoppingCartList[req.session.email.toString()] == null');
         }
 
         return it;
       };
 
-      if (!(this.shoppingCartList[req.session.user.toString()] != null)) {
-        throw new Error('Function  precondition failed: this.shoppingCartList[req.session.user.toString()] != null');
+      if (!(this.shoppingCartList[req.session.email.toString()] != null)) {
+        throw new Error('Function  precondition failed: this.shoppingCartList[req.session.email.toString()] != null');
       }
 
-      var user = req.session.user.toString();
+      var user = req.session.email.toString();
       var cartItems = this.shoppingCartList[user].getCartSerialNumbers();
       for (var item = 0; item < cartItems.length; item++) {
         console.log(cartItems[item]);
@@ -383,6 +391,7 @@ var Controller = function () {
      * the database
      * @param {Object} req HTTP Request object containing query info
      * @param {Object} res HTTP Response object to be send back to the user
+<<<<<<< HEAD
      */
 
   }, {
@@ -425,9 +434,63 @@ var Controller = function () {
     }
     manageProductCatalog() {
       let results = this.productDescriptionRepo.save(toSave);
-    }
-    */
+=======
+     */
 
+  }, {
+    key: 'getAllInventory',
+    value: function getAllInventory(req, res) {
+      var _this9 = this;
+
+      var query = this.url.parse(req.url, true).query;
+      var search = query.search;
+      var prodDesc = this.inventoryRepo.getAllInventoryItems();
+      Promise.all([prodDesc]).then(function (values) {
+        var items = JSON.stringify(values[0]);
+        // items = JSON.stringify(toSave);
+        // console.log('Values: ', items);
+
+        if (req.session.exists == true && req.session.isAdmin == true) {
+<<<<<<< HEAD
+          res.render('catalog', { items: JSON.stringify(results), search: search });
+        } else if (req.session.exists == true && req.session.isAdmin == false) {
+          //update descriptions?
+          //this.updateInventoryList(results);
+          res.render('/login');
+        } else {
+          res.render('/login');
+=======
+          res.render('inventory', { items: items, search: search });
+        } else {
+          _this9.updateInventoryList(values[0]); // Populate shopping inventory list
+          res.render('clientInventory', { search: search });
+>>>>>>> 95e1c590353252448b759a74568ac2b4553fe071
+        }
+      }).catch(function (err) {
+        console.log(err);
+      });
+>>>>>>> 8c6de9439be15fed271328a4c7a3b60440f36048
+    }
+<<<<<<< HEAD
+  }, {
+    key: 'manageProductCatalog',
+    value: function manageProductCatalog(req, res) {
+      var _this10 = this;
+=======
+
+    /**
+     * Processes an inventory action initiated by the user
+     * @param {Object} req HTTP request object containing action info
+     * @param {Object} res HTTP response object to be returned to the user
+     */
+>>>>>>> 95e1c590353252448b759a74568ac2b4553fe071
+
+      var productDescriptions = JSON.parse(req.body.productDescriptions);
+      var results = this.productDescriptionRepo.save(productDescriptions).then(function (results) {
+        console.log('Success saving the Product descriptions!');
+        _this10.getCatalog(req, res);
+      });
+    }
   }, {
     key: 'logout',
     value: function logout(req, res) {
@@ -436,13 +499,6 @@ var Controller = function () {
         res.redirect('/');
       }
     }
-
-    /**
-     * Processes an inventory action initiated by the user
-     * @param {Object} req HTTP request object containing action info
-     * @param {Object} res HTTP response object to be returned to the user
-     */
-
   }, {
     key: 'inventoryAction',
     value: function inventoryAction(req, res) {
@@ -498,6 +554,20 @@ var Controller = function () {
       } else {
         res.render('login', { error: 'Invalid username/password' });
       }
+    }
+  }, {
+    key: 'getProductInfo',
+    value: function getProductInfo(req, res, other) {
+      this.inventoryRepo.getAllInventoryItems().then(function (result) {
+        res.json(result);
+      });
+    }
+  }, {
+    key: 'getClients',
+    value: function getClients(req, res) {
+      this.userRepo.getAdmins().then(function (result) {
+        res.json(result);
+      });
     }
   }]);
 

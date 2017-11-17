@@ -25,7 +25,7 @@ class DesktopsTDG {
     add(compId, dimensionsId, desktop) {
         return connection.insert({
             'comp_id': compId,
-            'model_number': desktop.model_number,
+            'model_number': desktop.modelNumber,
             'dimension_id': dimensionsId,
         }, 'id')
         .into('Desktop');
@@ -53,7 +53,12 @@ class DesktopsTDG {
                       desktop.weight,
                       desktop.brand_name,
                       desktop.model_number,
+<<<<<<< HEAD
                       desktop.comp_id);
+=======
+                      desktop.comp_id, 
+                      desktop.type)
+>>>>>>> 8c6de9439be15fed271328a4c7a3b60440f36048
                   result.push(d);
               });
               return result;
@@ -82,7 +87,8 @@ class DesktopsTDG {
                       desktop.weight,
                       desktop.brand_name,
                       desktop.model_number,
-                      desktop.comp_id));
+                      desktop.comp_id, 
+                      desktop.type));
           });
           return result;
       });
@@ -98,11 +104,15 @@ class DesktopsTDG {
      * rows affected
      */
     update(compId, dimensionsId, desktop) {
+        console.log("the comp id: " + compId + " or " + desktop.computerId);
+        console.log("the model _ number: " + desktop.modelNumber);
+        console.log("the dimensions id: " + dimensionsId + " or " + desktop.dimensions.id);
+        console.log('id' + desktop.id);
         return connection.update({
-        'model_number': desktop.model_number,
-        'dimension_id': desktop.dimension.dimensions_id,
-      }).from('Desktop').where({id: desktop.id});
-      // REVIEW: This was marked todo, is this still the case? - Artem
+        'comp_id': compId,
+        //'model_number': desktop.modelNumber,
+        'dimension_id': dimensionsId,
+      }).from('Desktop').where({'model_number': desktop.modelNumber});
     }
 }
 module.exports = DesktopsTDG;

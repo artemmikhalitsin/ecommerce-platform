@@ -1,3 +1,4 @@
+
 /* eslint-disable */
 // Eslint disabled for this file only until it is documented
 
@@ -156,7 +157,7 @@ class UnitOfWork {
                case 'Desktop':
                  {
                    return this.dimensionsTDG
-                    .update(electronic.dimension)
+                    .update(electronic.dimensions)
                     .transacting(trx)
                     .then(
                       (dimensionsId) => {
@@ -188,7 +189,7 @@ class UnitOfWork {
                case 'Tablet':
                  {
                    return this.dimensionsTDG
-                    .update(electronic.dimension)
+                    .update(electronic.dimensions)
                     .transacting(trx)
                     .then(
                       (dimensionsId) => {
@@ -233,7 +234,7 @@ class UnitOfWork {
                 case 'Desktop':
                   {
                     return this.dimensionsTDG
-                      .add(electronic)
+                      .add(electronic.dimensions)
                       .transacting(trx)
                       .then(
                         (dimensionsId) => {
@@ -265,7 +266,7 @@ class UnitOfWork {
                 case 'Tablet':
                   {
                     return this.dimensionsTDG
-                      .add(electronic)
+                      .add(electronic.dimensions)
                       .transacting(trx)
                       .then(
                         (dimensionsId) => {
@@ -424,3 +425,4 @@ class UnitOfWork {
   }
 }
 module.exports = UnitOfWork;
+
