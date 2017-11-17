@@ -36,12 +36,73 @@ class Controller {
   }
 
   /**
+   * Validates the registration request sent by the user
+   * @author Ajmer
+   * NOTE: Still in progress
+   */
+  validateRegistrationRequest(userData){
+    let errors = [];
+    let errorMessage;
+    Object.keys(userData).forEach((element) => {
+      if (userData[element] == "") {
+        errorMessage = "The " + element + " cannot be empty!";
+        errors.push(errorMessage);
+      }
+    });
+
+    if (errors.length == 0) {
+      console.log("there are no errors");
+      let phone = userData['phone_number'];
+      let email = userData['email'];
+      let password = userData['password'];
+      let confirmPassword = userData['confirmPassword'];
+
+      // validating the phone number
+      // phone number regex \b\d{3}[-. ]?\d{3}[-. ]?\d{4}\b
+      if (!isNaN(phone)) {
+        console.log("is a number");
+        if (phone.length < 10 || phone.length > 10) {
+          console.log("less/more then 10 digits");
+          errors.push("The phone number should have exactly 10 digits");
+        }
+      } else {
+        errors.push("The phone number can only contain digits");
+        console.log("not a number");
+      }
+
+      // checking email (BAD)
+      if (email.includes("@")) {
+        console.log("email contains @ sign");
+      } else {
+        console.log("invalid email");
+      }
+
+      // Checking password
+      if (password.length < 6 || password.length > 20) {
+        console.log("Password is not between 6 and 20 characters");
+      } else {
+        if (password === confirmPassword) {
+          console.log("password matches");
+        } else {
+          console.log("password dont match");
+        }
+      }
+    } else {
+      console.log("there was at least one error. they are as follows");
+      console.log(errors);
+    }
+  }
+
+  /**
    * Processes a registration registrationRequest
    * @param {Object} req Incoming HTTP request containing registration info
    * @param {Object} res HTTP Response object to be sent back to user
    */
   registrationRequest(req, res) {
     let userData = req.body;
+    this.validateRegistrationRequest(userData);
+
+/*
     let password = userData['password'];
     let confirmPassword = userData['confirmPassword'];
     let hash = this.crypto.createHash('sha256');
@@ -77,6 +138,7 @@ class Controller {
         console.log('something bad happened');
       });
     }
+  */
   }
 
   /**
@@ -337,7 +399,7 @@ class Controller {
       res.redirect('/');
     }
   }
-  
+
   /**
    * Processes an inventory action initiated by the user
    * @param {Object} req HTTP request object containing action info
