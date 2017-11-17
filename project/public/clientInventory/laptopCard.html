@@ -1,9 +1,9 @@
 <!--Card-->
 <div class="card" style="height:48rem;" ng-class="{false:'flip-to-front', true:'flip-to-back'}[rotated]">
-  <div class="front">
+  <div class="front" style="width: 100%;">
     <!--Card image-->
     <div class="view overlay hm-white-slight">
-        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20%287%29.jpg" class="img-fluid" alt="">
+        <!--img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20%287%29.jpg" class="img-fluid" alt=""-->
     </div>
     <!--Card content-->
     <div class="card-body">
@@ -12,12 +12,12 @@
         <h4> Laptop </h4></br>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">Model Number: {[{ $ctrl.laptop.model_number }]}</li>
-          <!--<li class="list-group-item">Serial Number: {[{ $ctrl.desktop.serial_number }]}</li>-->
+          <li class="list-group-item" ng-repeat="serial in $ctrl.laptop.serial_numbers">{{serial}}
+              <a href="#" class="btn btn-primary pull-right" ng-click="addToShoppingCart(serial, $ctrl.laptop.model_number)">Add to Cart</a></li>
           <li class="list-group-item">Brand Name: {[{ $ctrl.laptop.brand_name }]}</li>
           <li class="list-group-item">Weight: {[{ $ctrl.laptop.weight }]} gram </li>
         </ul></br>
         <a href="#" class="btn btn-primary" ng-click="rotate()">View Details</a>
-        <a href="#" class="btn btn-primary" ng-click="addToCart($ctrl.laptop.serialNumber, $ctrl.laptop.modelNumber)">Add to Shopping Cart</a>
       </div>
       <!--/.caption-->
     </div>
@@ -40,7 +40,6 @@
         <li class="list-group-item">Touch Screen:{[{ $ctrl.laptop.touch_screen }]} </li>
       </ul></br>
       <a href="#" class="btn btn-primary" ng-click="rotate()">Go Back</a>
-      <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.laptop.serialNumber, $ctrl.laptop.modelNumber)">Add to Shopping Cart</a>
     </div>
     <!--/.card-body-->
   </div>

@@ -41,11 +41,14 @@ class InventoryItemRepository {
   }
   getByModelNumbers(modelNumbers) {
     let inventory = this.inventoryTDG.getByModelNumbers(modelNumbers);
-    let result;
-    Promise.all(inventory).then((values) => {
-          result = values;
-        });
+    console.log("The models numbers passed" + JSON.stringify(modelNumbers));
+    let result = [];
+    return Promise.all([inventory]).then((values) => {
+          result = values[0];
+          console.log("the inventory items repo gives: " + JSON.stringify(result));
+          
     return result;
+        }).catch((err) => {console.log(err)});
   }
   /**
    * Retrieves all items from the database table

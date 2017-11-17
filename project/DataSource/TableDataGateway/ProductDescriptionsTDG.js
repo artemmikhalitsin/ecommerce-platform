@@ -31,17 +31,11 @@ class ProductDescriptionsTDG {
    * @return {Promise<Object[]>} promise which resolves to the list containing
    * all products in the ProductDescription table
    */
-<<<<<<< HEAD
   getAll() {
     return connection('ProductDescription').select('*');
-=======
-  select() {
-    return connection('ProductDescription');
->>>>>>> e97fede8bb326a4320e1f1dc50d96e3b3bcfe495
   }
   getByModelNumber(modelNumber) {
-    return connection('ProductDescription')
-      .select('*')
+    return connection('ProductDescription').select('*')
       .where({model_number: modelNumber});
   }
 

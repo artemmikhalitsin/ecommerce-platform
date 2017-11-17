@@ -10,7 +10,11 @@ var InventoryItemRepository = require(rootPath + '/DataSource/Repository/Invento
 var UserRepository = require(rootPath + '/DataSource/Repository/UserRepository.js');
 var PurchaseCollectionRepo = require(rootPath + '/DataSource/Repository/PurchaseCollectionRepository.js');
 var ShoppingCart = require(rootPath + '/models/ShoppingCart.js');
+<<<<<<< HEAD
 
+=======
+var TransactionLogRepository = require(rootPath + '/DataSource/Repository/TransactionLogRepository.js');
+>>>>>>> 49bb53f5a00143d256bf3a019a607b74e61d662b
 /**
  * Identity map of inventory items
  * @author Wai Lau, Amanda Wai
@@ -28,8 +32,14 @@ var Controller = function () {
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
     this.purchaseCollectionRepo = new PurchaseCollectionRepo();
+<<<<<<< HEAD
     this.clientInventory = {}; // List of inventory items, key: serial number, value: locked or not locked
     this.shoppingCartList = {}; // List of shopping carts associated to users key:user, value: shopping cart
+=======
+    this.transactionRepo = new TransactionLogRepository();
+    this.clientInventory = {}; // key: serial, value: locked or not locked
+    this.shoppingCartList = {}; // carts associated to users k:user, v: cart
+>>>>>>> 49bb53f5a00143d256bf3a019a607b74e61d662b
     this.url = require('url');
     this.crypto = require('crypto');
   }
@@ -111,14 +121,50 @@ var Controller = function () {
   }, {
     key: 'addToShoppingCart',
     value: function addToShoppingCart(req, res) {
+<<<<<<< HEAD
+=======
+      var _this3 = this;
+
+      var _checkPostcondition = function _checkPostcondition(it) {
+        if (!_this3.shoppingCartList[req.session.email.toString()].getCartSerialNumbers().includes(req.body.serialNumber)) {
+          throw new Error('Item was not added to the cart');
+        }
+
+        if (!_this3.clientInventory[req.body.serialNumber].locked) {
+          throw new Error('Item isn\'t locked');
+        }
+
+        return it;
+      };
+
+      if (!(req.session.email != null)) {
+        throw new Error('User is not logged in');
+      }
+
+      if (!(Object.keys(this.clientInventory).length != 0)) {
+        throw new Error('Catalog is empty');
+      }
+
+      if (!!this.clientInventory[req.body.serialNumber].locked) {
+        throw new Error('Item is locked');
+      }
+
+      if (this.shoppingCartList[req.session.email.toString()]) {
+        if (!(Object.keys(this.shoppingCartList[req.session.email.toString()].getCart()).length < 7)) {
+          throw new Error('Cart has more than 7 items!');
+        }
+      }
+
+
+>>>>>>> 49bb53f5a00143d256bf3a019a607b74e61d662b
       var item = req.body.serialNumber;
       var productNumber = req.body.modelNumber;
       if (this.lockItem(item)) {
-        var _user = req.session.user.toString();
-        if (!this.shoppingCartList[_user]) {
-          this.shoppingCartList[_user] = new ShoppingCart();
+        var user = req.session.email.toString();
+        if (!this.shoppingCartList[user]) {
+          this.shoppingCartList[user] = new ShoppingCart();
         }
-        this.shoppingCartList[_user].addToCart(item, productNumber);
+        this.shoppingCartList[user].addToCart(item, productNumber);
         res.status(200).send({ success: 'successfully added' });
       } else {
         res.status(500).send({ error: 'item already in another cart' });
@@ -127,9 +173,46 @@ var Controller = function () {
   }, {
     key: 'removeFromShoppingCart',
     value: function removeFromShoppingCart(req, res) {
+<<<<<<< HEAD
+=======
+      var _this4 = this;
+
+      var _checkPostcondition2 = function _checkPostcondition2(it) {
+        if (!!_this4.shoppingCartList[req.session.email.toString()].getCartSerialNumbers().includes(req.body.serialNumber)) {
+          throw new Error('Item was not removed from the cart');
+        }
+
+        if (!!_this4.clientInventory[req.body.serialNumber].locked) {
+          throw new Error('Item is still locked');
+        }
+
+        return it;
+      };
+
+      if (!(req.session.email != null)) {
+        throw new Error('User is not logged in');
+      }
+
+      if (!this.clientInventory[req.body.serialNumber].locked) {
+        throw new Error('Item is not locked');
+      }
+
+      if (!(this.shoppingCartList[req.session.email.toString()] != null)) {
+        throw new Error('Shopping cart doesn\'t exists');
+      }
+
+      var user = req.session.email;
+>>>>>>> 49bb53f5a00143d256bf3a019a607b74e61d662b
       var item = req.body.serialNumber;
       this.shoppingCartList[user].removeFromCart(item);
+      this.clientInventory[item].locked = false;
       clearTimeout(this.clientInventory[item].timeout);
+<<<<<<< HEAD
+=======
+      res.status(200).send({ success: 'Hurray!' });
+
+      _checkPostcondition2();
+>>>>>>> 49bb53f5a00143d256bf3a019a607b74e61d662b
     }
 
     /**
@@ -158,9 +241,28 @@ var Controller = function () {
       } else {
         this.clientInventory[itemToLock].locked = true;
         // Store pointer of timeout function
+<<<<<<< HEAD
         this.clientInventory[itemToLock].timeout = setTimeout(this.unlockItem.bind(this), 10000, itemToLock);
         return true;
       }
+=======
+        this.clientInventory[itemToLock].timeout = setTimeout(this.unlockItem.bind(this), 300000, itemToLock);
+        return _checkPostcondition4(true);
+      }
+
+      _checkPostcondition4();
+    }
+
+    /**
+    * Deletes the user's shopping cart
+    * @param {String} user This user will have their shopping cart removed
+    */
+
+  }, {
+    key: 'deleteShoppingCart',
+    value: function deleteShoppingCart(user) {
+      delete this.shoppingCartList[user];
+>>>>>>> 49bb53f5a00143d256bf3a019a607b74e61d662b
     }
 
     /**
@@ -172,7 +274,25 @@ var Controller = function () {
   }, {
     key: 'completePurchaseTransaction',
     value: function completePurchaseTransaction(req, res) {
+<<<<<<< HEAD
       var user = req.session.user.toString();
+=======
+      var _this7 = this;
+
+      var _checkPostcondition5 = function _checkPostcondition5(it) {
+        if (!(_this7.shoppingCartList[req.session.email.toString()] == null)) {
+          throw new Error('Shopping cart still exists');
+        }
+
+        return it;
+      };
+
+      if (!(Object.keys(this.shoppingCartList[req.session.email.toString()].getCart()).length <= 7)) {
+        throw new Error('Cart size too big');
+      }
+
+      var user = req.session.email.toString();
+>>>>>>> 49bb53f5a00143d256bf3a019a607b74e61d662b
       var cart = Object.values(this.shoppingCartList[user].getCart());
       var purchases = [];
       for (var i in Object.keys(cart)) {
@@ -184,7 +304,18 @@ var Controller = function () {
             purchase_Id: cart[i].cartItemId });
         }
       }
+      var transaction = [{ client: user,
+        timestamp: new Date().toISOString() }];
+
       this.purchaseCollectionRepo.save(purchases);
+<<<<<<< HEAD
+=======
+      this.transactionRepo.save(transaction);
+      this.deleteShoppingCart(user);
+      res.status(200).send({ success: 'Successful purchase' });
+
+      _checkPostcondition5();
+>>>>>>> 49bb53f5a00143d256bf3a019a607b74e61d662b
     }
 
     /**
@@ -196,7 +327,25 @@ var Controller = function () {
   }, {
     key: 'cancelPurchaseTransaction',
     value: function cancelPurchaseTransaction(req, res) {
+<<<<<<< HEAD
       var user = req.session.user.toString();
+=======
+      var _this8 = this;
+
+      var _checkPostcondition6 = function _checkPostcondition6(it) {
+        if (!(_this8.shoppingCartList[req.session.email.toString()] == null)) {
+          throw new Error('Function  postcondition failed: this.shoppingCartList[req.session.email.toString()] == null');
+        }
+
+        return it;
+      };
+
+      if (!(this.shoppingCartList[req.session.email.toString()] != null)) {
+        throw new Error('Function  precondition failed: this.shoppingCartList[req.session.email.toString()] != null');
+      }
+
+      var user = req.session.email.toString();
+>>>>>>> 49bb53f5a00143d256bf3a019a607b74e61d662b
       var cartItems = this.shoppingCartList[user].getCartSerialNumbers();
       for (var item = 0; item < cartItems.length; item++) {
         this.unlockItem(cartItems[item].serial);
@@ -217,7 +366,12 @@ var Controller = function () {
     value: function returnPurchaseTransaction(req, res) {
       var returnItem = res;
 
+<<<<<<< HEAD
       res.forEach(function (product, serialNumber) {});
+=======
+      /* res.forEach((product, serialNumber) => {
+        });*/
+>>>>>>> 49bb53f5a00143d256bf3a019a607b74e61d662b
 
       this.purchaseCollectionRepo.returnItems(returnItem);
     }
@@ -254,13 +408,21 @@ var Controller = function () {
         if (req.session.exists == true && req.session.isAdmin == true) {
           res.render('inventory', { items: items, search: search });
         } else {
+<<<<<<< HEAD
           //this.updateInventoryList(values[0]);
+=======
+          _this9.updateInventoryList(values[0]); // Populate shopping inventory list
+>>>>>>> 49bb53f5a00143d256bf3a019a607b74e61d662b
           res.render('clientInventory', { search: search });
         }
       }).catch(function (err) {
         console.log(err);
       });
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 49bb53f5a00143d256bf3a019a607b74e61d662b
     /**
      * Processes an inventory action initiated by the user
      * @param {Object} req HTTP request object containing action info
@@ -334,7 +496,11 @@ var Controller = function () {
   }, {
     key: 'getProductInfo',
     value: function getProductInfo(req, res) {
+<<<<<<< HEAD
       this.productDescriptionRepo.getAll().then(function (result) {
+=======
+      this.inventoryRepo.getAllInventoryItems().then(function (result) {
+>>>>>>> 49bb53f5a00143d256bf3a019a607b74e61d662b
         res.json(result);
       });
     }

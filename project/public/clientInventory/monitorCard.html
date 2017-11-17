@@ -1,10 +1,9 @@
 <!--Card-->
 <div class="card" style="height:48rem;" ng-class="{false:'flip-to-front', true:'flip-to-back'}[rotated]">
-  <div class="front">
+  <div class="front" style="width: 100%;">
     <!--Card image-->
     <div class="view overlay hm-white-slight">
-        <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20%287%29.jpg" class="img-fluid" alt="">
-    </div>
+        <!--img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20%287%29.jpg" class="img-fluid" alt=""--></div>
     <!--Card content-->
     <div class="card-body">
       <div class="caption">
@@ -12,12 +11,12 @@
         <h4> Monitor </h4></br>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">Model Number: {[{ $ctrl.monitor.model_number }]}</li>
-          <!--<li class="list-group-item">Serial Number: {[{ $ctrl.monitor.serial_number }]}</li>-->
+          <li class="list-group-item" ng-repeat="serial in $ctrl.monitor.serial_numbers">{{serial}}
+              <a href="#" class="btn btn-primary pull-right" ng-click="addToShoppingCart(serial, $ctrl.monitor.model_number)">Add to Cart</a></li>
           <li class="list-group-item">Brand Name: {[{ $ctrl.monitor.brand_name }]}</li>
           <li class="list-group-item">Weight: {[{ $ctrl.monitor.weight }]} </li>
         </ul></br>
         <a href="#" class="btn btn-primary" ng-click="rotate()">View Details</a>
-        <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.monitor.serialNumber, $ctrl.monitor.modelNumber)">Add to Shopping Cart</a>
       </div>
       <!--/.caption-->
     </div>
@@ -32,7 +31,6 @@
         <li class="list-group-item">Dicplay Size (inches): {[{ $ctrl.monitor.display_size }]}</li>
       </ul></br>
       <a href="#" class="btn btn-primary" ng-click="rotate()">Go Back</a>
-      <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.monitor.serialNumber, $ctrl.monitor.modelNumber)">Add to Shopping Cart</a>
     </div>
     <!--/.card-body-->
   </div>
