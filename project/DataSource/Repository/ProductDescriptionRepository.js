@@ -26,7 +26,7 @@ class ProductDescriptionRepository {
    * retrieves the products from the TDG and adds them to the identity map
    * @return {Object[]} the complete list of product description objects
    */
-  getAll(){
+  getAll() {
       let context = this.productDescTDG.select();
 
       Promise.all([context]).then((values)=>{
@@ -43,7 +43,7 @@ class ProductDescriptionRepository {
    * REVIEW: This is esentially a subset of the below method, consider
    * removing - Artem
    */
-  getById(id){
+  getById(id) {
     return this.ProductDescriptionIM.get([id]);
   }
 
@@ -52,13 +52,13 @@ class ProductDescriptionRepository {
    * @param {numberp[]} ids the list of ids of the products to be retrieved
    * @return {Object[]} a list containing the product descriptions
    */
-  getByIds(ids){
+  getByIds(ids) {
     let products = this.ProductDescriptionIM.get(ids);
     // REVIEW: This means that if we don't find all of the given ids, we
     // will instead return all the products in the table? I believe this method
     // requires rework - Artem
-    if(products.length <= 0 || products.length < ids.length){
-      var prodDescFromTDG = this.productDescTDG.select();
+    if (products.length <= 0 || products.length < ids.length) {
+      let prodDescFromTDG = this.productDescTDG.select();
             Promise.all([prodDescFromTDG]).then((values)=>{
               products = values[0];
               // REVIEW: This function has a side effect,
@@ -78,31 +78,29 @@ class ProductDescriptionRepository {
    * @param {Object[]} products a list of products against which the current
    * product list is to be compared
    */
-  save(products){
-    var electronicsToAdd = [];
-    var electronicsToUpdate = [];
-    var electronicsToDelete = [];
+  save(products) {
+    let electronicsToAdd = [];
+    let electronicsToUpdate = [];
+    let electronicsToDelete = [];
 
-    let productIds = products.map(p => p.model_number);
+    let productIds = products.map((p) => p.model_number);
 
-    if(productIds.length > 0){
+    if (productIds.length > 0) {
     let context = this.getByIds(productIds);
     let allRecords = this.ProductDescriptionIM.getAll();
-    for(var i = 0; i < products.length; i++){
-      if(context.findIndex(p => p.model_number == products[i].model_number) !== -1
-          && electronicsToUpdate.findIndex(e => e.model_number == products[i].model_number) === -1){
+    for (var i = 0; i < products.length; i++) {
+      if (context.findIndex((p) => p.model_number == products[i].model_number) !== -1
+          && electronicsToUpdate.findIndex((e) => e.model_number == products[i].model_number) === -1) {
             // Case: the product exists in our list of products
             // and hasn't already been processed
             electronicsToUpdate.push(products[i]);
-      }
-      else if(allRecords.findIndex(p => p.model_number == products[i].model_number) === -1
-              && electronicsToAdd.findIndex(e => e.model_number == products[i].model_number) === -1){
+      } else if (allRecords.findIndex((p) => p.model_number == products[i].model_number) === -1
+              && electronicsToAdd.findIndex((e) => e.model_number == products[i].model_number) === -1) {
                 // Case: the product doesn't exist in our list of products
                 // and hasn't already been processed
                 electronicsToAdd.push(products[i]);
               }
     }
-
   }
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);
