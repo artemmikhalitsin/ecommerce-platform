@@ -155,6 +155,7 @@ class Controller {
     }
   }
 
+
   /**
     * Unlocks a previously locked items
     * @param {String} itemToUnlock Serial number of item to unlock
@@ -391,7 +392,7 @@ class Controller {
     }
   }
 
-  getProductInfo(req, res) {
+  getProductInfo(req, res, other) {
     this.inventoryRepo.getAllInventoryItems().then(
       (result) => {
         res.json(result);

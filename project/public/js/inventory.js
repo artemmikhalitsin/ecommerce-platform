@@ -2,6 +2,7 @@ _commonProps = ["model_number", "brand_name", "price", "weight",
                 "type", "serial_numbers"];
 _requestJSON = {"deleteSerials":[], "addSerials":[]};
 
+
 // This is to check if there is symbols in what the client entered
 function validateValue(value){
   let isAlphaNumeric = new RegExp(/^[a-zA-Z0-9]+/);

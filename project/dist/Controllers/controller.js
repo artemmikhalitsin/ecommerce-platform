@@ -489,7 +489,7 @@ var Controller = function () {
     }
   }, {
     key: 'getProductInfo',
-    value: function getProductInfo(req, res) {
+    value: function getProductInfo(req, res, other) {
       this.inventoryRepo.getAllInventoryItems().then(function (result) {
         res.json(result);
       });
