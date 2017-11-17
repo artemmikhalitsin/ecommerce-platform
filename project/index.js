@@ -135,6 +135,14 @@ app.get('/viewPurchaseCollection', function(req, res) {
   controller.viewPurchaseCollection(req, res);
 });
 
+app.get('/returnPurchsedItems', function(req, res){
+  controller.returnPurchaseTransaction(req, res);
+});
+
+app.get('/cancelReturn', function(req, res){
+  controller.cancelReturn(req, res);
+});
+
 app.get('/api/getAllProducts', function(req, res) {
   controller.getProductInfo(req, res);
 });

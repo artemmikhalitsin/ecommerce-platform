@@ -274,13 +274,17 @@ class Controller {
    * @param {Object} res list/array of serial numbers of returned items
   */
   returnPurchaseTransaction(req, res) {
+    pre:{
+
+    }
+    
     let returnItem = res;
 
-    /* res.forEach((product, serialNumber) => {
-
-    });*/
-
     this.purchaseCollectionRepo.returnItems(returnItem);
+
+    post:{
+
+    }
   }
 
   viewPurchaseCollection(req, res) {
