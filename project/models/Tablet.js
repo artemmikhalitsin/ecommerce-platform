@@ -25,12 +25,11 @@ class Tablet extends Computer {
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
      */
-    constructor(computerId, processorType, ramSize, numberCpuCores,
-                harddriveSize, displaySize, dimensions, batteryInfo,
-                os, cameraInfo, price, weight, brandName, modelNumber) {
-        super(processorType, ramSize, numberCpuCores, harddriveSize,
-              price, weight, brandName, modelNumber);
-        this.computerId = computerId;
+    constructor(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
+                displaySize, dimensions, batteryInfo, os, cameraInfo,
+                price, weight, brandName, modelNumber, type) {
+        super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
+              price, weight, brandName, modelNumber, type);
         this.displaySize = displaySize;
         this.dimensions = dimensions;
         this.batteryInfo = batteryInfo;

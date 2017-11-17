@@ -11,6 +11,7 @@ const ShoppingCart = require(rootPath +
     '/models/ShoppingCart.js');
 const TransactionLogRepository = require(rootPath
       + '/DataSource/Repository/TransactionLogRepository.js');
+
 /**
  * Identity map of inventory items
  * @author Wai Lau, Amanda Wai
@@ -75,7 +76,6 @@ class Controller {
       });
     }
   }
-
 
 
   /**
@@ -154,6 +154,7 @@ class Controller {
         'Item is still locked';
     }
   }
+
 
   /**
     * Unlocks a previously locked items
@@ -274,15 +275,13 @@ class Controller {
    * @param {Object} res list/array of serial numbers of returned items
   */
   returnPurchaseTransaction(req, res) {
-    pre:{
+    let returnItem = res;
 
-    }
+    /* res.forEach((product, serialNumber) => {
 
+    });*/
 
-
-    post:{
-
-    }
+    this.purchaseCollectionRepo.returnItems(returnItem);
   }
 
   viewPurchaseCollection(req, res) {
@@ -389,7 +388,7 @@ class Controller {
     }
   }
 
-  getProductInfo(req, res) {
+  getProductInfo(req, res, other) {
     this.inventoryRepo.getAllInventoryItems().then(
       (result) => {
         res.json(result);

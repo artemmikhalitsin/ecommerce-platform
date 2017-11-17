@@ -1,22 +1,21 @@
 /**
  * Class containing info common to all products
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
- * ATTRIBUTE THIS TO YOURSELF
+ * @author Ekaterina Ruhlin
  */
-class ProductDescription {
+ const rootPath = require('app-root-dir').get();
+const Computer = require(rootPath + '/models/ProductDescription.js');
+class InventoryItem {
     /**
-     * Given info common to all products, creates an object
-     * @param {string} price price
-     * @param {string} weight weight
-     * @param {string} brandName brand name
+     * @param {number} id id
+     * @param {string} serialNumber brand name
      * @param {string} modelNumber model number
+     * @param {Object} productDescrition productDescription
      */
-    constructor(price, weight, brandName, modelNumber, type) {
-        this.price = price;
-        this.weight = weight;
-        this.brandName = brandName;
+    constructor(id, serialNumber, modelNumber, productDescription) {
+        this.id = id;
+        this.serialNumber = serialNumber;
         this.modelNumber = modelNumber;
-        this.type = type;
+        this.productDescription = productDescription;
     }
 
     /**
@@ -78,4 +77,4 @@ class ProductDescription {
     }
 }
 
-module.exports = ProductDescription;
+module.exports = InventoryItem;

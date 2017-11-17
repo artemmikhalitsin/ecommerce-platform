@@ -46,9 +46,9 @@ class PurchaseCollectionRepo {
    * @return {Promise<Object[]>} promise which resolves to the list of inventory
    * items in the database
    */
-  get() {
-    return knex('PurchaseCollection').select('*');
-  }
+   get() {
+     return knex('PurchaseCollection').select('*');
+   }
 
   /**
    * Given a list of ids, retrieves items from the identity map corresponding

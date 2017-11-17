@@ -22,11 +22,10 @@ class Desktop extends Computer {
    * @param {Object} computerId computer id
    */
   constructor(processorType, ramSize, numberCpuCores, harddriveSize,
-              dimensions, price, weight, brandName, modelNumber, computerId) {
-    super(processorType, ramSize, numberCpuCores, harddriveSize,
-          price, weight, brandName, modelNumber);
+              dimensions, price, weight, brandName, modelNumber, computerId, type) {
+    super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
+          price, weight, brandName, modelNumber, type);
         this.dimensions = dimensions;
-        this.computerId = computerId;
     }
     /**
      * dimensions accessor

@@ -4,5 +4,7 @@ const userRepo = require(rootPath + '/DataSource/Repository/InventoryItemReposit
 let repo = new userRepo();
 
 repo.getAllInventoryItems().then(
-  (result) => { console.log(`Response from server: ${JSON.stringify(result)}`)}
-)
+  (result) => {
+ console.log(`Response from server: ${JSON.stringify(result)}`);
+}
+);

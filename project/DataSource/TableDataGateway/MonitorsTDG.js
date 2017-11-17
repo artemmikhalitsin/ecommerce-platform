@@ -26,35 +26,39 @@ class MonitorsTDG {
     getAll() {
         let result = [];
         return connection('Monitor').select('*')
-                                    .leftJoin('ProductDescription', 'Monitor.model_number','ProductDescription.model_number')
-                                    .then((monitors) => {
-                                        monitors.forEach(function(monitor){
-                                            result.push(new Monitor(   
-                                                monitor.display_size,
-                                                monitor.price, 
-                                                monitor.weight, 
-                                                monitor.brand_name, 
-                                                monitor.model_number));
-                                        });
-                                        return result;
-                                    });
+          .join('ProductDescription', 'Monitor.model_number',
+                'ProductDescription.model_number')
+          .then((monitors) => {
+              monitors.forEach(function(monitor) {
+                  result.push(new Monitor(
+                      monitor.display_size,
+                      monitor.price,
+                      monitor.weight,
+                      monitor.brand_name,
+                      monitor.model_number,
+                      monitor.type));
+              });
+              return result;
+          });
     }
-    getAllByModelNumber(modelNumbers){
+    getAllByModelNumber(modelNumbers) {
         let result = [];
         return connection('Monitor').select('*')
-                                    .whereIn('model_number', modelNumbers)
-                                    .leftJoin('ProductDescription', 'Monitor.model_number','ProductDescription.model_number')
-                                    .then((monitors) => {
-                                        monitors.forEach(function(monitor){
-                                            result.push(new Monitor(   
-                                                monitor.display_size,
-                                                monitor.price, 
-                                                monitor.weight, 
-                                                monitor.brand_name, 
-                                                monitor.model_number));
-                                        });
-                                        return result;
-                                    });
+          .whereIn('model_number', modelNumbers)
+          .join('ProductDescription', 'Monitor.model_number',
+                'ProductDescription.model_number')
+          .then((monitors) => {
+              monitors.forEach(function(monitor) {
+                  result.push(new Monitor(
+                      monitor.display_size,
+                      monitor.price,
+                      monitor.weight,
+                      monitor.brand_name,
+                      monitor.model_number,
+                      monitor.type));
+              });
+              return result;
+          });
     }
 
     /**

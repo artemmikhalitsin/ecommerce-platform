@@ -34,9 +34,9 @@ class LaptopsTDG {
     getAll() {
         let result = [];
         return connection('Laptop').select('*')
-          .leftJoin('Computer', 'Laptop.comp_id', 'Computer.comp_id')
-          .leftJoin('ProductDescription', 'Laptop.model_number',
-            'ProductDescription.model_number')
+          .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
+          .join('ProductDescription', 'Laptop.model_number',
+                'ProductDescription.model_number')
           .then((laptops) => {
               laptops.forEach(function(laptop) {
                   result.push(new Laptop(
@@ -53,18 +53,19 @@ class LaptopsTDG {
                       laptop.price,
                       laptop.weight,
                       laptop.brand_name,
-                      laptop.model_number));
+                      laptop.model_number,
+                      laptop.type));
               });
-          return result;
-        });
+              return result;
+          });
     }
     getByModelNumbers(modelNumbers) {
         let result = [];
         return connection('Laptop').select('*')
           .whereIn('model_number', modelNumbers)
-          .leftJoin('Computer', 'Laptop.comp_id', 'Computer.comp_id')
-          .leftJoin('ProductDescription', 'Laptop.model_number',
-            'ProductDescription.model_number')
+          .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
+          .join('ProductDescription', 'Laptop.model_number',
+                'ProductDescription.model_number')
           .then((laptops) => {
               laptops.forEach(function(laptop) {
                   result.push(new Laptop(
@@ -81,10 +82,11 @@ class LaptopsTDG {
                       laptop.price,
                       laptop.weight,
                       laptop.brand_name,
-                      laptop.model_number));
+                      laptop.model_number,
+                      laptop.type));
+              });
+              return result;
           });
-          return result;
-        });
     }
 
     /**
