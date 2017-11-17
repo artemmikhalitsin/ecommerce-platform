@@ -27,14 +27,16 @@
     </script>
 </head>
 
-<body ng-controller="returnController">
+<body ng-controller="returnPurchaseController">
   <div ng-include="'includes/header.hbs'"></div>
 
   <div class="container">
     <table>
-      <tr ng-repeat="items in records">
-        <td>{{items.name}}</td>
-        <td>{{items.serialNumber}}</td>
+      <tr ng-repeat="x in items">
+        <td>{{x.user_id}}</td>
+        <td>{{x.serial_number}}</td>
+        <td>{{x.module_number}}</td>
+        <td>{{x.purchase_id}}</td>
       </tr>
     </table>
   </div>

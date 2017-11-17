@@ -8,38 +8,18 @@ function returnPurchaseController($scope, $http, $compile){
   $scope.items = [];
   $http({
     method: 'GET',
-    url:'/viewPurchaseCollection'
+    url:'/api/viewPurchaseCollection'
   })
   .then(
     (res) => {
       $scope.items = res.data;
-      $scope.itemsShown = res.data;
-      console.log($scope.itemsShown);
-      filterShown($scope.search)
+      console.log($scope.items);
     }
   )
   .catch(
     (err) => {
       window.alert("Error loading purchased items.\n"
     + `Please contact admin. Error code ${err}`);
-    });
-
-    //Helper function that filters shown items, based on current search JQuery
-    let filterShown = function(query) {
-      if (query == "all")
-      {
-        $scope.itemsShown = $scope.items;
-      }
-      else {
-        $scope.itemsShown = $scope.items.filter(
-          item => item.type == query
-        );
-      }
-    }
-
-    //Any time search query is changed, re-filter results
-    $scope.$watch('search', function(newVal, oldVal) {
-      filterShown(newVal)
     });
 
     //New Code
@@ -67,7 +47,7 @@ function returnPurchaseController($scope, $http, $compile){
   }
 
   returnPurchase.controller('returnPurchaseController', returnPurchaseController);
-  
+
   returnPurchase.config(function($interpolateProvider) {
     $interpolateProvider.startSymbol('{[{');
     $interpolateProvider.endSymbol('}]}');

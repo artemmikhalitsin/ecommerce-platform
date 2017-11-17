@@ -277,10 +277,8 @@ class Controller {
     pre:{
 
     }
-    
-    let returnItem = res;
 
-    this.purchaseCollectionRepo.returnItems(returnItem);
+
 
     post:{
 
@@ -288,15 +286,11 @@ class Controller {
   }
 
   viewPurchaseCollection(req, res) {
-    let cart = this.purchaseCollectionRepo.get('*');
-    Promise.all([cart])
-    .then((values) => {
-      let items = JSON.stringify(values[0]);
-      console.log(items);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    this.purchaseCollectionRepo.get().then(
+      (result) => {
+        res.json(result);
+      }
+    );
   }
 
   /**

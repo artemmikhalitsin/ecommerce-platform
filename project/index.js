@@ -131,8 +131,12 @@ app.post('/cancelTransaction', function(req, res) {
   controller.cancelPurchaseTransaction(req, res);
 });
 
-app.get('/viewPurchaseCollection', function(req, res) {
+app.get('/api/viewPurchaseCollection', function(req, res) {
   controller.viewPurchaseCollection(req, res);
+});
+
+app.get('/returnPage', function(req, res){
+  res.render('returnPurchase', {items: JSON.stringify({'user_id': 'hello', 'serial_number': '123456789', 'module_number': '6785678765678', 'purchase_id': '1323213'})});
 });
 
 app.get('/returnPurchsedItems', function(req, res){

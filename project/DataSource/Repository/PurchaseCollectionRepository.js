@@ -46,8 +46,8 @@ class PurchaseCollectionRepo {
    * @return {Promise<Object[]>} promise which resolves to the list of inventory
    * items in the database
    */
-  get(args) {
-    return database('PurchaseCollection').select('*');
+  get() {
+    return knex('PurchaseCollection').select('*');
   }
 
   /**
