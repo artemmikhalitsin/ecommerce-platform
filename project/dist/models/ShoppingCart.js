@@ -13,7 +13,6 @@ var ShoppingCart = function () {
     _classCallCheck(this, ShoppingCart);
 
     this.cartItems = {}; // The key is a serial id
-    this.cartItemId = 0;
   }
 
   _createClass(ShoppingCart, [{
@@ -25,6 +24,11 @@ var ShoppingCart = function () {
     key: 'getCartSerialNumbers',
     value: function getCartSerialNumbers() {
       return Object.keys(this.cartItems);
+    }
+  }, {
+    key: 'generatePurchaseId',
+    value: function generatePurchaseId() {
+      return Math.round(Math.pow(36, 17) - Math.random() * Math.pow(36, 16)).toString(36).slice(1).toUpperCase();
     }
   }, {
     key: 'addToCart',
@@ -44,11 +48,10 @@ var ShoppingCart = function () {
       }
 
       if (!this.cartItems[item]) {
-        this.cartItems[item] = { cartItemId: this.cartItemId,
+        this.cartItems[item] = { cartItemId: this.generatePurchaseId(),
           model: modelNumber,
           serial: item
         };
-        this.cartItemId++;
       }
 
       return _checkPostcondition(item);

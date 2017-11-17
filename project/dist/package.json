@@ -24,7 +24,7 @@
     "lint-fix": "node_modules/eslint/bin/eslint.js . --fix",
     "make-docs": "node_modules/.bin/esdoc",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore knexfile.js,./public,./seeds,./test,./migrations,./DataSource,./node_modules,./npm-debug.log --copy-files",
-    "start": "node node_modules/concurrently/src/main.js -c \"bgBlue,bgRed\" -n \"Express,ESLint\" \"npm run build && nodemon index.js --exec babel-node --presets es2015 --plugins contracts transform-object-rest-spread\" \"nodemon -L node_modules/eslint/bin/eslint.js .\""
+    "start": "node node_modules/concurrently/src/main.js -c \"bgRed, bgBlue\" -n \"Express,ESLint\"  \"npm run build && nodemon index.js --exec babel-node --presets es2015 --plugins contracts transform-object-rest-spread\" \"nodemon -L node_modules/eslint/bin/eslint.js .\""
   },
   "keywords": [],
   "author": "",
@@ -53,6 +53,7 @@
     "mocha": "^4.0.1",
     "mysql": "^2.14.1",
     "nodemon": "^1.12.1",
+    "rimraf": "^2.6.2",
     "stringy": "0.1.0"
   },
   "dependencies": {

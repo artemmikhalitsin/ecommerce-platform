@@ -32,14 +32,14 @@ var Desktop = function (_Computer) {
    * @param {string} brandName brand name
    * @param {string} modelNumber model number
    * @param {Object} computerId computer id
+   * @param {string} type product type
    */
-  function Desktop(processorType, ramSize, numberCpuCores, harddriveSize, dimensions, price, weight, brandName, modelNumber, computerId) {
+  function Desktop(processorType, ramSize, numberCpuCores, harddriveSize, dimensions, price, weight, brandName, modelNumber, computerId, type) {
     _classCallCheck(this, Desktop);
 
-    var _this = _possibleConstructorReturn(this, (Desktop.__proto__ || Object.getPrototypeOf(Desktop)).call(this, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber));
+    var _this = _possibleConstructorReturn(this, (Desktop.__proto__ || Object.getPrototypeOf(Desktop)).call(this, computerId, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber, type));
 
     _this.dimensions = dimensions;
-    _this.computerId = computerId;
     return _this;
   }
   /**

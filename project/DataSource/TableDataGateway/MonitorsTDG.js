@@ -29,13 +29,13 @@ class MonitorsTDG {
           .join('ProductDescription', 'Monitor.model_number',
                 'ProductDescription.model_number')
           .then((monitors) => {
-              monitors.forEach(function(monitor){
+              monitors.forEach(function(monitor) {
                   result.push(new Monitor(
                       monitor.display_size,
                       monitor.price,
                       monitor.weight,
                       monitor.brand_name,
-                      monitor.model_number, 
+                      monitor.model_number,
                       monitor.type));
               });
               return result;
@@ -48,13 +48,13 @@ class MonitorsTDG {
           .join('ProductDescription', 'Monitor.model_number',
                 'ProductDescription.model_number')
           .then((monitors) => {
-              monitors.forEach(function(monitor){
+              monitors.forEach(function(monitor) {
                   result.push(new Monitor(
                       monitor.display_size,
                       monitor.price,
                       monitor.weight,
                       monitor.brand_name,
-                      monitor.model_number, 
+                      monitor.model_number,
                       monitor.type));
               });
               return result;

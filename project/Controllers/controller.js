@@ -77,7 +77,6 @@ class Controller {
   }
 
 
-
   /**
    * Updates the Controller's list of current items
    * @param {Object} newInventory Inventory items

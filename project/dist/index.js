@@ -78,7 +78,7 @@ app.get('/logout', function (req, res) {
 });
 
 app.get('/users', function (req, res) {
-  res.render('userTable');
+  res.render('/userTable');
 });
 
 // getting the inventory from the database

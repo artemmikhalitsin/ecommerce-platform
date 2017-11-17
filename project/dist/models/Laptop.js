@@ -36,13 +36,13 @@ var Laptop = function (_Computer) {
    * @param {string} weight weight
    * @param {string} brandName brand name
    * @param {string} modelNumber model number
+   * @param {string} type product type
    */
-  function Laptop(computerId, processorType, ramSize, numberCpuCores, harddriveSize, displaySize, batteryInfo, os, touchscreen, camera, price, weight, brandName, modelNumber) {
+  function Laptop(computerId, processorType, ramSize, numberCpuCores, harddriveSize, displaySize, batteryInfo, os, touchscreen, camera, price, weight, brandName, modelNumber, type) {
     _classCallCheck(this, Laptop);
 
-    var _this = _possibleConstructorReturn(this, (Laptop.__proto__ || Object.getPrototypeOf(Laptop)).call(this, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber));
+    var _this = _possibleConstructorReturn(this, (Laptop.__proto__ || Object.getPrototypeOf(Laptop)).call(this, computerId, processorType, ramSize, numberCpuCores, harddriveSize, price, weight, brandName, modelNumber, type));
 
-    _this.computerId = computerId;
     _this.displaySize = displaySize;
     _this.batteryInfo = batteryInfo;
     _this.os = os;

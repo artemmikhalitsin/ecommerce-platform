@@ -19,6 +19,7 @@ class Computer extends ProductDescription {
      * @param {string} weight weight
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
+     * @param {string} type product type
      */
     constructor(id, processorType, ramSize, numberCpuCores,
                 harddriveSize, price, weight, brandName, modelNumber, type) {
