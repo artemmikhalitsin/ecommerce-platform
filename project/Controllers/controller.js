@@ -360,7 +360,7 @@ class Controller {
     });
   }
   manageProductCatalog(req, res) {
-    console.log(JSON.stringify(req.body));
+    console.log(JSON.stringify(req.body.productDescriptions));
     let results = this.productDescriptionRepo.save(productDescriptions);
   }
   /*
