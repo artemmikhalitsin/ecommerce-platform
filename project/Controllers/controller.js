@@ -383,12 +383,15 @@ class Controller {
       console.log(err);
     });
   }
-
-  /**
-   * Processes an inventory action initiated by the user
-   * @param {Object} req HTTP request object containing action info
-   * @param {Object} res HTTP response object to be returned to the user
-   */
+  
+  manageProductCatalog(req, res) {
+    let productDescriptions = JSON.parse(req.body.productDescriptions);
+    let results = this.productDescriptionRepo.save(productDescriptions).then(
+      (results) => {
+        console.log('Success saving the Product descriptions!');
+        this.getCatalog(req, res);
+      });
+  }
 
   logout(req, res) {
     if (req.session.exists) {
@@ -396,7 +399,6 @@ class Controller {
       res.redirect('/');
     }
   }
-
 
   inventoryAction(req, res) {
     if (req.session.exists==true && req.session.isAdmin==true) {

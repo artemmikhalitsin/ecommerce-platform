@@ -28,8 +28,6 @@ const TabletsTDG = require(rootPath +
   '/DataSource/TableDataGateway/TabletsTDG.js');
 const PurchaseCollectionTDG = require(rootPath +
   '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
-const TransactionLogTDG = require(rootPath +
-  '/DataSource/TableDataGateway/TransactionLogTDG.js');
 
 /**
  * Unit of Work implementation
@@ -51,7 +49,6 @@ class UnitOfWork {
     this.monitorsTDG = new MonitorsTDG();
     this.tabletsTDG = new TabletsTDG();
     this.purchaseTDG = new PurchaseCollectionTDG();
-    this.transactionTDG = new TransactionLogTDG();
 
     this.dirtyElements = [];
     this.newElements = [];
@@ -60,7 +57,6 @@ class UnitOfWork {
     this.deletedInventoryItems = [];
     this.newPurchases = [];
     this.deletedPurchases = [];
-    this.transactionItems = [];
   }
   registerNew(object) {
     this.newElements = [];
@@ -91,10 +87,6 @@ class UnitOfWork {
   registerDeletedItem(object){
     this.deletedInventoryItems = [];
     this.deletedInventoryItems.push(object);
-  }
-  registerTransaction(object){
-    this.transactionItems = [];
-    this.transactionItems.push(object);
   }
   commitAll() {
 
@@ -153,15 +145,6 @@ class UnitOfWork {
          })
        });}
 
-       //add(log) transaction
-       let addedTransaction;
-       if(this.transactionItems[0] != null && this.transactionItems[0].length > 0){
-        addedTransaction = Promise.each(this.transactionItems[0], (transaction) => {
-         return this.transactionTDG.add(transaction).transacting(trx).then(() => {
-               console.log('added transaction');
-         })
-       });}
-
       //update products
       let updateditems;
       if(this.dirtyElements[0] && this.dirtyElements[0].length > 0){
@@ -173,7 +156,7 @@ class UnitOfWork {
                case 'Desktop':
                  {
                    return this.dimensionsTDG
-                    .update(electronic.dimension)
+                    .update(electronic.dimensions)
                     .transacting(trx)
                     .then(
                       (dimensionsId) => {
@@ -205,7 +188,7 @@ class UnitOfWork {
                case 'Tablet':
                  {
                    return this.dimensionsTDG
-                    .update(electronic.dimension)
+                    .update(electronic.dimensions)
                     .transacting(trx)
                     .then(
                       (dimensionsId) => {
@@ -250,7 +233,7 @@ class UnitOfWork {
                 case 'Desktop':
                   {
                     return this.dimensionsTDG
-                      .add(electronic)
+                      .add(electronic.dimensions)
                       .transacting(trx)
                       .then(
                         (dimensionsId) => {
@@ -282,7 +265,7 @@ class UnitOfWork {
                 case 'Tablet':
                   {
                     return this.dimensionsTDG
-                      .add(electronic)
+                      .add(electronic.dimensions)
                       .transacting(trx)
                       .then(
                         (dimensionsId) => {
@@ -308,14 +291,14 @@ class UnitOfWork {
       }
       //add
       );}
-      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems, addedTransaction])
+      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems])
         .then(trx.commit)
         .catch(trx.rollback);
     });
   }
 
-  // the following function is getting all the items along with their descriptions
-  getAllInventoryItems() {
+  // TODO: DELETE
+ /* getAllInventoryItems() {
     return new Promise((resolve, reject) => {
       let desktops = this.getAllDesktops();
       let laptops = this.getAllLaptops();
@@ -352,7 +335,7 @@ class UnitOfWork {
       }))
       .catch((err) => reject(err));
     });
-  }
+  }*/
 
   // this function is getting all the model numbers from all the products
   getAllModelNumbers(products) {

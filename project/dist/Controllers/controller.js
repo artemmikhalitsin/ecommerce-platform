@@ -449,13 +449,60 @@ var Controller = function () {
         console.log(err);
       });
     }
+  }, {
+    key: 'manageInventory',
+    value: function manageInventory(inventoryItems) {
+      var results = this.inventoryRepo.save(inventoryItems);
+    }
+  }, {
+    key: 'getProductDescription',
+    value: function getProductDescription(req, res) {
+      var query = this.url.parse(req.url, true).query;
+      var search = query.search;
+      var catalog = [];
+      var productDescriptions = this.productDescriptionRepo.getAllWithIncludes().then(function (results) {
+        console.log('Product Descriptions: ', JSON.stringify(results));
+        //res.render('catalog', {items: JSON.stringify(results), search: search});
+        if (req.session.exists == true && req.session.isAdmin == true) {
+          return res.send({ items: results, search: search });
+        }
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+  }, {
+    key: 'getCatalog',
+    value: function getCatalog(req, res) {
+      var query = this.url.parse(req.url, true).query;
+      var search = query.search;
+      var catalog = [];
+      var productDescriptions = this.productDescriptionRepo.getAllWithIncludes().then(function (results) {
+        console.log('Product Descriptions: ', JSON.stringify(results));
+        //res.render('catalog', {items: JSON.stringify(results), search: search});
+        if (req.session.exists == true && req.session.isAdmin == true) {
+          res.render('catalog', { items: JSON.stringify(results), search: search });
+        } else if (req.session.exists == true && req.session.isAdmin == false) {
+          //update descriptions?
+          //this.updateInventoryList(results);
+          res.render('/login');
+        } else {
+          res.render('/login');
+        }
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+  }, {
+    key: 'manageProductCatalog',
+    value: function manageProductCatalog(req, res) {
+      var _this10 = this;
 
-    /**
-     * Processes an inventory action initiated by the user
-     * @param {Object} req HTTP request object containing action info
-     * @param {Object} res HTTP response object to be returned to the user
-     */
-
+      var productDescriptions = JSON.parse(req.body.productDescriptions);
+      var results = this.productDescriptionRepo.save(productDescriptions).then(function (results) {
+        console.log('Success saving the Product descriptions!');
+        _this10.getCatalog(req, res);
+      });
+    }
   }, {
     key: 'logout',
     value: function logout(req, res) {
