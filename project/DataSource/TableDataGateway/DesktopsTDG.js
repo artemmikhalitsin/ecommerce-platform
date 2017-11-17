@@ -24,9 +24,9 @@ class DesktopsTDG {
      */
     add(compId, dimensionsId, desktop) {
         return connection.insert({
-            'comp_id': compId,
+            'comp_id': desktop.computerId,
             'model_number': desktop.modelNumber,
-            'dimension_id': dimensionsId,
+            'dimension_id': desktop.dimensions.id,
         }, 'id')
         .into('Desktop');
     }
@@ -36,9 +36,9 @@ class DesktopsTDG {
         return connection('Desktop').select('*')
           .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Desktop.model_number','ProductDescription.model_number')
+          .join('ProductDescription', 'Desktop.model_number', 'ProductDescription.model_number')
           .then((desktops) => {
-              desktops.forEach(function(desktop){
+              desktops.forEach(function(desktop) {
                   let d = new Desktop(
                       desktop.processor_type,
                       desktop.ram_size,
@@ -53,8 +53,8 @@ class DesktopsTDG {
                       desktop.weight,
                       desktop.brand_name,
                       desktop.model_number,
-                      desktop.comp_id, 
-                      desktop.type)
+                      desktop.comp_id,
+                      desktop.type);
                   result.push(d);
               });
               return result;
@@ -66,9 +66,9 @@ class DesktopsTDG {
           .whereIn('model_number', modelNumbers)
           .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Desktop.model_number','ProductDescription.model_number')
+          .join('ProductDescription', 'Desktop.model_number', 'ProductDescription.model_number')
           .then((desktops) => {
-              desktops.forEach(function(desktop){
+              desktops.forEach(function(desktop) {
                   result.push(new Desktop(
                       desktop.processor_type,
                       desktop.ram_size,
@@ -83,7 +83,7 @@ class DesktopsTDG {
                       desktop.weight,
                       desktop.brand_name,
                       desktop.model_number,
-                      desktop.comp_id, 
+                      desktop.comp_id,
                       desktop.type));
           });
           return result;
@@ -100,14 +100,10 @@ class DesktopsTDG {
      * rows affected
      */
     update(compId, dimensionsId, desktop) {
-        console.log("the comp id: " + compId + " or " + desktop.computerId);
-        console.log("the model _ number: " + desktop.modelNumber);
-        console.log("the dimensions id: " + dimensionsId + " or " + desktop.dimensions.id);
-        console.log('id' + desktop.id);
         return connection.update({
-        'comp_id': compId,
-        //'model_number': desktop.modelNumber,
-        'dimension_id': dimensionsId,
+         'comp_id': desktop.computerId,
+         'model_number': desktop.modelNumber,
+         'dimension_id': desktop.dimensions.id,
       }).from('Desktop').where({'model_number': desktop.modelNumber});
     }
 }

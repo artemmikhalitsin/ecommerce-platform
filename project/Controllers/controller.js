@@ -1,8 +1,7 @@
 const Promise = require('bluebird');
+const rootPath = require('app-root-dir').get();
 const InventoryItem = require(rootPath +
   '/models/InventoryItem.js');
-
-const rootPath = require('app-root-dir').get();
 const ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
 const InventoryItemRepository = require(rootPath +
@@ -329,24 +328,24 @@ class Controller {
         res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
       }
       }).catch((err) => {
-      console.log(err); 
+      console.log(err);
     });
   }
 
   manageInventory(inventoryItems) {
     let results = this.inventoryRepo.save(inventoryItems);
   }
-  getProductDescription(req, res){
+  getProductDescription(req, res) {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;
     let catalog = [];
     let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
     .then((results)=>{
         console.log('Product Descriptions: ', JSON.stringify(results));
-        //res.render('catalog', {items: JSON.stringify(results), search: search});
+        // res.render('catalog', {items: JSON.stringify(results), search: search});
       if (req.session.exists==true && req.session.isAdmin==true) {
         return res.send({items: results, search: search});
-      } 
+      }
       }).catch((err) => {
       console.log(err);
     });
@@ -358,15 +357,15 @@ class Controller {
     let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
     .then((results)=>{
         console.log('Product Descriptions: ', JSON.stringify(results));
-        //res.render('catalog', {items: JSON.stringify(results), search: search});
+        // res.render('catalog', {items: JSON.stringify(results), search: search});
       if (req.session.exists==true && req.session.isAdmin==true) {
         res.render('catalog', {items: JSON.stringify(results), search: search});
       } else if (req.session.exists==true && req.session.isAdmin==false) {
-        //update descriptions?
-        //this.updateInventoryList(results);
-        res.render('/login');
+        // update descriptions?
+        // this.updateInventoryList(results);
+        res.redirect('/login');
       } else {
-        res.render('/login');
+        res.redirect('/login');
       }
       }).catch((err) => {
       console.log(err);
@@ -374,6 +373,7 @@ class Controller {
   }
   manageProductCatalog(req, res) {
     let productDescriptions = JSON.parse(req.body.productDescriptions);
+    console.log('Descriptions recieved by the controller' + JSON.parse(req.body.productDescriptions));
     let results = this.productDescriptionRepo.save(productDescriptions).then((results) => {
       console.log('Success saving the Product descriptions!');
       this.getCatalog(req, res);

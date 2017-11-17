@@ -35,12 +35,12 @@ class ProductDescriptionsTDG {
   getAll() {
     let results = [];
     return connection('ProductDescription').select('*').then((productDescriptions) => {
-      productDescriptions.forEach(function(description){
+      productDescriptions.forEach(function(description) {
         results.push(new ProductDescription(
-          description.price, 
-          description.weight, 
-          description.brand_name, 
-          description.model_number, 
+          description.price,
+          description.weight,
+          description.brand_name,
+          description.model_number,
           description.type
           ));
       });
@@ -53,12 +53,12 @@ class ProductDescriptionsTDG {
       .select('*')
       .where({model_number: modelNumber})
       .then((productDescriptions) => {
-      productDescriptions.forEach(function(description){
+      productDescriptions.forEach(function(description) {
         results.push(new ProductDescription(
-          description.price, 
-          description.weight, 
-          description.brand_name, 
-          description.model_number, 
+          description.price,
+          description.weight,
+          description.brand_name,
+          description.model_number,
           description.type
           ));
       });
@@ -90,7 +90,6 @@ class ProductDescriptionsTDG {
    * rows affected
    */
   update(productDescription) {
-    // TODO
     return connection
       .update({
         'brand_name': productDescription.brandName,

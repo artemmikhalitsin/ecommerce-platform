@@ -35,7 +35,6 @@ class ComputersTDG {
      * rows affected
      */
     update(computer) {
-        // REVIEW: This was marked as todo - is this still the case? - Artem
         return connection.update({
           'processor_type': computer.processorType,
           'ram_size': computer.ramSize,

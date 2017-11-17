@@ -3,6 +3,10 @@ var catalog = angular.module('catalog', ['rowItem']);
 
 function catalogController($scope) {
   $scope.products = [];
+  $scope.$on('updateDescription', function(event, product, index){
+    console.log("updating row" + index + " desc: " + product);
+    $scope.products[index] = product;
+  });
   $scope.initCtatalog = function(){
     $.ajax({
         url: '/getProductDescription',
