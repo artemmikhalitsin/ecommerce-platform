@@ -5,6 +5,6 @@ clientInventory.config(function($interpolateProvider) {
   $interpolateProvider.endSymbol('}]}');
 });
 
-clientInventory.controller('InventoryController', ['$scope', function($scope) {
+clientInventory.controller('InventoryController', ['$scope', function($scope, $compile) {
   $scope.fruits=['apple', 'banana', 'kiwi', 'mango']
 }]);

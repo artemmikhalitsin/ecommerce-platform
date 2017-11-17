@@ -3,7 +3,7 @@
 
 // REVIEW: I haven't docced this file yet cause it's a little overwhelming
 // Only fixed some formatting - Artem
-
+'use strict';
 const Promise = require('bluebird');
 const rootPath = require('app-root-dir').get();
 const environment = process.env.NODE_ENV || 'development';
@@ -28,10 +28,12 @@ const TabletsTDG = require(rootPath +
   '/DataSource/TableDataGateway/TabletsTDG.js');
 const PurchaseCollectionTDG = require(rootPath +
   '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
+const TransactionLogTDG = require(rootPath +
+  '/DataSource/TableDataGateway/TransactionLogTDG.js');
 
 /**
  * Unit of Work implementation
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
+ * @author Ekaterina Ruhlin
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class UnitOfWork {
@@ -49,6 +51,7 @@ class UnitOfWork {
     this.monitorsTDG = new MonitorsTDG();
     this.tabletsTDG = new TabletsTDG();
     this.purchaseTDG = new PurchaseCollectionTDG();
+    this.transactionTDG = new TransactionLogTDG();
 
     this.dirtyElements = [];
     this.newElements = [];
@@ -56,7 +59,8 @@ class UnitOfWork {
     this.newInventoryItems = [];
     this.deletedInventoryItems = [];
     this.newPurchases = [];
-    this.deletePurchases = [];
+    this.deletedPurchases = [];
+    this.transactionItems = [];
   }
   registerNew(object) {
     this.newElements = [];
@@ -68,10 +72,10 @@ class UnitOfWork {
   }
 
   registerReturn(object){
-    this.deletePurchases = [];
-    this.deletedPurchase.push(object);
+    this.deletedPurchases = [];
+    this.deletedPurchases.push(object);
   }
-  
+
   registerDirty(object) {
     this.dirtyElements = [];
     this.dirtyElements.push(object);
@@ -88,10 +92,15 @@ class UnitOfWork {
     this.deletedInventoryItems = [];
     this.deletedInventoryItems.push(object);
   }
+  registerTransaction(object){
+    this.transactionItems = [];
+    this.transactionItems.push(object);
+  }
   commitAll() {
 
     let electronics = [];
     return connection.transaction((trx) => {
+      /*
       console.log('Electronics new Elements: ');
       console.log(this.newElements[0]);
       console.log('Electronics to update ');
@@ -104,6 +113,7 @@ class UnitOfWork {
       console.log(this.newPurchases[0]);
       console.log("Purchase to delete:");
       console.log(this.deletePurchases[0]);
+      */
 
       let deletedItems;
       //delete items
@@ -140,6 +150,15 @@ class UnitOfWork {
         deletedPurchases = Promise.each(this.deletedPurchases[0], (electronic) => {
          return this.purchaseTDG.delete(electronic).transacting(trx).then(() => {
                console.log('deleted purchase item');
+         })
+       });}
+
+       //add(log) transaction
+       let addedTransaction;
+       if(this.transactionItems[0] != null && this.transactionItems[0].length > 0){
+        addedTransaction = Promise.each(this.transactionItems[0], (transaction) => {
+         return this.transactionTDG.add(transaction).transacting(trx).then(() => {
+               console.log('added transaction');
          })
        });}
 
@@ -289,7 +308,7 @@ class UnitOfWork {
       }
       //add
       );}
-      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems])
+      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems, addedTransaction])
         .then(trx.commit)
         .catch(trx.rollback);
     });
@@ -305,7 +324,7 @@ class UnitOfWork {
 
       Promise.all([laptops, desktops, tablets, monitors])
       .then(((results) => {
-        let products = [].concat(...results);
+        let products = [].concat(...results); //[].concat.apply([], results); //
 
         // retrieve the model numbers present in the products
         let model_numbers = this.getAllModelNumbers(products);

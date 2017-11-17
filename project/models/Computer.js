@@ -4,9 +4,13 @@
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
  * ATTRIBUTE THIS TO YOURSELF
  */
+const rootPath = require('app-root-dir').get();
+const ProductDescription = require(rootPath + '/models/ProductDescription.js');
+
 class Computer extends ProductDescription {
     /**
      * Given attributes of a computer, consutrcts a Computer object
+     * @param {String} id id
      * @param {string} processorType processor type
      * @param {number} ramSize size of ram
      * @param {number} numberCpuCores number of cores
@@ -16,9 +20,10 @@ class Computer extends ProductDescription {
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
      */
-    constructor(processorType, ramSize, numberCpuCores,
-                harddriveSize, price, weight, brandName, modelNumber) {
-      super(price, weight, brandName, modelNumber);
+    constructor(id, processorType, ramSize, numberCpuCores,
+                harddriveSize, price, weight, brandName, modelNumber, type) {
+      super(price, weight, brandName, modelNumber, type);
+      this.computerId = id;
       this.processorType = processorType;
       this.ramSize = ramSize;
       this.numberCpuCores = numberCpuCores;

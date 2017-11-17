@@ -1,5 +1,5 @@
 // Update with your config settings.
-
+require('babel-register');
 module.exports = {
 
   development: {
