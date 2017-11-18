@@ -151,7 +151,7 @@ class LaptopsTDG {
           .join('ProductDescription', 'Laptop.model_number',
                 'ProductDescription.model_number')
           .then((laptops) => {
-              laptops.forEach(function(laptop){
+              laptops.forEach(function(laptop) {
                   result.push(new Laptop(
                       laptop.comp_id,
                       laptop.processor_type,
@@ -166,7 +166,7 @@ class LaptopsTDG {
                       laptop.price,
                       laptop.weight,
                       laptop.brand_name,
-                      laptop.model_number, 
+                      laptop.model_number,
                       laptop.type));
               });
               return result;
@@ -180,7 +180,7 @@ class LaptopsTDG {
           .join('ProductDescription', 'Laptop.model_number',
                 'ProductDescription.model_number')
           .then((laptops) => {
-              laptops.forEach(function(laptop){
+              laptops.forEach(function(laptop) {
                   result.push(new Laptop(
                       laptop.comp_id,
                       laptop.processor_type,
@@ -195,7 +195,7 @@ class LaptopsTDG {
                       laptop.price,
                       laptop.weight,
                       laptop.brand_name,
-                      laptop.model_number, 
+                      laptop.model_number,
                       laptop.type));
               });
               return result;
@@ -214,7 +214,7 @@ class LaptopsTDG {
       // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
           'comp_id': laptop.computerId,
-          //'model_number': laptop.modelNumber,
+          // 'model_number': laptop.modelNumber,
           'display_size': laptop.displaySize,
           'battery_info': laptop.batteryInfo,
           'os': laptop.os,

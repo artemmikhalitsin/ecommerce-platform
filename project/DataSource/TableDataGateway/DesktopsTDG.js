@@ -53,12 +53,9 @@ class DesktopsTDG {
                       desktop.weight,
                       desktop.brand_name,
                       desktop.model_number,
-<<<<<<< HEAD
                       desktop.comp_id);
-=======
-                      desktop.comp_id, 
-                      desktop.type)
->>>>>>> 8c6de9439be15fed271328a4c7a3b60440f36048
+
+
                   result.push(d);
               });
               return result;
@@ -87,7 +84,7 @@ class DesktopsTDG {
                       desktop.weight,
                       desktop.brand_name,
                       desktop.model_number,
-                      desktop.comp_id, 
+                      desktop.comp_id,
                       desktop.type));
           });
           return result;
@@ -104,14 +101,10 @@ class DesktopsTDG {
      * rows affected
      */
     update(compId, dimensionsId, desktop) {
-        console.log("the comp id: " + compId + " or " + desktop.computerId);
-        console.log("the model _ number: " + desktop.modelNumber);
-        console.log("the dimensions id: " + dimensionsId + " or " + desktop.dimensions.id);
-        console.log('id' + desktop.id);
         return connection.update({
-        'comp_id': compId,
-        //'model_number': desktop.modelNumber,
-        'dimension_id': dimensionsId,
+         'comp_id': desktop.computerId,
+         'model_number': desktop.modelNumber,
+         'dimension_id': desktop.dimensions.id,
       }).from('Desktop').where({'model_number': desktop.modelNumber});
     }
 }

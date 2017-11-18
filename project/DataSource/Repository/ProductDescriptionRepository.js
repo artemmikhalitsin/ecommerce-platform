@@ -103,7 +103,6 @@ class ProductDescriptionRepository {
     if (products.length <= 0 || products.length < ids.length) {
       let prodDescFromTDG = this.productDescTDG.getAll();
             Promise.all([prodDescFromTDG]).then((values)=>{
-              console.log("The tdg returns: " + JSON.stringify(values));
               products = values[0];
               // REVIEW: This function has a side effect,
               // even though it is an accessor - is this intended functionality?
@@ -148,8 +147,6 @@ class ProductDescriptionRepository {
               }
     }
   }
-  console.log("The new elements; " + JSON.stringify(electronicsToAdd));
-  console.log("The elements to update" + JSON.stringify(electronicsToUpdate));
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);
 

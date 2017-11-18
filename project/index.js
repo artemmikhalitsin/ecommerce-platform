@@ -1,4 +1,5 @@
 // const stringy = require('stringy');
+
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
@@ -69,7 +70,25 @@ app.get('/addProduct', function(req, res) {
     res.redirect('/login');
   }
 });
-
+app.get('/catalog', function(req, res) {
+  if (req.session.exists) {
+    controller.getCatalog(req, res);
+  } else {
+    console.log('login error');
+    controller.getAllInventory(req, res);
+  }
+});
+app.post('/manageProductCatalog', function(req, res) {
+   if (req.session.exists) {
+    controller.manageProductCatalog(req, res);
+  } else {
+    console.log('login error');
+    controller.getAllInventory(req, res);
+  }
+});
+app.get('/getProductDescription', function(req, res) {
+  controller.getProductDescription(req, res);
+});
 // this should be implemented in the controller
 app.get('/logout', function(req, res) {
   controller.logout(req, res);
