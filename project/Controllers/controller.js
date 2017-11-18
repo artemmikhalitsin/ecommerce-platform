@@ -302,9 +302,9 @@ class Controller {
   /**
    * Retrieves a complete list of products and serial numbers from
    * the database
-   * @param {Object} req HTTP Request object containing query info
+   * @param {Object} req HTTP Request object containing query  info
    * @param {Object} res HTTP Response object to be send back to the user
-   */
+   */ 
   getAllInventory(req, res) {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;
@@ -370,7 +370,6 @@ class Controller {
   }
   manageProductCatalog(req, res) {
     let productDescriptions = JSON.parse(req.body.productDescriptions);
-    console.log('Descriptions recieved by the controller' + JSON.parse(req.body.productDescriptions));
     let results = this.productDescriptionRepo.save(productDescriptions).then((results) => {
       console.log('Success saving the Product descriptions!');
       this.getProductDescription(req, res);
