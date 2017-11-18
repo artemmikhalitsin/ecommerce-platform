@@ -25,15 +25,8 @@
     "lint-fix": "node_modules/eslint/bin/eslint.js . --fix",
     "make-docs": "node_modules/.bin/esdoc",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore knexfile.js,./public,./seeds,./test,./migrations,./DataSource,./node_modules,./npm-debug.log --copy-files",
-<<<<<<< HEAD
     "start": "node node_modules/concurrently/src/main.js -c \"bgBlue,bgRed\" -n \"Express,ESLint\" \"nodemon -L --exec npm run server\" \"nodemon -L --exec npm run lint\"",
-    "server": "node node_modules/babel-cli/bin/babel-node.js index.js",
-    "lint": "node_modules/eslint/bin/eslint.js ."
-=======
-    "start": "node node_modules/concurrently/src/main.js -c \"bgRed,bgBlue\" -n \"Express,ESLint\" \"nodemon -L --exec npm run server\" \"nodemon -L --exec npm run lint-fix\"",
-    "babel-watch": "./node_modules/babel-watch/babel-watch.js index.js",
-    "server": " ./node_modules/babel-cli/bin/babel-node.js index.js"
->>>>>>> 8c6de9439be15fed271328a4c7a3b60440f36048
+    "server": "node node_modules/babel-cli/bin/babel-node.js index.js"
   },
   "keywords": [],
   "author": "",
