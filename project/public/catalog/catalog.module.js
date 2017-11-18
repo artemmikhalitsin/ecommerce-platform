@@ -33,7 +33,11 @@ function catalogController($scope) {
       data: {"productDescriptions":JSON.stringify($scope.products)},
       dataType: 'json',
       success: function(response){
-
+        $scope.$apply(function(){
+          
+        $scope.products = response.items;
+        console.log("Successfully saved!");
+      });
       },
       error: function(error){
         $('#error-box').show();

@@ -356,13 +356,10 @@ class Controller {
     let catalog = [];
     let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
     .then((results)=>{
-        console.log('Product Descriptions: ', JSON.stringify(results));
         // res.render('catalog', {items: JSON.stringify(results), search: search});
       if (req.session.exists==true && req.session.isAdmin==true) {
         res.render('catalog', {items: JSON.stringify(results), search: search});
       } else if (req.session.exists==true && req.session.isAdmin==false) {
-        // update descriptions?
-        // this.updateInventoryList(results);
         res.redirect('/login');
       } else {
         res.redirect('/login');
@@ -376,7 +373,7 @@ class Controller {
     console.log('Descriptions recieved by the controller' + JSON.parse(req.body.productDescriptions));
     let results = this.productDescriptionRepo.save(productDescriptions).then((results) => {
       console.log('Success saving the Product descriptions!');
-      this.getCatalog(req, res);
+      this.getProductDescription(req, res);
     });
   }
 

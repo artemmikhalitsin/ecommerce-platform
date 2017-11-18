@@ -24,9 +24,9 @@ class DesktopsTDG {
      */
     add(compId, dimensionsId, desktop) {
         return connection.insert({
-            'comp_id': desktop.computerId,
+            'comp_id': compId,
             'model_number': desktop.modelNumber,
-            'dimension_id': desktop.dimensions.id,
+            'dimension_id': dimensionsId,
         }, 'id')
         .into('Desktop');
     }
