@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 'use strict';
 const rootPath = require('app-root-dir').get();
 const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
