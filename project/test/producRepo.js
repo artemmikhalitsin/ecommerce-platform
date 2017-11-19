@@ -1,7 +1,8 @@
 const rootPath = require('app-root-dir').get();
-const userRepo = require(rootPath + '/DataSource/Repository/InventoryItemRepository.js');
+const UserRepo = require(rootPath +
+  '/DataSource/Repository/InventoryItemRepository.js');
 
-let repo = new userRepo();
+let repo = new UserRepo();
 
 repo.getAllInventoryItems().then(
   (result) => {

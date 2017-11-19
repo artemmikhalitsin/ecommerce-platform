@@ -11,6 +11,9 @@ let userRepo = new UserRepository();
  * @author Wai Lau, Daniel Isakov
  */
 class Aspect {
+  constructor() {
+    this.activeUsers = [];
+  }
   initialize(controller) {
     meld.around(controller, authPages, (joinpoint) => {
       console.log('Caught by aspect, validating the user...');
@@ -28,6 +31,15 @@ class Aspect {
           email: req.session.email,
           password: req.session.hash,
         };
+        for (let usr of activeUsers) {
+          if (usr.getEmail() == req.session.email && usr.isInactive()) {
+            console.log('user is innactive');
+            usr.timeStamp();
+          } else if (usr.getEmail() == req.session.email) {
+            console.log('user found');
+            usr.timeStamp();
+          }
+        }
       }
       return userRepo.authenticate(data).then((result) => {
         if (result.length <= 0) {
@@ -45,6 +57,7 @@ class Aspect {
             req.session.exists=true;
             req.session.hash=data.password;
             req.session.email=data.email;
+            activeUsers.push(new Tuple(data.email, new Date().getTime()));
           }
           if (result[0].is_admin == 1) {
             // REVIEW: this should probably be removed - Artem
@@ -66,6 +79,44 @@ class Aspect {
         res.redirect('/');
       });
     });
+
+    meld.before(controller, 'logout', function() {
+      const joinpoint = meld.joinpoint;
+      let user = joinpoint.args[0].body.email;
+      let index = 0;
+      for (let usr of activeUsers) {
+        if (usr.getEmail() == user) {
+          console.log('user found');
+          activeUsers[index] = null;
+        }
+        index+=1;
+      }
+      activeUsers = activeUsers.filter(function(val) {
+        return val != null;
+      });
+    });
+  }
+}
+
+class Tuple {
+  constructor(email, lastActiveUse) {
+    this.email = email;
+    this.lastActiveUse = lastActiveUse;
+  }
+
+  getEmail() {
+    return this.email;
+  }
+  timeStamp() {
+    this.lastActiveUse = new Date().getTime();
+  }
+
+  isInactive() { // set to 20min
+    if (new Date().getTime() > this.lastActiveUse + 20*60*1000) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 
