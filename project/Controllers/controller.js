@@ -77,124 +77,154 @@ class Controller {
   }
 
 
-
   /**
    * Updates the Controller's list of current items
    * @param {Object} newInventory Inventory items
   */
   updateInventoryList(newInventory) {
-    newInventory.forEach((product, index) => {
-      product.serial_numbers.forEach((serialNumber, index) => {
-        if (!this.clientInventory[serialNumber]) {
-          this.clientInventory[serialNumber] = {
-                                                locked: false,
-                                                timeout: null};
-        }
-      });
+    let inventoryList = [].concat(...newInventory.map((i) => i.serial_numbers));
+    inventoryList.forEach((serial, index) => {
+      if (!this.clientInventory[serial]) {
+        this.clientInventory[serial] = {locked: false,
+                                        timeout: null};
+      }
     });
+    // If item was deleted by an admin, the item list will be updated
+    for (let serial in this.clientInventory) {
+      if (!inventoryList.includes(serial)) {
+        clearTimeout(this.clientInventory[serial].timeout);
+        delete this.clientInventory[serial];
+      }
+    }
   }
-
 
   /**
     *@param {String} req user who added an item to their cart
     *@param {String} res item user wants to add to their cart
   */
   addToShoppingCart(req, res) {
+    invariant: req.session.email != null, 'User is not logged in';
     pre: {
-      req.session.email != null, 'User is not logged in';
       Object.keys(this.clientInventory).length != 0, 'Catalog is empty';
-      !this.clientInventory[req.body.serialNumber].locked, 'Item is locked';
+      this.clientInventory[req.body.serialNumber], 'Item does not exist!';
       if (this.shoppingCartList[req.session.email.toString()]) {
         Object.keys(this.shoppingCartList[req.session.email.toString()]
           .getCart()).length < 7, 'Cart has more than 7 items!';
       }
     }
-
-    let item = req.body.serialNumber;
-    let productNumber = req.body.modelNumber;
-    if (this.lockItem(item)) {
-      let user = req.session.email.toString();
-      if (!this.shoppingCartList[user]) {
-        this.shoppingCartList[user] = new ShoppingCart();
-      }
-      this.shoppingCartList[user].addToCart(item, productNumber);
-      res.status(200).send({success: 'successfully added'});
-    } else {
-      res.status(500).send({error: 'item already in another cart'});
-    }
-
+    /* This particular contract library does not work with asynchronous
+       calls. However, these are the postconditions:
     post: {
-      this.shoppingCartList[req.session.email.toString()]
+       this.shoppingCartList[req.session.email]
         .getCartSerialNumbers()
         .includes(req.body.serialNumber), 'Item was not added to the cart';
       this.clientInventory[req.body.serialNumber].locked,
         'Item isn\'t locked';
+    }*/
+    let item = req.body.serialNumber;
+    let productNumber = req.body.modelNumber;
+    let user = req.session.email;
+    if (!this.shoppingCartList[user]) {
+      this.shoppingCartList[user] = new ShoppingCart();
     }
+    this.getLatestInventory().then((values) => {
+      this.updateInventoryList(values[0]);
+      if (this.clientInventory[item]) {
+        if (this.clientInventory[item].locked) {
+          res.status(500).send({error: 'Item is already locked!'});
+        } else {
+          this.lockItem(user, item);
+          this.shoppingCartList[user].addToCart(item, productNumber);
+          res.status(200).send({success: 'Added to cart!'});
+        }
+      } else {
+        res.status(500).send({error: 'Item no longer exists!'});
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({error: 'Not added'});
+    });
   }
 
   removeFromShoppingCart(req, res) {
+    invariant: req.session.email != null, 'User is not logged in';
     pre : {
-      req.session.email != null, 'User is not logged in';
-      this.clientInventory[req.body.serialNumber].locked,
-        'Item is not locked';
+      if (this.clientInventory[req.body.serialNumber]) {
+        this.clientInventory[req.body.serialNumber].locked,
+          'Item is not locked';
+      }
       this.shoppingCartList[req.session.email.toString()] != null,
         'Shopping cart doesn\'t exists';
     }
-    let user = req.session.email;
-    let item = req.body.serialNumber;
-    this.shoppingCartList[user].removeFromCart(item);
-    this.clientInventory[item].locked = false;
-    clearTimeout(this.clientInventory[item].timeout);
-    res.status(200).send({success: 'Hurray!'});
     post : {
       !this.shoppingCartList[req.session.email.toString()]
         .getCartSerialNumbers().includes(req.body.serialNumber),
         'Item was not removed from the cart';
-      !this.clientInventory[req.body.serialNumber].locked,
-        'Item is still locked';
+      if (this.clientInventory[req.body.serialNumber]) {
+        !this.clientInventory[req.body.serialNumber].locked,
+          'Item is still locked';
+      }
     }
+    let user = req.session.email;
+    let item = req.body.serialNumber;
+    if (this.clientInventory[item]) {
+      clearTimeout(this.clientInventory[item].timeout);
+      this.unlockItem(user, item);
+    } else {
+      this.shoppingCartList[user].removeFromCart(item);
+    }
+    res.status(200).send({success: 'Item removed from cart!'});
   }
 
   /**
     * Unlocks a previously locked items
+    * @param {String} user user that owns the item
     * @param {String} itemToUnlock Serial number of item to unlock
   **/
-  unlockItem(itemToUnlock) {
+  unlockItem(user, itemToUnlock) {
+    invariant: {
+      user != null, 'User is not logged in';
+      this.clientInventory[itemToUnlock], 'Item doesn\'t exist';
+    }
     pre: {
       this.clientInventory[itemToUnlock].locked, 'Item isn\'t locked';
+      this.shoppingCartList[user].getCartSerialNumbers()
+        .includes(itemToUnlock), 'Item is not in user\'s shopping cart';
     }
-    this.clientInventory[itemToUnlock].locked = false;
-    this.clientInventory[itemToUnlock].timeout = null;
-
     post: {
       !this.clientInventory[itemToUnlock].locked, 'Item is still locked';
+      !this.shoppingCartList[user].getCartSerialNumbers()
+        .includes(itemToUnlock), 'Item is still part of shopping cart';
+    }
+    if (this.clientInventory[itemToUnlock]) {
+      this.clientInventory[itemToUnlock].locked = false;
+      this.clientInventory[itemToUnlock].timeout = null;
+      this.shoppingCartList[user].removeFromCart(itemToUnlock);
     }
   }
 
   /**
    * Locks an item to a user's shopping cart if it isn't already locked
-   * @param {Object} itemToLock serial number of item to lock
-   * @return {Boolean} Returns whether or not the item was locked
+   * @param {String} user the user who chose to lock an item
+   * @param {String} itemToLock serial number of item to lock
   */
-  lockItem(itemToLock) {
-    pre: {
-      this.clientInventory[itemToLock] != null,
-        'Inventory item doesn\'t exists!';
+  lockItem(user, itemToLock) {
+    invariant: {
+      user != null, 'User is not logged in';
+      this.clientInventory[itemToLock], 'Item doesn\'t exist';
     }
-    if (this.clientInventory[itemToLock] == null ||
-        this.clientInventory[itemToLock].locked) {
-      return false;
-    } else {
-      this.clientInventory[itemToLock].locked = true;
-      // Store pointer of timeout function
-      this.clientInventory[itemToLock].timeout = setTimeout(
-        this.unlockItem.bind(this), 300000, itemToLock);
-      return true;
+    pre: {
+      this.clientInventory[itemToLock].locked == false,
+        'Item is already locked';
     }
     post: {
       this.clientInventory[itemToLock].locked === true,
         'Item was not successfully locked';
     }
+    this.clientInventory[itemToLock].locked = true;
+    this.clientInventory[itemToLock].timeout = setTimeout(
+      this.unlockItem.bind(this), 300000, user, itemToLock);
   }
 
   /**
@@ -211,36 +241,51 @@ class Controller {
    * @param {Object} res
   */
   completePurchaseTransaction(req, res) {
+    invariant: req.session.email != null, 'User is not logged in';
     pre: {
-      Object.keys(this.shoppingCartList[req.session.email.toString()]
+      Object.keys(this.shoppingCartList[req.session.email]
+        .getCart()).length > 0, 'User has an empty cart';
+      Object.keys(this.shoppingCartList[req.session.email]
         .getCart()).length <= 7, 'Cart size too big';
     }
-
-    let user = req.session.email.toString();
-    let cart = Object.values(this.shoppingCartList[user].getCart());
-    let purchases = [];
-    for (let i in Object.keys(cart)) {
-      if (cart[i]) {
-        clearTimeout(this.clientInventory[cart[i].serial].timeout);
-        purchases.push({client: user,
-                            model_number: cart[i].model,
-                            serial_number: cart[i].serial,
-                            purchase_Id: cart[i].cartItemId});
-
-        delete this.clientInventory[cart[i].serial];
-      }
-    }
-    let transaction = [{client: user,
-                        timestamp: new Date().toISOString()}];
-
-    this.purchaseCollectionRepo.save(purchases);
-    this.transactionRepo.save(transaction);
-    this.deleteShoppingCart(user);
-    res.status(200).send({success: 'Successful purchase'});
+    /* This particular contract library does not work with asynchronous
+       calls. However, these are the postconditions:
     post: {
       this.shoppingCartList[req.session.email.toString()] == null,
         'Shopping cart still exists';
-    }
+    } */
+
+    let user = req.session.email;
+    let cart = Object.values(this.shoppingCartList[user].getCart());
+    let purchases = [];
+    this.getLatestInventory().then((values) => {
+      this.updateInventoryList(values[0]);
+      for (let i in Object.keys(cart)) {
+        if (cart[i]) {
+          if (!this.clientInventory[cart[i].serial]) {
+            res.status(500).send({error:
+              `Item ${cart[i].serial} no longer exists!
+                Remove it from your cart.`});
+          } else {
+            clearTimeout(this.clientInventory[cart[i].serial].timeout);
+            purchases.push({client: user,
+                                model_number: cart[i].model,
+                                serial_number: cart[i].serial,
+                                purchase_Id: cart[i].cartItemId});
+            delete this.clientInventory[cart[i].serial];
+            let transaction = [{client: user,
+                                timestamp: new Date().toISOString()}];
+            this.purchaseCollectionRepo.save(purchases);
+            this.transactionRepo.save(transaction);
+            this.deleteShoppingCart(user);
+            res.status(200).send({success: 'Successful purchase'});
+          }
+        }
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   /**
@@ -249,14 +294,15 @@ class Controller {
    * @param {Object} res
   */
   cancelPurchaseTransaction(req, res) {
+    invariant: req.session.email != null, 'User is not logged in';
     pre: {
-      this.shoppingCartList[req.session.email.toString()] != null;
+      this.shoppingCartList[req.session.email.toString()] != null,
+      'A transaction has not been initiated!';
     }
 
     let user = req.session.email.toString();
     let cartItems = this.shoppingCartList[user].getCartSerialNumbers();
     for (let item = 0; item < cartItems.length; item++) {
-      console.log(cartItems[item]);
       this.unlockItem(cartItems[item]);
       clearTimeout(this.clientInventory[cartItems[item]].timeout);
     }
@@ -264,7 +310,8 @@ class Controller {
     res.status(200).send({success: 'Successfully canceled'});
 
     post: {
-      this.shoppingCartList[req.session.email.toString()] == null;
+      this.shoppingCartList[req.session.email.toString()] == null,
+      'The user\'s shopping cart still exists; transaction is still active';
     }
   }
 
@@ -274,6 +321,7 @@ class Controller {
    * @param {Object} res list/array of serial numbers of returned items
   */
   returnPurchaseTransaction(req, res) {
+    invariant: req.session.email != null, 'User is not logged in';
     let returnItem = res;
 
     /* res.forEach((product, serialNumber) => {
@@ -284,6 +332,7 @@ class Controller {
   }
 
   viewPurchaseCollection(req, res) {
+    invariant: req.session.email != null, 'User is not logged in';
     let cart = this.purchaseCollectionRepo.get('*');
     Promise.all([cart])
     .then((values) => {
@@ -322,6 +371,16 @@ class Controller {
     .catch((err) => {
       console.log(err);
     });
+  }
+
+  /**
+   * Gets a complete list of products and serial numbers from
+   * the database and updates the list of available items
+   * @return {Object} Promise to update inventory
+   */
+  getLatestInventory() {
+    let prodDesc = this.inventoryRepo.getAllInventoryItems();
+    return Promise.all([prodDesc]);
   }
 
   /**

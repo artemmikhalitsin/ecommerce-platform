@@ -40,7 +40,8 @@ class ShoppingCart {
 
     removeFromCart(item) {
       pre: {
-          Object.keys(this.cartItems).length > 0;
+          Object.keys(this.cartItems).includes(item),
+            'The cart doesn\'t contain that item';
         }
         delete this.cartItems[item];
         return item;
