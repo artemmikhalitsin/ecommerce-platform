@@ -304,7 +304,7 @@ class Controller {
    * the database
    * @param {Object} req HTTP Request object containing query  info
    * @param {Object} res HTTP Response object to be send back to the user
-   */ 
+   */    
   getAllInventory(req, res) {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;

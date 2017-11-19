@@ -1,14 +1,14 @@
-var desktopForm = angular.module('desktop-form', []);
+var desktopForm = angular.module('desktopForm', []);
 
 //Component data
-desktopForm.component('desktop-form', {
-  templateUrl: '/inventory/product-forms/desktop-form.html',
+desktopForm.component('desktopForm', {
+  templateUrl: '/catalog/product-forms/desktop-form.html',
   controller: function($scope) {
     $scope.desktop = {};
     $scope.submitDesktop = () => {
       $scope.desktop.type = 'Desktop';
       $scope.$emit('newDesktop', $scope.desktop)
-      $scope.$ctrl.desktop = {};
+      $scope.desktop = {};
     }
   },
 });

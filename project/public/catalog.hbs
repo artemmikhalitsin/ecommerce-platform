@@ -10,16 +10,10 @@
     <script type="text/javascript" src="/catalog/rowItem.module.js"></script>
     <script type="text/javascript" src="/catalog/catalog.module.js"></script>
 
-    <script type="text/javascript" src="/inventory/new-product.module.js"></script>
-
-    <script type="text/javascript" src="/inventory/product-forms/monitor-form.module.js"></script>
-    <script type="text/javascript" src="/inventory/product-forms/laptop-form.module.js"></script>
-    <script type="text/javascript" src="/inventory/product-forms/desktop-form.module.js"></script>
-    <script type="text/javascript" src="/inventory/product-forms/tablet-form.module.js"></script>
-    <script type="text/javascript" src="/inventory/product-entries/desktop-entry.module.js"></script>
-    <script type="text/javascript" src="/inventory/product-entries/tablet-entry.module.js"></script>
-    <script type="text/javascript" src="/inventory/product-entries/laptop-entry.module.js"></script>
-    <script type="text/javascript" src="/inventory/product-entries/monitor-entry.module.js"></script>
+    <script type="text/javascript" src="/catalog/product-forms/monitor-form.module.js"></script>
+    <script type="text/javascript" src="/catalog/product-forms/laptop-form.module.js"></script>
+    <script type="text/javascript" src="/catalog/product-forms/desktop-form.module.js"></script>
+    <script type="text/javascript" src="/catalog/product-forms/tablet-form.module.js"></script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -53,14 +47,16 @@
                         <select class="form-control" ng-model="selected">
                           <option value="monitor">Monitor</option>
                           <option value="laptop">Laptop</option>
-                          <option value="Desktop">Desktop</option>
+                          <option value="desktop">Desktop</option>
                           <option value="tablet">Tablet</option>
                         </select>
                       </label><br />
-                        <laptop-form ng-show="selected=='laptop'" desktop=''></laptop-form>
+                      <form ng-model="formData">
+                        <laptop-form ng-show="selected=='laptop'"></laptop-form>
                         <tablet-form ng-show="selected=='tablet'"></tablet-form>
-                        <desktop-form ng-show="selected=='Desktop'" ></desktop-form>
+                        <desktop-form ng-show="selected=='desktop'" ></desktop-form>
                         <monitor-form ng-show="selected=='monitor'"></monitor-form>
+                      </form>
                       <br />
                     </div>
                   </div>
