@@ -51,9 +51,8 @@ function remove(serialNumber, http) {
     data: {serialNumber: serialNumber},
   }).then(function successCallback(response) {
       $('#cart_' + serialNumber).remove();
-      window.alert("Removed successfully");
     }, function errorCallback(response) {
-      window.alert("Unsuccessful!");
+      window.alert('Cannot remove item!');
   });
 
 }

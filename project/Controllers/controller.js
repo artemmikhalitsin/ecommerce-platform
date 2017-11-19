@@ -260,27 +260,30 @@ class Controller {
     let purchases = [];
     this.getLatestInventory().then((values) => {
       this.updateInventoryList(values[0]);
-      for (let i in Object.keys(cart)) {
-        if (cart[i]) {
-          if (!this.clientInventory[cart[i].serial]) {
-            res.status(500).send({error:
-              `Item ${cart[i].serial} no longer exists!
-                Remove it from your cart.`});
-          } else {
-            clearTimeout(this.clientInventory[cart[i].serial].timeout);
-            purchases.push({client: user,
-                                model_number: cart[i].model,
-                                serial_number: cart[i].serial,
-                                purchase_Id: cart[i].cartItemId});
-            delete this.clientInventory[cart[i].serial];
-            let transaction = [{client: user,
-                                timestamp: new Date().toISOString()}];
-            this.purchaseCollectionRepo.save(purchases);
-            this.transactionRepo.save(transaction);
-            this.deleteShoppingCart(user);
-            res.status(200).send({success: 'Successful purchase'});
+      let inventoryList = [].concat(...values[0].map((i) => i.serial_numbers));
+      let deletedItems = this.shoppingCartList[user].getCartSerialNumbers()
+        .filter((cartSerial) => inventoryList.indexOf(cartSerial) == -1);
+      if (deletedItems.length > 0) {
+        res.status(500).send({error:
+          `Item(s) ${deletedItems.join(', ')} no longer exist.
+          Remove them to complete the transaction`});
+      } else if (deletedItems.length === 0) {
+        for (let i in Object.keys(cart)) {
+          if (cart[i]) {
+              clearTimeout(this.clientInventory[cart[i].serial].timeout);
+              purchases.push({client: user,
+                                  model_number: cart[i].model,
+                                  serial_number: cart[i].serial,
+                                  purchase_Id: cart[i].cartItemId});
+              delete this.clientInventory[cart[i].serial];
           }
         }
+        let transaction = [{client: user,
+                            timestamp: new Date().toISOString()}];
+        this.purchaseCollectionRepo.save(purchases);
+        this.transactionRepo.save(transaction);
+        this.deleteShoppingCart(user);
+        res.status(200).send({success: 'Successful purchase'});
       }
     })
     .catch((err) => {
@@ -296,19 +299,20 @@ class Controller {
   cancelPurchaseTransaction(req, res) {
     invariant: req.session.email != null, 'User is not logged in';
     pre: {
-      this.shoppingCartList[req.session.email.toString()] != null,
+      this.shoppingCartList[req.session.email] != null,
       'A transaction has not been initiated!';
     }
 
     let user = req.session.email.toString();
     let cartItems = this.shoppingCartList[user].getCartSerialNumbers();
     for (let item = 0; item < cartItems.length; item++) {
-      this.unlockItem(cartItems[item]);
-      clearTimeout(this.clientInventory[cartItems[item]].timeout);
+      if (this.clientInventory[cartItems[item]]) {
+        this.unlockItem(user, cartItems[item]);
+        clearTimeout(this.clientInventory[cartItems[item]].timeout);
+      }
     }
     delete this.shoppingCartList[user];
     res.status(200).send({success: 'Successfully canceled'});
-
     post: {
       this.shoppingCartList[req.session.email.toString()] == null,
       'The user\'s shopping cart still exists; transaction is still active';
