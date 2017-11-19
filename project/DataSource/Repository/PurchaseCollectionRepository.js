@@ -18,7 +18,7 @@ class PurchaseCollectionRepo {
   constructor() {
     this.uow = new UnitOfWork();
     this.inventoryItemsIM = new InventoryItemsIdentityMap();
-    this.purchaseColectionTDG = new PurchaseCollectionTDG();
+    this.purchaseCollectionTDG = new PurchaseCollectionTDG();
   }
   /**
    * Retrieves items from the identity map. If none are there,
@@ -46,9 +46,11 @@ class PurchaseCollectionRepo {
    * @return {Promise<Object[]>} promise which resolves to the list of inventory
    * items in the database
    */
-  get(args) {
-    return database('PurchaseCollection').select('*');
-  }
+   get() {
+     return this.purchaseCollectionTDG.select();
+
+    // return knex('PurchaseCollection').select('*');
+   }
 
   /**
    * Given a list of ids, retrieves items from the identity map corresponding

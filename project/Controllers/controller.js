@@ -11,6 +11,7 @@ const ShoppingCart = require(rootPath +
     '/models/ShoppingCart.js');
 const TransactionLogRepository = require(rootPath
       + '/DataSource/Repository/TransactionLogRepository.js');
+
 /**
  * Identity map of inventory items
  * @author Wai Lau, Amanda Wai
@@ -177,6 +178,7 @@ class Controller {
     res.status(200).send({success: 'Item removed from cart!'});
   }
 
+
   /**
     * Unlocks a previously locked items
     * @param {String} user user that owns the item
@@ -336,16 +338,11 @@ class Controller {
   }
 
   viewPurchaseCollection(req, res) {
-    invariant: req.session.email != null, 'User is not logged in';
-    let cart = this.purchaseCollectionRepo.get('*');
-    Promise.all([cart])
-    .then((values) => {
-      let items = JSON.stringify(values[0]);
-      console.log(items);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    this.purchaseCollectionRepo.get().then(
+      (result) => {
+        res.json(result);
+      }
+    );
   }
 
   /**
@@ -454,7 +451,7 @@ class Controller {
     }
   }
 
-  getProductInfo(req, res) {
+  getProductInfo(req, res, other) {
     this.inventoryRepo.getAllInventoryItems().then(
       (result) => {
         res.json(result);
