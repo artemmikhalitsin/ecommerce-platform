@@ -1,4 +1,4 @@
-_commonProps = ["model_number", "brand_name", "price", "weight",
+_commonProps = ["modelNumber", "brandName", "price", "weight",
                 "type", "serial_numbers"];
 _requestJSON = {"deleteSerials":[], "addSerials":[]};
 
@@ -53,7 +53,7 @@ function addSerialRow(button){
   $(button).parent().parent().parent().find('tr:last').prev().after(`
     <tr>
       <td>
-        <input type="text" class="form-control add-item" name=@${data["model_number"]} placeholder="Serial Number">
+        <input type="text" class="form-control add-item" name=@${data["modelNumber"]} placeholder="Serial Number">
       </td>
       <td>
         <button type="button" onclick="cancelAdd(this);" class="btn btn-default">Cancel</button>
@@ -78,8 +78,8 @@ function formatChildRows( data ) {
           </tr>`
     }
   }
-  var serial_numbers = data.serial_numbers;
-  if (serial_numbers < 1){
+  var serialNumbers = data.serialNumbers;
+  if (serialNumbers < 1){
     serialRows += `<tr>
          <td colspan=2>
            No serial numbers.
@@ -87,14 +87,14 @@ function formatChildRows( data ) {
        </tr>`
   }
   //for each existing serial number add a new row
-  for (number in serial_numbers) {
+  for (number in serialNumbers) {
      serialRows += `
       <tr>
         <td>
-          ${serial_numbers[number]}
+          ${serialNumbers[number]}
         </td>
         <td>
-          <input type="checkbox" id=${serial_numbers[number]}@${data["model_number"]} onchange='deleteSerial(this);'>
+          <input type="checkbox" id=${serialNumbers[number]}@${data["modelNumber"]} onchange='deleteSerial(this);'>
         </td>
       </tr>`;
   }
@@ -114,7 +114,7 @@ function formatChildRows( data ) {
         </table>
       </div>
       <div class="col">
-        <table cellpadding="5" cellspacing="0" border="0" id=${data["model_number"]} style="padding-left:50px;">
+        <table cellpadding="5" cellspacing="0" border="0" id=${data["modelNumber"]} style="padding-left:50px;">
           <tr>
             <td> Serial Numbers </td>
             <td> Delete? </td>
@@ -137,8 +137,8 @@ $(document).ready(function() {
             'data': null,
             'defaultContent': '',
         },
-        {'data': 'model_number'},
-        {'data': 'brand_name'},
+        {'data': 'modelNumber'},
+        {'data': 'brandName'},
         {'data': 'price'},
         {'data': 'weight'},
         {'data': 'type'},
