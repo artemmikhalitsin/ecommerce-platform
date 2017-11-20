@@ -5,8 +5,6 @@ const InventoryItemRepository = require(rootPath +
   '/DataSource/Repository/InventoryItemRepository.js');
 const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
-const PurchaseController = require(rootPath +
-  '/Controllers/purchaseController.js');
 
 /**
  * Identity map of inventory items
@@ -21,7 +19,6 @@ class Controller {
     this.userRepo = new UserRepository();
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
-    this.purchaseController = new PurchaseController();
     this.url = require('url');
     this.crypto = require('crypto');
   }
@@ -77,7 +74,7 @@ class Controller {
    * @param {Object} res HTTP Response object to be send back to the user
    */
 
-  getAllInventory(req, res) {
+  getAllInventory(req, res, purchaseController) {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;
     let prodDesc = this.inventoryRepo.getAllInventoryItems();
@@ -90,7 +87,9 @@ class Controller {
       if (req.session.exists==true && req.session.isAdmin==true) {
         res.render('inventory', {items: items, search: search});
       } else {
-        this.purchaseController.updateInventoryList(values[0]);
+        if (purchaseController) {
+          purchaseController.updateInventoryList(values[0]);
+        }
         res.render('clientInventory', {search: search});
       }
     })

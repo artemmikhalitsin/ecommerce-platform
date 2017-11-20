@@ -85,16 +85,16 @@ app.get('/users', function(req, res) {
 // getting the inventory from the database
 app.get('/getAllInventoryItems', function(req, res) {
   if (req.session.exists) {
-    controller.getAllInventory(req, res);
+    controller.getAllInventory(req, res, purchaseController);
   } else {
     console.log('login error');
-    controller.getAllInventory(req, res);
+    controller.getAllInventory(req, res, null);
   }
 });
 
 // getting the client inventory from the database
 app.get('/clientInventory', function(req, res) {
-    controller.getAllInventory(req, res);
+    controller.getAllInventory(req, res, purchaseController);
     console.log('Successs');
 });
 

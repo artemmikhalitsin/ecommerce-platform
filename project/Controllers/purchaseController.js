@@ -29,7 +29,6 @@ class PurchaseController {
    * @param {Object} newInventory Inventory items
   */
   updateInventoryList(newInventory) {
-    console.log('UPDATING INVENTORY LIST');
     let inventoryList = [].concat(...newInventory.map((i) => i.serial_numbers));
     inventoryList.forEach((serial, index) => {
       if (!this.clientInventory[serial]) {
@@ -44,9 +43,11 @@ class PurchaseController {
         delete this.clientInventory[serial];
       }
     }
-    console.log(this.clientInventory);
   }
 
+  makeNewShoppingCart(user) {
+    this.shoppingCartList[user] = new ShoppingCart();
+  }
   /**
     *@param {String} req user who added an item to their cart
     *@param {String} res item user wants to add to their cart
@@ -54,9 +55,9 @@ class PurchaseController {
   addToShoppingCart(req, res) {
     invariant: req.session.email != null, 'User is not logged in';
     pre: {
-      Object.keys(this.clientInventory).length != 0, 'Catalog is empty';
+      Object.keys(this.clientInventory).length > 0, 'Catalog is empty';
       this.clientInventory[req.body.serialNumber], 'Item does not exist!';
-      if (this.shoppingCartList[req.session.email.toString()]) {
+      if (this.shoppingCartList[req.session.email]) {
         Object.keys(this.shoppingCartList[req.session.email.toString()]
           .getCart()).length < 7, 'Cart has more than 7 items!';
       }
@@ -74,7 +75,7 @@ class PurchaseController {
     let productNumber = req.body.modelNumber;
     let user = req.session.email;
     if (!this.shoppingCartList[user]) {
-      this.shoppingCartList[user] = new ShoppingCart();
+      this.makeNewShoppingCart(user);
     }
     this.getLatestInventory().then((values) => {
       this.updateInventoryList(values[0]);
