@@ -100,5 +100,19 @@ class ProductDescriptionsTDG {
       .from('ProductDescription')
       .where({model_number: productDescription.modelNumber});
   }
+  /**
+   * Deletes an item from the inventory given an id
+   * @param {number} productDescription the model number of the description to be deleted,
+   * as it appears in the table
+   * @return {Promise<number>} a promise which resolves to the number of rows
+   * affected
+   */
+  delete(prodDescription) {
+      console.log(productDescription);
+      console.log('in productDescriptionTDG');
+      return connection.from('ProductDescription').where(
+        {'model_number': prodDescription.modelNumber}
+      ).del();
+  }
 }
 module.exports = ProductDescriptionsTDG;

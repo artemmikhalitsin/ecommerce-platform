@@ -27,6 +27,8 @@ class ProductDescriptionsIdentityMap {
      * Gets all the products currently stored in the Identity map
      * @return {Object[]} an array containing the products
      */
+
+     //TODO modify to only retrieve available descriptions
   getAll() {
     return this.productDescriptions;
   }
@@ -80,6 +82,16 @@ class ProductDescriptionsIdentityMap {
         this.productDescriptions[index] = Object.assign({}, newDescription);
       }
     }
+  }
+  /**
+     * Deletes items from the identity map by filtering them out
+     * @param {string[]} productDescriptionToRemove a list of alpha-numberical
+     * model numbers for which the description is to be removed
+     */
+  delete(toRemove) {
+    this.productDescription = this.productDescription.filter((item) => {
+      return !toRemove.includes(item.model_number);
+    });
   }
 }
 module.exports = ProductDescriptionsIdentityMap;
