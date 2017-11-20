@@ -139,7 +139,7 @@ app.post('/api/addToReturnCart', function(req, res) {
 });
 
 app.post('/api/returnPurchaseItems', function(req, res) {
-  controller.returnPurchaseTransaction(res, req);
+  controller.returnPurchaseTransaction(req, res);
 });
 
 app.get('/api/viewPurchaseCollection', function(req, res) {

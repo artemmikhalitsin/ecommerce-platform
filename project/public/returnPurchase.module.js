@@ -27,9 +27,9 @@ function returnPurchaseController($scope, $http, $compile){
         url: '/api/addToReturnCart',
         data: {serialNumber: serialNumber, modelNumber: modelNumber},
       }).then(function successCallback(response){
-        window.alert("Returned");
+        window.alert("Added to Cart");
       }, function errorCallback(response){
-        window.alert("Not Returned");
+        window.alert("Not Added to Cart");
       });
     }
 

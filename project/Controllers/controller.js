@@ -278,19 +278,15 @@ class Controller {
   /**
    * Submits return transaction to database
    * @param {Object} req
-   * @param {Object} res list/array of serial numbers of returned items
+   * @param {Object} res
   */
   returnPurchaseTransaction(req, res) {
-    pre: {
-      req.session.email != null, 'User is not logged in';
-    }
-
     let user = req.session.email.toString();
     let returnCart = Object.values(this.returnCartList[user].getCart());
     let returns = [];
     for (let i in Object.keys(returnCart)) {
       if (returnCart[i]) {
-        clearTimeout(this.returnPurchase[returnCart[i].serial].timeout);
+        // clearTimeout(this.returnPurchase[returnCart[i].serial].timeout);
         returns.push({client: user,
                             model_number: returnCart[i].model,
                             serial_number: returnCart[i].serial,
@@ -303,9 +299,15 @@ class Controller {
                         timestamp: new Date().toISOString()}];
 
     this.InventoryItemRepository.save(returns);
+    this.purchaseCollectionRepo.returnItems(returns);
     this.transactionRepo.save(transaction);
     this.deleteReturnCart(user);
     res.status(200).send({success: 'Successful Return'});
+
+    post: {
+      this.returnCartList[req.session.email.toString()] == null,
+        'Return cart still exists';
+    }
   }
 
   addToReturnCart(req, res) {
