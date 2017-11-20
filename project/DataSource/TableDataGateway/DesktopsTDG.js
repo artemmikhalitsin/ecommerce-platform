@@ -25,7 +25,7 @@ class DesktopsTDG {
     add(compId, dimensionsId, desktop) {
         return connection.insert({
             'comp_id': compId,
-            'model_number': desktop.model_number,
+            'model_number': desktop.modelNumber,
             'dimension_id': dimensionsId,
         }, 'id')
         .into('Desktop');
@@ -101,10 +101,10 @@ class DesktopsTDG {
      */
     update(compId, dimensionsId, desktop) {
         return connection.update({
-        'model_number': desktop.model_number,
-        'dimension_id': desktop.dimension.dimensions_id,
-      }).from('Desktop').where({id: desktop.id});
-      // REVIEW: This was marked todo, is this still the case? - Artem
+         'comp_id': desktop.computerId,
+         'model_number': desktop.modelNumber,
+         'dimension_id': desktop.dimensions.id,
+      }).from('Desktop').where({'model_number': desktop.modelNumber});
     }
 }
 module.exports = DesktopsTDG;

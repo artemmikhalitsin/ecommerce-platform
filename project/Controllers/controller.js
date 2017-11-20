@@ -1,4 +1,7 @@
+const Promise = require('bluebird');
 const rootPath = require('app-root-dir').get();
+const InventoryItem = require(rootPath +
+  '/models/InventoryItem.js');
 const ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
 const InventoryItemRepository = require(rootPath +
@@ -299,29 +302,77 @@ class Controller {
   /**
    * Retrieves a complete list of products and serial numbers from
    * the database
-   * @param {Object} req HTTP Request object containing query info
+   * @param {Object} req HTTP Request object containing query  info
    * @param {Object} res HTTP Response object to be send back to the user
-   */
-
+   */    
   getAllInventory(req, res) {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;
-    let prodDesc = this.inventoryRepo.getAllInventoryItems();
-    Promise.all([prodDesc])
-    .then((values) => {
-      let items = JSON.stringify(values[0]);
-      // items = JSON.stringify(toSave);
-      // console.log('Values: ', items);
-
+    let inventory = [];
+    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
+    .then((results)=>{
+       return Promise.each(results, (product)=>{
+        return this.inventoryRepo.getByModelNumbers([product.modelNumber]).then((values)=>{
+                  product.serial_numbers = values.map((p) => p.serialNumber);
+                  inventory.push(product);
+                });
+      });
+      }).then((val)=>{
+        console.log('Values: ', JSON.stringify(inventory));
       if (req.session.exists==true && req.session.isAdmin==true) {
-        res.render('inventory', {items: items, search: search});
+        res.render('inventory', {items: JSON.stringify(inventory), search: search});
+      } else if (req.session.exists==true && req.session.isAdmin==false) {
+        this.updateInventoryList(inventory);
+        res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
       } else {
-        this.updateInventoryList(values[0]); // Populate shopping inventory list
-        res.render('clientInventory', {search: search});
+        res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
       }
-    })
-    .catch((err) => {
+      }).catch((err) => {
       console.log(err);
+    });
+  }
+
+  manageInventory(inventoryItems) {
+    let results = this.inventoryRepo.save(inventoryItems);
+  }
+  getProductDescription(req, res) {
+    let query = this.url.parse(req.url, true).query;
+    let search = query.search;
+    let catalog = [];
+    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
+    .then((results)=>{
+        console.log('Product Descriptions: ', JSON.stringify(results));
+        // res.render('catalog', {items: JSON.stringify(results), search: search});
+      if (req.session.exists==true && req.session.isAdmin==true) {
+        return res.send({items: results, search: search});
+      }
+      }).catch((err) => {
+      console.log(err);
+    });
+  }
+  getCatalog(req, res) {
+    let query = this.url.parse(req.url, true).query;
+    let search = query.search;
+    let catalog = [];
+    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
+    .then((results)=>{
+        // res.render('catalog', {items: JSON.stringify(results), search: search});
+      if (req.session.exists==true && req.session.isAdmin==true) {
+        res.render('catalog', {items: JSON.stringify(results), search: search});
+      } else if (req.session.exists==true && req.session.isAdmin==false) {
+        res.redirect('/login');
+      } else {
+        res.redirect('/login');
+      }
+      }).catch((err) => {
+      console.log(err);
+    });
+  }
+  manageProductCatalog(req, res) {
+    let productDescriptions = JSON.parse(req.body.productDescriptions);
+    let results = this.productDescriptionRepo.save(productDescriptions).then((results) => {
+      console.log('Success saving the Product descriptions!');
+      this.getProductDescription(req, res);
     });
   }
 
