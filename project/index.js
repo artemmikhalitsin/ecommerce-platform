@@ -77,7 +77,11 @@ app.get('/logout', function(req, res) {
 });
 
 app.get('/users', function(req, res) {
+    if (req.session.exists) {
   res.render('userTable');
+    }
+    else
+   res.redirect('/login');
 });
 
 // getting the inventory from the database
