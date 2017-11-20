@@ -44,11 +44,13 @@ class DesktopsTDG {
                       desktop.ram_size,
                       desktop.number_cpu_cores,
                       desktop.harddrive_size,
+                      /*
                       new Dimensions(
                           desktop.dimension_id,
                           desktop.depth,
                           desktop.height,
                           desktop.width),
+                          */
                       desktop.price,
                       desktop.weight,
                       desktop.brand_name,

@@ -50,11 +50,13 @@ class TabletsTDG {
                       tablet.number_cpu_cores,
                       tablet.harddrive_size,
                       tablet.display_size,
+                      /*
                       new Dimensions(
                           tablet.dimension_id,
                           tablet.depth,
                           tablet.height,
                           tablet.width),
+                          */
                       tablet.battery_info,
                       tablet.os,
                       tablet.camera_info,
