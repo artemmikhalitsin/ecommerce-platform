@@ -8,7 +8,7 @@ const rootPath = require('app-root-dir').get();
 const ProductDescription = require(rootPath + '/models/ProductDescription.js');
 
 class Computer extends ProductDescription {
-    /**
+    /*
      * Given attributes of a computer, consutrcts a Computer object
      * @param {String} id id
      * @param {string} processorType processor type

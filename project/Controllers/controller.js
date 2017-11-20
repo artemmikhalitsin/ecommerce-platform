@@ -311,15 +311,12 @@ class Controller {
     let inventory = [];
     let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
     .then((results)=>{
-<<<<<<< HEAD
+
       console.log('all the products are: ' + JSON.stringify(results));
        return Promise.each(results, (product)=>{
         return this.inventoryRepo.getByModelNumbers([product.modelNumber]).then((values)=>{
                   console.log('inventory item is ' + JSON.stringify(values));
-=======
-       return Promise.each(results, (product)=>{
-        return this.inventoryRepo.getByModelNumbers([product.modelNumber]).then((values)=>{
->>>>>>> 8c6de9439be15fed271328a4c7a3b60440f36048
+
                   product.serial_numbers = values.map((p) => p.serialNumber);
                   inventory.push(product);
                 });
@@ -397,15 +394,13 @@ class Controller {
     }
   }
 
-<<<<<<< HEAD
+
   /**
    * Processes an inventory action initiated by the user
    * @param {Object} req HTTP request object containing action info
    * @param {Object} res HTTP response object to be returned to the user
    */
-=======
 
->>>>>>> 8c6de9439be15fed271328a4c7a3b60440f36048
   inventoryAction(req, res) {
     if (req.session.exists==true && req.session.isAdmin==true) {
       let request = req.body;
