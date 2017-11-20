@@ -132,7 +132,6 @@ app.post('/cancelTransaction', function(req, res) {
 
 app.get('/returnPage', function(req, res) {
   res.render('returnPurchase');
-<<<<<<< HEAD
 });
 
 app.post('/api/addToReturnCart', function(req, res) {
@@ -141,8 +140,6 @@ app.post('/api/addToReturnCart', function(req, res) {
 
 app.post('/api/returnPurchaseItems', function(req, res) {
   controller.returnPurchaseTransaction(req, res);
-=======
->>>>>>> 1ea10958ff93a9e9a62e7354f1e53a66ffe30090
 });
 
 app.get('/api/viewPurchaseCollection', function(req, res) {

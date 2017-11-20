@@ -8,13 +8,9 @@ const UserRepository = require(rootPath +
 const PurchaseCollectionRepo = require(rootPath
     + '/DataSource/Repository/PurchaseCollectionRepository.js');
 const ShoppingCart = require(rootPath +
-<<<<<<< HEAD
-    '/models/ShoppingCart.js');
+    '/Cart/ShoppingCart.js');
 const ReturnCart = require(rootPath
     + '/models/ReturnCart.js');
-=======
-    '/Cart/ShoppingCart.js');
->>>>>>> 1ea10958ff93a9e9a62e7354f1e53a66ffe30090
 const TransactionLogRepository = require(rootPath
       + '/DataSource/Repository/TransactionLogRepository.js');
 
@@ -337,7 +333,6 @@ class Controller {
    * @param {Object} res
   */
   returnPurchaseTransaction(req, res) {
-<<<<<<< HEAD
     let user = req.session.email.toString();
     let returnCart = Object.values(this.returnCartList[user].getCart());
     let returns = [];
@@ -351,12 +346,6 @@ class Controller {
     }
     let transaction = [{client: user,
                         timestamp: new Date().toISOString()}];
-=======
-    invariant: req.session.email != null, 'User is not logged in';
-    let returnItem = res;
-
-    /* res.forEach((product, serialNumber) => {
->>>>>>> 1ea10958ff93a9e9a62e7354f1e53a66ffe30090
 
     this.purchaseCollectionRepo.returnItems(returns);
     this.transactionRepo.save(transaction);
