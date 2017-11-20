@@ -384,10 +384,8 @@ class Controller {
    */
 
   logout(req, res) {
-    if (req.session.exists) {
-      req.session.destroy();
-      res.redirect('/');
-    }
+    req.session.destroy();
+    res.redirect('/');
   }
 
 
