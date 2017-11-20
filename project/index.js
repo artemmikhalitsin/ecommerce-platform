@@ -19,7 +19,7 @@ const Aspect = require(rootPath +
 let controller = new Controller();
 // linter is wrong, aspect is enabled by the constructor
 let aspect = new Aspect();
-aspect.initialize(controller);
+aspect.monitor(controller);
 
 // allows use of static pages
 app.use(express.static(path.join(__dirname, 'public')));
@@ -100,12 +100,7 @@ app.get('/users', function(req, res) {
 
 // getting the inventory from the database
 app.get('/getAllInventoryItems', function(req, res) {
-  if (req.session.exists) {
-    controller.getAllInventory(req, res);
-  } else {
-    console.log('login error');
-    controller.getAllInventory(req, res);
-  }
+  controller.getAllInventory(req, res);
 });
 
 // getting the client inventory from the database

@@ -20,9 +20,11 @@ class Desktop extends Computer {
    * @param {string} brandName brand name
    * @param {string} modelNumber model number
    * @param {Object} computerId computer id
+   * @param {string} type
    */
   constructor(processorType, ramSize, numberCpuCores, harddriveSize,
-              dimensions, price, weight, brandName, modelNumber, computerId, type) {
+              dimensions, price, weight, brandName, modelNumber, computerId,
+              type) {
     super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
           price, weight, brandName, modelNumber, type);
         this.dimensions = dimensions;

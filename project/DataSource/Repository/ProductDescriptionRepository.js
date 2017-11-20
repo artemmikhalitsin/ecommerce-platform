@@ -14,7 +14,7 @@ let MonitorsTDG = require(rootPath
   + '/DataSource/TableDataGateway/MonitorsTDG.js');
 let TabletsTDG = require(rootPath
   + '/DataSource/TableDataGateway/TabletsTDG.js');
-let ProductDescription = require(rootPath + '/models/ProductDescription.js');
+// let ProductDescription = require(rootPath + '/models/ProductDescription.js');
 
 /**
  * Repository for product descrptions
@@ -61,6 +61,7 @@ class ProductDescriptionRepository {
         for (let i = 0; i < products.length; i++) {
           result.push(products[i]);
         }
+      console.log('Result from repo: ' + JSON.stringify(products));
     return result;
     });
   }
@@ -123,23 +124,25 @@ class ProductDescriptionRepository {
   save(products) {
     let electronicsToAdd = [];
     let electronicsToUpdate = [];
+    // let electronicsToDelete = [];
 
-    let productIds = products.map((p) => p.modelNumber);
+    let productIds = products.map((p) => p.model_number);
+
     if (productIds.length > 0) {
     let context = this.getByIds(productIds);
     let allRecords = this.ProductDescriptionIM.getAll();
     for (let i = 0; i < products.length; i++) {
       if (context.findIndex(
-        (p) => p.modelNumber == products[i].modelNumber) !== -1
+        (p) => p.model_number == products[i].model_number) !== -1
           && electronicsToUpdate.findIndex(
-            (e) => e.modelNumber == products[i].modelNumber) === -1) {
+            (e) => e.model_number == products[i].model_number) === -1) {
             // Case: the product exists in our list of products
             // and hasn't already been processed
             electronicsToUpdate.push(products[i]);
       } else if (allRecords.findIndex(
-        (p) => p.modelNumber == products[i].modelNumber) === -1
+        (p) => p.model_number == products[i].model_number) === -1
               && electronicsToAdd.findIndex(
-                (e) => e.modelNumber == products[i].modelNumber) === -1) {
+                (e) => e.model_number == products[i].model_number) === -1) {
                 // Case: the product doesn't exist in our list of products
                 // and hasn't already been processed
                 electronicsToAdd.push(products[i]);
@@ -149,10 +152,8 @@ class ProductDescriptionRepository {
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);
 
-    return this.uow.commitAll().then((result) => {
-      this.ProductDescriptionIM.add(electronicsToAdd);
-      return true;
-    });
+    this.uow.commitAll();
+    this.ProductDescriptionIM.add(electronicsToAdd);
   }
 }
 

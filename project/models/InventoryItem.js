@@ -2,14 +2,14 @@
  * Class containing info common to all products
  * @author Ekaterina Ruhlin
  */
- const rootPath = require('app-root-dir').get();
-const Computer = require(rootPath + '/models/ProductDescription.js');
+// const rootPath = require('app-root-dir').get();
+// const Computer = require(rootPath + '/models/ProductDescription.js');
 class InventoryItem {
     /**
      * @param {number} id id
      * @param {string} serialNumber brand name
      * @param {string} modelNumber model number
-     * @param {Object} productDescrition productDescription
+     * @param {Object} productDescription productDescription
      */
     constructor(id, serialNumber, modelNumber, productDescription) {
         this.id = id;
