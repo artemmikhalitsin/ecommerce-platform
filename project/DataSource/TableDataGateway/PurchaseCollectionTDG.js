@@ -46,6 +46,8 @@ class PurchaseCollectionTDG {
      * affected
      */
     delete(returnItem) {
+        console.log(returnItem);
+        console.log('in purchaseTDG');
         return connection.from('PurchaseCollection').where(
           {'serial_number': returnItem.serial_number}
         ).del();

@@ -286,19 +286,15 @@ class Controller {
     let returns = [];
     for (let i in Object.keys(returnCart)) {
       if (returnCart[i]) {
-        // clearTimeout(this.returnPurchase[returnCart[i].serial].timeout);
         returns.push({client: user,
                             model_number: returnCart[i].model,
                             serial_number: returnCart[i].serial,
                             purchase_Id: returnCart[i].cartItemId});
-
-        delete this.returnPurchase[returnCart[i].serial];
       }
     }
     let transaction = [{client: user,
                         timestamp: new Date().toISOString()}];
 
-    this.InventoryItemRepository.save(returns);
     this.purchaseCollectionRepo.returnItems(returns);
     this.transactionRepo.save(transaction);
     this.deleteReturnCart(user);
