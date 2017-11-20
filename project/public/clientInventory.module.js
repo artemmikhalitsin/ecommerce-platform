@@ -52,7 +52,11 @@ function ClientInventoryController($scope, $http, $compile) {
         $('#temp_cart').children().remove();
 
       }, function errorCallback(response) {
-        window.alert(response.data.error);
+        if (response.data.error) {
+          window.alert(response.data.error);
+        } else {
+          window.alert('Your transaction can\'t be completed at this time');
+        }
     });
   }
 
@@ -62,7 +66,7 @@ function ClientInventoryController($scope, $http, $compile) {
       url: '/cancelTransaction'
     }).then(function successCallback(response) {
         window.alert("Canceled!");
-
+        $('#temp_cart').children().remove();
       }, function errorCallback(response) {
         window.alert("Not canceled");
     });

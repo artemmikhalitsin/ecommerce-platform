@@ -13,9 +13,12 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 }));
 
 const Controller = require(rootPath + '/Controllers/controller');
+const PurchaseController = require(rootPath +
+  '/Controllers/purchaseController');
 const Aspect = require(rootPath +
   '/Aspects/aspect.js');
 let controller = new Controller();
+let purchaseController = new PurchaseController();
 // linter is wrong, aspect is enabled by the constructor
 let aspect = new Aspect();
 aspect.initialize(controller);
@@ -82,16 +85,16 @@ app.get('/users', function(req, res) {
 // getting the inventory from the database
 app.get('/getAllInventoryItems', function(req, res) {
   if (req.session.exists) {
-    controller.getAllInventory(req, res);
+    controller.getAllInventory(req, res, purchaseController);
   } else {
     console.log('login error');
-    controller.getAllInventory(req, res);
+    controller.getAllInventory(req, res, null);
   }
 });
 
 // getting the client inventory from the database
 app.get('/clientInventory', function(req, res) {
-    controller.getAllInventory(req, res);
+    controller.getAllInventory(req, res, purchaseController);
     console.log('Successs');
 });
 
@@ -111,23 +114,23 @@ app.post('/loginRequest', function(req, res) {
 });
 
 app.post('/addToCart', function(req, res) {
-    controller.addToShoppingCart(req, res);
+  purchaseController.addToShoppingCart(req, res);
 });
 
 app.post('/removeFromCart', function(req, res) {
-    controller.removeFromShoppingCart(req, res);
+  purchaseController.removeFromShoppingCart(req, res);
 });
 
 app.post('/purchaseItems', function(req, res) {
-  controller.completePurchaseTransaction(req, res);
+  purchaseController.completePurchaseTransaction(req, res);
 });
 
 app.get('/viewShoppingCart', function(req, res) {
-  controller.viewShoppingCart(req, res);
+  purchaseController.viewShoppingCart(req, res);
 });
 
 app.post('/cancelTransaction', function(req, res) {
-  controller.cancelPurchaseTransaction(req, res);
+  purchaseController.cancelPurchaseTransaction(req, res);
 });
 
 app.get('/returnPage', function(req, res) {
@@ -135,15 +138,15 @@ app.get('/returnPage', function(req, res) {
 });
 
 app.post('/api/addToReturnCart', function(req, res) {
-  controller.addToReturnCart(req, res);
+  purchaseController.addToReturnCart(req, res);
 });
 
 app.post('/api/returnPurchaseItems', function(req, res) {
-  controller.returnPurchaseTransaction(req, res);
+  purchaseController.returnPurchaseTransaction(req, res);
 });
 
 app.get('/api/viewPurchaseCollection', function(req, res) {
-  controller.viewPurchaseCollection(req, res);
+  purchaseController.viewPurchaseCollection(req, res);
 });
 
 app.get('/api/getAllProducts', function(req, res) {
