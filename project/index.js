@@ -131,7 +131,15 @@ app.post('/cancelTransaction', function(req, res) {
 });
 
 app.get('/returnPage', function(req, res) {
-  res.render('returnPurchase', {items: JSON.stringify({'user_id': 'hello', 'serial_number': '123456789', 'module_number': '6785678765678', 'purchase_id': '1323213'})});
+  res.render('returnPurchase');
+});
+
+app.post('/api/addToReturnCart', function(req, res) {
+  controller.addToReturnCart(req, res);
+});
+
+app.post('/api/returnPurchaseItems', function(req, res) {
+  controller.returnPurchaseTransaction(res, req);
 });
 
 app.get('/api/viewPurchaseCollection', function(req, res) {

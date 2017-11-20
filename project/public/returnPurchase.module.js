@@ -1,9 +1,6 @@
-var returnPurchase = angular.module("returnPurchase",[]);
+var returnPurchase = angular.module('returnPurchase',[]);
 
 function returnPurchaseController($scope, $http, $compile){
-  let search = new URLSearchParams(window.location.search).get('search');
-  $scope.search = search ? search : "all";
-  $scope.itemsShown = [];
   //Load items from api call
   $scope.items = [];
   $http({
@@ -23,10 +20,23 @@ function returnPurchaseController($scope, $http, $compile){
     });
 
     //New Code
+
+    $scope.addToReturnCart = (serialNumber, modelNumber) => {
+      $http({
+        method: 'POST',
+        url: '/api/addToReturnCart',
+        data: {serialNumber: serialNumber, modelNumber: modelNumber},
+      }).then(function successCallback(response){
+        window.alert("Returned");
+      }, function errorCallback(response){
+        window.alert("Not Returned");
+      });
+    }
+
     $scope.returnPurchase = function(){
       $http({
         method: 'POST',
-        url:'/returnPurchaseItems'
+        url:'/api/returnPurchaseItems'
       }).then(function successCallback(response) {
         window.alert("Returned");
       }, function errorCallback(response){

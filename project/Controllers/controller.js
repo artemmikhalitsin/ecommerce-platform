@@ -9,6 +9,8 @@ const PurchaseCollectionRepo = require(rootPath
     + '/DataSource/Repository/PurchaseCollectionRepository.js');
 const ShoppingCart = require(rootPath +
     '/models/ShoppingCart.js');
+const ReturnCart = require(rootPath
+    + '/models/ReturnCart.js');
 const TransactionLogRepository = require(rootPath
       + '/DataSource/Repository/TransactionLogRepository.js');
 
@@ -29,6 +31,7 @@ class Controller {
     this.transactionRepo = new TransactionLogRepository();
     this.clientInventory = {}; // key: serial, value: locked or not locked
     this.shoppingCartList = {}; // carts associated to users k:user, v: cart
+    this.returnCartList = {}; // carts for returns.
     this.url = require('url');
     this.crypto = require('crypto');
   }
@@ -269,23 +272,67 @@ class Controller {
     }
   }
 
+  deleteReturnCart(user) {
+    delete this.returnCartList[user];
+  }
   /**
    * Submits return transaction to database
    * @param {Object} req
    * @param {Object} res list/array of serial numbers of returned items
   */
   returnPurchaseTransaction(req, res) {
-    let returnItem = res;
+    pre: {
+      req.session.email != null, 'User is not logged in';
+    }
 
-    /* res.forEach((product, serialNumber) => {
+    let user = req.session.email.toString();
+    let returnCart = Object.values(this.returnCartList[user].getCart());
+    let returns = [];
+    for (let i in Object.keys(returnCart)) {
+      if (returnCart[i]) {
+        clearTimeout(this.returnPurchase[returnCart[i].serial].timeout);
+        returns.push({client: user,
+                            model_number: returnCart[i].model,
+                            serial_number: returnCart[i].serial,
+                            purchase_Id: returnCart[i].cartItemId});
 
-    });*/
+        delete this.returnPurchase[returnCart[i].serial];
+      }
+    }
+    let transaction = [{client: user,
+                        timestamp: new Date().toISOString()}];
 
-    this.purchaseCollectionRepo.returnItems(returnItem);
+    this.InventoryItemRepository.save(returns);
+    this.transactionRepo.save(transaction);
+    this.deleteReturnCart(user);
+    res.status(200).send({success: 'Successful Return'});
   }
 
+  addToReturnCart(req, res) {
+    pre: {
+      req.session.email != null, 'User is not logged in';
+    }
+
+    let returnItem = req.body.serialNumber;
+    let productNumber = req.body.modelNumber;
+
+    if (true) {
+      let user = req.session.email.toString();
+      if (!this.returnCartList[user]) {
+        this.returnCartList[user] = new ReturnCart();
+      }
+
+      this.returnCartList[user].addToReturnCart(returnItem, productNumber);
+      res.status(200).send({sucess: 'successfully added'});
+    } else {
+      res.status(500).send({error: 'item in another cart'});
+    }
+    post: {
+
+    }
+  }
   viewPurchaseCollection(req, res) {
-    this.purchaseCollectionRepo.get().then(
+    this.purchaseCollectionRepo.get(req.session.email).then(
       (result) => {
         res.json(result);
       }

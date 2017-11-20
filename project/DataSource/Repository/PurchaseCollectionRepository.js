@@ -46,10 +46,8 @@ class PurchaseCollectionRepo {
    * @return {Promise<Object[]>} promise which resolves to the list of inventory
    * items in the database
    */
-   get() {
-     return this.purchaseCollectionTDG.select();
-
-    // return knex('PurchaseCollection').select('*');
+   get(user) {
+     return this.purchaseCollectionTDG.select(user);
    }
 
   /**
