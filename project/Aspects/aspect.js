@@ -5,15 +5,17 @@ const crypto = require('crypto');
 const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
 let userRepo = new UserRepository();
+let activeUsers = [];
 
 /**
  * Aspect that manages authentication
  * @author Wai Lau, Daniel Isakov
  */
 class Aspect {
-  constructor() {
-    this.activeUsers = [];
-  }
+  // constructor() {
+  //   this.activeUsers = [];
+  //   const that = this;
+  // }
   initialize(controller) {
     meld.around(controller, authPages, (joinpoint) => {
       console.log('Caught by aspect, validating the user...');
@@ -57,7 +59,12 @@ class Aspect {
             req.session.exists=true;
             req.session.hash=data.password;
             req.session.email=data.email;
+            console.log('checking array');
+            console.log(activeUsers);
+            console.log('inputing tuple');
             activeUsers.push(new Tuple(data.email, new Date().getTime()));
+            console.log('new array');
+            console.log(activeUsers);
           }
           if (result[0].is_admin == 1) {
             // REVIEW: this should probably be removed - Artem
@@ -81,9 +88,12 @@ class Aspect {
     });
 
     meld.before(controller, 'logout', function() {
-      const joinpoint = meld.joinpoint;
-      let user = joinpoint.args[0].body.email;
+      const joinpoint = meld.joinpoint();
+      const user = joinpoint.args[0].session.email;
       let index = 0;
+      // console.log('checking array before logout');
+      // console.log(activeUsers);
+      // console.log('user to logout: ' + user);
       for (let usr of activeUsers) {
         if (usr.getEmail() == user) {
           console.log('user found');
@@ -91,6 +101,9 @@ class Aspect {
         }
         index+=1;
       }
+      // console.log('checking new array');
+      // console.log(activeUsers);
+      // console.log('shrinking array');
       activeUsers = activeUsers.filter(function(val) {
         return val != null;
       });
@@ -99,20 +112,20 @@ class Aspect {
 }
 
 class Tuple {
-  constructor(email, lastActiveUse) {
+  constructor(email, lastRequest) {
     this.email = email;
-    this.lastActiveUse = lastActiveUse;
+    this.lastRequest = lastRequest;
   }
 
   getEmail() {
     return this.email;
   }
   timeStamp() {
-    this.lastActiveUse = new Date().getTime();
+    this.lastRequest = new Date().getTime();
   }
 
   isInactive() { // set to 20min
-    if (new Date().getTime() > this.lastActiveUse + 20*60*1000) {
+    if (new Date().getTime() > this.lastRequest + 20*60*1000) {
       return true;
     } else {
       return false;

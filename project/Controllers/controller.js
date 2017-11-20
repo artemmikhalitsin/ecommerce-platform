@@ -317,7 +317,7 @@ class Controller {
         res.render('inventory', {items: items, search: search});
       } else {
         this.updateInventoryList(values[0]); // Populate shopping inventory list
-        res.render('clientInventory', {search: search});
+        res.render('inventory', {search: search});
       }
     })
     .catch((err) => {

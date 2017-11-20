@@ -111,12 +111,12 @@ console.log(err);
     let electronicsToDelete = [];
 
     // Extracts the model numbers of given items
-    let model_numbers = items.map((p) => p.model_number);
+    let modelNumbers = items.map((p) => p.model_number);
 
-    if (model_numbers.length > 0) {
+    if (modelNumbers.length > 0) {
       // Retrieve the items corresponding to given ids
       let allInventoryItems = this.inventoryItemsIM
-                          .getByModelNumbers(model_numbers);
+                          .getByModelNumbers(modelNumbers);
 
       for (let i = 0; i < items.length; i++) {
         for (let j = 0; j < items[i].serial_number.length; j++) {
