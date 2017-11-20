@@ -1,0 +1,47 @@
+<div class="row justify-content-center">
+  <div class="card-block"  style="height:auto;"></br>
+    <form  method="POST" action="">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+
+            <div class="form-group row">
+              <label class="col-4 col-form-label">Brand Name</label>
+              <div class="col-md-8">
+                <input type="text" ng-model="monitor.brandName" class="form-control">
+              </div>
+            </div>
+
+          <div class="form-group row">
+            <label class="col-4 col-form-label">Model Number</label>
+            <div class="col-md-8">
+              <input type="text" ng-model="monitor.modelNumber" class="form-control">
+            </div>
+          </div>
+
+            <div class="row form-group">
+              <label class="col-4 col-form-label">Price</label>
+              <div class="col-md-8">
+                <input type="number" step="0.01" min="0" ng-model="monitor.price" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">Weight(g)</label>
+              <div class="col-md-8">
+                <input type="number" step="1" min="0" ng-model="monitor.weight" class="form-control">
+              </div>
+            </div>
+            <div class="row form-group">
+              <label class="col-4 col-form-label">Display size</label>
+              <div class="col-md-8">
+                <input type="number" step="1" min="0" ng-model="monitor.displaySize" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <button ng-click="submitMonitor()" class="btn btn-primary">Add Monitor</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

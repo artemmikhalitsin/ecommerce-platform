@@ -21,12 +21,12 @@ class LaptopsTDG {
     add(compId, laptop) {
         return connection.insert({
             'comp_id': compId,
-            'model_number': laptop.model_number,
-            'display_size': laptop.display_size,
-            'battery_info': laptop.battery_info,
+            'model_number': laptop.modelNumber,
+            'display_size': laptop.displaySize,
+            'battery_info': laptop.batteryInfo,
             'os': laptop.os,
             'camera': laptop.camera,
-            'touch_screen': laptop.touch_screen,
+            'touch_screen': laptop.touchscreen,
         }, 'id')
         .into('Laptop');
     }
@@ -100,14 +100,14 @@ class LaptopsTDG {
     update(compId, laptop) {
       // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
-          'comp_id': laptop.comp_id,
-          'model_number': laptop.model_number,
-          'display_size': laptop.display_size,
-          'battery_info': laptop.battery_info,
+          'comp_id': laptop.computerId,
+          // 'model_number': laptop.modelNumber,
+          'display_size': laptop.displaySize,
+          'battery_info': laptop.batteryInfo,
           'os': laptop.os,
           'camera': laptop.camera,
-          'touch_screen': laptop.touch_screen,
-        }).from('Laptop').where({id: laptop.id});
+          'touch_screen': laptop.touchscreen,
+        }).from('Laptop').where({'model_number': laptop.modelNumber});
     }
 }
 module.exports = LaptopsTDG;
