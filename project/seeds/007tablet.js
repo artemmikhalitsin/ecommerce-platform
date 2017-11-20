@@ -6,7 +6,7 @@ const tablets = [
     'display_size': 25,
     'battery_info': 'regional',
     'os': 'Graphic Interface',
-    'camera_info': 'tellus nulla ut'
+    'camera_info': 'tellus nulla ut',
   },
   {
     'model_number': '847042583-8',
@@ -15,8 +15,8 @@ const tablets = [
     'display_size': 24,
     'battery_info': 'dedicated',
     'os': 'Extended',
-    'camera_info': 'nulla ultrices aliquet maecenas'
-  }
+    'camera_info': 'nulla ultrices aliquet maecenas',
+  },
 ];
 
 exports.seed = function(knex, Promise) {

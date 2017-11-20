@@ -1,10 +1,10 @@
-var adminInventory = angular.module('adminInventory', [])
+let adminInventory = angular.module('adminInventory', []);
 
 adminInventory.controller('AdminController', function($scope) {
   $scope.items = [{
     serial_number: ['22'],
     model_number: '22',
-    brand_name: "b",
+    brand_name: 'b',
     price: 1,
     weight: 1,
     type: 'Desktop',
@@ -14,11 +14,11 @@ adminInventory.controller('AdminController', function($scope) {
     harddrive_size: 3,
     dimensions: {depth: 1,
        height: 1,
-       width: 1}
-   },{
+       width: 1},
+   }, {
     serial_number: ['1234'],
     model_number: '61',
-    brand_name: "changed",
+    brand_name: 'changed',
     price: 1,
     weight: 1,
     type: 'Desktop',
@@ -28,11 +28,11 @@ adminInventory.controller('AdminController', function($scope) {
     harddrive_size: 3,
     dimensions: {depth: 1,
        height: 1,
-       width: 1}
-   },{
+       width: 1},
+   }, {
     serial_number: ['12', '14'],
     model_number: '62',
-    brand_name: "b",
+    brand_name: 'b',
     price: 1,
     weight: 1,
     type: 'Desktop',
@@ -42,11 +42,11 @@ adminInventory.controller('AdminController', function($scope) {
     harddrive_size: 3,
     dimensions: {depth: 1,
        height: 1,
-       width: 1}
+       width: 1},
    }];
 
-   //Datatable setup
-   var inventory_table = $('#table_inventory').DataTable({
+   // Datatable setup
+   let inventory_table = $('#table_inventory').DataTable({
      data: $scope.items,
      columns: [
        {
@@ -74,9 +74,9 @@ adminInventory.controller('AdminController', function($scope) {
        } else {
            // Open this row
            let rowData = row.data();
-           console.log("Printing type: ", rowData.type);
+           console.log('Printing type: ', rowData.type);
            row.child( formatChildRows(row.data()) ).show();
            tr.addClass('shown');
        }
    });
-})
+});

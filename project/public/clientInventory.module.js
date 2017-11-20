@@ -1,71 +1,67 @@
-var clientInventory = angular.module('clientInventory', ['desktopCard', 'monitorCard', 'tabletCard', 'laptopCard']);
+let clientInventory = angular.module('clientInventory', ['desktopCard', 'monitorCard', 'tabletCard', 'laptopCard']);
 
 function ClientInventoryController($scope, $http, $compile) {
-  //Get any search parameters
+  // Get any search parameters
   let search = new URLSearchParams(window.location.search).get('search');
-  $scope.search = search ? search : "all";
+  $scope.search = search ? search : 'all';
   $scope.itemsShown = [];
-  //Load items from api call
+  // Load items from api call
   $scope.items = [];
   $http({
     method: 'GET',
-    url: '/api/getAllProducts'
+    url: '/api/getAllProducts',
   })
   .then(
     (res) => {
       $scope.items = res.data;
       $scope.itemsShown = res.data;
       console.log($scope.itemsShown);
-      filterShown($scope.search)
+      filterShown($scope.search);
     }
   )
   .catch(
     (err) => {
-      window.alert("Error loading inventory items.\n"
+      window.alert('Error loading inventory items.\n'
     + `Please contact the admin. Error code: ${err}`);
   });
 
-  //Helper function that filters shown items, based on current search JQuery
+  // Helper function that filters shown items, based on current search JQuery
   let filterShown = function(query) {
-    if (query == "all")
-    {
+    if (query == 'all') {
       $scope.itemsShown = $scope.items;
-    }
-    else {
+    } else {
       $scope.itemsShown = $scope.items.filter(
-        item => item.type == query
+        (item) => item.type == query
       );
     }
-  }
+  };
 
-  //Any time search query is changed, re-filter results
+  // Any time search query is changed, re-filter results
   $scope.$watch('search', function(newVal, oldVal) {
-    filterShown(newVal)
+    filterShown(newVal);
   });
 
-  $scope.purchase = function(){
+  $scope.purchase = function() {
     $http({
       method: 'POST',
-      url: '/purchaseItems'
+      url: '/purchaseItems',
     }).then(function successCallback(response) {
-        window.alert("Purchased!");
-
+        window.alert('Purchased!');
       }, function errorCallback(response) {
-        window.alert("Not purchased");
+        window.alert('Not purchased');
     });
-  }
+  };
 
-  $scope.cancelTransaction = function(){
+  $scope.cancelTransaction = function() {
     $http({
       method: 'POST',
-      url: '/cancelTransaction'
+      url: '/cancelTransaction',
     }).then(function successCallback(response) {
-        window.alert("Canceled!");
-
+        window.alert('Canceled!');
       }, function errorCallback(response) {
-        window.alert("Not canceled");
+        window.alert('Not canceled');
     });
-  }
+  };
 }
 
 clientInventory.controller('ClientInventoryController', ClientInventoryController);

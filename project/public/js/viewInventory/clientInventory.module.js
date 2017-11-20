@@ -1,4 +1,4 @@
-var clientInventory = angular.module('clientInventory', [])
+let clientInventory = angular.module('clientInventory', []);
 
 clientInventory.config(function($interpolateProvider) {
   $interpolateProvider.startSymbol('{[{');
@@ -6,5 +6,5 @@ clientInventory.config(function($interpolateProvider) {
 });
 
 clientInventory.controller('InventoryController', ['$scope', function($scope, $compile) {
-  $scope.fruits=['apple', 'banana', 'kiwi', 'mango']
+  $scope.fruits=['apple', 'banana', 'kiwi', 'mango'];
 }]);

@@ -6,7 +6,7 @@ const laptops = [
     'battery_info': 'integer a nibh',
     'os': 'elit proin',
     'touch_screen': false,
-    'camera': true
+    'camera': true,
   },
   {
     'model_number': '079057815-8',
@@ -15,7 +15,7 @@ const laptops = [
     'battery_info': 'integer fwsd frdgt',
     'os': 'elit ksthvd wrycnd',
     'touch_screen': false,
-    'camera': true
+    'camera': true,
   },
   {
     'model_number': '471262598-8',
@@ -24,8 +24,8 @@ const laptops = [
     'battery_info': 'integer b sdfrg iskfe',
     'os': 'elits rdwfr gtde',
     'touch_screen': true,
-    'camera': true
-  }
+    'camera': true,
+  },
 ];
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries

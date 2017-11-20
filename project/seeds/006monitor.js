@@ -1,12 +1,12 @@
 const monitors = [
   {
     'model_number': '141278542-1',
-    'display_size': 32
+    'display_size': 32,
   },
   {
     'model_number': '511703112-1',
-    'display_size': 40
-  }
+    'display_size': 40,
+  },
 ];
 
 exports.seed = function(knex, Promise) {

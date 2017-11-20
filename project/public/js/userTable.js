@@ -14,7 +14,7 @@ $(document).ready(function() {
         {'data': 'last_name'},
         {'data': 'password'},
         {'data': 'full_adress'},
-        {'data': 'phone_number'}
+        {'data': 'phone_number'},
       ],
     });
     $('input[type="search"]').val(search).keyup();

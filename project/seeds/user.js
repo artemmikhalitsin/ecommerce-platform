@@ -25,7 +25,7 @@ const users = [
     'is_admin': true,
     'phone_number': '1234567890',
     'password': '5d67f20efe3f11f3c5f92e591866bf66b9533ac79df3fb90ee3a84f451f12558',
-  }
+  },
 ];
 
 exports.seed = function(knex, Promise) {

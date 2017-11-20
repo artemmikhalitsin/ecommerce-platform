@@ -1,6 +1,6 @@
-var laptopForm = angular.module('laptopForm', []);
+let laptopForm = angular.module('laptopForm', []);
 
-//Component data
+// Component data
 laptopForm.component('laptopForm', {
   templateUrl: '/inventory/product-forms/laptop-form.html',
   controller: function($scope) {
@@ -8,21 +8,21 @@ laptopForm.component('laptopForm', {
     $scope.serial_number = '';
     $scope.submitLaptop = () => {
       $scope.laptop.type = 'laptop';
-      $scope.$emit("newLaptop", $scope.laptop);
+      $scope.$emit('newLaptop', $scope.laptop);
       $scope.laptop = {};
-    }
+    };
     $scope.addSerial = () => {
-      if($scope.serial_number === '') return;
-      if(!$scope.laptop.serial_numbers){
-        //make empty array
+      if ($scope.serial_number === '') return;
+      if (!$scope.laptop.serial_numbers) {
+        // make empty array
         $scope.laptop.serial_numbers = [];
       }
-      //append serial to array
+      // append serial to array
         $scope.laptop.serial_numbers.push($scope.serial_number);
         $scope.serial_number = '';
-    }
+    };
     $scope.remove = (index) => {
-      $scope.laptop.serial_numbers.splice(index,1);
-    }
+      $scope.laptop.serial_numbers.splice(index, 1);
+    };
   },
 });
