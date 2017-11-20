@@ -9,12 +9,12 @@ exports.up = function(knex, Promise) {
     if (!table) {
       throw new Error('Error creating table ' + tablename);
     } else {
-      table.increments('id').unsigned().primary();
+      table.string('purchase_id').notNullable().primary().unique();
       table.string('user_id').notNullable();
+      table.foreign('user_id').references('User.email');
       table.string('serial_number').notNullable().unique();
       table.string('model_number').notNullable();
       table.foreign('model_number').references('ProductDescription.model_number');
-      table.string('purchase_id').notNullable();
     }
   });
 };
