@@ -17,8 +17,12 @@ class ShoppingCart {
     }
 
     generatePurchaseId() {
-        return Math.round((Math.pow(36, 17) - Math.random()
-              * Math.pow(36, 16))).toString(36).slice(1).toUpperCase();
+      let result = '';
+      let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      for (let i = 16; i > 0; --i) {
+        result += chars[Math.round(Math.random() * (chars.length - 1))];
+      }
+      return result;
     }
 
     addToCart(item, modelNumber) {

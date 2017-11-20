@@ -8,7 +8,7 @@ const UserRepository = require(rootPath +
 const PurchaseCollectionRepo = require(rootPath
     + '/DataSource/Repository/PurchaseCollectionRepository.js');
 const ShoppingCart = require(rootPath +
-    '/models/ShoppingCart.js');
+    '/Cart/ShoppingCart.js');
 const TransactionLogRepository = require(rootPath
       + '/DataSource/Repository/TransactionLogRepository.js');
 
