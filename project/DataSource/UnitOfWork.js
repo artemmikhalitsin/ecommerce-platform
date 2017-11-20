@@ -147,7 +147,7 @@ class UnitOfWork {
        //remove purchase
        let deletedPurchase;
        if(this.deletedPurchases[0] != null && this.deletedPurchases[0].length > 0){
-        deletedPurchases = Promise.each(this.deletedPurchases[0], (electronic) => {
+        deletedPurchase = Promise.each(this.deletedPurchases[0], (electronic) => {
          return this.purchaseTDG.delete(electronic).transacting(trx).then(() => {
                console.log('deleted purchase item');
          })
@@ -308,7 +308,7 @@ class UnitOfWork {
       }
       //add
       );}
-      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems, addedTransaction])
+      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems, addedTransaction, deletedPurchase])
         .then(trx.commit)
         .catch(trx.rollback);
     });

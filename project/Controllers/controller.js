@@ -10,7 +10,7 @@ const PurchaseCollectionRepo = require(rootPath
 const ShoppingCart = require(rootPath +
     '/Cart/ShoppingCart.js');
 const ReturnCart = require(rootPath
-    + '/models/ReturnCart.js');
+    + '/Cart/ReturnCart.js');
 const TransactionLogRepository = require(rootPath
       + '/DataSource/Repository/TransactionLogRepository.js');
 
@@ -359,23 +359,26 @@ class Controller {
   }
 
   addToReturnCart(req, res) {
+    invariant: req.session.email != null, 'User is not logged in';
+
     pre: {
-      req.session.email != null, 'User is not logged in';
+
     }
 
     let returnItem = req.body.serialNumber;
     let productNumber = req.body.modelNumber;
+    let user = req.session.email.toString();
+
+    if (!this.returnCartList[user]) {
+      this.returnCartList[user] = new ReturnCart();
+    }
 
     if (true) {
-      let user = req.session.email.toString();
-      if (!this.returnCartList[user]) {
-        this.returnCartList[user] = new ReturnCart();
-      }
-
       this.returnCartList[user].addToReturnCart(returnItem, productNumber);
+      console.log(returnItem);
       res.status(200).send({sucess: 'successfully added'});
     } else {
-      res.status(500).send({error: 'item in another cart'});
+      res.status(500).send({error: 'item in cart'});
     }
     post: {
 
