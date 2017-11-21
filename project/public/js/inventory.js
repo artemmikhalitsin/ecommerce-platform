@@ -1,6 +1,7 @@
 _commonProps = ["modelNumber", "brandName", "price", "weight",
-                "type", "is_available", "serialNumbers"];
+                "type", "serialNumbers"];
 _requestJSON = {"deleteSerials":[], "addSerials":[]};
+
 
 // This is to check if there is symbols in what the client entered
 function validateValue(value){
@@ -141,12 +142,6 @@ $(document).ready(function() {
         {'data': 'price'},
         {'data': 'weight'},
         {'data': 'type'},
-        {
-          'data': 'is_available',
-          render: function(data, type, row) {
-            return data? 'yes' : 'no';
-          }
-        }
       ],
     });
     $('#table_inventory tbody').on('click', 'td.details-control', function() {
@@ -158,7 +153,7 @@ $(document).ready(function() {
             tr.removeClass('shown');
         } else {
             // Open this row
-            let rowData = row.data();//NEEDS TO PASS VAR NAME
+            let rowData = row.data();
             console.log("Printing type: ", rowData.type);
             row.child( formatChildRows(row.data()) ).show();
             tr.addClass('shown');

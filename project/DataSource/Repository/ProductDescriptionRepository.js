@@ -61,6 +61,7 @@ class ProductDescriptionRepository {
         for (let i = 0; i < products.length; i++) {
           result.push(products[i]);
         }
+      console.log('Result from repo: ' + JSON.stringify(products));
     return result;
     });
   }
@@ -91,7 +92,7 @@ class ProductDescriptionRepository {
 
   /**
    * Retrieves the product description from the identity map given a list of IDs
-   * @param {numberp[]} ids the list of ids of the products to be retrieved
+   * @param {number[]} ids the list of ids of the products to be retrieved
    * @return {Object[]} a list containing the product descriptions
    */
   getByIds(ids) {

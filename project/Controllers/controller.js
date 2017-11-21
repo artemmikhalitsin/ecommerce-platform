@@ -180,7 +180,6 @@ class Controller {
    * @param {Object} itemToLock serial number of item to lock
    * @return {Boolean} Returns whether or not the item was locked
   */
-
   lockItem(itemToLock) {
     pre: {
       this.clientInventory[itemToLock] != null,
@@ -303,7 +302,7 @@ class Controller {
   /**
    * Retrieves a complete list of products and serial numbers from
    * the database
-   * @param {Object} req HTTP Request object containing query  info
+   * @param {Object} req HTTP Request object containing query info
    * @param {Object} res HTTP Response object to be send back to the user
    */
   getAllInventory(req, res) {
@@ -312,8 +311,11 @@ class Controller {
     let inventory = [];
     let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
     .then((results)=>{
+      console.log('all the products are: ' + JSON.stringify(results));
        return Promise.each(results, (product)=>{
         return this.inventoryRepo.getByModelNumbers([product.modelNumber]).then((values)=>{
+                  console.log('inventory item is ' + JSON.stringify(values));
+
                   product.serial_numbers = values.map((p) => p.serialNumber);
                   inventory.push(product);
                 });
@@ -371,6 +373,7 @@ class Controller {
   }
   manageProductCatalog(req, res) {
     let productDescriptions = JSON.parse(req.body.productDescriptions);
+    console.log('Descriptions recieved by the controller' + JSON.parse(req.body.productDescriptions));
     let results = this.productDescriptionRepo.save(productDescriptions).then((results) => {
       console.log('Success saving the Product descriptions!');
       this.getProductDescription(req, res);
@@ -384,10 +387,18 @@ class Controller {
    */
 
   logout(req, res) {
-    req.session.destroy();
-    res.redirect('/');
+    if (req.session.exists) {
+      req.session.destroy();
+      res.redirect('/');
+    }
   }
 
+
+  /**
+   * Processes an inventory action initiated by the user
+   * @param {Object} req HTTP request object containing action info
+   * @param {Object} res HTTP response object to be returned to the user
+   */
 
   inventoryAction(req, res) {
     if (req.session.exists==true && req.session.isAdmin==true) {
@@ -451,15 +462,11 @@ class Controller {
   }
 
   getClients(req, res) {
-    if (req.session.exists==true && req.session.isAdmin==true) {
-      this.userRepo.getClients().then(
-        (result) => {
-          res.json(result);
-        }
-      );
-    } else {
-res.redirect('/login', {error: 'Invalid username/password'});
-}
+    this.userRepo.getAdmins().then(
+      (result) => {
+        res.json(result);
+      }
+    );
   }
 }
 

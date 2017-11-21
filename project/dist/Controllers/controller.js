@@ -391,6 +391,50 @@ var Controller = function () {
      * the database
      * @param {Object} req HTTP Request object containing query info
      * @param {Object} res HTTP Response object to be send back to the user
+<<<<<<< HEAD
+     */
+
+  }, {
+    key: 'getAllInventory',
+    value: function getAllInventory(req, res) {
+      var _this9 = this;
+
+      var query = this.url.parse(req.url, true).query;
+      var search = query.search;
+      var inventory = [];
+      var productDescriptions = this.productDescriptionRepo.getAllWithIncludes().then(function (results) {
+        console.log("all the products are: " + JSON.stringify(results));
+        return Promise.each(results, function (product) {
+          return _this9.inventoryRepo.getByModelNumbers([product.modelNumber]).then(function (values) {
+            console.log("inventory item is " + JSON.stringify(values));
+            product.serial_numbers = values.map(function (p) {
+              return p.serialNumber;
+            });
+            inventory.push(product);
+          });
+        });
+      }).then(function (val) {
+        console.log('Values: ', JSON.stringify(inventory));
+        if (req.session.exists == true && req.session.isAdmin == true) {
+          res.render('inventory', { items: JSON.stringify(inventory), search: search });
+        } else if (req.session.exists == true && req.session.isAdmin == false) {
+          _this9.updateInventoryList(inventory);
+          res.render('clientInventory', { items: JSON.stringify(inventory), search: search });
+        } else {
+          res.render('clientInventory', { items: JSON.stringify(inventory), search: search });
+        }
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+
+    /*
+    manageInventory() {
+      let results = this.inventoryRepo.save(toSave);
+    }
+    manageProductCatalog() {
+      let results = this.productDescriptionRepo.save(toSave);
+=======
      */
 
   }, {
@@ -425,6 +469,7 @@ var Controller = function () {
       }).catch(function (err) {
         console.log(err);
       });
+>>>>>>> 8c6de9439be15fed271328a4c7a3b60440f36048
     }
 <<<<<<< HEAD
   }, {

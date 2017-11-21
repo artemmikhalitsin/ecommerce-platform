@@ -4,7 +4,7 @@
  * ATTRIBUTE THIS TO YOURSELF
  */
 class ProductDescription {
-    /**
+    /*
      * Given info common to all products, creates an object
      * @param {string} price price
      * @param {string} weight weight
