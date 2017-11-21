@@ -15,19 +15,19 @@ class MonitorsTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new monitor record in the database
      */
-    add(monitor) {
+    static add(monitor) {
         return connection.insert({
             'model_number': monitor.modelNumber,
             'display_size': monitor.displaySize,
         }, 'id')
         .into('Monitor');
     }
-    getAll() {
+    static getAll() {
         return connection('Monitor').select('*')
           .join('ProductDescription', 'Monitor.model_number',
                 'ProductDescription.model_number');
     }
-    getAllByModelNumber(modelNumbers) {
+    static getAllByModelNumber(modelNumbers) {
         return connection('Monitor').select('*')
           .whereIn('model_number', modelNumbers)
           .join('ProductDescription', 'Monitor.model_number',
@@ -40,7 +40,7 @@ class MonitorsTDG {
      * @return {Promise<number>} promise which resolves to the number of
      * rows affected
      */
-    update(monitor) {
+    static update(monitor) {
       // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
           // 'model_number': monitor.modelNumber,

@@ -22,7 +22,7 @@ class TabletsTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new tablet record in the database
      */
-    add(compId, dimensionsId, tablet) {
+    static add(compId, dimensionsId, tablet) {
         return connection.insert({
             'comp_id': compId,
             'model_number': tablet.modelNumber,
@@ -67,7 +67,7 @@ class TabletsTDG {
               return result;
           });
     }*/
-    getAll() {
+    static getAll() {
         return connection('Tablet').select('*')
           .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
@@ -108,7 +108,7 @@ class TabletsTDG {
               return result;
           });
     }*/
-    getByModelNumber(modelNumbers) {
+    static getByModelNumber(modelNumbers) {
         return connection('Tablet').select('*')
           .whereIn('model_number', modelNumbers)
           .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
@@ -126,7 +126,7 @@ class TabletsTDG {
      * @return {Promise<number>} promise which resolves to the number of
      * rows affected
      */
-    update(compId, dimensionsId, tablet) {
+    static update(compId, dimensionsId, tablet) {
         return connection.update({
           'comp_id': tablet.computerId,
           'dimension_id': tablet.dimensions.id,

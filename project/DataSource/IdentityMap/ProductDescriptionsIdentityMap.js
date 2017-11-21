@@ -27,8 +27,6 @@ class ProductDescriptionsIdentityMap {
      * Gets all the products currently stored in the Identity map
      * @return {Object[]} an array containing the products
      */
-
-     // TODO modify to only retrieve available descriptions
   getAll() {
     return this.productDescriptions;
   }

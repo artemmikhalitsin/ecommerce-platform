@@ -16,7 +16,7 @@ class DimensionsTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new dimension record in the database
      */
-    add(dimension) {
+    static add(dimension) {
         return connection.insert({
           'depth': dimension.depth,
           'height': dimension.height,
@@ -25,7 +25,7 @@ class DimensionsTDG {
         .into('Dimensions');
     }
 
-    select() {
+    static select() {
         // TODO
     }
 
@@ -35,7 +35,7 @@ class DimensionsTDG {
      * @return {Promise<number>} promise which resolves to the number of
      * rows affected
      */
-    update(dimension) {
+    static update(dimension) {
         return connection.update({
           'depth': dimension.depth,
           'height': dimension.height,

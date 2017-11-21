@@ -18,7 +18,7 @@ class LaptopsTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new laptop record in the database
      */
-    add(compId, laptop) {
+    static add(compId, laptop) {
         return connection.insert({
             'comp_id': compId,
             'model_number': laptop.modelNumber,
@@ -30,13 +30,13 @@ class LaptopsTDG {
         }, 'id')
         .into('Laptop');
     }
-    getAll() {
+    static getAll() {
         return connection('Laptop').select('*')
           .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
           .join('ProductDescription', 'Laptop.model_number',
                 'ProductDescription.model_number');
     }
-    getByModelNumbers(modelNumbers) {
+    static getByModelNumbers(modelNumbers) {
         return connection('Laptop').select('*')
           .whereIn('model_number', modelNumbers)
           .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
@@ -109,7 +109,7 @@ class LaptopsTDG {
      * @return {Promise<number>} promise which resolves to the number of
      * rows affected
      */
-    update(compId, laptop) {
+    static update(compId, laptop) {
       // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
           'comp_id': laptop.computerId,

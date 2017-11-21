@@ -1,7 +1,7 @@
 'use strict';
 const rootPath = require('app-root-dir').get();
 const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
-const TransactionLogTDG = require(rootPath +
+const transactionLogTDG = require(rootPath +
   '/DataSource/TableDataGateway/TransactionLogTDG.js');
 
 /**
@@ -15,7 +15,6 @@ class TransactionLogRepo {
    */
   constructor() {
     this.uow = new UnitOfWork();
-    this.transactionLogTDG = new TransactionLogTDG();
   }
 
   /**

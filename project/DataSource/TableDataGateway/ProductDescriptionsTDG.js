@@ -16,7 +16,7 @@ class ProductDescriptionsTDG {
    * @return {Promise<number[]>} promise which resolves to the list containing
    * the id of the new product record in the database
    */
-  add(productDescription) {
+  static add(productDescription) {
     return connection.insert({
       'model_number': productDescription.modelNumber,
       'brand_name': productDescription.brandName,
@@ -31,12 +31,10 @@ class ProductDescriptionsTDG {
    * @return {Promise<Object[]>} promise which resolves to the list containing
    * all products in the ProductDescription table
    */
-  getAll() {
-    let results = [];
+  static getAll() {
     return connection('ProductDescription').select('*');
   }
-  getByModelNumber(modelNumber) {
-    let results = [];
+  static getByModelNumber(modelNumber) {
     return connection('ProductDescription')
       .select('*')
       .where({model_number: modelNumber});
@@ -54,7 +52,7 @@ class ProductDescriptionsTDG {
    * @return {Promise<Object[]>} promise which resolves to the list containing
    * the product associated to the specified model number
    */
-  selectById(modelNumber) {
+  static selectById(modelNumber) {
     return connection('ProductDescription')
                 .where({model_number: modelNumber}).select('*');
   }
@@ -65,7 +63,7 @@ class ProductDescriptionsTDG {
    * @return {Promise<number>} promise which resolves to the number of
    * rows affected
    */
-  update(productDescription) {
+  static update(productDescription) {
     return connection
       .update({
         'brand_name': productDescription.brandName,
@@ -78,12 +76,12 @@ class ProductDescriptionsTDG {
   }
   /**
    * Deletes an item from the inventory given an id
-   * @param {number} productDescription the model number of the description to be deleted,
-   * as it appears in the table
+   * @param {number} prodDescription the model number of the description to be
+   * deleted,as it appears in the table
    * @return {Promise<number>} a promise which resolves to the number of rows
    * affected
    */
-  delete(prodDescription) {
+  static delete(prodDescription) {
       console.log(productDescription);
       console.log('in productDescriptionTDG');
       return connection.from('ProductDescription').where(

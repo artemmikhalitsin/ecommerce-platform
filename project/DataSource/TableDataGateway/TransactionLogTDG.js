@@ -15,7 +15,7 @@ class TransactionLogTDG {
      * @return {Promise<number[]>} a promise which resolves to an array
      * containing the id of the inserted item in the table
      */
-    add(transaction) {
+    static add(transaction) {
         return connection.insert({
             'user_id': transaction.client,
             'timestamp': transaction.timestamp,
@@ -27,7 +27,7 @@ class TransactionLogTDG {
      * Gets all items from the TransactionLog table
      * @return {Promise<Object[]>} a promise which resolves to an array of items
      */
-    getAllTransactions() {
+    static getAllTransactions() {
         return connection('Transaction').select('*');
     }
 }

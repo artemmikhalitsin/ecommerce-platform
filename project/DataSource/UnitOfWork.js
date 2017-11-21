@@ -11,23 +11,23 @@ const environment = process.env.NODE_ENV || 'development';
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
 
-const ProductDescriptionsTDG = require(rootPath +
+const productDescTDG = require(rootPath +
   '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
-const InventoryItemsTDG = require(rootPath +
+const inventoryItemsTDG = require(rootPath +
   '/DataSource/TableDataGateway/InventoryItemsTDG.js');
-const ComputersTDG = require(rootPath +
+const computersTDG = require(rootPath +
   '/DataSource/TableDataGateway/ComputersTDG.js');
-const DesktopsTDG = require(rootPath +
+const desktopsTDG = require(rootPath +
   '/DataSource/TableDataGateway/DesktopsTDG.js');
-const DimensionsTDG = require(rootPath +
+const dimensionsTDG = require(rootPath +
   '/DataSource/TableDataGateway/DimensionsTDG.js');
-const LaptopsTDG = require(rootPath +
+const laptopsTDG = require(rootPath +
   '/DataSource/TableDataGateway/LaptopsTDG.js');
-const MonitorsTDG = require(rootPath +
+const monitorsTDG = require(rootPath +
   '/DataSource/TableDataGateway/MonitorsTDG.js');
-const TabletsTDG = require(rootPath +
+const tabletsTDG = require(rootPath +
   '/DataSource/TableDataGateway/TabletsTDG.js');
-const PurchaseCollectionTDG = require(rootPath +
+const purchaseTDG = require(rootPath +
   '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
 
 /**
@@ -39,18 +39,7 @@ class UnitOfWork {
   /**
    * Constructor initiates all table data gateways
    */
-  // REVIEW: TDGS have no instance variables - do we need to instantiate them? - Artem
   constructor() {
-    this.productDescTDG = new ProductDescriptionsTDG();
-    this.inventoryItemsTDG = new InventoryItemsTDG();
-    this.computersTDG = new ComputersTDG();
-    this.desktopsTDG = new DesktopsTDG();
-    this.dimensionsTDG = new DimensionsTDG();
-    this.laptopsTDG = new LaptopsTDG();
-    this.monitorsTDG = new MonitorsTDG();
-    this.tabletsTDG = new TabletsTDG();
-    this.purchaseTDG = new PurchaseCollectionTDG();
-
     this.dirtyElements = [];
     this.newElements = [];
     this.deletedElements = [];
@@ -112,7 +101,7 @@ class UnitOfWork {
       //delete items
       if(this.deletedInventoryItems[0] != null && this.deletedInventoryItems[0].length > 0){
        deletedItems = Promise.each(this.deletedInventoryItems[0], (electronic) => {
-        return this.inventoryItemsTDG.delete(electronic).transacting(trx).then(() => {
+        return inventoryItemsTDG.delete(electronic).transacting(trx).then(() => {
               console.log('deleted inventory item');
         })
       });}
@@ -121,7 +110,7 @@ class UnitOfWork {
       let newItems;
       if(this.newInventoryItems[0] != null && this.newInventoryItems[0].length > 0){
         newItems = Promise.each(this.newInventoryItems[0], (electronic) => {
-          return this.inventoryItemsTDG.add(electronic.serial_number, electronic.model_number).transacting(trx).then(() => {
+          return inventoryItemsTDG.add(electronic.serial_number, electronic.model_number).transacting(trx).then(() => {
                console.log('added inventory item');
          })
        });}
@@ -130,7 +119,7 @@ class UnitOfWork {
        let purchasedItems;
        if (this.newPurchases[0] != null && this.newPurchases[0].length > 0) {
          purchasedItems = Promise.each(this.newPurchases[0], (electronic) => {
-           return this.purchaseTDG.add(electronic.client, electronic.serial_number, electronic.model_number, electronic.purchase_Id)
+           return purchaseTDG.add(electronic.client, electronic.serial_number, electronic.model_number, electronic.purchase_Id)
                   .transacting(trx).then(() => {
                     console.log("Added purchased items");
                   })
@@ -141,7 +130,7 @@ class UnitOfWork {
        let deletedPurchase;
        if(this.deletedPurchases[0] != null && this.deletedPurchases[0].length > 0){
         deletedPurchases = Promise.each(this.deletedPurchases[0], (electronic) => {
-         return this.purchaseTDG.delete(electronic).transacting(trx).then(() => {
+         return purchaseTDG.delete(electronic).transacting(trx).then(() => {
                console.log('deleted purchase item');
          })
        });}
@@ -151,22 +140,22 @@ class UnitOfWork {
       if(this.dirtyElements[0] && this.dirtyElements[0].length > 0){
 
       updateditems = Promise.each(this.dirtyElements[0], (electronic) => {
-        return this.productDescTDG.update(electronic).transacting(trx).then(
+        return productDescTDG.update(electronic).transacting(trx).then(
           (model_number) => {
              switch (electronic.type) {
                case 'Desktop':
                  {
-                   return this.dimensionsTDG
+                   return dimensionsTDG
                     .update(electronic.dimensions)
                     .transacting(trx)
                     .then(
                       (dimensionsId) => {
-                        return this.computersTDG
+                        return computersTDG
                           .update(electronic)
                           .transacting(trx)
                           .then(
                             (compId) => {
-                              return this.desktopsTDG
+                              return desktopsTDG
                                 .update(compId, dimensionsId, electronic)
                                 .transacting(trx);
                           });
@@ -175,12 +164,12 @@ class UnitOfWork {
                  break;
                case 'Laptop':
                  {
-                   return this.computersTDG
+                   return computersTDG
                     .update(electronic)
                     .transacting(trx)
                     .then(
                       (compId) => {
-                        return this.laptopsTDG
+                        return laptopsTDG
                           .update(compId, electronic)
                           .transacting(trx);
                     });
@@ -188,17 +177,17 @@ class UnitOfWork {
                  break;
                case 'Tablet':
                  {
-                   return this.dimensionsTDG
+                   return dimensionsTDG
                     .update(electronic.dimensions)
                     .transacting(trx)
                     .then(
                       (dimensionsId) => {
-                        return this.computersTDG
+                        return computersTDG
                           .update(electronic)
                           .transacting(trx)
                           .then(
                             (compId) => {
-                              return this.tabletsTDG
+                              return tabletsTDG
                                 .update(compId, dimensionsId, electronic)
                                 .transacting(trx);
                           });
@@ -207,7 +196,7 @@ class UnitOfWork {
                  break;
                case 'Monitor':
                  {
-                   return this.monitorsTDG.update(electronic).transacting(trx);
+                   return monitorsTDG.update(electronic).transacting(trx);
                  };
                  break;
              }
@@ -220,30 +209,30 @@ class UnitOfWork {
       let addeditems;
       if(this.newElements[0] != null){
       addeditems = Promise.each(this.newElements[0], (electronic) => {
-        return this.productDescTDG
+        return productDescTDG
           .add(electronic)
           .transacting(trx)
           .then(
             (model_number) => {
           /*Promise.each(electronic.serial_number, (item_serial_number) => {
-            return this.inventoryItemsTDG.add(item_serial_number, electronic.model_number).transacting(trx).then((id) => {
+            return inventoryItemsTDG.add(item_serial_number, electronic.model_number).transacting(trx).then((id) => {
               console.log('added inventory item ');
             });
           });*/
               switch (electronic.type) {
                 case 'Desktop':
                   {
-                    return this.dimensionsTDG
+                    return dimensionsTDG
                       .add(electronic.dimensions)
                       .transacting(trx)
                       .then(
                         (dimensionsId) => {
-                          return this.computersTDG
+                          return computersTDG
                             .add(electronic)
                             .transacting(trx)
                             .then(
                               (compId) => {
-                                return this.desktopsTDG
+                                return desktopsTDG
                                   .add(compId, dimensionsId, electronic)
                                   .transacting(trx);
                             });
@@ -252,12 +241,12 @@ class UnitOfWork {
                   break;
                 case 'Laptop':
                   {
-                    return this.computersTDG
+                    return computersTDG
                       .add(electronic)
                       .transacting(trx)
                       .then(
                         (compId) => {
-                          return this.laptopsTDG
+                          return laptopsTDG
                             .add(compId, electronic)
                             .transacting(trx);
                         });
@@ -265,17 +254,17 @@ class UnitOfWork {
                   break;
                 case 'Tablet':
                   {
-                    return this.dimensionsTDG
+                    return dimensionsTDG
                       .add(electronic.dimensions)
                       .transacting(trx)
                       .then(
                         (dimensionsId) => {
-                          return this.computersTDG
+                          return computersTDG
                             .add(electronic)
                             .transacting(trx)
                             .then(
                               (compId) => {
-                                return this.tabletsTDG
+                                return tabletsTDG
                                   .add(compId, dimensionsId, electronic)
                                   .transacting(trx);
                               });
@@ -284,7 +273,7 @@ class UnitOfWork {
                   break;
                 case 'Monitor':
                   {
-                    return this.monitorsTDG.add(electronic).transacting(trx);
+                    return monitorsTDG.add(electronic).transacting(trx);
                   };
                   break;
               }
@@ -425,4 +414,3 @@ class UnitOfWork {
   }
 }
 module.exports = UnitOfWork;
-

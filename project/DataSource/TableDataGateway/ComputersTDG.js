@@ -15,7 +15,7 @@ class ComputersTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new computer record in the database
      */
-    add(computer) {
+    static add(computer) {
         return connection.insert({
             'processor_type': computer.processorType,
             'ram_size': computer.ramSize,
@@ -25,7 +25,7 @@ class ComputersTDG {
         .into('Computer');
     }
 
-    select() {
+    static select() {
         // TODO
     }
     /**
@@ -34,7 +34,7 @@ class ComputersTDG {
      * @return {Promise<number>} promise which resolves to the number of
      * rows affected
      */
-    update(computer) {
+    static update(computer) {
         return connection.update({
           'processor_type': computer.processorType,
           'ram_size': computer.ramSize,

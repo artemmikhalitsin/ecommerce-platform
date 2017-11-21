@@ -4,7 +4,7 @@ const Promise = require('bluebird');
 let UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 let ProductDescriptionIdentityMap = require(rootPath
   + '/DataSource/IdentityMap/ProductDescriptionsIdentityMap.js');
-let ProductDescriptionsTDG = require(rootPath
+let productDescTDG = require(rootPath
   + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
 let DesktopsTDG = require(rootPath
   + '/DataSource/TableDataGateway/DesktopsTDG.js');
@@ -35,11 +35,6 @@ class ProductDescriptionRepository {
   constructor() {
     this.uow = new UnitOfWork();
     this.ProductDescriptionIM = new ProductDescriptionIdentityMap();
-    this.productDescTDG = new ProductDescriptionsTDG();
-    this.DesktopsTDG = new DesktopsTDG();
-    this.LaptopsTDG = new LaptopsTDG();
-    this.MonitorsTDG = new MonitorsTDG();
-    this.TabletsTDG = new TabletsTDG();
   }
 
   /**
@@ -145,7 +140,7 @@ class ProductDescriptionRepository {
     return results;
   }
   getAll() {
-      let context = this.productDescTDG.getAll().then((descriptions) => {
+      let context = productDescTDG.getAll().then((descriptions) => {
         return products = this.mapToProducts(descriptions);
       });
 
@@ -156,16 +151,16 @@ class ProductDescriptionRepository {
     return context;
   }
   getAllWithIncludes() {
-    let desktops = this.DesktopsTDG.getAll().then((descriptions) => {
+    let desktops = DesktopsTDG.getAll().then((descriptions) => {
       return desktops = this.mapToDesktops(descriptions);
     });
-    let laptops = this.LaptopsTDG.getAll().then((descriptions) => {
+    let laptops = LaptopsTDG.getAll().then((descriptions) => {
       return laptops = this.mapToLaptops(descriptions);
     });
-    let monitors = this.MonitorsTDG.getAll().then((descriptions) => {
+    let monitors = MonitorsTDG.getAll().then((descriptions) => {
       return monitors = this.mapToMonitors(descriptions);
     });
-    let tablets = this.TabletsTDG.getAll().then((descriptions) => {
+    let tablets = TabletsTDG.getAll().then((descriptions) => {
       return tablets = this.mapToTablets(descriptions);
     });
     let result = [];
@@ -178,16 +173,16 @@ class ProductDescriptionRepository {
     });
   }
   getByModelNumbers(modelNumbers) {
-    let desktops = this.DesktopsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
+    let desktops = DesktopsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
       return desktops = this.mapToDesktops(descriptions);
     });
-    let laptops = this.LaptopsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
+    let laptops = LaptopsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
       return laptops = this.mapToLaptops(descriptions);
     });
-    let monitors = this.MonitorsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
+    let monitors = MonitorsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
       return monitors = this.mapToMonitors(descriptions);
     });
-    let tablets = this.TabletsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
+    let tablets = TabletsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
       return tablets = this.mapToTablets(descriptions);
     });
 
@@ -222,7 +217,7 @@ class ProductDescriptionRepository {
     // will instead return all the products in the table? I believe this method
     // requires rework - Artem
     if (products.length <= 0 || products.length < ids.length) {
-      return this.productDescTDG.getAll().then((values)=>{
+      return productDescTDG.getAll().then((values)=>{
               products = this.mapToProducts(values);
               this.ProductDescriptionIM.add(products);
               return products;

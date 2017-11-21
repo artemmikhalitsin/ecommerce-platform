@@ -22,7 +22,7 @@ class DesktopsTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new desktop record in the database
      */
-    add(compId, dimensionsId, desktop) {
+    static add(compId, dimensionsId, desktop) {
         return connection.insert({
             'comp_id': compId,
             'model_number': desktop.modelNumber,
@@ -30,14 +30,14 @@ class DesktopsTDG {
         }, 'id')
         .into('Desktop');
     }
-    getAll() {
+    static getAll() {
         return connection('Desktop').select('*')
           .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
           .join('ProductDescription', 'Desktop.model_number',
                 'ProductDescription.model_number');
     }
-    getByModelNumbers(modelNumbers) {
+    static getByModelNumbers(modelNumbers) {
         return connection('Desktop').select('*')
           .whereIn('model_number', modelNumbers)
           .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
@@ -115,7 +115,7 @@ class DesktopsTDG {
      * @return {Promise<number>} promise which resolves to the number of
      * rows affected
      */
-    update(compId, dimensionsId, desktop) {
+    static update(compId, dimensionsId, desktop) {
         return connection.update({
          'comp_id': desktop.computerId,
          'model_number': desktop.modelNumber,
