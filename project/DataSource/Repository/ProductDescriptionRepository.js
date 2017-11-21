@@ -174,7 +174,6 @@ class ProductDescriptionRepository {
         for (let i = 0; i < products.length; i++) {
           result.push(products[i]);
         }
-      console.log('Result from repo: ' + JSON.stringify(products));
     return result;
     });
   }
@@ -223,17 +222,12 @@ class ProductDescriptionRepository {
     // will instead return all the products in the table? I believe this method
     // requires rework - Artem
     if (products.length <= 0 || products.length < ids.length) {
-      let prodDescFromTDG = this.productDescTDG.getAll();
-            Promise.all([prodDescFromTDG]).then((values)=>{
-              products = values[0];
-              // REVIEW: This function has a side effect,
-              // even though it is an accessor - is this intended functionality?
-              // - Artem
+      return this.productDescTDG.getAll().then((values)=>{
+              products = this.mapToProducts(values);
               this.ProductDescriptionIM.add(products);
               return products;
             });
     }
-    return products;
   }
 
   /**
@@ -249,7 +243,8 @@ class ProductDescriptionRepository {
 
     let productIds = products.map((p) => p.modelNumber);
     if (productIds.length > 0) {
-    let context = this.getByIds(productIds);
+      let context = [];
+    return this.getByIds(productIds).then((values) => {
     let allRecords = this.ProductDescriptionIM.getAll();
     for (let i = 0; i < products.length; i++) {
       if (context.findIndex(
@@ -268,7 +263,7 @@ class ProductDescriptionRepository {
                 electronicsToAdd.push(products[i]);
               }
     }
-  }
+
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);
 
@@ -276,6 +271,8 @@ class ProductDescriptionRepository {
       this.ProductDescriptionIM.add(electronicsToAdd);
       return true;
     });
+  });
+  }
   }
 }
 
