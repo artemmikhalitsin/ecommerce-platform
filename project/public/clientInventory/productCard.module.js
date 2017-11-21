@@ -51,9 +51,8 @@ function remove(serialNumber, http) {
     data: {serialNumber: serialNumber},
   }).then(function successCallback(response) {
       $('#cart_' + serialNumber).remove();
-      window.alert("Removed successfully");
     }, function errorCallback(response) {
-      window.alert("Unsuccessful!");
+      window.alert('Cannot remove item!');
   });
 
 }
@@ -67,10 +66,14 @@ function addToShoppingCart(serialNumber,modelNumber, http, compile, scope) {
     var html=`<li id="cart_${serialNumber}">${serialNumber}<button ng-click="remove('${serialNumber}')">X</button></li>`;
     let el = document.getElementById('temp_cart');
     angular.element(el).append(compile(html)(scope));
-    window.alert("Added to shopping cart");
+    window.alert(response.data.success);
 
     }, function errorCallback(response) {
-      window.alert("Not added to shopping cart");
+      if (!response.data.error) {
+        window.alert('Item is not currently available');
+      } else {
+        window.alert(response.data.error);
+      }
   });
 }
 
