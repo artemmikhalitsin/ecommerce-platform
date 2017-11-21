@@ -227,7 +227,8 @@ class Controller {
     }
   }
 
-  getProductInfo(req, res, other) {
+
+  getProductInfo(req, res) {
     this.inventoryRepo.getAllInventoryItems().then(
       (result) => {
         res.json(result);
