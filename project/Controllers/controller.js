@@ -87,8 +87,7 @@ class Controller {
        return Promise.each(results, (product)=>{
         return this.inventoryRepo.getByModelNumbers([product.modelNumber]).then((values)=>{
                   console.log('inventory item is ' + JSON.stringify(values));
-
-                  product.serial_numbers = values.map((p) => p.serialNumber);
+                  product.serial_numbers = values.map((p) => p.serial_number);
                   inventory.push(product);
                 });
       });
@@ -98,7 +97,7 @@ class Controller {
         res.render('inventory', {items: JSON.stringify(inventory), search: search});
       } else if (req.session.exists==true && req.session.isAdmin==false) {
         if (purchaseController) {
-          purchaseController.updateInventoryList(inventory);
+          purchaseController.getLatestInventory();
         }
         res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
       } else {
@@ -229,11 +228,23 @@ class Controller {
 
 
   getProductInfo(req, res) {
-    this.inventoryRepo.getAllInventoryItems().then(
-      (result) => {
-        res.json(result);
-      }
-    );
+    let inventory = [];
+    this.productDescriptionRepo.getAllWithIncludes()
+    .then((results)=>{
+       return Promise.each(results, (product)=>{
+        return this.inventoryRepo.getByModelNumbers([product.modelNumber])
+          .then((values)=>{
+            console.log('inventory item is ' + JSON.stringify(values));
+            product.serial_numbers = values.map((p) => p.serial_number);
+            inventory.push(product);
+          });
+      });
+    }).then((val)=>{
+      console.log('Values: ', JSON.stringify(inventory));
+      res.json(inventory);
+    }).catch((err) => {
+      console.log(err);
+    });
   }
 
   getClients(req, res) {

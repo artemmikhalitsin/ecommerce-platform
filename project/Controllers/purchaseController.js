@@ -1,15 +1,17 @@
+const Promise = require('bluebird');
 const rootPath = require('app-root-dir').get();
 const PurchaseCollectionRepo = require(rootPath
     + '/DataSource/Repository/PurchaseCollectionRepository.js');
-const InventoryItemRepository = require(rootPath +
-      '/DataSource/Repository/InventoryItemRepository.js');
+const ProductDescriptionRepository = require(rootPath +
+      '/DataSource/Repository/ProductDescriptionRepository.js');
 const ShoppingCart = require(rootPath +
     '/Cart/ShoppingCart.js');
 const ReturnCart = require(rootPath
     + '/models/ReturnCart.js');
 const TransactionLogRepository = require(rootPath
       + '/DataSource/Repository/TransactionLogRepository.js');
-
+const InventoryItemRepository = require(rootPath +
+  '/DataSource/Repository/InventoryItemRepository.js');
 /**
  * Identity map of inventory items
  * @author Amanda Wai
@@ -19,6 +21,7 @@ class PurchaseController {
   constructor() {
     this.purchaseCollectionRepo = new PurchaseCollectionRepo();
     this.transactionRepo = new TransactionLogRepository();
+    this.productDescriptionRepo = new ProductDescriptionRepository();
     this.inventoryRepo = new InventoryItemRepository();
     this.clientInventory = {}; // key: serial, value: locked or not locked
     this.shoppingCartList = {}; // carts associated to users k:user, v: cart
@@ -28,8 +31,7 @@ class PurchaseController {
    * Updates the Controller's list of current items
    * @param {Object} newInventory Inventory items
   */
-  updateInventoryList(newInventory) {
-    let inventoryList = [].concat(...newInventory.map((i) => i.serial_numbers));
+  updateInventoryList(inventoryList) {
     inventoryList.forEach((serial, index) => {
       if (!this.clientInventory[serial]) {
         this.clientInventory[serial] = {locked: false,
@@ -78,7 +80,6 @@ class PurchaseController {
       this.makeNewShoppingCart(user);
     }
     this.getLatestInventory().then((values) => {
-      this.updateInventoryList(values[0]);
       if (this.clientInventory[item]) {
         if (this.clientInventory[item].locked) {
           res.status(500).send({error: 'Item is already locked!'});
@@ -210,8 +211,7 @@ class PurchaseController {
     let cart = Object.values(this.shoppingCartList[user].getCart());
     let purchases = [];
     this.getLatestInventory().then((values) => {
-      this.updateInventoryList(values[0]);
-      let inventoryList = [].concat(...values[0].map((i) => i.serial_numbers));
+      let inventoryList = Object.keys(this.clientInventory);
       let deletedItems = this.shoppingCartList[user].getCartSerialNumbers()
         .filter((cartSerial) => inventoryList.indexOf(cartSerial) == -1);
       if (deletedItems.length > 0) {
@@ -335,14 +335,27 @@ class PurchaseController {
     );
   }
 
+
   /**
    * Gets a complete list of products and serial numbers from
    * the database and updates the list of available items
    * @return {Object} Promise to update inventory
    */
   getLatestInventory() {
-    let prodDesc = this.inventoryRepo.getAllInventoryItems();
-    return Promise.all([prodDesc]);
+    let inventorySerials = [];
+    return this.productDescriptionRepo.getAllWithIncludes()
+      .then((results) => {
+        return Promise.each(results, (product) => {
+          return this.inventoryRepo.getByModelNumbers([product.modelNumber])
+            .then((values) => {
+              product.serial_numbers = values.map((p) => p.serial_number);
+              inventorySerials.push(product.serial_numbers);
+            });
+        });
+      }).then((val) => {
+        inventorySerials = [].concat(...inventorySerials);
+        this.updateInventoryList(inventorySerials);
+      });
   }
 }
 module.exports = PurchaseController;

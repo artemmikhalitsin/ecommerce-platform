@@ -174,7 +174,7 @@ app.get('/api/viewPurchaseCollection', function(req, res) {
 });
 
 app.get('/api/getAllProducts', function(req, res) {
-  controller.getProductInfo(req, res);
+  controller.getProductInfo(req, res, purchaseController);
 });
 
 app.get('/api/getAllClients', function(req, res) {
