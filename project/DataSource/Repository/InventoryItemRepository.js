@@ -5,7 +5,7 @@ const InventoryItemsIdentityMap = require(rootPath +
   '/DataSource/IdentityMap/InventoryItemsIdentityMap.js');
 const InventoryItemsTDG = require(rootPath +
   '/DataSource/TableDataGateway/InventoryItemsTDG.js');
-
+const InventoryItem = require(rootPath + '/models/InventoryItem.js');
 /**
  * Repository for Inventory Items
  * @author Ekaterina Ruhlin
@@ -44,7 +44,10 @@ class InventoryItemRepository {
     console.log('The models numbers passed' + JSON.stringify(modelNumbers));
     let result = [];
     return Promise.all([inventory]).then((values) => {
-          result = values[0];
+      let result = [];
+          values[0].forEach(function(item) {
+            result.push(new InventoryItem(item.id, item.serial_number, item.model_number, null));
+          });
           console.log('the inventory items repo gives: '
             + JSON.stringify(result));
 

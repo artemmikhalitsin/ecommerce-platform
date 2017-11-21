@@ -16,6 +16,12 @@ let TabletsTDG = require(rootPath
   + '/DataSource/TableDataGateway/TabletsTDG.js');
 let ProductDescription = require(rootPath + '/models/ProductDescription.js');
 
+const Tablet = require(rootPath + '/models/Tablet.js');
+const Dimensions = require(rootPath + '/models/Dimensions.js');
+const Desktop = require(rootPath + '/models/Desktop.js');
+const Laptop = require(rootPath + '/models/Laptop.js');
+const Monitor = require(rootPath + '/models/Monitor.js');
+
 /**
  * Repository for product descrptions
  * @author Ekaterina Ruhlin
@@ -41,8 +47,107 @@ class ProductDescriptionRepository {
    * retrieves the products from the TDG and adds them to the identity map
    * @return {Object[]} the complete list of product description objects
    */
+  mapToTablets(tablets) {
+      let result = [];
+      tablets.forEach(function(tablet) {
+        result.push(new Tablet(
+            tablet.comp_id,
+            tablet.processor_type,
+            tablet.ram_size,
+            tablet.number_cpu_cores,
+            tablet.harddrive_size,
+            tablet.display_size,
+            new Dimensions(
+                tablet.dimension_id,
+                tablet.depth,
+                tablet.height,
+                tablet.width),
+            tablet.battery_info,
+            tablet.os,
+            tablet.camera_info,
+            tablet.price,
+            tablet.weight,
+            tablet.brand_name,
+            tablet.model_number,
+            tablet.type));
+      });
+    return result;
+  }
+  mapToDesktops(desktops) {
+    let result = [];
+    desktops.forEach(function(desktop) {
+      let d = new Desktop(
+          desktop.processor_type,
+          desktop.ram_size,
+          desktop.number_cpu_cores,
+          desktop.harddrive_size,
+          new Dimensions(
+              desktop.dimension_id,
+              desktop.depth,
+              desktop.height,
+              desktop.width),
+          desktop.price,
+          desktop.weight,
+          desktop.brand_name,
+          desktop.model_number,
+          desktop.comp_id,
+          desktop.type);
+      result.push(d);
+    });
+    return result;
+  }
+  mapToLaptops(laptops) {
+    let result = [];
+    laptops.forEach(function(laptop) {
+      result.push(new Laptop(
+          laptop.comp_id,
+          laptop.processor_type,
+          laptop.ram_size,
+          laptop.number_cpu_cores,
+          laptop.harddrive_size,
+          laptop.display_size,
+          laptop.battery_info,
+          laptop.os,
+          laptop.touch_screen,
+          laptop.camera,
+          laptop.price,
+          laptop.weight,
+          laptop.brand_name,
+          laptop.model_number,
+          laptop.type));
+    });
+    return result;
+  }
+  mapToMonitors(monitors) {
+    let result = [];
+    monitors.forEach(function(monitor) {
+      result.push(new Monitor(
+          monitor.display_size,
+          monitor.price,
+          monitor.weight,
+          monitor.brand_name,
+          monitor.model_number,
+          monitor.type));
+    });
+    return result;
+  }
+  mapToProducts(productDescriptions) {
+    let results = [];
+    productDescriptions.forEach(function(description) {
+      results.push(new ProductDescription(
+        description.price,
+        description.weight,
+        description.brand_name,
+        description.model_number,
+        description.type
+        ));
+    });
+    return results;
+  }
   getAll() {
-      let context = this.productDescTDG.getAll();
+      let context = this.productDescTDG.getAll().then((descriptions) => {
+        return products = this.mapToProducts(descriptions);
+      });
 
       Promise.all(context).then((values)=>{
         context = values;
@@ -51,10 +156,18 @@ class ProductDescriptionRepository {
     return context;
   }
   getAllWithIncludes() {
-    let desktops = this.DesktopsTDG.getAll();
-    let laptops = this.LaptopsTDG.getAll();
-    let monitors = this.MonitorsTDG.getAll();
-    let tablets = this.TabletsTDG.getAll();
+    let desktops = this.DesktopsTDG.getAll().then((descriptions) => {
+      return desktops = this.mapToDesktops(descriptions);
+    });
+    let laptops = this.LaptopsTDG.getAll().then((descriptions) => {
+      return laptops = this.mapToLaptops(descriptions);
+    });
+    let monitors = this.MonitorsTDG.getAll().then((descriptions) => {
+      return monitors = this.mapToMonitors(descriptions);
+    });
+    let tablets = this.TabletsTDG.getAll().then((descriptions) => {
+      return tablets = this.mapToTablets(descriptions);
+    });
     let result = [];
     return Promise.all([desktops, laptops, monitors, tablets]).then((values)=>{
       let products = [].concat(...values);
@@ -66,10 +179,19 @@ class ProductDescriptionRepository {
     });
   }
   getByModelNumbers(modelNumbers) {
-    let desktops = this.DesktopsTDG.getByModelNumbers(modelNumbers);
-    let laptops = this.LaptopsTDG.getByModelNumbers(modelNumbers);
-    let monitors = this.MonitorsTDG.getByModelNumbers(modelNumbers);
-    let tablets = this.TabletsTDG.getByModelNumbers(modelNumbers);
+    let desktops = this.DesktopsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
+      return desktops = this.mapToDesktops(descriptions);
+    });
+    let laptops = this.LaptopsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
+      return laptops = this.mapToLaptops(descriptions);
+    });
+    let monitors = this.MonitorsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
+      return monitors = this.mapToMonitors(descriptions);
+    });
+    let tablets = this.TabletsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
+      return tablets = this.mapToTablets(descriptions);
+    });
+
     let result = [];
     return Promise.all([desktops, laptops, monitors, tablets]).then((values)=>{
       let products = [].concat(...values);
