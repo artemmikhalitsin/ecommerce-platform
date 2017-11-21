@@ -15,7 +15,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "dev": "docker run -v $(pwd):/usr/src/project -p 8080:8080 -it 343docker/express",
+    "dev": "docker run -v $(pwd):/usr/src/project -p 8080:8080 -it 343docker/express-quick",
     "make-migration": "knex migrate:make",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
@@ -67,7 +67,8 @@
     "body-parser": "^1.18.2",
     "concurrently": "^3.5.0",
     "esdoc-standard-plugin": "^1.0.0",
-    "express-session": "^1.15.6"
+    "express-session": "^1.15.6",
+    "validator": "^9.1.1"
   },
   "description": "",
   "nodemonConfig": {

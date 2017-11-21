@@ -1,24 +1,29 @@
 /**
  * Class representing a User
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
- * ATTRIBUTE THIS TO YOURSELF
+ * @author Catherine & Ajmer
  */
 class User {
     /**
      * Given a user's info, creates a new user object
+     * @param {string} first_name user's first name
+     * @param {string} last_name user's last name
+     * @param {string} phone_number user's phone number
      * @param {string} email email of the user
-     * @param {string} name user's full name
-     * @param {string} address user's address
+     * @param {string} full_address user's full address
      * @param {string} password user's password
-     * @param {boolean} isAdmin whether the user is an admin
+     * @param {boolean} is_admin whether the user is an admin
      */
-    constructor(email, name, address, password, isAdmin) {
-        this.email = email;
-        this.name = name;
-        this.address = address;
-        this.password = password;
-        this.isAdmin = isAdmin;
+    constructor(first_name, last_name, phone_number, email, full_address, password,
+                is_admin) {
+      this.first_name = first_name;
+      this.last_name = last_name;
+      this.phone_number = phone_number;
+      this.email = email;
+      this.full_address = full_address;
+      this.password = password;
+      this.is_admin = is_admin;
     }
+
     /**
      * email accessor
      * @return {string} the user's email
@@ -26,13 +31,31 @@ class User {
     getEmail() {
       return this.email;
     }
+
     /**
-     * name accessor
-     * @return {string} the user's name
+     * first_name accessor
+     * @return {string} the user's first name
      */
-    getName() {
-       return this.name;
+    getfirst_name() {
+       return this.first_name;
     }
+
+    /**
+     * last_name accessor
+     * @return {string} the user's last name
+     */
+    getlast_name() {
+      return this.last_name;
+    }
+
+    /**
+     * phone_number accessor
+     * @return {string} the user's phone number
+     */
+    getphone_number() {
+      return this.phone_number;
+    }
+
     /**
      * password accessor
      * @return {string} the user's password
@@ -40,55 +63,77 @@ class User {
     getPassword() {
       return this.password;
     }
+
     /**
-     * address accessor
-     * @return {string} the user's address
+     * full_address accessor
+     * @return {string} the user's full address
      */
-    getAddress() {
-      return this.address;
+    getfull_address() {
+      return this.full_address;
     }
+
     /**
-     * isAdmin accessor
+     * is_admin accessor
      * @return {boolean} whether the user is an admin
      */
-    getIsAdmin() {
-      return this.isAdmin;
+    getis_admin() {
+      return this.is_admin;
     }
 
     /**
      * email mutator
-     * @param {string} email user's new email
+     * @param {string} email user's email
      */
     setEmail(email) {
       this.email = email;
     }
+
     /**
-     * name mutator
-     * @param {string} name user's new name
+     * first name mutator
+     * @param {string} first_name user's first name
      */
-    setName(name) {
-      this.name = name;
+    setfirst_name(first_name) {
+      this.first_name = first_name;
     }
+
+    /**
+     * last name mutator
+     * @param {string} last_name user's last name
+     */
+    setlast_name(last_name) {
+      this.last_name = last_name;
+    }
+
+    /**
+     * phone number mutator
+     * @param {string} phone_number user's phone number
+     */
+    setphone_number(phone_number) {
+      this.phone_number = phone_number;
+    }
+
     /**
      * password mutator
-     * @param {string} password user's new password
+     * @param {string} password user's password
      */
     setPassword(password) {
       this.password = password;
     }
+
     /**
-     * address mutator
-     * @param {string} address user's new address
+     * full address mutator
+     * @param {string} full_address user's full address
      */
-    setAddress(address) {
-      this.address = address;
+    setfull_address(full_address) {
+      this.full_address = full_address;
     }
+
     /**
-     * email mutator
-     * @param {boolean} isAdmin new specification of whether user is an admin
+     * is_admin mutator
+     * @param {boolean} is_admin new specification of whether user is an admin
      */
-    setIsAdmin(isAdmin) {
-      this.isAdmin = isAdmin;
+    setis_admin(is_admin) {
+      this.is_admin = is_admin;
     }
 }
 

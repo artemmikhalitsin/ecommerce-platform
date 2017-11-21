@@ -14,6 +14,10 @@ const TransactionLogRepository = require(rootPath +
   '/DataSource/Repository/TransactionLogRepository.js');
 const InventoryItem = require(rootPath +
   '/models/InventoryItem.js');
+const User = require(rootPath +
+  '/models/User.js');
+
+let validator = require('validator');
 
 /**
  * Identity map of inventory items
@@ -38,103 +42,105 @@ class Controller {
 
   /**
    * Validates the registration request sent by the user
-   * @author Ajmer
+   * @author Ajmer Singh Gadreh
    * @param {Object} userData it contains all the data sent from the user
    * NOTE: Still in progress
    */
   validateRegistrationRequest(userData) {
     let errors = [];
-    let errorMessage;
+
+    // Checking for empty data fields
     Object.keys(userData).forEach((element) => {
-      if (userData[element] == '') {
-        errorMessage = 'The ' + element + ' cannot be empty!';
-        errors.push(errorMessage);
+      let data = validator.trim(userData[element]);
+      if (validator.isEmpty(data)) {
+        errors.push('The ' + element + ' cannot be empty OR have only spaces');
       }
     });
 
+    // Validating the fields
     if (errors.length == 0) {
-      console.log('there are no errors');
-      let phone = userData['phone_number'];
+      let phone = validator.blacklist(userData['phone_number'], ' ( ) ');
       let email = userData['email'];
       let password = userData['password'];
       let confirmPassword = userData['confirmPassword'];
 
-      // validating the phone number
-      // phone number regex \b\d{3}[-. ]?\d{3}[-. ]?\d{4}\b
-      if (!isNaN(phone)) {
-        console.log('is a number');
-        if (phone.length < 10 || phone.length > 10) {
-          console.log('less/more then 10 digits');
-          errors.push('The phone number should have exactly 10 digits');
-        }
-      } else {
-        errors.push('The phone number can only contain digits');
-        console.log('not a number');
+      // validating phone number
+      if (!validator.isMobilePhone(phone, 'en-CA')) {
+        errors.push('The phone number is invalid');
       }
 
-      // checking email (BAD)
-      if (email.includes('@')) {
-        console.log('email contains @ sign');
-      } else {
-        console.log('invalid email');
+      // checking email
+      if (!validator.isEmail(email)) {
+        errors.push('The email is invalid');
       }
 
-      // Checking password
-      if (password.length < 6 || password.length > 20) {
-        console.log('Password is not between 6 and 20 characters');
-      } else {
-        if (password === confirmPassword) {
-          console.log('password matches');
-        } else {
-          console.log('password dont match');
-        }
+      // Checking password length
+      if (!validator.isLength(password, {min: 6, max: 20})) {
+        errors.push('Password length is not between 6 and 20');
       }
-    } else {
-      console.log('there was at least one error. they are as follows');
-      console.log(errors);
+
+      // Comparing password with confirmPassword
+      if (!validator.equals(password, confirmPassword)) {
+        errors.push('Confirmation of password failed');
+      }
+
+      // Checking white spaces in password
+      if (validator.contains(password, ' ')) {
+        errors.push('Password cannot contain spaces');
+      }
     }
+
+    return errors;
   }
 
   /**
    * Processes a registration registrationRequest
+   * @author Ajmer Singh Gadreh
    * @param {Object} req Incoming HTTP request containing registration info
    * @param {Object} res HTTP Response object to be sent back to user
    */
   registrationRequest(req, res) {
+    let messages = [];
     let userData = req.body;
-    let password = userData['password'];
-    let confirmPassword = userData['confirmPassword'];
-    let hash = this.crypto.createHash('sha256');
-    let salted = userData['email'] + password + 'salt';
-    userData['password'] = hash.update(salted).digest('hex');
-    if (password != confirmPassword) {
-      console.log('password confirmation failed. try again...');
+    let errors = this.validateRegistrationRequest(userData);
+
+    if (errors.length > 0) {
+      // if it reaches here, then some validation failed. Send errors back
       res.redirect('/registration');
     } else {
-      delete userData['confirmPassword'];
-      let email = userData['email'];
-      this.userRepo.verifyEmail(email).then( (result) => {
-        console.log(result);
+      this.userRepo.verifyEmail(userData['email']).then( (result) => {
         if (result.length == 0) {
-          console.log('adding new user');
-          userData['is_admin'] = false;
-          console.log(userData);
-          this.userRepo.save(userData).then( (result) => {
-            console.log('success: ' + result);
+          let hash = this.crypto.createHash('sha256');
+          let salted = userData['email'] + userData['password'] + 'salt';
+          userData['password'] = hash.update(salted).digest('hex');
+
+          // creating a user object by using the provided data
+          let user = new User(
+            userData['first_name'], userData['last_name'],
+            userData['phone_number'], userData['email'],
+            userData['full_address'], userData['password'], false
+          );
+
+          // About to save the user into the database
+          this.userRepo.save(user).then( () => {
+            // the following message should be passed to login page
+            messages.push('Your account has been created! You can login now!');
             res.redirect('/login');
           })
           .catch( (err) => {
-            console.log('failed: ' + err);
+            // send the following error to the registration page
+            errors.push('Something bad happened while processing the request');
             res.redirect('/registration');
           });
         } else {
-          console.log('Email already exists');
+          // send the following error to the registration page
+          errors.push('The email is already taken! Please provide another one');
           res.redirect('/registration');
         }
       })
       .catch( (err) => {
         console.log(err);
-        console.log('something bad happened');
+        console.log('something bad happened while processing the request');
       });
     }
   }
@@ -361,6 +367,7 @@ class Controller {
   /**
    * Retrieves a complete list of products and serial numbers from
    * the database
+   * @author Katia & Ajmer
    * @param {Object} req HTTP Request object containing query info
    * @param {Object} res HTTP Response object to be send back to the user
    */
@@ -385,12 +392,15 @@ class Controller {
       }).then((val)=>{
         console.log('Values: ', JSON.stringify(inventory));
       if (req.session.exists==true && req.session.isAdmin==true) {
-        res.render('inventory', {items: JSON.stringify(inventory), search: search});
+        res.render('inventory',
+                   {items: JSON.stringify(inventory), search: search});
       } else if (req.session.exists==true && req.session.isAdmin==false) {
         this.updateInventoryList(inventory);
-        res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
+        res.render('clientInventory',
+                   {items: JSON.stringify(inventory), search: search});
       } else {
-        res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
+        res.render('clientInventory',
+                   {items: JSON.stringify(inventory), search: search});
       }
       }).catch((err) => {
         console.log(err);
