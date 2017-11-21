@@ -112,7 +112,7 @@ class PurchaseCollectionRepo {
     this.uow.registerReturn(electronicsToDelete);
     this.uow.registerNewItem(electronicsToAdd);
     this.uow.commitAll();
-    this.inventoryItemsIM.add(electronicsToAdd);
+    // this.inventoryItemsIM.add(electronicsToAdd);
   }
 }
 module.exports = PurchaseCollectionRepo;
