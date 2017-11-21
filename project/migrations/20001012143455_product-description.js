@@ -12,7 +12,6 @@ exports.up = function(knex, Promise) {
       table.decimal('price').notNullable();
       table.decimal('weight').notNullable();
       table.string('type').notNullable();
-      table.boolean('is_available').defaultTo(true);
     }
   });
 };

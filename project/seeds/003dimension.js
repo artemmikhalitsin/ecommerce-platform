@@ -1,3 +1,7 @@
+/**
+ * Seeding the Dimensions table with some data
+ * @author Ajmer Singh Gadreh
+ */
 const dimensions = [
   {
     'depth': 171,

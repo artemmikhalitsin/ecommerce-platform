@@ -349,7 +349,7 @@ class UnitOfWork {
     return connection('ProductDescription').select('*');
   }
 
-  // the following getter function will need to be moved to their respective TDGs
+  // the following getter function will need to be moved to their respective TDGs -Ajmer
   getAllDesktops() {
     return connection('ProductDescription')
                .innerJoin('Desktop', 'Desktop.model_number',
@@ -358,7 +358,7 @@ class UnitOfWork {
                .innerJoin('Dimensions', 'Desktop.dimension_id',
                           'Dimensions.dimension_id')
                .select('ProductDescription.model_number', 'brand_name', 'price',
-                       'type', 'weight', 'is_available', 'processor_type',
+                       'type', 'weight', 'processor_type',
                        'ram_size', 'number_cpu_cores', 'harddrive_size',
                        'depth', 'height', 'width');
   }
@@ -369,7 +369,7 @@ class UnitOfWork {
                           'ProductDescription.model_number')
                .innerJoin('Computer', 'Laptop.comp_id', 'Computer.comp_id')
                .select('ProductDescription.model_number', 'brand_name', 'price',
-                       'type', 'weight', 'is_available', 'processor_type',
+                       'type', 'weight', 'processor_type',
                        'ram_size', 'number_cpu_cores', 'harddrive_size', 'os',
                        'touch_screen', 'camera', 'display_size',
                        'battery_info');
@@ -383,7 +383,7 @@ class UnitOfWork {
                .innerJoin('Dimensions', 'Tablet.dimension_id',
                           'Dimensions.dimension_id')
                .select('ProductDescription.model_number', 'brand_name', 'price',
-                       'type', 'weight', 'is_available', 'processor_type',
+                       'type', 'weight', 'processor_type',
                        'ram_size', 'number_cpu_cores', 'harddrive_size',
                        'display_size', 'battery_info', 'camera_info',
                        'os', 'depth', 'height', 'width');
@@ -394,7 +394,7 @@ class UnitOfWork {
                .innerJoin('Monitor', 'Monitor.model_number',
                           'ProductDescription.model_number')
                .select('ProductDescription.model_number', 'brand_name', 'price',
-                       'type', 'weight', 'is_available', 'display_size');
+                       'type', 'weight', 'display_size');
   }
 
   // NOTE if we are not using this function then it should be removed. If we gonna use it later then ignore this comment

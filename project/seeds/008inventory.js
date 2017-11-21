@@ -1,3 +1,7 @@
+/**
+ * Sedding the Inventory table with some items
+ * @author Ajmer Singh Gadreh
+ */
 const items = [
   {
     'serial_number': 'EK22-B7QU-KYKL-GHA6',

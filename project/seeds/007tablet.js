@@ -1,3 +1,7 @@
+/**
+ * Seeding the Tablet table with some data
+ * @author Ajmer Singh Gadreh
+ */
 const tablets = [
   {
     'model_number': '425528356-7',
