@@ -302,6 +302,7 @@ class Controller {
     }
   }
 
+
   getProductInfo(req, res) {
     this.inventoryRepo.getAllInventoryItems().then(
       (result) => {
