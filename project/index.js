@@ -95,8 +95,13 @@ app.get('/logout', function(req, res) {
 });
 
 app.get('/users', function(req, res) {
-  res.render('/userTable');
+  if (req.session.exists) {
+    res.render('userTable');
+  } else {
+    res.redirect('/login');
+  }
 });
+
 
 // getting the inventory from the database
 app.get('/getAllInventoryItems', function(req, res) {
@@ -150,6 +155,10 @@ app.get('/viewPurchaseCollection', function(req, res) {
 
 app.get('/api/getAllProducts', function(req, res) {
   controller.getProductInfo(req, res);
+});
+
+app.get('/api/getAllClients', function(req, res) {
+  controller.getClients(req, res);
 });
 
 app.listen(8080, function() {

@@ -451,11 +451,15 @@ class Controller {
   }
 
   getClients(req, res) {
-    this.userRepo.getAdmins().then(
-      (result) => {
-        res.json(result);
-      }
-    );
+    if (req.session.exists==true && req.session.isAdmin==true) {
+      this.userRepo.getClients().then(
+        (result) => {
+          res.json(result);
+        }
+      );
+    } else {
+res.redirect('/login', {error: 'Invalid username/password'});
+}
   }
 }
 

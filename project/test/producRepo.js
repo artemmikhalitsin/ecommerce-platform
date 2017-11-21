@@ -9,3 +9,9 @@ repo.getAllInventoryItems().then(
  console.log(`Response from server: ${JSON.stringify(result)}`);
 }
 );
+
+repo.getAdmins().then(
+  (result) => {
+    console.log(`Response from server: ${JSON.stringify(result)}`);
+  }
+);
