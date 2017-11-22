@@ -3,31 +3,44 @@ const meld = require('meld');
 const crypto = require('crypto');
 const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
+const ProcessQueue = require(rootPath +
+  '/Aspects/processQueue.js');
 
 /**
  * Aspect that manages authentication
  * @author Wai Lau, Daniel Isakov
  */
 
-const authPages = ['inventoryAction'];
+const authRequests = [
+  'inventoryAction',
+  'getCatalog',
+  'manageProductCatalog',
+  'addToShoppingCart',
+  'removeFromShoppingCart',
+  'completePurchaseTransaction',
+  'viewShoppingCart',
+  'cancelPurchaseTransaction',
+  'addToReturnCart',
+  'returnPurchaseTransaction',
+  'viewPurchaseCollection',
+  'getClients',
+];
 
 class Aspect {
   constructor() {
      this.userRepo = new UserRepository();
      this.activeUsers = [];
+     this.processQueue = new ProcessQueue();
   }
 
   // if you do not pass joinpoint:
   // validate session will not let caught function proceed after validation
   validateSession(req, res, data, joinpoint) {
     return this.userRepo.authenticate(data).then((result) => {
-      if (result.length <= 0) {
+      if (result.length <= 0 || result.length > 1) {
         console.log('Terminated by aspect. Invalid user/pass.');
         req.session.destroy();
-      } else if (result.length > 1) {
-        console.log('Terminated by aspect. Duplicates detected.');
-        req.session.destroy();
-      } else if (result.length == 1) {
+      } else {
         req.session.exists=true;
         req.session.hash=data.password;
         req.session.email=data.email;
@@ -46,29 +59,34 @@ class Aspect {
         }
         console.log(this.activeUsers);
         if (joinpoint) {
-          return joinpoint.proceed(req, res);
+          if (req.session.isAdmin) {
+            this.processQueue.adminReq(joinpoint, req, res);
+          } else {
+            this.processQueue.clientReq(joinpoint, req, res);
+          }
         }
       }
     }).catch((errors) => {
+      console.log(errors);
       console.log('Terminated by aspect, invalid request.');
       req.session.destroy();
     });
   }
 
-  monitor(controller) {
-    meld.around(controller, authPages, (joinpoint) => {
+  watch(controller) {
+    meld.around(controller, authRequests, (joinpoint) => {
       console.log('Caught by main aspect, validating the user...');
       let req = joinpoint.args[0];
       let res = joinpoint.args[1];
-      if (!req.session.exists) {
-        console.log('Terminated by aspect, session does not exist.');
-        req.session.destroy();
-      } else {
-        let data = {
+      let data;
+      if (req.session.exists) {
+        data = {
             email: req.session.email,
             password: req.session.hash,
         };
         this.validateSession(req, res, data, joinpoint);
+      } else {
+        this.processQueue.anonReq(joinpoint);
       }
     });
 
@@ -89,6 +107,7 @@ class Aspect {
       let res = joinpoint.args[1];
       if (!req.session.exists) {
         console.log('Caught by logout aspect, user not logged in');
+        return joinpoint.proceed();
       } else {
         let data = {
             email: req.session.email,
@@ -107,7 +126,7 @@ class Aspect {
           this.activeUsers = this.activeUsers.filter((val) => {
               return val != null;
           });
-          return joinpoint.proceed(req, res);
+          return joinpoint.proceed();
         });
       }
     });

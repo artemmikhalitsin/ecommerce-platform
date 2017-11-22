@@ -8,36 +8,36 @@ function productCardController($scope) {
 }
 function desktopCardController($scope, $http, $compile) {
   rotateCard($scope);
-  $scope.addToShoppingCart = (serialNumber, modelNumber) => {
-    addToShoppingCart(serialNumber, modelNumber, $http, $compile, $scope);
-  };
+  $scope.addToShoppingCart = (serialNumber, modelNumber, brandName, type, price) => {
+    addToShoppingCart(serialNumber,modelNumber, brandName, type, price, $http, $compile, $scope);
+  }
   $scope.remove = (index) => {
     remove(index, $http);
   };
 }
 function laptopCardController($scope, $http, $compile) {
   rotateCard($scope);
-  $scope.addToShoppingCart = (serialNumber, modelNumber) => {
-    addToShoppingCart(serialNumber, modelNumber, $http, $compile, $scope);
-  };
+  $scope.addToShoppingCart = (serialNumber, modelNumber, brandName, type, price) => {
+    addToShoppingCart(serialNumber,modelNumber, brandName, type, price, $http, $compile, $scope);
+  }
   $scope.remove = (index) => {
     remove(index, $http);
   };
 }
 function tabletCardController($scope, $http, $compile) {
   rotateCard($scope);
-  $scope.addToShoppingCart = (serialNumber, modelNumber) => {
-    addToShoppingCart(serialNumber, modelNumber, $http, $compile, $scope);
-  };
+  $scope.addToShoppingCart = (serialNumber, modelNumber, brandName, type, price) => {
+    addToShoppingCart(serialNumber,modelNumber, brandName, type, price, $http, $compile, $scope);
+  }
   $scope.remove = (index) => {
     remove(index, $http);
   };
 }
 function monitorCardController($scope, $http, $compile) {
   rotateCard($scope);
-  $scope.addToShoppingCart = (serialNumber, modelNumber) => {
-    addToShoppingCart(serialNumber, modelNumber, $http, $compile, $scope);
-  };
+  $scope.addToShoppingCart = (serialNumber, modelNumber, brandName, type, price) => {
+    addToShoppingCart(serialNumber,modelNumber, brandName, type, price, $http, $compile, $scope);
+  }
   $scope.remove = (index) => {
     remove(index, $http);
   };
@@ -53,11 +53,11 @@ function remove(serialNumber, http) {
       $('#cart_' + serialNumber).remove();
       window.alert('Removed successfully');
     }, function errorCallback(response) {
-      window.alert('Unsuccessful!');
+      window.alert('Cannot remove item!');
   });
 }
 
-function addToShoppingCart(serialNumber, modelNumber, http, compile, scope) {
+function addToShoppingCart(serialNumber,modelNumber, brandName, type, price, http, compile, scope) {
   http({
     method: 'POST',
     url: '/addToCart',
@@ -70,6 +70,26 @@ function addToShoppingCart(serialNumber, modelNumber, http, compile, scope) {
     }, function errorCallback(response) {
       window.alert('Not added to shopping cart');
   });
+    var html=`<div class="list-group-item list-group-item-action flex-column align-items-start" id="cart_${serialNumber}">`
+    +  `<div class="d-flex w-100 justify-content-between">`
+    +   `<h3 class="mb-1">${brandName} ${type}</h3>`
+    +   `<div>$${price}</div>`
+    +   `</div>`
+    +   `<div>Model: ${modelNumber}</div>`
+    +   `<div>Serial: ${serialNumber}</div>`
+    + `<button class="pull-right btn" ng-click="remove('${serialNumber}')">Remove From Cart</button>`
+    + `</div>`;
+    $('#shopping_cart').show();
+    let el = document.getElementById('temp_cart');
+    angular.element(el).append(compile(html)(scope));
+    window.alert(response.data.success);
+    }, function errorCallback(response) {
+        if (response.data.error == null) {
+          window.alert('Too many items in cart');
+        }
+        window.alert(response.data.error);
+      }
+  );
 }
 
 function rotateCard($scope) {

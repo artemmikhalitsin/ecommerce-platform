@@ -1,21 +1,24 @@
 $(document).ready(function() {
-    let inventory_table = $('#table_inventory').DataTable({
-      data: data,
+    $.get("/api/getAllClients", (res) => {console.log(res)});
+    let inventory_table = $('#table_users').DataTable({
+      ajax: {
+        url: '/api/getAllClients',
+        dataSrc: ''
+      },
       columns: [
-        {
-            'className': 'details-control',
-            'orderable': false,
-            'data': null,
-            'defaultContent': '',
-        },
-        {'data': 'id'},
-        {'data': 'email'},
-        {'data': 'first_name'},
-        {'data': 'last_name'},
-        {'data': 'password'},
-        {'data': 'full_adress'},
-        {'data': 'phone_number'},
-      ],
-    });
-    $('input[type="search"]').val(search).keyup();
+          {'data': 'id'},
+          {'data': 'email'},
+          {'data': 'first_name'},
+          {'data': 'last_name'},
+          //{'data': 'password'},
+          {'data': 'full_address'},
+          {'data': 'phone_number'},
+        /*  {
+            'data': 'is_admin',
+            render: function(data, type, row) {
+              return data ? 'yes' : 'no';
+            }
+          }*/
+      ]
+    })
 });

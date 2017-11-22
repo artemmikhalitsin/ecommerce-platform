@@ -3,7 +3,6 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
-const Monitor = require(rootPath + '/models/Monitor.js');
 /**
  * Table Data Gateway for the Monitor table
  * @author Ekaterina Ruhlin
@@ -24,41 +23,15 @@ class MonitorsTDG {
         .into('Monitor');
     }
     getAll() {
-        let result = [];
         return connection('Monitor').select('*')
           .join('ProductDescription', 'Monitor.model_number',
-                'ProductDescription.model_number')
-          .then((monitors) => {
-              monitors.forEach(function(monitor) {
-                  result.push(new Monitor(
-                      monitor.display_size,
-                      monitor.price,
-                      monitor.weight,
-                      monitor.brand_name,
-                      monitor.model_number,
-                      monitor.type));
-              });
-              return result;
-          });
+                'ProductDescription.model_number');
     }
     getAllByModelNumber(modelNumbers) {
-        let result = [];
         return connection('Monitor').select('*')
           .whereIn('model_number', modelNumbers)
           .join('ProductDescription', 'Monitor.model_number',
-                'ProductDescription.model_number')
-          .then((monitors) => {
-              monitors.forEach(function(monitor) {
-                  result.push(new Monitor(
-                      monitor.display_size,
-                      monitor.price,
-                      monitor.weight,
-                      monitor.brand_name,
-                      monitor.model_number,
-                      monitor.type));
-              });
-              return result;
-          });
+                'ProductDescription.model_number');
     }
 
     /**
