@@ -16,11 +16,12 @@ class ReturnCart {
       return Object.keys(this.returnCartItems);
     }
 
-    addToReturnCart(item, modelNumber) {
+    addToReturnCart(item, modelNumber, purchaseId) {
       if (!this.returnCartItems[item]) {
         this.returnCartItems[item] = {
                               model: modelNumber,
                               serial: item,
+                              purchaseId: purchaseId,
                               };
       }
       post: {
