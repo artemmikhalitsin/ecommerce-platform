@@ -218,7 +218,7 @@ class Controller {
     if (req.session.exists) {
       res.redirect('/getAllInventoryItems');
     } else {
-      res.render('login', {error: 'Invalid username/password'});
+      res.render('login');
     }
   }
 
