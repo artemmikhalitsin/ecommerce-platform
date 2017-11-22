@@ -381,12 +381,8 @@ class Controller {
        return Promise.each(results, (product)=>{
         return this.inventoryRepo.getByModelNumbers([product.modelNumber]).then(
           (values)=>{
-            console.log('PRINTING THE VALUES: ');
-            console.log(values);
             product.serial_numbers = values.map((p) => p.serial_number);
             inventory.push(product);
-            console.log('PRINGTING THE PRODUCT');
-            console.log(product);
           });
         });
       }).then((val)=>{
