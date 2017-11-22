@@ -12,7 +12,7 @@
         <h4>Tablet</h4></br>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">Model Number: {[{ $ctrl.tablet.modelNumber }]}</li>
-          <li class="list-group-item" ng-repeat="serial in $ctrl.tablet.serial_numbers">{{serial}}
+          <li class="list-group-item" ng-repeat="serial in $ctrl.tablet.serialNumbers">{{serial}}
               <a href="#" class="btn btn-primary pull-right" ng-click="addToShoppingCart(serial, $ctrl.tablet.modelNumber, $ctrl.tablet.brandName, 'Tablet', $ctrl.tablet.price.toFixed(2))">Add to Cart</a></li>
           <li class="list-group-item">Brand Name: {[{ $ctrl.tablet.brandName }]}</li>
           <li class="list-group-item">Weight: {[{ $ctrl.tablet.weight }]} </li>
