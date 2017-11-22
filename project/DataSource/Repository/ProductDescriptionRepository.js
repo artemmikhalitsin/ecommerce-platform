@@ -92,7 +92,7 @@ class ProductDescriptionRepository {
 
   /**
    * Retrieves the product description from the identity map given a list of IDs
-   * @param {numberp[]} ids the list of ids of the products to be retrieved
+   * @param {number[]} ids the list of ids of the products to be retrieved
    * @return {Object[]} a list containing the product descriptions
    */
   getByIds(ids) {
@@ -124,25 +124,23 @@ class ProductDescriptionRepository {
   save(products) {
     let electronicsToAdd = [];
     let electronicsToUpdate = [];
-    let electronicsToDelete = [];
 
-    let productIds = products.map((p) => p.model_number);
-
+    let productIds = products.map((p) => p.modelNumber);
     if (productIds.length > 0) {
     let context = this.getByIds(productIds);
     let allRecords = this.ProductDescriptionIM.getAll();
     for (let i = 0; i < products.length; i++) {
       if (context.findIndex(
-        (p) => p.model_number == products[i].model_number) !== -1
+        (p) => p.modelNumber == products[i].modelNumber) !== -1
           && electronicsToUpdate.findIndex(
-            (e) => e.model_number == products[i].model_number) === -1) {
+            (e) => e.modelNumber == products[i].modelNumber) === -1) {
             // Case: the product exists in our list of products
             // and hasn't already been processed
             electronicsToUpdate.push(products[i]);
       } else if (allRecords.findIndex(
-        (p) => p.model_number == products[i].model_number) === -1
+        (p) => p.modelNumber == products[i].modelNumber) === -1
               && electronicsToAdd.findIndex(
-                (e) => e.model_number == products[i].model_number) === -1) {
+                (e) => e.modelNumber == products[i].modelNumber) === -1) {
                 // Case: the product doesn't exist in our list of products
                 // and hasn't already been processed
                 electronicsToAdd.push(products[i]);
@@ -152,8 +150,10 @@ class ProductDescriptionRepository {
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);
 
-    this.uow.commitAll();
-    this.ProductDescriptionIM.add(electronicsToAdd);
+    return this.uow.commitAll().then((result) => {
+      this.ProductDescriptionIM.add(electronicsToAdd);
+      return true;
+    });
   }
 }
 

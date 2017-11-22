@@ -50,7 +50,7 @@ function ClientInventoryController($scope, $http, $compile) {
     }).then(function successCallback(response) {
         window.alert(response.data.success);
         $('#temp_cart').children().remove();
-
+        $('#shopping_cart').hide();
       }, function errorCallback(response) {
         if (response.data.error) {
           window.alert(response.data.error);

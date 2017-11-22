@@ -1,4 +1,7 @@
+const Promise = require('bluebird');
 const rootPath = require('app-root-dir').get();
+const InventoryItem = require(rootPath +
+  '/models/InventoryItem.js');
 const ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
 const InventoryItemRepository = require(rootPath +
@@ -77,24 +80,76 @@ class Controller {
   getAllInventory(req, res, purchaseController) {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;
-    let prodDesc = this.inventoryRepo.getAllInventoryItems();
-    Promise.all([prodDesc])
-    .then((values) => {
-      let items = JSON.stringify(values[0]);
-      // items = JSON.stringify(toSave);
-      // console.log('Values: ', items);
-
+    let inventory = [];
+    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
+    .then((results)=>{
+      console.log('all the products are: ' + JSON.stringify(results));
+       return Promise.each(results, (product)=>{
+        return this.inventoryRepo.getByModelNumbers([product.modelNumber]).then((values)=>{
+                  console.log('inventory item is ' + JSON.stringify(values));
+                  product.serial_numbers = values.map((p) => p.serial_number);
+                  inventory.push(product);
+                });
+      });
+      }).then((val)=>{
+        console.log('Values: ', JSON.stringify(inventory));
       if (req.session.exists==true && req.session.isAdmin==true) {
-        res.render('inventory', {items: items, search: search});
-      } else {
+        res.render('inventory', {items: JSON.stringify(inventory), search: search});
+      } else if (req.session.exists==true && req.session.isAdmin==false) {
         if (purchaseController) {
-          purchaseController.updateInventoryList(values[0]);
+          purchaseController.getLatestInventory();
         }
-        res.render('clientInventory', {search: search});
+        res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
+      } else {
+        res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
       }
-    })
-    .catch((err) => {
+      }).catch((err) => {
       console.log(err);
+    });
+  }
+
+  manageInventory(inventoryItems) {
+    let results = this.inventoryRepo.save(inventoryItems);
+  }
+  getProductDescription(req, res) {
+    let query = this.url.parse(req.url, true).query;
+    let search = query.search;
+    let catalog = [];
+    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
+    .then((results)=>{
+        console.log('Product Descriptions: ', JSON.stringify(results));
+        // res.render('catalog', {items: JSON.stringify(results), search: search});
+      if (req.session.exists==true && req.session.isAdmin==true) {
+        return res.send({items: results, search: search});
+      }
+      }).catch((err) => {
+      console.log(err);
+    });
+  }
+  getCatalog(req, res) {
+    let query = this.url.parse(req.url, true).query;
+    let search = query.search;
+    let catalog = [];
+    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
+    .then((results)=>{
+        // res.render('catalog', {items: JSON.stringify(results), search: search});
+      if (req.session.exists==true && req.session.isAdmin==true) {
+        res.render('catalog', {items: JSON.stringify(results), search: search});
+      } else if (req.session.exists==true && req.session.isAdmin==false) {
+        res.redirect('/login');
+      } else {
+        res.redirect('/login');
+      }
+      }).catch((err) => {
+      console.log(err);
+    });
+  }
+  manageProductCatalog(req, res) {
+    let productDescriptions = JSON.parse(req.body.productDescriptions);
+    console.log('Descriptions recieved by the controller' + JSON.parse(req.body.productDescriptions));
+    let results = this.productDescriptionRepo.save(productDescriptions).then((results) => {
+      console.log('Success saving the Product descriptions!');
+      this.getProductDescription(req, res);
     });
   }
 
@@ -111,6 +166,12 @@ class Controller {
     }
   }
 
+
+  /**
+   * Processes an inventory action initiated by the user
+   * @param {Object} req HTTP request object containing action info
+   * @param {Object} res HTTP response object to be returned to the user
+   */
 
   inventoryAction(req, res) {
     if (req.session.exists==true && req.session.isAdmin==true) {
@@ -165,12 +226,25 @@ class Controller {
     }
   }
 
-  getProductInfo(req, res, other) {
-    this.inventoryRepo.getAllInventoryItems().then(
-      (result) => {
-        res.json(result);
-      }
-    );
+
+  getProductInfo(req, res) {
+    let inventory = [];
+    this.productDescriptionRepo.getAllWithIncludes()
+    .then((results)=>{
+       return Promise.each(results, (product)=>{
+        return this.inventoryRepo.getByModelNumbers([product.modelNumber])
+          .then((values)=>{
+            console.log('inventory item is ' + JSON.stringify(values));
+            product.serial_numbers = values.map((p) => p.serial_number);
+            inventory.push(product);
+          });
+      });
+    }).then((val)=>{
+      console.log('Values: ', JSON.stringify(inventory));
+      res.json(inventory);
+    }).catch((err) => {
+      console.log(err);
+    });
   }
 
   getClients(req, res) {

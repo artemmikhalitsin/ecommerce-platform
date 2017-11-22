@@ -11,10 +11,10 @@
         <h4 class="pull-right">${[{ $ctrl.tablet.price.toFixed(2) }]}</h4>
         <h4>Tablet</h4></br>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Model Number: {[{ $ctrl.tablet.model_number }]}</li>
+          <li class="list-group-item">Model Number: {[{ $ctrl.tablet.modelNumber }]}</li>
           <li class="list-group-item" ng-repeat="serial in $ctrl.tablet.serial_numbers">{{serial}}
-              <a href="#" class="btn btn-primary pull-right" ng-click="addToShoppingCart(serial, $ctrl.tablet.model_number)">Add to Cart</a></li>
-          <li class="list-group-item">Brand Name: {[{ $ctrl.tablet.brand_name }]}</li>
+              <a href="#" class="btn btn-primary pull-right" ng-click="addToShoppingCart(serial, $ctrl.tablet.modelNumber, $ctrl.tablet.brandName, 'Tablet', $ctrl.tablet.price.toFixed(2))">Add to Cart</a></li>
+          <li class="list-group-item">Brand Name: {[{ $ctrl.tablet.brandName }]}</li>
           <li class="list-group-item">Weight: {[{ $ctrl.tablet.weight }]} </li>
         </ul></br>
         <a href="#" class="btn btn-primary" ng-click="rotate()">View Details</a>
@@ -29,14 +29,14 @@
     <h2 class="text-center">Detailed Info</h2>
     <div class="card-body">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">Processor Type:{[{ $ctrl.tablet.processor_type }]} </li>
-        <li class="list-group-item">RAM size:{[{ $ctrl.tablet.ram_size }]} </li>
-        <li class="list-group-item"># of CPU core:{[{ $ctrl.tablet.number_cpu_cores }]} </li>
-        <li class="list-group-item">Hard Drive Size:{[{ $ctrl.tablet.harddrive_size }]} </li>
-        <li class="list-group-item">Display Size (inches):{[{ $ctrl.tablet.display_size }]} </li>
-        <li class="list-group-item">Battery Info:{[{ $ctrl.tablet.battery_info }]} </li>
+        <li class="list-group-item">Processor Type:{[{ $ctrl.tablet.processorType }]} </li>
+        <li class="list-group-item">RAM size:{[{ $ctrl.tablet.ramSize }]} </li>
+        <li class="list-group-item"># of CPU core:{[{ $ctrl.tablet.numberCpuCores }]} </li>
+        <li class="list-group-item">Hard Drive Size:{[{ $ctrl.tablet.harddriveSize }]} </li>
+        <li class="list-group-item">Display Size (inches):{[{ $ctrl.tablet.displaySize }]} </li>
+        <li class="list-group-item">Battery Info:{[{ $ctrl.tablet.batteryInfo }]} </li>
         <li class="list-group-item">OS:{[{ $ctrl.tablet.os }]} </li>
-        <li class="list-group-item">Camera Info:{[{ $ctrl.tablet.camera_info }]} </li>
+        <li class="list-group-item">Camera Info:{[{ $ctrl.tablet.cameraInfo }]} </li>
         <li class="list-group-item">Height (cm): {[{ $ctrl.tablet.height }]}</li>
         <li class="list-group-item">Width (cm): {[{ $ctrl.tablet.width }]}</li>
         <li class="list-group-item">Depth (cm):{[{ $ctrl.tablet.depth }]} </li>

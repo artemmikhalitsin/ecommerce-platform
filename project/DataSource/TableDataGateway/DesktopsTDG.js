@@ -25,7 +25,7 @@ class DesktopsTDG {
     add(compId, dimensionsId, desktop) {
         return connection.insert({
             'comp_id': compId,
-            'model_number': desktop.model_number,
+            'model_number': desktop.modelNumber,
             'dimension_id': dimensionsId,
         }, 'id')
         .into('Desktop');
@@ -36,7 +36,8 @@ class DesktopsTDG {
         return connection('Desktop').select('*')
           .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Desktop.model_number', 'ProductDescription.model_number')
+          .join('ProductDescription', 'Desktop.model_number',
+                'ProductDescription.model_number')
           .then((desktops) => {
               desktops.forEach(function(desktop) {
                   let d = new Desktop(
@@ -66,7 +67,8 @@ class DesktopsTDG {
           .whereIn('model_number', modelNumbers)
           .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Desktop.model_number', 'ProductDescription.model_number')
+          .join('ProductDescription', 'Desktop.model_number',
+                'ProductDescription.model_number')
           .then((desktops) => {
               desktops.forEach(function(desktop) {
                   result.push(new Desktop(
@@ -101,10 +103,10 @@ class DesktopsTDG {
      */
     update(compId, dimensionsId, desktop) {
         return connection.update({
-        'model_number': desktop.model_number,
-        'dimension_id': desktop.dimension.dimensions_id,
-      }).from('Desktop').where({id: desktop.id});
-      // REVIEW: This was marked todo, is this still the case? - Artem
+         'comp_id': desktop.computerId,
+         'model_number': desktop.modelNumber,
+         'dimension_id': desktop.dimensions.id,
+      }).from('Desktop').where({'model_number': desktop.modelNumber});
     }
 }
 module.exports = DesktopsTDG;
