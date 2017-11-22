@@ -244,7 +244,7 @@ class Controller {
   }
 
   getClients(req, res) {
-    this.userRepo.getAdmins().then((result) => {
+    this.userRepo.getClients().then((result) => {
       res.json(result);
     });
   }
