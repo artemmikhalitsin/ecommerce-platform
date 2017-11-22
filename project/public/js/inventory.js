@@ -1,5 +1,5 @@
 _commonProps = ["modelNumber", "brand_name", "price", "weight",
-                "type", "serial_numbers", "computerId"];
+                "type", "serialNumbers", "computerId"];
 _requestJSON = {"deleteSerials":[], "addSerials":[]};
 
 /**
@@ -52,7 +52,7 @@ function getAllTextBoxes(){
       invalidModelIds.push(modelId);
     }
   });
-  console.log(_requestJSON.addSerials);
+  //console.log(_requestJSON.addSerials);
   if (invalidModelIds.length === 0){
     return true;
   } else{
@@ -100,7 +100,7 @@ function deleteSerial(checkbox){
     toBeDeleted.serialNumbers.push(checkbox.id);
     _requestJSON.deleteSerials.push(toBeDeleted);
   }
-  console.log("to be deleted: " + JSON.stringify(_requestJSON.deleteSerials));
+  //console.log("to be deleted: " + JSON.stringify(_requestJSON.deleteSerials));
 }
 
 function cancelAdd(row){
@@ -143,10 +143,10 @@ function formatChildRows( data ) {
           </tr>`
     }
   }
-  var serial_numbers = data.serial_numbers;
+  var serialNumbers = data.serialNumbers;
 
   // following if statement executes when there are no serial numbers
-  if (serial_numbers < 1){
+  if (serialNumbers < 1){
     serialRows += `<tr>
          <td colspan=2>
            No serial numbers.
@@ -154,17 +154,39 @@ function formatChildRows( data ) {
        </tr>`
   }
 
+  let alreadyChecked = false;
   //for each existing serial number add a new row with a checkbox beside it
-  for (number in serial_numbers) {
-     serialRows += `
-      <tr>
-        <td>
-          ${serialNumbers[number]}
-        </td>
-        <td>
-          <input type="checkbox" id=${serial_numbers[number]} name=${data["modelNumber"]} onchange='deleteSerial(this);'>
-        </td>
-      </tr>`;
+  for (number in serialNumbers) {
+    if (_requestJSON.deleteSerials.length > 0) {
+      for (var index in _requestJSON.deleteSerials) {
+        if (_requestJSON.deleteSerials.hasOwnProperty(index) && _requestJSON.deleteSerials[index].serialNumbers.includes(serialNumbers[number])) {
+          alreadyChecked = true;
+        }
+      }
+    }
+
+    if (alreadyChecked) {
+      serialRows += `
+       <tr>
+         <td>
+           ${serialNumbers[number]}
+         </td>
+         <td>
+           <input type="checkbox" checked id=${serialNumbers[number]} name=${data["modelNumber"]} onchange='deleteSerial(this);'>
+         </td>
+       </tr>`;
+    } else {
+      serialRows += `
+       <tr>
+         <td>
+           ${serialNumbers[number]}
+         </td>
+         <td>
+           <input type="checkbox" id=${serialNumbers[number]} name=${data["modelNumber"]} onchange='deleteSerial(this);'>
+         </td>
+       </tr>`;
+    }
+    alreadyChecked = false;
   }
 
   //button to add more serial numbers
@@ -225,8 +247,6 @@ $(document).ready(function() {
             tr.removeClass('shown');
         } else {
             // Open this row
-            let rowData = row.data();
-            console.log("Printing type: ", rowData.type);
             row.child( formatChildRows(row.data()) ).show();
             tr.addClass('shown');
         }
@@ -235,10 +255,9 @@ $(document).ready(function() {
 });
 
 function submitData(){
-    if(getAllTextBoxes()){
-      console.log("Going to call inventory actions");
-      console.log(_requestJSON);
-      /*
+  if(getAllTextBoxes()){
+    // console.log("Going to call inventory actions");
+    // console.log(_requestJSON);
     $.ajax({
         url: '/inventoryAction',
         type: 'post',
@@ -253,6 +272,5 @@ function submitData(){
         },
         data: {"actions":JSON.stringify(_requestJSON)}
     });
-    */
   }
 }

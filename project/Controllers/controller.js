@@ -9,6 +9,10 @@ const InventoryItemRepository = require(rootPath +
 const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
 
+const User = require(rootPath + '/models/User.js');
+
+let validator = require('validator');
+
 /**
  * Identity map of inventory items
  * @author Wai Lau, Amanda Wai
@@ -235,6 +239,8 @@ class Controller {
    */
 
   inventoryAction(req, res) {
+    console.log("In progress...");
+    /*
     if (req.session.exists==true && req.session.isAdmin==true) {
       let request = req.body;
       console.log(request.actions);
@@ -271,6 +277,7 @@ class Controller {
     } else {
       console.log('Not admin, fool!');
     }
+    */
   }
 
   /**
