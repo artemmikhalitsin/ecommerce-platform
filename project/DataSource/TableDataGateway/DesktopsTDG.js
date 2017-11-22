@@ -45,6 +45,20 @@ class DesktopsTDG {
           .join('ProductDescription', 'Desktop.model_number',
                 'ProductDescription.model_number');
     }
+    /**
+     * Retrieves all desktop object rows except those listed in modelNumbers
+     * @param {string[]} modelNumbers a list of model numbers
+     * @return {Promise<Object[]>} resolves to the list of objects matching
+     * the query
+     */
+    static getAllExcept(modelNumbers) {
+      return connection('Desktop').select('*')
+        .whereNotIn('model_number', modelNumbers)
+        .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
+        .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
+        .join('ProductDescription', 'Desktop.model_number',
+              'ProductDescription.model_number');
+    }
     /* getAll() {
         let result = [];
         return connection('Desktop').select('*')

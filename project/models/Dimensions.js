@@ -14,52 +14,77 @@ class Dimensions {
      * @param {number} width width of a product
      */
     constructor(id, depth, height, width) {
-        this.id = id;
-        this.depth = depth;
-        this.height = height;
-        this.width = width;
+        this._id = id;
+        this._depth = depth;
+        this._height = height;
+        this._width = width;
     }
+    /**
+     * id accessor
+     * @return {number} the dimension id
+     */
+    get id() {
+      return this._id;
+    }
+    /**
+     * id mutator. id is immutable, so this function does nothing
+     * and exists only for interfacing purposes
+     * @param {number} newId the new Id (ignored)
+     */
+    set id(newId) {/* id is immutable */};
     /**
      * depth accessor
      * @return {number} depth
      */
-    getDepth() {
-      return this.depth;
+    get depth() {
+      return this._depth;
+    }
+    /**
+    * depth mutator
+    * @param {number} depth new depth
+    */
+    set depth(depth) {
+      this._depth = depth;
     }
     /**
      * height accessor
      * @return {number} height
      */
-    getHeight() {
-       return this.height;
+    get height() {
+       return this._height;
+    }
+    /**
+    * height mutator
+    * @param {number} height new height
+    */
+    set height(height) {
+      this._height = height;
     }
     /**
      * width accessor
      * @return {number} width
      */
-    getWidth() {
-       return this.width;
-    }
-    /**
-     * depth mutator
-     * @param {number} depth new depth
-     */
-    setDepth(depth) {
-      this.depth = depth;
-    }
-    /**
-     * height mutator
-     * @param {number} height new height
-     */
-    setHeight() {
-      this.height = height;
+    get width() {
+       return this._width;
     }
     /**
      * width mutator
      * @param {number} width new width
      */
-    setWidth() {
-      this.width = width;
+    set width(width) {
+      this._width = width;
+    }
+    /**
+     * Creates a clone of the current dimension objects
+     * @return {Dimensions} a copy of the object
+     */
+    clone() {
+      return new Dimensions(
+        this.id,
+        this.depth,
+        this.height,
+        this.width
+      );
     }
 }
 

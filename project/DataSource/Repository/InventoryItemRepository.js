@@ -38,21 +38,50 @@ class InventoryItemRepository {
     return context;
   }
   getByModelNumbers(modelNumbers) {
-    let inventory = inventoryTDG.getByModelNumbers(modelNumbers);
-    console.log('The models numbers passed' + JSON.stringify(modelNumbers));
-    let result = [];
-    return Promise.all([inventory]).then((values) => {
-      let result = [];
-          values[0].forEach(function(item) {
-            result.push(new InventoryItem(item.id, item.serial_number, item.model_number, null));
-          });
+    return new Promise((resolve, reject) => {
+      if (modelNumbers === undefined) {
+        reject(new TypeError('modelNumbers must be of type string[]'));
+      }
+      // No model numbers to get - do no additional computation
+      if (modelNumbers.length === 0) {
+        resolve([]);
+      }
+      let imapItems = inventoryItemsIM.get(modelNumbers);
+      let imapModelNumbers = imapItems.map((item) => item.getModelNumber());
+      console.log(imapItems);
+      // If all items found in identity map, resolve the promise
+      if (imapItems.length === modelNumbers.length) {
+        resolve(imapItems);
+      }
+      // Otherwise, find what items have to be retrieved from tables
+      let dbModelNumbers = modelNumbers.filter(
+        (modelNumber) => {
+          return !imapModelNumbers.includes(modelNumber);
+        }
+      );
+      // Now fetch those numbers fom the tables
+      inventoryTDG.getByModelNumbers(dbModelNumbers)
+      .then(
+        (items) => {
+          // Create objects from table rows
+          let dbItems = items.map(
+            (item) => {
+              return new InventoryItem(item.id, item.serial_number,
+                                       item.model_number, null);
+            }
+          );
+          // Add the newly retrieved objected to the identity map
+          inventoryItemsIM.add(dbItems);
+
           console.log('the inventory items repo gives: '
             + JSON.stringify(result));
-
-    return result;
-        }).catch((err) => {
-console.log(err);
-});
+          resolve(imapItems.concat(dbItems));
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(err);
+        });
+      });
   }
   /**
    * Retrieves all items from the database table

@@ -117,6 +117,20 @@ class TabletsTDG {
             'ProductDescription.model_number');
     }
     /**
+     * Retrieves all tablet object rows except those listed in modelNumbers
+     * @param {string[]} modelNumbers a list of model numbers
+     * @return {Promise<Object[]>} resolves to the list of objects matching
+     * the query
+     */
+    static getAllExcept(modelNumbers) {
+        return connection('Tablet').select('*')
+          .whereNotIn('model_number', modelNumbers)
+          .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
+          .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
+          .join('ProductDescription', 'Tablet.model_number',
+            'ProductDescription.model_number');
+    }
+    /**
      * Updates the specifications of a tablet in the database
      * @param {number} compId the id of the Computer portion specification in
      * the Computer table

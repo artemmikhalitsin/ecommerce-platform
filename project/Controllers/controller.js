@@ -8,6 +8,8 @@ const InventoryItemRepository = require(rootPath +
   '/DataSource/Repository/InventoryItemRepository.js');
 const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
+const url = require('url');
+const crypto = require('crypto');
 
 /**
  * Identity map of inventory items
@@ -22,8 +24,6 @@ class Controller {
     this.userRepo = new UserRepository();
     this.inventoryRepo = new InventoryItemRepository();
     this.productDescriptionRepo = new ProductDescriptionRepository();
-    this.url = require('url');
-    this.crypto = require('crypto');
   }
 
   /**
@@ -35,7 +35,7 @@ class Controller {
     let userData = req.body;
     let password = userData['password'];
     let confirmPassword = userData['confirmPassword'];
-    let hash = this.crypto.createHash('sha256');
+    let hash = crypto.createHash('sha256');
     let salted = userData['email'] + password + 'salt';
     userData['password'] = hash.update(salted).digest('hex');
     if (password != confirmPassword) {
@@ -78,20 +78,26 @@ class Controller {
    */
 
   getAllInventory(req, res, purchaseController) {
-    let query = this.url.parse(req.url, true).query;
+    let query = url.parse(req.url, true).query;
     let search = query.search;
     let inventory = [];
-    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
-    .then((results)=>{
-      console.log('all the products are: ' + JSON.stringify(results));
-       return Promise.each(results, (product)=>{
-        return this.inventoryRepo.getByModelNumbers([product.modelNumber]).then((values)=>{
-                  console.log('inventory item is ' + JSON.stringify(values));
-
-                  product.serial_numbers = values.map((p) => p.serialNumber);
-                  inventory.push(product);
+    // Get all items from the product description repo
+    this.productDescriptionRepo
+    .getAll()
+    .then(
+      (results) => {
+        console.log('all the products are: ' + JSON.stringify(results));
+        return Promise.each(results,
+          (product) => {
+            return this.inventoryRepo
+            .getByModelNumbers([product.getModelNumber()])
+            .then(
+              (values)=>{
+                    console.log('inventory item is ' + JSON.stringify(values));
+                    product.serial_numbers = values.map((p) => p.serialNumber);
+                    inventory.push(product);
                 });
-      });
+              });
       }).then((val)=>{
         console.log('Values: ', JSON.stringify(inventory));
       if (req.session.exists==true && req.session.isAdmin==true) {
@@ -113,10 +119,10 @@ class Controller {
     let results = this.inventoryRepo.save(inventoryItems);
   }
   getProductDescription(req, res) {
-    let query = this.url.parse(req.url, true).query;
+    let query = url.parse(req.url, true).query;
     let search = query.search;
     let catalog = [];
-    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
+    let productDescriptions = this.productDescriptionRepo.getAll()
     .then((results)=>{
         console.log('Product Descriptions: ', JSON.stringify(results));
         // res.render('catalog', {items: JSON.stringify(results), search: search});
@@ -128,10 +134,10 @@ class Controller {
     });
   }
   getCatalog(req, res) {
-    let query = this.url.parse(req.url, true).query;
+    let query = url.parse(req.url, true).query;
     let search = query.search;
     let catalog = [];
-    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
+    let productDescriptions = this.productDescriptionRepo.getAll()
     .then((results)=>{
         // res.render('catalog', {items: JSON.stringify(results), search: search});
       if (req.session.exists==true && req.session.isAdmin==true) {

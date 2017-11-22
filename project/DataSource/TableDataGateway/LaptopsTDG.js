@@ -6,7 +6,7 @@ const connection = require('knex')(configuration);
 const Laptop = require(rootPath + '/models/Laptop.js');
 /**
  * Table Data Gateway for the Laptop table
- * @author Eaterina Ruhlin
+ * @author Ekaterina Ruhlin
  * REVIEW: PLEASE VERIFY THAT THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class LaptopsTDG {
@@ -39,6 +39,19 @@ class LaptopsTDG {
     static getByModelNumbers(modelNumbers) {
         return connection('Laptop').select('*')
           .whereIn('model_number', modelNumbers)
+          .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
+          .join('ProductDescription', 'Laptop.model_number',
+                'ProductDescription.model_number');
+    }
+    /**
+     * Retrieves all laptop object rows except those listed in modelNumbers
+     * @param {string[]} modelNumbers a list of model numbers
+     * @return {Promise<Object[]>} resolves to the list of objects matching
+     * the query
+     */
+    static getAllExcept(modelNumbers) {
+        return connection('Laptop').select('*')
+          .whereNotIn('model_number', modelNumbers)
           .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
           .join('ProductDescription', 'Laptop.model_number',
                 'ProductDescription.model_number');

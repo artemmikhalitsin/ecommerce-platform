@@ -33,7 +33,18 @@ class MonitorsTDG {
           .join('ProductDescription', 'Monitor.model_number',
                 'ProductDescription.model_number');
     }
-
+    /**
+     * Retrieves all monitor object rows except those listed in modelNumbers
+     * @param {string[]} modelNumbers a list of model numbers
+     * @return {Promise<Object[]>} resolves to the list of objects matching
+     * the query
+     */
+    static getAllExcept(modelNumbers) {
+        return connection('Monitor').select('*')
+          .whereNotIn('model_number', modelNumbers)
+          .join('ProductDescription', 'Monitor.model_number',
+                'ProductDescription.model_number');
+    }
     /**
      * Updates the specifications of a monitor in the database
      * @param {Object} monitor the product specifications of a monitor

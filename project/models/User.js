@@ -13,83 +13,96 @@ class User {
      * @param {boolean} isAdmin whether the user is an admin
      */
     constructor(email, name, address, password, isAdmin) {
-        this.email = email;
-        this.name = name;
-        this.address = address;
-        this.password = password;
-        this.isAdmin = isAdmin;
+        this._email = email;
+        this._name = name;
+        this._address = address;
+        this._password = password;
+        this._isAdmin = isAdmin;
     }
     /**
      * email accessor
      * @return {string} the user's email
      */
-    getEmail() {
-      return this.email;
+    get email() {
+      return this._email;
     }
     /**
      * name accessor
      * @return {string} the user's name
      */
-    getName() {
-       return this.name;
+    get name() {
+       return this._name;
     }
     /**
      * password accessor
      * @return {string} the user's password
      */
-    getPassword() {
-      return this.password;
+    get password() {
+      return this._password;
     }
     /**
      * address accessor
      * @return {string} the user's address
      */
-    getAddress() {
-      return this.address;
+    get address() {
+      return this._address;
     }
     /**
      * isAdmin accessor
      * @return {boolean} whether the user is an admin
      */
-    getIsAdmin() {
-      return this.isAdmin;
+    get isAdmin() {
+      return this._isAdmin;
     }
 
     /**
      * email mutator
      * @param {string} email user's new email
      */
-    setEmail(email) {
-      this.email = email;
+    set email(email) {
+      this._email = email;
     }
     /**
      * name mutator
      * @param {string} name user's new name
      */
-    setName(name) {
-      this.name = name;
+    set name(name) {
+      this._name = name;
     }
     /**
      * password mutator
      * @param {string} password user's new password
      */
-    setPassword(password) {
-      this.password = password;
+    set password(password) {
+      this._password = password;
     }
     /**
      * address mutator
      * @param {string} address user's new address
      */
-    setAddress(address) {
-      this.address = address;
+    set address(address) {
+      this._address = address;
     }
     /**
      * email mutator
      * @param {boolean} isAdmin new specification of whether user is an admin
      */
-    setIsAdmin(isAdmin) {
-      this.isAdmin = isAdmin;
+    set isAdmin(isAdmin) {
+      this._isAdmin = isAdmin;
     }
+    /**
+     * creates a clone of the user
+     * @return {User} a copy of the object
+     */
+     clone() {
+       return new User(
+         this.email,
+         this.name,
+         this.address,
+         this.password,
+         this.isAdmin
+       );
+     }
 }
 
 module.exports = User;

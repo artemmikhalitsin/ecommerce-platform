@@ -5,39 +5,45 @@
  */
 class ReturnCart {
     constructor() {
-      this.returnCartItems = {}; // The key is a serial id
+      this._returnCartItems = {}; // The key is a serial id
     }
 
     getCart() {
-      return this.returnCartItems;
+      return Object.assign({}, this._returnCartItems);
     }
 
     getCartSerialNumbers() {
-      return Object.keys(this.returnCartItems);
+      return Object.keys(this._returnCartItems);
     }
 
     addToReturnCart(item, modelNumber) {
-      if (!this.returnCartItems[item]) {
-        this.returnCartItems[item] = {
+      if (!this._returnCartItems[item]) {
+        this._returnCartItems[item] = {
                               model: modelNumber,
                               serial: item,
                               };
       }
       post: {
-        Object.keys(this.returnCartItems).includes(item),
+        // REVIEW: this post condition will always evaluate
+        // to false as you cannot use includes with complex
+        // data structures (objects, arrays, etc.) - Artem
+        Object.keys(this._returnCartItems).includes(item),
           'Item was not added to cart';
       }
       return item;
     }
-
+    // REVIEW: if you are passing whole objects here,
+    // use model number for comparison. you cannot compare
+    // whole data structures like this - Artem
     removeFromCart(item) {
       pre: {
-          Object.keys(this.returnCartItems).length > 0;
+          Object.keys(this._returnCartItems).length > 0;
         }
-        delete this.returnCartItems[item];
+        delete this._returnCartItems[item];
         return item;
       post: {
-          !Object.keys(this.returnCartItems).includes(item),
+        // REVIEW: see above - Artem
+          !Object.keys(this._returnCartItems).includes(item),
             'Item was not removed from the cart';
       }
     }

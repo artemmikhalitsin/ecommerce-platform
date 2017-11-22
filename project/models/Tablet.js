@@ -31,81 +31,103 @@ class Tablet extends Computer {
                 cameraInfo, price, weight, brandName, modelNumber, type) {
         super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
               price, weight, brandName, modelNumber, type);
-        this.displaySize = displaySize;
-        this.dimensions = dimensions;
-        this.batteryInfo = batteryInfo;
-        this.os = os;
-        this.cameraInfo = cameraInfo;
+        this._displaySize = displaySize;
+        this._dimensions = dimensions;
+        this._batteryInfo = batteryInfo;
+        this._os = os;
+        this._cameraInfo = cameraInfo;
     }
     /**
      * displaySize accessor
      * @return {number} size of the display
      */
-    getDisplaySize() {
-      return this.displaySize;
+    get displaySize() {
+      return this._displaySize;
+    }
+    /**
+    * displaySize mutator
+    * @param {number} displaySize new size of the display
+    */
+    set displaySize(displaySize) {
+      this._displaySize = displaySize;
     }
     /**
      * dimensions accessor
      * @return {Object} dimensions of the desktop
      */
-    getDimensions() {
-      return this.dimensions;
+    get dimensions() {
+      return this._dimensions.clone();
+    }
+    /**
+    * dimensions mutator
+    * @param {Object} dimensions new dimensions of the desktop
+    */
+    set dimensions(dimensions) {
+      this._dimensions = dimensions.clone();
     }
     /**
      * batteryInfo accessor
      * @return {string} battery info
      */
-    getBatteryInfo() {
-      return this.batteryInfo;
+    get batteryInfo() {
+      return this._batteryInfo;
+    }
+    /**
+    * batteryInfo mutator
+    * @param {string} batteryInfo new info about the battery
+    */
+    set batteryInfo(batteryInfo) {
+      this._batteryInfo = batteryInfo;
     }
     /**
      * os accessor
      * @return {string} type of os
      */
-    getOs() {
-      return this.os;
+    get os() {
+      return this._os;
+    }
+    /**
+    * os mutator
+    * @param {string} os new type of os
+    */
+    set os(os) {
+      this._os = os;
     }
     /**
      * cameraInfo accessor
      * @return {string} info about the camera
      */
-    getCameraInfo() {
-      return this.cameraInfo;
-    }
-    /**
-     * displaySize mutator
-     * @param {number} displaySize new size of the display
-     */
-    setDisplaySize(displaySize) {
-      this.displaySize = displaySize;
-    }
-    /**
-     * dimensions mutator
-     * @param {Object} dimensions new dimensions of the desktop
-     */
-    setDimensions(dimensions) {
-      this.dimensions = dimensions;
-    }
-    /**
-     * batteryInfo mutator
-     * @param {string} batteryInfo new info about the battery
-     */
-    setBatteryInfo(batteryInfo) {
-      this.batteryInfo = batteryInfo;
-    }
-    /**
-     * os mutator
-     * @param {string} os new type of os
-     */
-    setOs(os) {
-      this.os = os;
+    get cameraInfo() {
+      return this._cameraInfo;
     }
     /**
      * cameraInfo mutator
      * @param {string} cameraInfo new info about the camera
      */
-    setCameraInfo(cameraInfo) {
-      this.cameraInfo = cameraInfo;
+    set cameraInfo(cameraInfo) {
+      this._cameraInfo = cameraInfo;
+    }
+    /**
+     * Creates a clone of the object
+     * @return {Tablet} a clone of the object
+     */
+    clone() {
+      return new Tablet(
+          this.comp_id,
+          this.processor_type,
+          this.ram_size,
+          this.number_cpu_cores,
+          this.harddrive_size,
+          this.display_size,
+          this.dimensions,
+          this.battery_info,
+          this.os,
+          this.camera_info,
+          this.price,
+          this.weight,
+          this.brand_name,
+          this.model_number,
+          this.type);
     }
 }
 

@@ -5,21 +5,34 @@ class Monitor extends ProductDescription {
     constructor(displaySize, price, weight,
                 brandName, modelNumber, type) {
         super(price, weight, brandName, modelNumber, type);
-        this.displaySize = displaySize;
+        this._displaySize = displaySize;
     }
-    getDisplaySize() {
-      return this.displaySize;
+    /**
+     * display size accessor
+     * @return {number} display size
+     */
+    get displaySize() {
+      return this._displaySize;
     }
-    getTouchescreen() {
-       return this.touchescreen;
+    /**
+     * display size mutator
+     * @param {number} displaySize new value of displaySize
+     */
+    set displaySize(displaySize) {
+      this._displaySize = displaySize;
     }
-
-
-    setDisplaySize(displaySize) {
-      this.displaySize = displaySize;
-    }
-    setTouchescreen(touchescreen) {
-      this.touchescreen = touchescreen;
+    /**
+     * Creates a clonse of the object
+     * @return {Monitor} a copy of this object
+     */
+    clone() {
+      return new Monitor(
+          this.display_size,
+          this.price,
+          this.weight,
+          this.brand_name,
+          this.model_number,
+          this.type);
     }
 }
 

@@ -24,67 +24,67 @@ class Computer extends ProductDescription {
     constructor(id, processorType, ramSize, numberCpuCores,
                 harddriveSize, price, weight, brandName, modelNumber, type) {
       super(price, weight, brandName, modelNumber, type);
-      this.computerId = id;
-      this.processorType = processorType;
-      this.ramSize = ramSize;
-      this.numberCpuCores = numberCpuCores;
-      this.harddriveSize = harddriveSize;
+      this._computerId = id;
+      this._processorType = processorType;
+      this._ramSize = ramSize;
+      this._numberCpuCores = numberCpuCores;
+      this._harddriveSize = harddriveSize;
     }
     /**
      * processorType accessor
      * @return {string} proccessor type
      */
-    getProcessorType() {
-      return this.processorType;
+    get proccesorType() {
+      return this._processorType;
+    }
+    /**
+    * processorType mutator
+    * @param {string} processorType new processor type
+    */
+    set proccesorType(processorType) {
+      this._processorType = processorType;
     }
     /**
      * ramSize accessor
      * @return {number} ram size
      */
-    getRamSize() {
-       return this.ramSize;
+    get ramSize() {
+       return this._ramSize;
+    }
+    /**
+    * ramSize mutator
+    * @param {number} ramSize new size of ram
+    */
+    set ramSize(ramSize) {
+      this._ramSize = ramSize;
     }
     /**
      * numberCpuCores accessor
      * @return {number} number of cpu cores
      */
-    getNumberCpuCores() {
-      return this.numberCpuCores;
+    get numberCpuCores() {
+      return this._numberCpuCores;
+    }
+    /**
+    * numberCpuCores mutator
+    * @param {number} numberCpuCores new number of cores
+    */
+    set numberCpuCores(numberCpuCores) {
+      this._numberCpuCores = numberCpuCores;
     }
     /**
      * harddriveSize accessor
      * @return {number} size of hard drive
      */
-    getHarddriveSize() {
-      return this.harddriveSize;
-    }
-    /**
-     * processorType mutator
-     * @param {string} processorType new processor type
-     */
-    setProcessorType(processorType) {
-      this.processorType = processorType;
-    }
-    /**
-     * ramSize mutator
-     * @param {number} ramSize new size of ram
-     */
-    setRamSize(ramSize) {
-      this.ramSize = ramSize;
-    }
-    /**
-     * numberCpuCores mutator
-     * @param {number} numberCpuCores new number of cores
-     */
-    setNumberCpuCores(numberCpuCores) {
-      this.numberCpuCores = numberCpuCores;
+    get harddriveSize() {
+      return this._harddriveSize;
     }
     /**
      * harddriveSize mutator
      * @param {number} harddriveSize new size of hard drive
      */
-    setHarddriveSize(harddriveSize) {
-      this.harddriveSize = harddriveSize;
+    set harddriveSize(harddriveSize) {
+      this._harddriveSize = harddriveSize;
     }
 }
 

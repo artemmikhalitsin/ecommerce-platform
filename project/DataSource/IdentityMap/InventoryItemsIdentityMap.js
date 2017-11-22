@@ -38,9 +38,14 @@ class InventoryItemsIdentityMap {
      */
   get(modelNumbers) {
     // Filters to only items whos model number appears in the given list
-    return this.inventoryItems.filter((item) => {
-      return modelNumbers.includes(item.serial_number);
-    });
+    console.log(modelNumbers);
+    return this.inventoryItems.filter(
+      (item) => {
+        if (!item) {
+          return false;
+        };
+        return modelNumbers.includes(item.serial_number);
+      });
   }
 
   /**
@@ -53,7 +58,7 @@ class InventoryItemsIdentityMap {
       // Add the item only if it doesn't already exist
       if (!this.inventoryItems.includes(item.serial_number)) {
         this.inventoryItems.push(
-          Object.assign({}, newInventoryItems[i])
+          newInventoryItems[i].clone()
         );
       }
     }
@@ -61,7 +66,7 @@ class InventoryItemsIdentityMap {
 
   /**
      * Deletes items from the identity map by filtering them out
-     * @param {string[]} inventoryItemsToRemove a list of alpha-numberical
+     * @param {string[]} toRemove a list of alpha-numberical
      * model numbers for which the items are to be removed
      */
   delete(toRemove) {

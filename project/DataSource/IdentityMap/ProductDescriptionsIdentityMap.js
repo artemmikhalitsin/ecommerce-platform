@@ -25,10 +25,15 @@ class ProductDescriptionsIdentityMap {
 
   /**
      * Gets all the products currently stored in the Identity map
+     * This product returns copies of object in memory, not references
      * @return {Object[]} an array containing the products
      */
   getAll() {
-    return this.productDescriptions;
+    //
+    return this.productDescriptions.map(
+      (item) => {
+        return item.clone();
+      });
   }
 
   /**
@@ -53,7 +58,7 @@ class ProductDescriptionsIdentityMap {
       if (!this.productDescriptions.includes(item.model_number)) {
         this.productDescriptions.push(
           // Push a copy of the object
-          Object.assign({}, newProductDescriptions[i])
+          newProductDescriptions[i].clone()
         );
       }
     }
@@ -61,8 +66,8 @@ class ProductDescriptionsIdentityMap {
 
   /**
    * Updates a single item in the identity map
-   * @param updatedProductDescriptions list of objects, each specifying new
-   * descriptions of products
+   * @param {Object[]} updatedProductDescriptions list of objects,
+   * each specifying new descriptions of products
    */
   update(updatedProductDescriptions) {
     for (let i = 0; i< updatedProductDescriptions.length; i++) {
@@ -77,13 +82,13 @@ class ProductDescriptionsIdentityMap {
       // If model number exists in the map, replace the description with
       // a copy of the new one
       if (index > -1) {
-        this.productDescriptions[index] = Object.assign({}, newDescription);
+        this.productDescriptions[index] = newDescription.clone();
       }
     }
   }
   /**
      * Deletes items from the identity map by filtering them out
-     * @param {string[]} productDescriptionToRemove a list of alpha-numberical
+     * @param {string[]} toRemove a list of alpha-numberical
      * model numbers for which the description is to be removed
      */
   delete(toRemove) {

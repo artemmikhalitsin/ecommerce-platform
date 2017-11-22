@@ -27,21 +27,39 @@ class Desktop extends Computer {
               type) {
     super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
           price, weight, brandName, modelNumber, type);
-        this.dimensions = dimensions;
+        this._dimensions = dimensions;
     }
     /**
      * dimensions accessor
      * @return {Object} dimensions of the desktop
      */
-    getDimensions() {
-      return this.dimensions;
+    get dimensions() {
+      return this._dimensions.clone();
     }
     /**
      * dimensions mutator
      * @param {Object} dimensions new dimensions of the desktop
      */
-    setDimensions(dimensions) {
-      this.dimensions = dimensions;
+    set dimensions(dimensions) {
+      this._dimensions = dimensions.clone();
+    }
+    /**
+     * Creates a clone of the objects
+     * @return {Desktop} a clone of the object
+     */
+    clone() {
+      return new Desktop(
+          this.processor_type,
+          this.ram_size,
+          this.number_cpu_cores,
+          this.harddrive_size,
+          this.dimensions,
+          this.price,
+          this.weight,
+          this.brandName,
+          this.modelNumber,
+          this.comp_id,
+          this.type);
     }
 }
 
