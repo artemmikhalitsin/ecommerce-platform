@@ -41,7 +41,7 @@ class InventoryItemRepository {
   }
   getByModelNumbers(modelNumbers) {
     let inventory = this.inventoryTDG.getByModelNumbers(modelNumbers);
-    console.log('The models numbers passed' + JSON.stringify(modelNumbers));
+    // console.log('The models numbers passed' + JSON.stringify(modelNumbers));
     let result = [];
     return Promise.all([inventory]).then((values) => {
       let result = [];

@@ -14,7 +14,6 @@ let MonitorsTDG = require(rootPath
   + '/DataSource/TableDataGateway/MonitorsTDG.js');
 let TabletsTDG = require(rootPath
   + '/DataSource/TableDataGateway/TabletsTDG.js');
-let ProductDescription = require(rootPath + '/models/ProductDescription.js');
 
 const Tablet = require(rootPath + '/models/Tablet.js');
 const Dimensions = require(rootPath + '/models/Dimensions.js');
