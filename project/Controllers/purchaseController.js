@@ -1,5 +1,4 @@
-import { clearTimeout } from 'timers';
-
+const Timer = require('timers');
 const Promise = require('bluebird');
 const rootPath = require('app-root-dir').get();
 const PurchaseCollectionRepo = require(rootPath
@@ -43,7 +42,7 @@ class PurchaseController {
     // If item was deleted by an admin, the item list will be updated
     for (let serial in this.clientInventory) {
       if (!inventoryList.includes(serial)) {
-        clearTimeout(this.clientInventory[serial].timeout);
+        Timer.clearTimeout(this.clientInventory[serial].timeout);
         delete this.clientInventory[serial];
       }
     }
@@ -122,7 +121,7 @@ class PurchaseController {
     let user = req.session.email;
     let item = req.body.serialNumber;
     if (this.clientInventory[item]) {
-      clearTimeout(this.clientInventory[item].timeout);
+      Timer.clearTimeout(this.clientInventory[item].timeout);
       this.unlockItem(user, item);
     } else {
       this.shoppingCartList[user].removeFromCart(item);
@@ -223,7 +222,7 @@ class PurchaseController {
       } else if (deletedItems.length === 0) {
         for (let i in Object.keys(cart)) {
           if (cart[i]) {
-              clearTimeout(this.clientInventory[cart[i].serial].timeout);
+              Timer.clearTimeout(this.clientInventory[cart[i].serial].timeout);
               purchases.push({client: user,
                                   modelNumber: cart[i].model,
                                   serialNumber: cart[i].serial,
@@ -261,7 +260,7 @@ class PurchaseController {
     for (let item = 0; item < cartItems.length; item++) {
       if (this.clientInventory[cartItems[item]]) {
         this.unlockItem(user, cartItems[item]);
-        clearTimeout(this.clientInventory[cartItems[item]].timeout);
+        Timer.clearTimeout(this.clientInventory[cartItems[item]].timeout);
       }
     }
     delete this.shoppingCartList[user];
@@ -309,12 +308,12 @@ class PurchaseController {
   addToReturnCart(req, res) {
     invariant: req.session.email != null, 'User is not logged in';
     pre: {
-      Object.keys(this.purchaseCollectionRepo.get(req.session.email)).length > 0, 
-        'User made no purchases'; 
-      this.purchaseCollectionRepo.get(req.session.email)[req.body.serialNumber],
-        'Item does not exist';
-      typeof(this.returnCartList[req.session.email.toString()].getCart()[req.body.serialNumber]) == 'undefined',
-        'Item already in cart';
+      Object.keys(this.purchaseCollectionRepo
+        .get(req.session.email)).length > 0, 'User made no purchases';
+      this.purchaseCollectionRepo
+        .get(req.session.email)[req.body.serialNumber], 'Item does not exist';
+      typeof(this.returnCartList[req.session.email.toString()]
+      .getCart()[req.body.serialNumber]) == 'undefined', 'Item already in cart';
       if (this.returnCartList[req.session.email]) {
         Object.keys(this.returnCartList[req.session.email.toString()]
           .getCart()).length < 7, 'Cart has more than 7 items';
@@ -343,7 +342,7 @@ class PurchaseController {
     }
   }
 
-  cancelReturnTransaction(req, res){
+  cancelReturnTransaction(req, res) {
     invariant: req.session.email != null, 'User is not logged in';
     pre: {
       this.returnCartList[req.session.email] != null,
@@ -352,10 +351,10 @@ class PurchaseController {
 
     let user = req.session.email.toString();
     let retItems = this.returnCartList[user].getCartSerialNumbers();
-    for(let item = 0; item < retItems.length; item++) {
-      if(this.clientInventory[retItems[items]]) {
+    for (let item = 0; item < retItems.length; item++) {
+      if (this.clientInventory[retItems[items]]) {
         this.unlockItem(user, retItems[item]);
-        clearTimeout(this.clientInventory[retItems[item]].timeout);
+        Timer.clearTimeout(this.clientInventory[retItems[item]].timeout);
       }
     }
     delete this.returnCartList[user];

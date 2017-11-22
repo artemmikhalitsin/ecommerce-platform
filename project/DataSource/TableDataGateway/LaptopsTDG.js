@@ -3,7 +3,7 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
-const Laptop = require(rootPath + '/models/Laptop.js');
+// const Laptop = require(rootPath + '/models/Laptop.js');
 /**
  * Table Data Gateway for the Laptop table
  * @author Eaterina Ruhlin

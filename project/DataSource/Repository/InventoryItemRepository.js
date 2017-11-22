@@ -42,11 +42,12 @@ class InventoryItemRepository {
   getByModelNumbers(modelNumbers) {
     let inventory = this.inventoryTDG.getByModelNumbers(modelNumbers);
     console.log('The models numbers passed' + JSON.stringify(modelNumbers));
-    let result = [];
+    // let result = [];
     return Promise.all([inventory]).then((values) => {
       let result = [];
           values[0].forEach(function(item) {
-            result.push(new InventoryItem(item.id, item.serial_number, item.model_number, null));
+            result.push(new InventoryItem(item.id, item.serial_number,
+              item.model_number, null));
           });
           console.log('the inventory items repo gives: '
             + JSON.stringify(result));

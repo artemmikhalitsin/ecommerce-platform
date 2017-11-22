@@ -32,11 +32,11 @@ class ProductDescriptionsTDG {
    * all products in the ProductDescription table
    */
   getAll() {
-    let results = [];
+    // let results = [];
     return connection('ProductDescription').select('*');
   }
   getByModelNumber(modelNumber) {
-    let results = [];
+    // let results = [];
     return connection('ProductDescription')
       .select('*')
       .where({model_number: modelNumber});
@@ -78,13 +78,13 @@ class ProductDescriptionsTDG {
   }
   /**
    * Deletes an item from the inventory given an id
-   * @param {number} productDescription the model number of the description to be deleted,
-   * as it appears in the table
+   * @param {number} prodDescription the model number of 
+   * the description to be deleted, as it appears in the table
    * @return {Promise<number>} a promise which resolves to the number of rows
    * affected
    */
   delete(prodDescription) {
-      console.log(productDescription);
+      console.log(prodDescription);
       console.log('in productDescriptionTDG');
       return connection.from('ProductDescription').where(
         {'model_number': prodDescription.modelNumber}

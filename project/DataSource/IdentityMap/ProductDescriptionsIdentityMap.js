@@ -63,8 +63,8 @@ class ProductDescriptionsIdentityMap {
 
   /**
    * Updates a single item in the identity map
-   * @param updatedProductDescriptions list of objects, each specifying new
-   * descriptions of products
+   * @param {Onject[]} updatedProductDescriptions list of objects, 
+   * each specifying new descriptions of products
    */
   update(updatedProductDescriptions) {
     for (let i = 0; i< updatedProductDescriptions.length; i++) {
@@ -85,7 +85,7 @@ class ProductDescriptionsIdentityMap {
   }
   /**
      * Deletes items from the identity map by filtering them out
-     * @param {string[]} productDescriptionToRemove a list of alpha-numberical
+     * @param {string[]} toRemove a list of alpha-numberical
      * model numbers for which the description is to be removed
      */
   delete(toRemove) {

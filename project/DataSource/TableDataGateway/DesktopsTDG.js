@@ -3,8 +3,8 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
-const Desktop = require(rootPath + '/models/Desktop.js');
-const Dimensions = require(rootPath + '/models/Dimensions.js');
+// const Desktop = require(rootPath + '/models/Desktop.js');
+// const Dimensions = require(rootPath + '/models/Dimensions.js');
 
 /**
  * Table Data Gateway for the Desktop table
