@@ -60,7 +60,7 @@ class ProductDescriptionRepository {
         for (let i = 0; i < products.length; i++) {
           result.push(products[i]);
         }
-      console.log('Result from repo: ' + JSON.stringify(products));
+      // console.log('Result from repo: ' + JSON.stringify(products));
     return result;
     });
   }
