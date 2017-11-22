@@ -223,9 +223,9 @@ class PurchaseController {
           if (cart[i]) {
               clearTimeout(this.clientInventory[cart[i].serial].timeout);
               purchases.push({client: user,
-                                  model_number: cart[i].model,
-                                  serial_number: cart[i].serial,
-                                  purchase_Id: cart[i].cartItemId});
+                                  modelNumber: cart[i].model,
+                                  serialNumber: cart[i].serial,
+                                  purchaseId: cart[i].cartItemId});
               delete this.clientInventory[cart[i].serial];
           }
         }

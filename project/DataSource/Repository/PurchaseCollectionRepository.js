@@ -98,7 +98,6 @@ class PurchaseCollectionRepo {
     // var electronicsToAdd = []
     let electronicsToDelete = items;
     let electronicsToAdd = items;
-
     this.uow.registerDeletedItem(electronicsToDelete);
     this.uow.registerNewPurchase(electronicsToAdd);
     this.uow.commitAll();
