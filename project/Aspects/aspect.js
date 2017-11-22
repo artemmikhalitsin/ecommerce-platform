@@ -33,10 +33,6 @@ class Aspect {
      this.processQueue = new ProcessQueue();
   }
 
-  runNextProcess() {
-    processQueue.pop();
-  }
-
   // if you do not pass joinpoint:
   // validate session will not let caught function proceed after validation
   validateSession(req, res, data, joinpoint) {
