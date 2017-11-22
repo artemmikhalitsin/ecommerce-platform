@@ -45,8 +45,8 @@ class InventoryItemRepository {
     let result = [];
     return Promise.all([inventory]).then((values) => {
           result = values[0];
-          console.log('the inventory items repo gives: '
-          + JSON.stringify(result));
+          console.log('the inventory items repo gives: ' +
+          JSON.stringify(result));
 
     return result;
         }).catch((err) => {

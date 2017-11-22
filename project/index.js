@@ -1,14 +1,12 @@
 // const stringy = require('stringy');
-const authPages = ['loginRequest', 'inventoryAction', 'logout'];
 
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
 const session = require('express-session');
 const rootPath = require('app-root-dir').get();
-const crypto = require('crypto');
 const app = express();
-const meld = require('meld');
+
 let bodyParser = require('body-parser');
 app.use( bodyParser.json() ); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
@@ -16,10 +14,12 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 }));
 
 const Controller = require(rootPath + '/Controllers/controller');
-const UserRepository = require(rootPath +
-  '/DataSource/Repository/UserRepository.js');
+const Aspect = require(rootPath +
+  '/Aspects/aspect.js');
 let controller = new Controller();
-let userRepo = new UserRepository();
+// linter is wrong, aspect is enabled by the constructor
+let aspect = new Aspect();
+aspect.initialize(controller);
 
 // allows use of static pages
 app.use(express.static(path.join(__dirname, 'public')));
@@ -70,7 +70,25 @@ app.get('/addProduct', function(req, res) {
     res.redirect('/login');
   }
 });
-
+app.get('/catalog', function(req, res) {
+  if (req.session.exists) {
+    controller.getCatalog(req, res);
+  } else {
+    console.log('login error');
+    controller.getAllInventory(req, res);
+  }
+});
+app.post('/manageProductCatalog', function(req, res) {
+   if (req.session.exists) {
+    controller.manageProductCatalog(req, res);
+  } else {
+    console.log('login error');
+    controller.getAllInventory(req, res);
+  }
+});
+app.get('/getProductDescription', function(req, res) {
+  controller.getProductDescription(req, res);
+});
 // this should be implemented in the controller
 app.get('/logout', function(req, res) {
   controller.logout(req, res);
@@ -141,59 +159,4 @@ app.get('/api/getAllProducts', function(req, res) {
 
 app.listen(8080, function() {
   console.log('Example app listening on port 8080!');
-});
-
-meld.around(controller, authPages, (joinpoint) => {
-  console.log('Caught by aspect, validating the user...');
-  let req = joinpoint.args[0];
-  let res = joinpoint.args[1];
-  let data = {};
-  if (!req.session.exists) {
-    data = req.body;
-    let hash = crypto.createHash('sha256');
-    let salted = data.email + data.password + 'salt';
-    salted = hash.update(salted).digest('hex');
-    data.password = salted;
-  } else {
-    data = {
-      email: req.session.email,
-      password: req.session.hash,
-    };
-  }
-  return userRepo.authenticate(data).then((result) => {
-    if (result.length <= 0) {
-      console.log('Session rejected by aspect. ' +
-        'Reason: Invalid user/pass.');
-      req.session.destroy();
-      res.redirect('/');
-    } else if (result.length > 1) {
-      console.log('Session rejected by aspect. ' +
-        'Reason: Duplicate database entries detected.');
-      req.session.destroy();
-      res.redirect('/');
-    } else if (result.length == 1) {
-      if (!req.session.exists) {
-        req.session.exists=true;
-        req.session.hash=data.password;
-        req.session.email=data.email;
-      }
-      if (result[0].is_admin == 1) {
-        // REVIEW: this should probably be removed - Artem
-        console.log('User is admin.');
-        req.session.isAdmin=true;
-        req.session.user = data.email;
-        return joinpoint.proceed(req, res);
-      } else {
-        // REVIEW: this should probably be removed - Artem
-        console.log('User is not admin.');
-        req.session.isAdmin=false;
-        req.session.user=data.email;
-        return joinpoint.proceed(req, res);
-      }
-    }
-  }).catch((errors) => {
-    console.log('Invalid Session.');
-    req.session.destroy();
-    res.redirect('/');
-  });
 });

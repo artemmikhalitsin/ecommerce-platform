@@ -25,12 +25,12 @@ class TabletsTDG {
     add(compId, dimensionsId, tablet) {
         return connection.insert({
             'comp_id': compId,
-            'model_number': tablet.model_number,
+            'model_number': tablet.modelNumber,
             'dimension_id': dimensionsId,
-            'display_size': tablet.display_size,
-            'battery_info': tablet.battery_info,
+            'display_size': tablet.displaySize,
+            'battery_info': tablet.batteryInfo,
             'os': tablet.os,
-            'camera_info': tablet.camera_info,
+            'camera_info': tablet.cameraInfo,
         }, 'id')
         .into('Tablet');
     }
@@ -39,8 +39,8 @@ class TabletsTDG {
         return connection('Tablet').select('*')
           .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription',
-          'Tablet.model_number', 'ProductDescription.model_number')
+          .join('ProductDescription', 'Tablet.model_number',
+          'ProductDescription.model_number')
           .then((tablets) => {
               tablets.forEach(function(tablet) {
                   result.push(new Tablet(
@@ -73,8 +73,7 @@ class TabletsTDG {
           .whereIn('model_number', modelNumbers)
           .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription',
-          'Tablet.model_number', 'ProductDescription.model_number')
+          .join('ProductDescription', 'Tablet.model_number', 'ProductDescription.model_number')
           .then((tablets) => {
               tablets.forEach(function(tablet) {
                   result.push(new Tablet(
@@ -115,14 +114,14 @@ class TabletsTDG {
     update(compId, dimensionsId, tablet) {
       // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
-          'comp_id': tablet.comp_id,
-          'model_number': tablet.model_number,
-          'dimension_id': tablet.dimension.dimensions_id,
-          'display_size': tablet.display_size,
-          'battery_info': tablet.battery_info,
+          'comp_id': tablet.computerId,
+          // 'model_number': tablet.modelNumber,
+          'dimension_id': tablet.dimensions.id,
+          'display_size': tablet.displaySize,
+          'battery_info': tablet.batteryInfo,
           'os': tablet.os,
-          'camera_info': tablet.camera_info,
-        }).from('Tablet').where({id: tablet.id});
+          'camera_info': tablet.cameraInfo,
+        }).from('Tablet').where({'model_number': tablet.modelNumber});
     }
 }
 module.exports = TabletsTDG;

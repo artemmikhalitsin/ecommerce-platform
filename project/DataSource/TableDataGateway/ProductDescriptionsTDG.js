@@ -3,6 +3,7 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
+const ProductDescription = require(rootPath + '/models/ProductDescription.js');
 
 /**
  * Table Data Gateway for the ProductDescription table
@@ -18,8 +19,8 @@ class ProductDescriptionsTDG {
    */
   add(productDescription) {
     return connection.insert({
-      'model_number': productDescription.model_number,
-      'brand_name': productDescription.brand_name,
+      'model_number': productDescription.modelNumber,
+      'brand_name': productDescription.brandName,
       'weight': productDescription.weight,
       'price': productDescription.price,
       'type': productDescription.type,
@@ -32,11 +33,38 @@ class ProductDescriptionsTDG {
    * all products in the ProductDescription table
    */
   getAll() {
-    return connection('ProductDescription').select('*');
+    let results = [];
+    return connection('ProductDescription')
+    .select('*').then((productDescriptions) => {
+      productDescriptions.forEach(function(description) {
+        results.push(new ProductDescription(
+          description.price,
+          description.weight,
+          description.brand_name,
+          description.model_number,
+          description.type
+          ));
+      });
+      return results;
+    });
   }
   getByModelNumber(modelNumber) {
-    return connection('ProductDescription').select('*')
-      .where({model_number: modelNumber});
+    let results = [];
+    return connection('ProductDescription')
+      .select('*')
+      .where({model_number: modelNumber})
+      .then((productDescriptions) => {
+      productDescriptions.forEach(function(description) {
+        results.push(new ProductDescription(
+          description.price,
+          description.weight,
+          description.brand_name,
+          description.model_number,
+          description.type
+          ));
+      });
+      return results;
+    });
   }
 
   /*
@@ -63,16 +91,15 @@ class ProductDescriptionsTDG {
    * rows affected
    */
   update(productDescription) {
-    // TODO
     return connection
       .update({
-        'brand_name': productDescription.brand_name,
+        'brand_name': productDescription.brandName,
         'weight': productDescription.weight,
         'price': productDescription.price,
         'type': productDescription.type,
       })
       .from('ProductDescription')
-      .where({model_number: productDescription.model_number});
+      .where({model_number: productDescription.modelNumber});
   }
 }
 module.exports = ProductDescriptionsTDG;

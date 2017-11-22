@@ -6,6 +6,6 @@ let repo = new UserRepo();
 
 repo.getAllInventoryItems().then(
   (result) => {
-    console.log(`Response from server: ${JSON.stringify(result)}`);
-  }
+ console.log(`Response from server: ${JSON.stringify(result)}`);
+}
 );

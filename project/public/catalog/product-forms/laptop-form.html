@@ -5,15 +5,15 @@
         <div class="row">
           <div class="col">
             <div class="form-group row">
-              <label class="col-4 col-form-label">Brand</label>
+              <label class="col-4 col-form-label">Brand Name</label>
               <div class="col-md-8">
-                <input type="text" ng-model="laptop.brand" class="form-control">
+                <input type="text" ng-model="laptop.brandName" class="form-control">
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-4 col-form-label">Model</label>
+              <label class="col-4 col-form-label">Model Number</label>
               <div class="col-md-8">
-                <input type="text" ng-model="laptop.model" class="form-control">
+                <input type="text" ng-model="laptop.modelNumber" class="form-control">
               </div>
             </div>
             <div class="row form-group">
@@ -31,37 +31,37 @@
             <div class="row form-group">
               <label class="col-4 col-form-label">Display size</label>
               <div class="col-md-8">
-                <input type="number" step="1" min="0" ng-model="laptop.display_size" class="form-control">
+                <input type="number" step="1" min="0" ng-model="laptop.displaySize" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4 col-form-label">Processor Type</label>
               <div class="col-md-8">
-                <input type="text" ng-model="laptop.processor_type" class="form-control">
+                <input type="text" ng-model="laptop.processorType" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4 col-form-label">RAM size</label>
               <div class="col-md-8">
-                <input type="number" step="1" min="0" ng-model="laptop.ram_size" class="form-control">
+                <input type="number" step="1" min="0" ng-model="laptop.ramSize" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4 col-form-label"># of CPU cores</label>
               <div class="col-md-8">
-                <input type="number" step="1" min="0" ng-model="laptop.number_cpu_cores" class="form-control">
+                <input type="number" step="1" min="0" ng-model="laptop.numberCpuCores" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4 col-form-label">Harddrive size</label>
               <div class="col-md-8">
-                <input type="number" step="1" min="0" ng-model="laptop.harddrive_size" class="form-control">
+                <input type="number" step="1" min="0" ng-model="laptop.harddriveSize" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4 col-form-label">Battery Info</label>
               <div class="col-md-8">
-                <input type="text" ng-model="laptop.battery_info" class="form-control">
+                <input type="text" ng-model="laptop.batteryInfo" class="form-control">
               </div>
             </div>
             <div class="row form-group">
@@ -82,7 +82,7 @@
             <div class="row form-group">
               <label class="col-4 col-form-label">Touch screen</label>
               <div class="col-md-8">
-                <select class="form-control" ng-model="laptop.touch_screen">
+                <select class="form-control" ng-model="laptop.touchScreen">
                   <option value="true">Yes</option>
                   <option value="false">No</option>
                 </select>

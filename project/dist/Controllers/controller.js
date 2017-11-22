@@ -11,6 +11,7 @@ var UserRepository = require(rootPath + '/DataSource/Repository/UserRepository.j
 var PurchaseCollectionRepo = require(rootPath + '/DataSource/Repository/PurchaseCollectionRepository.js');
 var ShoppingCart = require(rootPath + '/models/ShoppingCart.js');
 var TransactionLogRepository = require(rootPath + '/DataSource/Repository/TransactionLogRepository.js');
+
 /**
  * Identity map of inventory items
  * @author Wai Lau, Amanda Wai
@@ -406,22 +407,45 @@ var Controller = function () {
         // console.log('Values: ', items);
 
         if (req.session.exists == true && req.session.isAdmin == true) {
+<<<<<<< HEAD
+          res.render('catalog', { items: JSON.stringify(results), search: search });
+        } else if (req.session.exists == true && req.session.isAdmin == false) {
+          //update descriptions?
+          //this.updateInventoryList(results);
+          res.render('/login');
+        } else {
+          res.render('/login');
+=======
           res.render('inventory', { items: items, search: search });
         } else {
           _this9.updateInventoryList(values[0]); // Populate shopping inventory list
           res.render('clientInventory', { search: search });
+>>>>>>> 95e1c590353252448b759a74568ac2b4553fe071
         }
       }).catch(function (err) {
         console.log(err);
       });
     }
+<<<<<<< HEAD
+  }, {
+    key: 'manageProductCatalog',
+    value: function manageProductCatalog(req, res) {
+      var _this10 = this;
+=======
 
     /**
      * Processes an inventory action initiated by the user
      * @param {Object} req HTTP request object containing action info
      * @param {Object} res HTTP response object to be returned to the user
      */
+>>>>>>> 95e1c590353252448b759a74568ac2b4553fe071
 
+      var productDescriptions = JSON.parse(req.body.productDescriptions);
+      var results = this.productDescriptionRepo.save(productDescriptions).then(function (results) {
+        console.log('Success saving the Product descriptions!');
+        _this10.getCatalog(req, res);
+      });
+    }
   }, {
     key: 'logout',
     value: function logout(req, res) {
@@ -488,7 +512,7 @@ var Controller = function () {
     }
   }, {
     key: 'getProductInfo',
-    value: function getProductInfo(req, res) {
+    value: function getProductInfo(req, res, other) {
       this.inventoryRepo.getAllInventoryItems().then(function (result) {
         res.json(result);
       });

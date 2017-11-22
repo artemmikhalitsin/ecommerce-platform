@@ -4,6 +4,7 @@ const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
 const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 
+
 /**
  * Repository for users
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF

@@ -5,15 +5,15 @@
         <div class="row">
           <div class="col">
             <div class="form-group row">
-              <label class="col-4 col-form-label">Brand</label>
+              <label class="col-4 col-form-label">Brand Name</label>
               <div class="col-md-8">
-                <input type="text" ng-model="tablet.brand" class="form-control">
+                <input type="text" ng-model="tablet.brandName" class="form-control">
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-4 col-form-label">Model</label>
+              <label class="col-4 col-form-label">Model Number</label>
               <div class="col-md-8">
-                <input type="text" ng-model="tablet.model" class="form-control">
+                <input type="text" ng-model="tablet.modelNumber" class="form-control">
               </div>
             </div>
             <div class="row form-group">
@@ -31,37 +31,37 @@
             <div class="row form-group">
               <label class="col-4 col-form-label">Display size</label>
               <div class="col-md-8">
-                <input type="number" step="1" min="0" ng-model="tablet.display_size" class="form-control">
+                <input type="number" step="1" min="0" ng-model="tablet.displaySize" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4 col-form-label">Processor Type</label>
               <div class="col-md-8">
-                <input type="text" ng-model="tablet.processor_type" class="form-control">
+                <input type="text" ng-model="tablet.processorType" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4 col-form-label">RAM size</label>
               <div class="col-md-8">
-                <input type="number" step="1" min="0" ng-model="tablet.ram_size" class="form-control">
+                <input type="number" step="1" min="0" ng-model="tablet.ramSize" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4 col-form-label"># of CPU cores</label>
               <div class="col-md-8">
-                <input type="number" step="1" min="0" ng-model="tablet.number_cpu_cores" class="form-control">
+                <input type="number" step="1" min="0" ng-model="tablet.numberCpuCores" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4 col-form-label">Harddrive size</label>
               <div class="col-md-8">
-                <input type="number" step="1" min="0" ng-model="tablet.harddrive_size" class="form-control">
+                <input type="number" step="1" min="0" ng-model="tablet.harddriveSize" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4 col-form-label">Battery Info</label>
               <div class="col-md-8">
-                <input type="text" ng-model="tablet.battery_info" class="form-control">
+                <input type="text" ng-model="tablet.batteryInfo" class="form-control">
               </div>
             </div>
             <div class="row form-group">
@@ -73,25 +73,29 @@
             <div class="row form-group">
               <label class="col-4 col-form-label">Camera Info</label>
               <div class="col-md-8">
-                <input type="text" ng-model="tablet.camera_info" class="form-control">
+                <input type="text" ng-model="tablet.cameraInfo" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4 col-form-label">Height (cm)</label>
               <div class="col-md-8">
-                <input type="number" step="0.1" min="0" ng-model="tablet.height" class="form-control">
+                <input type="number" step="0.1" min="0" ng-model="tablet.dimensions.height" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4 col-form-label">Width (cm)</label>
               <div class="col-md-8">
-                <input type="number" step="0.1" min="0" ng-model="tablet.width" class="form-control">
+                <input type="number" step="0.1" min="0" ng-model="tablet.dimensions.width" class="form-control">
               </div>
             </div>
             <div class="row form-group">
               <label class="col-4 col-form-label">Depth (cm)</label>
               <div class="col-md-8">
+<<<<<<< HEAD:project/public/inventory/product-forms/tablet-form.html
                 <input type="number" step="0.1" min="0" ng-model="tablet.depth" class="form-control">
+=======
+                <input type="number" step="0.1" min="0" ng-model="tablet.dimensions.depth" class="form-control">
+>>>>>>> 12fb1fe8a0ebd34490efcbc5e3910e15bce0dd1d:project/public/catalog/product-forms/tablet-form.html
               </div>
             </div>
           </div>

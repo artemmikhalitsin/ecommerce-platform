@@ -1,4 +1,4 @@
-/* let expect = require('chai').expect;
+let expect = require('chai').expect;
 let rootPath = require('app-root-dir').get();
 let inventoryRepo = require(rootPath +
   '/DataSource/Repository/InventoryItemRepository.js');
@@ -16,4 +16,3 @@ describe('inventoryRepo', function() {
     });
   });
 });
-*/
