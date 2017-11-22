@@ -84,7 +84,7 @@ class Controller {
       return Promise.each(results, (product)=>{
         return this.inventoryRepo.getByModelNumbers([product.modelNumber]).then((values)=>{
           // console.log('inventory item is ' + JSON.stringify(values));
-          product.serial_numbers = values.map((p) => p.serial_number);
+          product.serialNumbers = values.map((p) => p.serialNumber);
           inventory.push(product);
         });
       });
@@ -144,7 +144,7 @@ class Controller {
   }
   manageProductCatalog(req, res) {
     let productDescriptions = JSON.parse(req.body.productDescriptions);
-    console.log('Descriptions recieved by the controller' + JSON.parse(req.body.productDescriptions));
+    console.log('Descriptions recieved by the controller' + (req.body.productDescriptions));
     let results = this.productDescriptionRepo.save(productDescriptions).then((results) => {
       console.log('Success saving the Product descriptions!');
       this.getProductDescription(req, res);
@@ -231,7 +231,7 @@ class Controller {
         return this.inventoryRepo.getByModelNumbers([product.modelNumber])
         .then((values)=>{
           // console.log('inventory item is ' + JSON.stringify(values));
-          product.serial_numbers = values.map((p) => p.serial_number);
+          product.serialNumbers = values.map((p) => p.serialNumber);
           inventory.push(product);
         });
       });

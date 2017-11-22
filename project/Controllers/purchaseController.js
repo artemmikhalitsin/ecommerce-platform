@@ -7,7 +7,7 @@ const ProductDescriptionRepository = require(rootPath +
 const ShoppingCart = require(rootPath +
     '/Cart/ShoppingCart.js');
 const ReturnCart = require(rootPath
-    + '/models/ReturnCart.js');
+    + '/Cart/ReturnCart.js');
 const TransactionLogRepository = require(rootPath
       + '/DataSource/Repository/TransactionLogRepository.js');
 const InventoryItemRepository = require(rootPath +
@@ -223,9 +223,9 @@ class PurchaseController {
           if (cart[i]) {
               clearTimeout(this.clientInventory[cart[i].serial].timeout);
               purchases.push({client: user,
-                                  model_number: cart[i].model,
-                                  serial_number: cart[i].serial,
-                                  purchase_Id: cart[i].cartItemId});
+                                  modelNumber: cart[i].model,
+                                  serialNumber: cart[i].serial,
+                                  purchaseId: cart[i].cartItemId});
               delete this.clientInventory[cart[i].serial];
           }
         }
@@ -287,7 +287,7 @@ class PurchaseController {
         returns.push({client: user,
                             model_number: returnCart[i].model,
                             serial_number: returnCart[i].serial,
-                            purchase_Id: returnCart[i].cartItemId});
+                            purchase_Id: returnCart[i].purchaseId});
       }
     }
     let transaction = [{client: user,
@@ -305,28 +305,27 @@ class PurchaseController {
   }
 
   addToReturnCart(req, res) {
-    pre: {
-      req.session.email != null, 'User is not logged in';
-    }
+    invariant: req.session.email != null, 'User is not logged in';
 
     let returnItem = req.body.serialNumber;
     let productNumber = req.body.modelNumber;
+    let purchaseId = req.body.purchaseId;
+    let user = req.session.email.toString();
+    if (!this.returnCartList[user]) {
+      this.returnCartList[user] = new ReturnCart();
+    }
 
     if (true) {
-      let user = req.session.email.toString();
-      if (!this.returnCartList[user]) {
-        this.returnCartList[user] = new ReturnCart();
-      }
-
-      this.returnCartList[user].addToReturnCart(returnItem, productNumber);
+      this.returnCartList[user].addToReturnCart(returnItem,
+                                  productNumber, purchaseId);
       res.status(200).send({sucess: 'successfully added'});
     } else {
-      res.status(500).send({error: 'item in another cart'});
+      res.status(500).send({error: 'item in cart'});
     }
     post: {
 
+      }
     }
-  }
   viewPurchaseCollection(req, res) {
     this.purchaseCollectionRepo.get(req.session.email).then(
       (result) => {
@@ -348,8 +347,8 @@ class PurchaseController {
         return Promise.each(results, (product) => {
           return this.inventoryRepo.getByModelNumbers([product.modelNumber])
             .then((values) => {
-              product.serial_numbers = values.map((p) => p.serial_number);
-              inventorySerials.push(product.serial_numbers);
+              product.serialNumbers = values.map((p) => p.serialNumber);
+              inventorySerials.push(product.serialNumbers);
             });
         });
       }).then((val) => {

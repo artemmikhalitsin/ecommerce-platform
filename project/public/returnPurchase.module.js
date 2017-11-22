@@ -21,11 +21,11 @@ function returnPurchaseController($scope, $http, $compile){
 
     //New Code
 
-    $scope.addToReturnCart = (serialNumber, modelNumber) => {
+    $scope.addToReturnCart = (serialNumber, modelNumber, purchaseId) => {
       $http({
         method: 'POST',
         url: '/api/addToReturnCart',
-        data: {serialNumber: serialNumber, modelNumber: modelNumber},
+        data: {serialNumber: serialNumber, modelNumber: modelNumber, purchaseId: purchaseId},
       }).then(function successCallback(response){
         window.alert("Added to Cart");
       }, function errorCallback(response){

@@ -3,7 +3,6 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
-const ProductDescription = require(rootPath + '/models/ProductDescription.js');
 
 /**
  * Table Data Gateway for the ProductDescription table
@@ -34,36 +33,13 @@ class ProductDescriptionsTDG {
    */
   getAll() {
     let results = [];
-    return connection('ProductDescription').select('*').then((productDescriptions) => {
-      productDescriptions.forEach(function(description) {
-        results.push(new ProductDescription(
-          description.price,
-          description.weight,
-          description.brand_name,
-          description.model_number,
-          description.type
-          ));
-      });
-      return results;
-    });
+    return connection('ProductDescription').select('*');
   }
   getByModelNumber(modelNumber) {
     let results = [];
     return connection('ProductDescription')
       .select('*')
-      .where({model_number: modelNumber})
-      .then((productDescriptions) => {
-      productDescriptions.forEach(function(description) {
-        results.push(new ProductDescription(
-          description.price,
-          description.weight,
-          description.brand_name,
-          description.model_number,
-          description.type
-          ));
-      });
-      return results;
-    });
+      .where({model_number: modelNumber});
   }
 
   /*

@@ -30,8 +30,22 @@ class DesktopsTDG {
         }, 'id')
         .into('Desktop');
     }
-
     getAll() {
+        return connection('Desktop').select('*')
+          .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
+          .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
+          .join('ProductDescription', 'Desktop.model_number',
+                'ProductDescription.model_number');
+    }
+    getByModelNumbers(modelNumbers) {
+        return connection('Desktop').select('*')
+          .whereIn('model_number', modelNumbers)
+          .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
+          .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
+          .join('ProductDescription', 'Desktop.model_number',
+                'ProductDescription.model_number');
+    }
+    /* getAll() {
         let result = [];
         return connection('Desktop').select('*')
           .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
@@ -60,8 +74,8 @@ class DesktopsTDG {
               });
               return result;
           });
-    }
-    getByModelNumbers(modelNumbers) {
+    }*/
+    /* getByModelNumbers(modelNumbers) {
         let result = [];
         return connection('Desktop').select('*')
           .whereIn('model_number', modelNumbers)
@@ -90,7 +104,7 @@ class DesktopsTDG {
           });
           return result;
       });
-    }
+    }*/
     /**
      * Updates the specifications of a desktop in the database
      * @param {number} compId the id of the Computer portion specification in

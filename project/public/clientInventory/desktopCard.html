@@ -11,8 +11,8 @@
         <h4> Desktop </h4></br>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">Model Number: {[{ $ctrl.desktop.modelNumber }]}</li>
-          <li class="list-group-item" ng-repeat="serial in $ctrl.desktop.serial_numbers">{{serial}}
-              <a href="#" class="btn btn-primary pull-right" ng-click="addToShoppingCart(serial, $ctrl.desktop.modelNumber)">Add to Cart</a></li>
+          <li class="list-group-item" ng-repeat="serial in $ctrl.desktop.serialNumbers">{{serial}}
+              <a href="#" class="btn btn-primary pull-right" ng-click="addToShoppingCart(serial, $ctrl.desktop.modelNumber, $ctrl.desktop.brandName, 'Desktop', $ctrl.desktop.price.toFixed(2))">Add to Cart</a></li>
           <li class="list-group-item">Brand Name: {[{ $ctrl.desktop.brandName }]}</li>
           <li class="list-group-item">Weight: {[{ $ctrl.desktop.weight }]} gram </li>
         </ul></br>
@@ -37,7 +37,6 @@
         <li class="list-group-item">Depth (cm): {[{ $ctrl.desktop.depth }]}</li>
       </ul></br>
       <a href="#" class="btn btn-primary" ng-click="rotate()">Go Back</a>
-      <a href="#" class="btn btn-primary" ng-click="addToShoppingCart($ctrl.desktop.serial_number, $ctrl.desktop.modelNumber)">Add to Shopping Cart</a>
     </div>
     <!--/.card-body-->
   </div>
