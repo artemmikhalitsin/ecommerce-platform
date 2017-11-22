@@ -8,6 +8,7 @@ class ProcessQueue {
     joinpoint.args[0] = req;
     joinpoint.args[1] = res;
     this.processList.push(joinpoint);
+    // console.log(this.processList);
     this.runNext();
   }
 
@@ -15,11 +16,13 @@ class ProcessQueue {
     joinpoint.args[0] = req;
     joinpoint.args[1] = res;
     this.processList.unshift(joinpoint);
+    // console.log(this.processList);
     this.runNext();
   }
 
   anonReq(joinpoint) {
     this.processList.unshift(joinpoint);
+    // console.log(this.processList);
     this.runNext();
   }
 
@@ -27,6 +30,7 @@ class ProcessQueue {
     if (!this.busy && this.processList.length > 0) {
       this.busy = true;
       this.run(this.processList.pop());
+      // console.log(this.processList);
       this.busy = false;
     }
     // whether request is processed or not,
