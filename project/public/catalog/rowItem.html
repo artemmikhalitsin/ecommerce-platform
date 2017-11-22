@@ -23,6 +23,11 @@
       <label  class="control-label">Weight:	&nbsp;</label>
       <span ng-show='!editMode'>{[{$ctrl.product.weight}]}</span>
       <input ng-show='editMode' type="text" class="form-control" ng-model="$ctrl.product.weight"></input>
+      <div>
+        <label  class="control-label">Is Available?	&nbsp;</label>
+        <span ng-show='!editMode'>{[{$ctrl.product.isAvailable}]}</span>
+        <input ng-show='editMode' type="checkbox" class="form-control" ng-model="$ctrl.product.isAvailable" ng-true-value="1" ng-false-value="0"></input>
+      </div>
       <div ng-show="isDesktop() || isLaptop() || isTablet()">
         <label class="control-label">Processor Type: 	&nbsp;</label>
         <span ng-show='!editMode'>{[{$ctrl.product.processorType}]}</span>
@@ -31,7 +36,7 @@
       <div ng-show="isDesktop() || isLaptop() || isTablet()">
         <label class="control-label">RAM Size: 	&nbsp;</label>
         <span ng-show='!editMode'>{[{$ctrl.product.ramSize}]}</span>
-        <input ng-show='editMode' type="number" step="512" min="0" class="form-control" ng-model="$ctrl.product.ramSize"></input>
+        <input ng-show='editMode' type="number" step="1" min="0" class="form-control" ng-model="$ctrl.product.ramSize"></input>
       </div>
       <div ng-show="isMonitor() || isLaptop()">
       <label  class="control-label">Display Size:	&nbsp; </label>
@@ -44,10 +49,6 @@
         <label class="control-label">Number of CPU Cores:	&nbsp;</label>
         <span ng-show='!editMode'> {[{$ctrl.product.numberCpuCores}]}</span>
         <input ng-show='editMode' type="number" step="1" min="0" class="form-control" ng-model="$ctrl.product.numberCpuCores"></input>
-        <br>
-        <label class="control-label">OS:	&nbsp;</label>
-        <span ng-show='!editMode'>{[{$ctrl.product.os}]}</span>
-        <input ng-show='editMode' type="text" class="form-control" ng-model="$ctrl.product.os"></input>
         <br>
         <label class="control-label">Harddrive Size:	&nbsp;</label>
         <span ng-show='!editMode'>{[{$ctrl.product.harddriveSize}]}</span>
@@ -83,6 +84,10 @@
         </select>
       </div>
       <div ng-show="isTablet() || isLaptop()">
+        <label class="control-label">OS:	&nbsp;</label>
+        <span ng-show='!editMode'>{[{$ctrl.product.os}]}</span>
+        <input ng-show='editMode' type="text" class="form-control" ng-model="$ctrl.product.os"></input>
+        <br>
         <label class="control-label">Battery Info:&nbsp;</label>
         <span ng-show='!editMode'>{[{$ctrl.product.batteryInfo}]}</span>
         <input ng-show='editMode' type="text" class="form-control" ng-model="$ctrl.product.batteryInfo"></input>

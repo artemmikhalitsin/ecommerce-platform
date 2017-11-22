@@ -34,13 +34,13 @@ class TabletsTDG {
         }, 'id')
         .into('Tablet');
     }
-    getAll() {
+    /* getAll() {
         let result = [];
         return connection('Tablet').select('*')
           .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
           .join('ProductDescription', 'Tablet.model_number',
-                'ProductDescription.model_number')
+            'ProductDescription.model_number')
           .then((tablets) => {
               tablets.forEach(function(tablet) {
                   result.push(new Tablet(
@@ -66,15 +66,22 @@ class TabletsTDG {
               });
               return result;
           });
+    }*/
+    getAll() {
+        return connection('Tablet').select('*')
+          .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
+          .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
+          .join('ProductDescription', 'Tablet.model_number',
+            'ProductDescription.model_number');
     }
-    getByModelNumber(modelNumbers) {
+    /* getByModelNumber(modelNumbers) {
         let result = [];
         return connection('Tablet').select('*')
           .whereIn('model_number', modelNumbers)
           .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
           .join('ProductDescription', 'Tablet.model_number',
-                'ProductDescription.model_number')
+            'ProductDescription.model_number')
           .then((tablets) => {
               tablets.forEach(function(tablet) {
                   result.push(new Tablet(
@@ -100,8 +107,15 @@ class TabletsTDG {
               });
               return result;
           });
+    }*/
+    getByModelNumber(modelNumbers) {
+        return connection('Tablet').select('*')
+          .whereIn('model_number', modelNumbers)
+          .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
+          .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
+          .join('ProductDescription', 'Tablet.model_number',
+            'ProductDescription.model_number');
     }
-
     /**
      * Updates the specifications of a tablet in the database
      * @param {number} compId the id of the Computer portion specification in
@@ -113,10 +127,8 @@ class TabletsTDG {
      * rows affected
      */
     update(compId, dimensionsId, tablet) {
-      // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
           'comp_id': tablet.computerId,
-          // 'model_number': tablet.modelNumber,
           'dimension_id': tablet.dimensions.id,
           'display_size': tablet.displaySize,
           'battery_info': tablet.batteryInfo,

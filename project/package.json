@@ -24,7 +24,7 @@
     "lint": "node_modules/eslint/bin/eslint.js .",
     "lint-fix": "node_modules/eslint/bin/eslint.js . --fix",
     "make-docs": "node_modules/.bin/esdoc",
-    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore knexfile.js,./public,./seeds,./test,./migrations,./DataSource,./node_modules,./npm-debug.log --copy-files",
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore knexfile.js,./Aspects,./models,./public,./seeds,./test,./migrations,./DataSource,./node_modules,./npm-debug.log --copy-files",
     "start": "node node_modules/concurrently/src/main.js -c \"bgRed,bgBlue\" -n \"Express,ESLint\" \"nodemon -L --exec npm run server\" \"nodemon -L --exec npm run lint-fix\"",
     "babel-watch": "./node_modules/babel-watch/babel-watch.js index.js",
     "server": " ./node_modules/babel-cli/bin/babel-node.js index.js"

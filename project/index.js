@@ -1,4 +1,5 @@
 // const stringy = require('stringy');
+
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
@@ -13,12 +14,15 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 }));
 
 const Controller = require(rootPath + '/Controllers/controller');
+const PurchaseController = require(rootPath +
+  '/Controllers/purchaseController');
 const Aspect = require(rootPath +
   '/Aspects/aspect.js');
 let controller = new Controller();
+let purchaseController = new PurchaseController();
 // linter is wrong, aspect is enabled by the constructor
 let aspect = new Aspect();
-aspect.initialize(controller);
+aspect.monitor(controller);
 
 // allows use of static pages
 app.use(express.static(path.join(__dirname, 'public')));
@@ -62,8 +66,6 @@ app.get('/registration', function(req, res) {
   }
 });
 
-// NOTE: THIS ROUTE DOES NOT WORK ANYMORE DUE TO THE FILE NAME CHANGES
-// MAYBE IT GOT REPLACED BY SOMETHING ELSE
 app.get('/addProduct', function(req, res) {
   if (req.session.exists) {
     res.render('inventory/new-product');
@@ -71,29 +73,52 @@ app.get('/addProduct', function(req, res) {
     res.redirect('/login');
   }
 });
-
+app.get('/catalog', function(req, res) {
+  if (req.session.exists) {
+    controller.getCatalog(req, res);
+  } else {
+    console.log('login error');
+    controller.getAllInventory(req, res);
+  }
+});
+app.post('/manageProductCatalog', function(req, res) {
+   if (req.session.exists) {
+    controller.manageProductCatalog(req, res);
+  } else {
+    console.log('login error');
+    controller.getAllInventory(req, res);
+  }
+});
+app.get('/getProductDescription', function(req, res) {
+  controller.getProductDescription(req, res);
+});
 // this should be implemented in the controller
 app.get('/logout', function(req, res) {
   controller.logout(req, res);
 });
 
 app.get('/users', function(req, res) {
-  res.render('/userTable');
+  if (req.session.exists) {
+    res.render('userTable');
+  } else {
+    res.redirect('/login');
+  }
 });
+
 
 // getting the inventory from the database
 app.get('/getAllInventoryItems', function(req, res) {
   if (req.session.exists) {
-    controller.getAllInventory(req, res);
+    controller.getAllInventory(req, res, purchaseController);
   } else {
     console.log('login error');
-    controller.getAllInventory(req, res);
+    controller.getAllInventory(req, res, null);
   }
 });
 
 // getting the client inventory from the database
 app.get('/clientInventory', function(req, res) {
-    controller.getAllInventory(req, res);
+    controller.getAllInventory(req, res, purchaseController);
     console.log('Successs');
 });
 
@@ -113,31 +138,47 @@ app.post('/loginRequest', function(req, res) {
 });
 
 app.post('/addToCart', function(req, res) {
-    controller.addToShoppingCart(req, res);
+  purchaseController.addToShoppingCart(req, res);
 });
 
 app.post('/removeFromCart', function(req, res) {
-    controller.removeFromShoppingCart(req, res);
+  purchaseController.removeFromShoppingCart(req, res);
 });
 
 app.post('/purchaseItems', function(req, res) {
-  controller.completePurchaseTransaction(req, res);
+  purchaseController.completePurchaseTransaction(req, res);
 });
 
 app.get('/viewShoppingCart', function(req, res) {
-  controller.viewShoppingCart(req, res);
+  purchaseController.viewShoppingCart(req, res);
 });
 
 app.post('/cancelTransaction', function(req, res) {
-  controller.cancelPurchaseTransaction(req, res);
+  purchaseController.cancelPurchaseTransaction(req, res);
 });
 
-app.get('/viewPurchaseCollection', function(req, res) {
-  controller.viewPurchaseCollection(req, res);
+app.get('/returnPage', function(req, res) {
+  res.render('returnPurchase');
+});
+
+app.post('/api/addToReturnCart', function(req, res) {
+  purchaseController.addToReturnCart(req, res);
+});
+
+app.post('/api/returnPurchaseItems', function(req, res) {
+  purchaseController.returnPurchaseTransaction(req, res);
+});
+
+app.get('/api/viewPurchaseCollection', function(req, res) {
+  purchaseController.viewPurchaseCollection(req, res);
 });
 
 app.get('/api/getAllProducts', function(req, res) {
-  controller.getProductInfo(req, res);
+  controller.getProductInfo(req, res, purchaseController);
+});
+
+app.get('/api/getAllClients', function(req, res) {
+  controller.getClients(req, res);
 });
 
 app.listen(8080, function() {

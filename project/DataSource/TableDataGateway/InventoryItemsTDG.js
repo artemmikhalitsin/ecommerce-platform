@@ -49,11 +49,9 @@ class InventoryItemsTDG {
      * affected
      */
     delete(inventoryItem) {
-        console.log(inventoryItem);
-        console.log('in inventoryIemTDG');
         return connection.from('Inventory').where(
-          {'serial_number': inventoryItem.serial_number,
-           'model_number': inventoryItem.model_number}
+          {'serial_number': inventoryItem.serialNumber,
+           'model_number': inventoryItem.modelNumber}
         ).del();
     }
 }

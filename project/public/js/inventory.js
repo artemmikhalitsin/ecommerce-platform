@@ -159,7 +159,7 @@ function formatChildRows( data ) {
      serialRows += `
       <tr>
         <td>
-          ${serial_numbers[number]}
+          ${serialNumbers[number]}
         </td>
         <td>
           <input type="checkbox" id=${serial_numbers[number]} name=${data["modelNumber"]} onchange='deleteSerial(this);'>

@@ -8,8 +8,8 @@ function productCardController($scope) {
 }
 function desktopCardController($scope, $http, $compile) {
   rotateCard($scope);
-  $scope.addToShoppingCart = (serialNumber, modelNumber) => {
-    addToShoppingCart(serialNumber,modelNumber, $http, $compile, $scope);
+  $scope.addToShoppingCart = (serialNumber, modelNumber, brandName, type, price) => {
+    addToShoppingCart(serialNumber,modelNumber, brandName, type, price, $http, $compile, $scope);
   }
   $scope.remove = (index) => {
     remove(index, $http);
@@ -17,8 +17,8 @@ function desktopCardController($scope, $http, $compile) {
 }
 function laptopCardController($scope, $http, $compile) {
   rotateCard($scope);
-  $scope.addToShoppingCart = (serialNumber, modelNumber) => {
-    addToShoppingCart(serialNumber,modelNumber, $http, $compile, $scope);
+  $scope.addToShoppingCart = (serialNumber, modelNumber, brandName, type, price) => {
+    addToShoppingCart(serialNumber,modelNumber, brandName, type, price, $http, $compile, $scope);
   }
   $scope.remove = (index) => {
     remove(index, $http);
@@ -26,8 +26,8 @@ function laptopCardController($scope, $http, $compile) {
 }
 function tabletCardController($scope, $http, $compile) {
   rotateCard($scope);
-  $scope.addToShoppingCart = (serialNumber, modelNumber) => {
-    addToShoppingCart(serialNumber,modelNumber, $http, $compile, $scope);
+  $scope.addToShoppingCart = (serialNumber, modelNumber, brandName, type, price) => {
+    addToShoppingCart(serialNumber,modelNumber, brandName, type, price, $http, $compile, $scope);
   }
   $scope.remove = (index) => {
     remove(index, $http);
@@ -35,8 +35,8 @@ function tabletCardController($scope, $http, $compile) {
 }
 function monitorCardController($scope, $http, $compile) {
   rotateCard($scope);
-  $scope.addToShoppingCart = (serialNumber, modelNumber) => {
-    addToShoppingCart(serialNumber,modelNumber, $http, $compile, $scope);
+  $scope.addToShoppingCart = (serialNumber, modelNumber, brandName, type, price) => {
+    addToShoppingCart(serialNumber,modelNumber, brandName, type, price, $http, $compile, $scope);
   }
   $scope.remove = (index) => {
     remove(index, $http);
@@ -51,27 +51,38 @@ function remove(serialNumber, http) {
     data: {serialNumber: serialNumber},
   }).then(function successCallback(response) {
       $('#cart_' + serialNumber).remove();
-      window.alert("Removed successfully");
     }, function errorCallback(response) {
-      window.alert("Unsuccessful!");
+      window.alert('Cannot remove item!');
   });
 
 }
 
-function addToShoppingCart(serialNumber,modelNumber, http, compile, scope) {
+function addToShoppingCart(serialNumber,modelNumber, brandName, type, price, http, compile, scope) {
   http({
     method: 'POST',
     url: '/addToCart',
     data: {serialNumber: serialNumber, modelNumber: modelNumber},
   }).then(function successCallback(response) {
-    var html=`<li id="cart_${serialNumber}">${serialNumber}<button ng-click="remove('${serialNumber}')">X</button></li>`;
+    var html=`<div class="list-group-item list-group-item-action flex-column align-items-start" id="cart_${serialNumber}">`
+    +  `<div class="d-flex w-100 justify-content-between">`
+    +   `<h3 class="mb-1">${brandName} ${type}</h3>`
+    +   `<div>$${price}</div>`
+    +   `</div>`
+    +   `<div>Model: ${modelNumber}</div>`
+    +   `<div>Serial: ${serialNumber}</div>`
+    + `<button class="pull-right btn" ng-click="remove('${serialNumber}')">Remove From Cart</button>`
+    + `</div>`;
+    $('#shopping_cart').show();
     let el = document.getElementById('temp_cart');
     angular.element(el).append(compile(html)(scope));
-    window.alert("Added to shopping cart");
-
+    window.alert(response.data.success);
     }, function errorCallback(response) {
-      window.alert("Not added to shopping cart");
-  });
+        if (response.data.error == null) {
+          window.alert('Too many items in cart');
+        }
+        window.alert(response.data.error);
+      }
+  );
 }
 
 function rotateCard($scope) {
