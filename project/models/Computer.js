@@ -22,8 +22,8 @@ class Computer extends ProductDescription {
      * @param {string} type
      */
     constructor(id, processorType, ramSize, numberCpuCores,
-                harddriveSize, price, weight, brandName, modelNumber, type) {
-      super(price, weight, brandName, modelNumber, type);
+                harddriveSize, price, weight, brandName, modelNumber, type, isAvailable) {
+      super(price, weight, brandName, modelNumber, type, isAvailable);
       this.computerId = id;
       this.processorType = processorType;
       this.ramSize = ramSize;

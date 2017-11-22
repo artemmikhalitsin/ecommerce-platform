@@ -11,13 +11,15 @@ class ProductDescription {
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
      * @param {string} type
+     * @param {boolean} isAvailable
      */
-    constructor(price, weight, brandName, modelNumber, type) {
+    constructor(price, weight, brandName, modelNumber, type, isAvailable) {
         this.price = price;
         this.weight = weight;
         this.brandName = brandName;
         this.modelNumber = modelNumber;
         this.type = type;
+        this.isAvailable = isAvailable;
     }
 
     /**
