@@ -46,7 +46,7 @@ function ClientInventoryController($scope, $http, $compile) {
   let search = new URLSearchParams(window.location.search).get('search');
   $scope.search = search ? search : "all";
   $scope.itemsShown = [];
-  //Load items from api call
+  // Load items from api call
   $scope.items = [];
   $http({
     method: 'GET',
@@ -93,10 +93,15 @@ function ClientInventoryController($scope, $http, $compile) {
       method: 'POST',
       url: '/purchaseItems'
     }).then(function successCallback(response) {
-        window.alert("Purchased!");
-
+        window.alert(response.data.success);
+        $('#temp_cart').children().remove();
+        $('#shopping_cart').hide();
       }, function errorCallback(response) {
-        window.alert("Not purchased");
+        if (response.data.error) {
+          window.alert(response.data.error);
+        } else {
+          window.alert('Your transaction can\'t be completed at this time');
+        }
     });
   }
 
@@ -106,7 +111,7 @@ function ClientInventoryController($scope, $http, $compile) {
       url: '/cancelTransaction'
     }).then(function successCallback(response) {
         window.alert("Canceled!");
-
+        $('#temp_cart').children().remove();
       }, function errorCallback(response) {
         window.alert("Not canceled");
     });

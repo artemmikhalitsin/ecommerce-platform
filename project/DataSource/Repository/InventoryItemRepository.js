@@ -5,7 +5,7 @@ const InventoryItemsIdentityMap = require(rootPath +
   '/DataSource/IdentityMap/InventoryItemsIdentityMap.js');
 const InventoryItemsTDG = require(rootPath +
   '/DataSource/TableDataGateway/InventoryItemsTDG.js');
-
+const InventoryItem = require(rootPath + '/models/InventoryItem.js');
 /**
  * Repository for Inventory Items
  * @author Ekaterina Ruhlin
@@ -41,12 +41,21 @@ class InventoryItemRepository {
   }
   getByModelNumbers(modelNumbers) {
     let inventory = this.inventoryTDG.getByModelNumbers(modelNumbers);
-    console.log('The models numbers passed' + JSON.stringify(modelNumbers));
+    // console.log('The models numbers passed' + JSON.stringify(modelNumbers));
     let result = [];
     return Promise.all([inventory]).then((values) => {
+<<<<<<< HEAD
           result = values[0];
           console.log('the inventory items repo gives: ' +
           JSON.stringify(result));
+=======
+      let result = [];
+          values[0].forEach(function(item) {
+            result.push(new InventoryItem(item.id, item.serial_number, item.model_number, null));
+          });
+          console.log('the inventory items repo gives: '
+            + JSON.stringify(result));
+>>>>>>> b77e2577262d59ed57c73274fba2bd4e32e7ecca
 
     return result;
         }).catch((err) => {
@@ -111,12 +120,12 @@ console.log(err);
     let electronicsToDelete = [];
 
     // Extracts the model numbers of given items
-    let model_numbers = items.map((p) => p.model_number);
+    let modelNumbers = items.map((p) => p.model_number);
 
-    if (model_numbers.length > 0) {
+    if (modelNumbers.length > 0) {
       // Retrieve the items corresponding to given ids
       let allInventoryItems = this.inventoryItemsIM
-                          .getByModelNumbers(model_numbers);
+                          .getByModelNumbers(modelNumbers);
 
       for (let i = 0; i < items.length; i++) {
         for (let j = 0; j < items[i].serial_number.length; j++) {

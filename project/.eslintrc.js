@@ -4,7 +4,7 @@ module.exports = {
           					"ecmaVersion": 6
   								 },
   "rules": {
-            "linebreak-style": ["error", "windows"],
+            "linebreak-style": ["error", "unix"],
 						"require-jsdoc": ["error", {
 							"require": {
 								"FunctionDeclaration": false,

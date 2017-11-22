@@ -18,7 +18,7 @@ class PurchaseCollectionRepo {
   constructor() {
     this.uow = new UnitOfWork();
     this.inventoryItemsIM = new InventoryItemsIdentityMap();
-    this.purchaseColectionTDG = new PurchaseCollectionTDG();
+    this.purchaseCollectionTDG = new PurchaseCollectionTDG();
   }
   /**
    * Retrieves items from the identity map. If none are there,
@@ -46,9 +46,9 @@ class PurchaseCollectionRepo {
    * @return {Promise<Object[]>} promise which resolves to the list of inventory
    * items in the database
    */
-  get(args) {
-    return database('PurchaseCollection').select('*');
-  }
+   get(user) {
+     return this.purchaseCollectionTDG.select(user);
+   }
 
   /**
    * Given a list of ids, retrieves items from the identity map corresponding
@@ -98,7 +98,6 @@ class PurchaseCollectionRepo {
     // var electronicsToAdd = []
     let electronicsToDelete = items;
     let electronicsToAdd = items;
-
     this.uow.registerDeletedItem(electronicsToDelete);
     this.uow.registerNewPurchase(electronicsToAdd);
     this.uow.commitAll();
@@ -112,7 +111,7 @@ class PurchaseCollectionRepo {
     this.uow.registerReturn(electronicsToDelete);
     this.uow.registerNewItem(electronicsToAdd);
     this.uow.commitAll();
-    this.inventoryItemsIM.add(electronicsToAdd);
+    // this.inventoryItemsIM.add(electronicsToAdd);
   }
 }
 module.exports = PurchaseCollectionRepo;

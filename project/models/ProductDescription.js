@@ -4,13 +4,17 @@
  * ATTRIBUTE THIS TO YOURSELF
  */
 class ProductDescription {
-    /**
+    /*
      * Given info common to all products, creates an object
      * @param {string} price price
      * @param {string} weight weight
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
+<<<<<<< HEAD
      * @param {string} type product type
+=======
+     * @param {string} type
+>>>>>>> b77e2577262d59ed57c73274fba2bd4e32e7ecca
      */
     constructor(price, weight, brandName, modelNumber, type) {
         this.price = price;
