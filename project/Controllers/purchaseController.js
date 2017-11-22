@@ -69,7 +69,7 @@ class PurchaseController {
     /* This particular contract library does not work with asynchronous
        calls. However, these are the postconditions:
     post: {
-       this.shoppingCartList[req.session.email]
+      this.shoppingCartList[req.session.email]
         .getCartSerialNumbers()
         .includes(req.body.serialNumber), 'Item was not added to the cart';
       this.clientInventory[req.body.serialNumber].locked,
@@ -308,6 +308,18 @@ class PurchaseController {
 
   addToReturnCart(req, res) {
     invariant: req.session.email != null, 'User is not logged in';
+    pre: {
+      Object.keys(this.purchaseCollectionRepo.get(req.session.email)).length > 0, 
+        'User made no purchases'; 
+      this.purchaseCollectionRepo.get(req.session.email)[req.body.serialNumber],
+        'Item does not exist';
+      typeof(this.returnCartList[req.session.email.toString()].getCart()[req.body.serialNumber]) == 'undefined',
+        'Item already in cart';
+      if (this.returnCartList[req.session.email]) {
+        Object.keys(this.returnCartList[req.session.email.toString()]
+          .getCart()).length < 7, 'Cart has more than 7 items';
+      }
+    }
 
     let returnItem = req.body.serialNumber;
     let productNumber = req.body.modelNumber;
@@ -325,8 +337,10 @@ class PurchaseController {
       res.status(500).send({error: 'item in cart'});
     }
     post: {
-
-      }
+      this.returnCartList[req.session.email]
+        .getCartSerialNumbers()
+        .includes(req.body.serialNumber), 'Item was not added';
+    }
   }
 
   cancelReturnTransaction(req, res){
