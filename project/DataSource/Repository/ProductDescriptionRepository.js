@@ -245,6 +245,7 @@ class ProductDescriptionRepository {
     if (productIds.length > 0) {
       let context = [];
     return this.getByIds(productIds).then((values) => {
+      context = values;
     let allRecords = this.ProductDescriptionIM.getAll();
     for (let i = 0; i < products.length; i++) {
       if (context.findIndex(
@@ -263,7 +264,6 @@ class ProductDescriptionRepository {
                 electronicsToAdd.push(products[i]);
               }
     }
-
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);
 
