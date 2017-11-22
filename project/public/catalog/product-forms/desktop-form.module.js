@@ -7,6 +7,7 @@ desktopForm.component('desktopForm', {
     $scope.desktop = {};
     $scope.submitDesktop = () => {
       $scope.desktop.type = 'Desktop';
+      $scope.desktop.isAvailable = 1;
       $scope.$emit('newDesktop', $scope.desktop)
       $scope.desktop = {};
     }

@@ -7,6 +7,7 @@ laptopForm.component('laptopForm', {
     $scope.laptop = {};
     $scope.submitLaptop = () => {
       $scope.laptop.type = 'Laptop';
+      $scope.laptop.isAvailable = 1;
       $scope.$emit("newLaptop", $scope.laptop);
       $scope.laptop = {};
     }
