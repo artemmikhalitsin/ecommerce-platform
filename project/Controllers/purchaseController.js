@@ -287,7 +287,7 @@ class PurchaseController {
         returns.push({client: user,
                             model_number: returnCart[i].model,
                             serial_number: returnCart[i].serial,
-                            purchase_Id: returnCart[i].cartItemId});
+                            purchase_Id: returnCart[i].purchaseId});
       }
     }
     let transaction = [{client: user,
@@ -309,15 +309,15 @@ class PurchaseController {
 
     let returnItem = req.body.serialNumber;
     let productNumber = req.body.modelNumber;
+    let purchaseId = req.body.purchaseId;
     let user = req.session.email.toString();
-
     if (!this.returnCartList[user]) {
       this.returnCartList[user] = new ReturnCart();
     }
 
     if (true) {
-      this.returnCartList[user].addToReturnCart(returnItem, productNumber);
-      console.log(returnItem);
+      this.returnCartList[user].addToReturnCart(returnItem,
+                                  productNumber, purchaseId);
       res.status(200).send({sucess: 'successfully added'});
     } else {
       res.status(500).send({error: 'item in cart'});
