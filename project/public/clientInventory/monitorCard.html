@@ -11,7 +11,7 @@
         <h4> Monitor </h4></br>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">Model Number: {[{ $ctrl.monitor.modelNumber }]}</li>
-          <li class="list-group-item" ng-repeat="serial in $ctrl.monitor.serial_numbers">{{serial}}
+          <li class="list-group-item" ng-repeat="serial in $ctrl.monitor.serialNumbers">{{serial}}
               <a href="#" class="btn btn-primary pull-right" ng-click="addToShoppingCart(serial, $ctrl.monitor.model_number)">Add to Cart</a></li>
           <li class="list-group-item">Brand Name: {[{ $ctrl.monitor.brandName }]}</li>
           <li class="list-group-item">Weight: {[{ $ctrl.monitor.weight }]} </li>

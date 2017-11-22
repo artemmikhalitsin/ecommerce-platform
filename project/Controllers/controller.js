@@ -87,7 +87,7 @@ class Controller {
        return Promise.each(results, (product)=>{
         return this.inventoryRepo.getByModelNumbers([product.modelNumber]).then((values)=>{
                   console.log('inventory item is ' + JSON.stringify(values));
-                  product.serial_numbers = values.map((p) => p.serial_number);
+                  product.serialNumbers = values.map((p) => p.serialNumber);
                   inventory.push(product);
                 });
       });
@@ -235,7 +235,7 @@ class Controller {
         return this.inventoryRepo.getByModelNumbers([product.modelNumber])
           .then((values)=>{
             console.log('inventory item is ' + JSON.stringify(values));
-            product.serial_numbers = values.map((p) => p.serial_number);
+            product.serialNumbers = values.map((p) => p.serialNumber);
             inventory.push(product);
           });
       });

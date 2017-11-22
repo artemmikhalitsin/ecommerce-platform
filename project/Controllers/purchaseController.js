@@ -348,8 +348,8 @@ class PurchaseController {
         return Promise.each(results, (product) => {
           return this.inventoryRepo.getByModelNumbers([product.modelNumber])
             .then((values) => {
-              product.serial_numbers = values.map((p) => p.serial_number);
-              inventorySerials.push(product.serial_numbers);
+              product.serialNumbers = values.map((p) => p.serialNumber);
+              inventorySerials.push(product.serialNumbers);
             });
         });
       }).then((val) => {
