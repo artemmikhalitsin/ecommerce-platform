@@ -58,10 +58,12 @@ class Aspect {
           );
         }
         console.log(this.activeUsers);
-        if (req.session.isAdmin) {
-          this.processQueue.adminReq(joinpoint, req, res);
-        } else {
-          this.processQueue.clientReq(joinpoint, req, res);
+        if (joinpoint) {
+          if (req.session.isAdmin) {
+            this.processQueue.adminReq(joinpoint, req, res);
+          } else {
+            this.processQueue.clientReq(joinpoint, req, res);
+          }
         }
       }
     }).catch((errors) => {
