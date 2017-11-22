@@ -4,6 +4,11 @@ const hbs = require('express-handlebars');
 const session = require('express-session');
 const rootPath = require('app-root-dir').get();
 const app = express();
+const Controller = require(rootPath + '/Controllers/controller');
+const PurchaseController = require(rootPath +
+  '/Controllers/purchaseController');
+const Aspect = require(rootPath +
+  '/Aspects/aspect.js');
 
 let bodyParser = require('body-parser');
 app.use(bodyParser.json()); // to support JSON-encoded bodies
@@ -11,11 +16,6 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
   extended: false,
 }));
 
-const Controller = require(rootPath + '/Controllers/controller');
-const PurchaseController = require(rootPath +
-  '/Controllers/purchaseController');
-const Aspect = require(rootPath +
-  '/Aspects/aspect.js');
 let controller = new Controller();
 let purchaseController = new PurchaseController();
 // linter is wrong, aspect is enabled by the constructor
@@ -34,6 +34,12 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
 }));
+
+app.use((req, res, next) => {
+  res.locals.session = req.session;
+  console.log(res.locals.session);
+  next();
+});
 
 // let sess;
 app.engine('hbs', hbs({extname: 'hbs'}));
