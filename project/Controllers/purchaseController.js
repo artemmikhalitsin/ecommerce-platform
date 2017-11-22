@@ -1,3 +1,5 @@
+import { clearTimeout } from 'timers';
+
 const Promise = require('bluebird');
 const rootPath = require('app-root-dir').get();
 const PurchaseCollectionRepo = require(rootPath
@@ -29,7 +31,7 @@ class PurchaseController {
   }
   /**
    * Updates the Controller's list of current items
-   * @param {Object} newInventory Inventory items
+   * @param {Object} inventoryList new Inventory items
   */
   updateInventoryList(inventoryList) {
     inventoryList.forEach((serial, index) => {
@@ -325,7 +327,31 @@ class PurchaseController {
     post: {
 
       }
+  }
+
+  cancelReturnTransaction(req, res){
+    invariant: req.session.email != null, 'User is not logged in';
+    pre: {
+      this.returnCartList[req.session.email] != null,
+      'A return transaction has not been initiated!';
     }
+
+    let user = req.session.email.toString();
+    let retItems = this.returnCartList[user].getCartSerialNumbers();
+    for(let item = 0; item < retItems.length; item++) {
+      if(this.clientInventory[retItems[items]]) {
+        this.unlockItem(user, retItems[item]);
+        clearTimeout(this.clientInventory[retItems[item]].timeout);
+      }
+    }
+    delete this.returnCartList[user];
+    res.status(200).send({success: 'Return transaction Succesfully canceled'});
+    post: {
+      this.returnCartList[req.session.email.toString()]==null,
+      'The user\'s shopping cart still exists; transaction is still active';
+    }
+  }
+
   viewPurchaseCollection(req, res) {
     this.purchaseCollectionRepo.get(req.session.email).then(
       (result) => {
