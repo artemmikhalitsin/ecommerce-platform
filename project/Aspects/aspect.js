@@ -5,6 +5,8 @@ const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
 const ProcessQueue = require(rootPath +
   '/Aspects/processQueue.js');
+const ActiveUser = require(rootPath +
+  '/Aspects/activeUser.js');
 
 /**
  * Aspect that manages authentication
@@ -141,29 +143,6 @@ class Aspect {
         });
       }
     });
-  }
-}
-
-class ActiveUser {
-  constructor(email, lastRequest) {
-    this.email = email;
-    this.lastRequest = lastRequest;
-  }
-
-  getEmail() {
-    return this.email;
-  }
-
-  timeStamp() {
-    this.lastRequest = new Date().getTime();
-  }
-
-  isInactive() { // set to 20min
-    if (new Date().getTime() > this.lastRequest + 20*60*1000) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }
 
