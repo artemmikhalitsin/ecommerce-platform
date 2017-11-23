@@ -13,7 +13,7 @@
   <script type="text/javascript" src="/js/validations/registration.js"></script>
 </head>
 <body ng-app="">
-  <div ng-include="'includes/header.hbs'"></div>
+  <div ng-include="'includes/header.hbs'" ng-init="isAdmin = {{session.isAdmin}}; exists = {{session.exists}}"></div>
   <div class="container">
     <header class="jumbotron my-4">
       <h1 class="display-4">Registration</h1>

@@ -2,7 +2,7 @@
  * Class representing a User
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
  * ATTRIBUTE THIS TO YOURSELF
- */
+ */ 
 class User {
     /**
      * Given a user's info, creates a new user object

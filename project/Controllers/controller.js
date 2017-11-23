@@ -109,6 +109,7 @@ class Controller {
     let results = this.inventoryRepo.save(inventoryItems);
   }
 
+
   getProductDescription(req, res) {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;
@@ -124,6 +125,7 @@ class Controller {
       console.log(err);
     });
   }
+
   getCatalog(req, res) {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;
@@ -221,7 +223,6 @@ class Controller {
       res.render('login', {error: 'Invalid username/password'});
     }
   }
-
 
   getProductInfo(req, res) {
     let inventory = [];

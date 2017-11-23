@@ -39,12 +39,11 @@
 </head>
 
 <body ng-app="">
-	<div ng-include="'includes/header.hbs'" ng-init="email = '{{session.email}}'"></div>
-
+	<div ng-include="'includes/header.hbs'" ng-init="isAdmin = {{session.isAdmin}}; exists = {{session.exists}}"></div>
 	<!--div ng-include="'includes/sidebar.hbs'" id="left"></div-->
 	<!--div style="margin-left:10%"-->
 				<div class="text-center">
-					<h2>List of Inventory</h2>
+					<h2>List of Inventory </h2>
 					<div id="error-box" class="row justify-content-center" style="display: none; margin-bottom: 1em;">
 						<div class="card" style="height: auto; width: 30rem; background-color: #ffcccc;">
 							<div id="error-message" class="card-header text-center">{{error}}</div>
