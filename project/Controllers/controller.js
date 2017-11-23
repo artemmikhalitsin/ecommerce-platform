@@ -163,8 +163,6 @@ class Controller {
     req.session.destroy();
     res.redirect('/');
   }
-
-
   /**
   * Processes an inventory action initiated by the user
   * @param {Object} req HTTP request object containing action info

@@ -110,6 +110,14 @@ app.get('/users', function(req, res) {
   }
 });
 
+app.get('/profile', function(req, res) {
+  if (req.session.exists && !req.session.isAdmin) {
+    res.render('profile');
+  } else {
+    res.redirect('/');
+  }
+});
+
 
 // getting the inventory from the database
 app.get('/getAllInventoryItems', function(req, res) {
