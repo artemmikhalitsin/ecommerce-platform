@@ -146,7 +146,7 @@ class Controller {
     let inventory = [];
     let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
     .then((results)=>{
-      console.log('all the products are: ' + JSON.stringify(results));
+      // console.log('all the products are: ' + JSON.stringify(results));
        return Promise.each(results, (product)=>{
         return this.inventoryRepo.getByModelNumbers([product.modelNumber])
           .then((values)=>{
@@ -247,7 +247,13 @@ class Controller {
   */
 
   inventoryAction(req, res) {
-    console.log("In progress...");
+    if (req.session.exists==true && req.session.isAdmin==true) {
+      let addSerials = JSON.parse(req.body.addSerials);
+      let deleteSerials = JSON.parse(req.body.deleteSerials);
+      let allItems = addSerials.concat(deleteSerials);
+      // this.inventoryRepo.save(allItems);
+      res.status(200).send({success: 'Actions complete'});
+    }
     /*
     if (req.session.exists==true && req.session.isAdmin==true) {
       let request = req.body;

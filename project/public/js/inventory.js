@@ -262,6 +262,8 @@ function submitData(){
         url: '/inventoryAction',
         type: 'post',
         dataType: 'json',
+        data: {addSerials: JSON.stringify(_requestJSON.addSerials),
+              deleteSerials: JSON.stringify(_requestJSON.deleteSerials)},
         success: function (xhr) {
           window.location.reload()
         },
@@ -269,8 +271,7 @@ function submitData(){
           _requestJSON.addSerials = [];
           $('#error-box').show();
           $('#error-message').html(xhr.responseJSON.error);
-        },
-        data: {"actions":JSON.stringify(_requestJSON)}
+        }
     });
   }
 }

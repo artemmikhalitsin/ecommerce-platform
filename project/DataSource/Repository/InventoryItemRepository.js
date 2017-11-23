@@ -49,8 +49,9 @@ class InventoryItemRepository {
             result.push(new InventoryItem(item.id, item.serial_number,
               item.model_number, null));
           });
-          console.log('the inventory items repo gives: '
-            + JSON.stringify(result));
+          this.inventoryItemsIM.add(result);
+          // console.log('the inventory items repo gives: '
+          //  + JSON.stringify(result));
 
     return result;
         }).catch((err) => {
