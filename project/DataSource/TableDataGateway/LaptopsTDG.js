@@ -38,7 +38,7 @@ class LaptopsTDG {
     }
     static getByModelNumbers(modelNumbers) {
         return connection('Laptop').select('*')
-          .whereIn('model_number', modelNumbers)
+          .whereIn('ProductDescription.model_number', modelNumbers)
           .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
           .join('ProductDescription', 'Laptop.model_number',
                 'ProductDescription.model_number');
@@ -51,7 +51,7 @@ class LaptopsTDG {
      */
     static getAllExcept(modelNumbers) {
         return connection('Laptop').select('*')
-          .whereNotIn('model_number', modelNumbers)
+          .whereNotIn('ProductDescription.model_number', modelNumbers)
           .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
           .join('ProductDescription', 'Laptop.model_number',
                 'ProductDescription.model_number');

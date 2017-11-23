@@ -48,7 +48,6 @@ class InventoryItemRepository {
       }
       let imapItems = inventoryItemsIM.get(modelNumbers);
       let imapModelNumbers = imapItems.map((item) => item.getModelNumber());
-      console.log(imapItems);
       // If all items found in identity map, resolve the promise
       if (imapItems.length === modelNumbers.length) {
         resolve(imapItems);
@@ -59,6 +58,7 @@ class InventoryItemRepository {
           return !imapModelNumbers.includes(modelNumber);
         }
       );
+      console.log(dbModelNumbers);
       // Now fetch those numbers fom the tables
       inventoryTDG.getByModelNumbers(dbModelNumbers)
       .then(
@@ -74,7 +74,7 @@ class InventoryItemRepository {
           inventoryItemsIM.add(dbItems);
 
           console.log('the inventory items repo gives: '
-            + JSON.stringify(result));
+            + JSON.stringify(dbItems));
           resolve(imapItems.concat(dbItems));
         })
         .catch((err) => {
@@ -164,7 +164,6 @@ class InventoryItemRepository {
       }
       // Any item in inventory that don't appear in new list are to be removed
       electronicsToDelete = allInventoryItems.filter(function(item) {
-        console.log(item.model_number);
        items.forEach(function(element) {
          return element.serial_number.findIndex((e) =>
             e == item.serial_number) === -1;

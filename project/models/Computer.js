@@ -31,6 +31,19 @@ class Computer extends ProductDescription {
       this._harddriveSize = harddriveSize;
     }
     /**
+     * computerId accessor
+     * @return {number} id of the computer
+     */
+     get compId() {
+       return this._computerId;
+     }
+     /**
+      * computerId mutator. Ids are immutable, so this method does nothing
+      * and exists only for interfacing purposes
+      * @param {number} compId ignored
+      */
+    set compId(compId) {/* ids are immutable */}
+    /**
      * processorType accessor
      * @return {string} proccessor type
      */

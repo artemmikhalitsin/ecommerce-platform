@@ -39,7 +39,7 @@ class DesktopsTDG {
     }
     static getByModelNumbers(modelNumbers) {
         return connection('Desktop').select('*')
-          .whereIn('model_number', modelNumbers)
+          .whereIn('ProductDescription.model_number', modelNumbers)
           .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
           .join('ProductDescription', 'Desktop.model_number',
@@ -53,7 +53,7 @@ class DesktopsTDG {
      */
     static getAllExcept(modelNumbers) {
       return connection('Desktop').select('*')
-        .whereNotIn('model_number', modelNumbers)
+        .whereNotIn('ProductDescription.model_number', modelNumbers)
         .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
         .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
         .join('ProductDescription', 'Desktop.model_number',

@@ -19,7 +19,19 @@ class ProductDescription {
         this._modelNumber = modelNumber;
         this._type = type;
     }
-
+    /**
+     * type accessor
+     * @return {string} the type of the object
+     */
+     get type() {
+       return this._type;
+     }
+     /**
+      * type mutator. object's type should not be changed as it is determined
+      * during construction, so this method does nothing.
+      * @param {string} type ignored
+      */
+      set type(type) {/* an object's type shouldn't be changed */}
     /**
      * price accessor
      * @return {number} price of the product

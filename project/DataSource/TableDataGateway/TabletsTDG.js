@@ -110,7 +110,7 @@ class TabletsTDG {
     }*/
     static getByModelNumber(modelNumbers) {
         return connection('Tablet').select('*')
-          .whereIn('model_number', modelNumbers)
+          .whereIn('ProductDescription.model_number', modelNumbers)
           .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
           .join('ProductDescription', 'Tablet.model_number',
@@ -124,7 +124,7 @@ class TabletsTDG {
      */
     static getAllExcept(modelNumbers) {
         return connection('Tablet').select('*')
-          .whereNotIn('model_number', modelNumbers)
+          .whereNotIn('ProductDescription.model_number', modelNumbers)
           .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
           .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
           .join('ProductDescription', 'Tablet.model_number',

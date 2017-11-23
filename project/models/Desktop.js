@@ -49,17 +49,43 @@ class Desktop extends Computer {
      */
     clone() {
       return new Desktop(
-          this.processor_type,
-          this.ram_size,
-          this.number_cpu_cores,
-          this.harddrive_size,
+          this.processorType,
+          this.ramSize,
+          this.numberCpuCores,
+          this.harddriveSize,
           this.dimensions,
           this.price,
           this.weight,
           this.brandName,
           this.modelNumber,
-          this.comp_id,
+          this.compId,
           this.type);
+    }
+    /**
+     * Creates a front-end friendly object
+     * @return {Object} an object describing the desktop
+     * that can be sent to the front-end
+     */
+    frontendFriendlify() {
+      return {
+        // Product properties
+        type: this.type,
+        model_number: this.modelNumber,
+        brand_name: this.brandName,
+        price: this.price,
+        weight: this.weight,
+        // Computer properties
+        processor_type: this.processorType,
+        ram_size: this.ramSize,
+        number_cpu_cores: this.numberCpuCores,
+        harddrive_size: this.harddriveSize,
+        // Dimensions
+        dimensions: {
+          height: this.dimensions.height,
+          width: this.dimensions.width,
+          depth: this.dimensions.depth,
+        },
+      };
     }
 }
 

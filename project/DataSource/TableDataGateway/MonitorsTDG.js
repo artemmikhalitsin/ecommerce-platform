@@ -29,7 +29,7 @@ class MonitorsTDG {
     }
     static getAllByModelNumber(modelNumbers) {
         return connection('Monitor').select('*')
-          .whereIn('model_number', modelNumbers)
+          .whereIn('ProductDescription.model_number', modelNumbers)
           .join('ProductDescription', 'Monitor.model_number',
                 'ProductDescription.model_number');
     }
@@ -41,7 +41,7 @@ class MonitorsTDG {
      */
     static getAllExcept(modelNumbers) {
         return connection('Monitor').select('*')
-          .whereNotIn('model_number', modelNumbers)
+          .whereNotIn('ProductDescription.model_number', modelNumbers)
           .join('ProductDescription', 'Monitor.model_number',
                 'ProductDescription.model_number');
     }

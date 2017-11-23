@@ -145,13 +145,13 @@ class ProductDescriptionRepository {
         (resolve, reject) => {
           // Get the items in memory
           let imapProducts = productIMAP.getAll();
+          console.log(imapProducts);
           let imapModelNumbers = imapProducts.map(
             (product) => {
-              return product.getModelNumber();
+              return product.modelNumber;
             }
           );
           // Retrieve the rest of the items from the tables
-          console.log(`Getting all except ${imapModelNumbers}`);
           let tdgPromises = [
             DesktopsTDG.getAllExcept(imapModelNumbers),
             TabletsTDG.getAllExcept(imapModelNumbers),
@@ -271,8 +271,8 @@ class ProductDescriptionRepository {
     return this.uow.commitAll().then((result) => {
       productIMAP.add(electronicsToAdd);
       return true;
+      });
     });
-  });
   }
   }
 }

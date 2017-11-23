@@ -38,7 +38,6 @@ class InventoryItemsIdentityMap {
      */
   get(modelNumbers) {
     // Filters to only items whos model number appears in the given list
-    console.log(modelNumbers);
     return this.inventoryItems.filter(
       (item) => {
         if (!item) {

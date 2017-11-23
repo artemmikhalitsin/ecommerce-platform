@@ -78,41 +78,79 @@ class Controller {
    */
 
   getAllInventory(req, res, purchaseController) {
+    function combineByModelNumber(products, items) {
+
+    }
     let query = url.parse(req.url, true).query;
     let search = query.search;
     let inventory = [];
+    let products = [];
+    let inventoryItems = [];
     // Get all items from the product description repo
-    this.productDescriptionRepo
-    .getAll()
+    this.productDescriptionRepo.getAll()
     .then(
-      (results) => {
-        console.log('all the products are: ' + JSON.stringify(results));
-        return Promise.each(results,
+      (result) => {
+        // Store the result for future use
+        products = result;
+        // Get a list of the model numbers
+        let modelNumbers = products.map(
           (product) => {
-            return this.inventoryRepo
-            .getByModelNumbers([product.getModelNumber()])
-            .then(
-              (values)=>{
-                    console.log('inventory item is ' + JSON.stringify(values));
-                    product.serial_numbers = values.map((p) => p.serialNumber);
-                    inventory.push(product);
-                });
-              });
-      }).then((val)=>{
-        console.log('Values: ', JSON.stringify(inventory));
-      if (req.session.exists==true && req.session.isAdmin==true) {
-        res.render('inventory', {items: JSON.stringify(inventory), search: search});
-      } else if (req.session.exists==true && req.session.isAdmin==false) {
-        if (purchaseController) {
-          purchaseController.updateInventoryList(inventory);
+            return product.modelNumber;
+          });
+        // Retrieve the associated inventory items (async)
+        return this.inventoryRepo.getByModelNumbers(modelNumbers);
+      })
+      .then(
+        (result) => {
+          // Store the inventory items for future use
+          inventoryItems = result;
+          return inventoryItems;
         }
-        res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
-      } else {
-        res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
-      }
-      }).catch((err) => {
-      console.log(err);
-    });
+      ).then(
+        () => {
+          /* Now, combine products and inventory items and output everything
+          in a front-end friendly format */
+          let inventorySerials = inventoryItems.map(
+            (item) => {
+              return item.serialNumber;
+            }
+          );
+          inventory = products.map(
+            // for each product, find it's inventory items, and produce a
+            // front-end friendly object containing all the info
+            (product) => {
+              // Get the serial numbers
+              let productSerials = inventoryItems.filter(
+                (item) => {
+                  return item.serialNumber === product.serialNumber;
+                }
+              );
+              // Produce a front-end friendly object
+              let result = product.frontendFriendlify();
+              result.serial_numbers = productSerials;
+              // Add the product to the array
+              return result;
+            });
+            // Pass the list of front-end friendly objects to next step
+            return inventory;
+        }
+      )
+      .then(
+        (inventory) => {
+          if (req.session.exists==true && req.session.isAdmin==true) {
+            res.render('inventory', {items: JSON.stringify(inventory), search: search});
+          } else if (req.session.exists==true && req.session.isAdmin==false) {
+            if (purchaseController) {
+              purchaseController.updateInventoryList(inventory);
+            }
+            res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
+          } else {
+            res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
+          }
+      })
+      .catch((err) => {
+          console.log(err);
+        });
   }
 
   manageInventory(inventoryItems) {

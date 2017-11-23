@@ -27,12 +27,24 @@ class Monitor extends ProductDescription {
      */
     clone() {
       return new Monitor(
-          this.display_size,
+          this.displaySize,
           this.price,
           this.weight,
-          this.brand_name,
-          this.model_number,
+          this.brandName,
+          this.modelNumber,
           this.type);
+    }
+    frontendFriendlify() {
+      return {
+        // Product properties
+        type: this.type,
+        model_number: this.modelNumber,
+        brand_name: this.brandName,
+        price: this.price,
+        weight: this.weight,
+        // Monitor properties
+        display_size: this.displaySize,
+      };
     }
 }
 

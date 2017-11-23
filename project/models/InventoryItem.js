@@ -31,72 +31,53 @@ class InventoryItem {
    */
   set id(newId) {/* id is immutable */};
   /**
-    * price accessor
-    * @return {number} price of the product
+    * serialNumber accessor
+    * @return {string} serial number of the item
     */
-  get price() {
-    return this._price;
+  get serialNumber() {
+    return this._serialNumber;
   }
   /**
-    * price mutator
-    * @param {number} price the new price of the product
-    */
-  set price(price) {
-    this._price = price;
-  }
-  /**
-     * weight accessor
-     * @return {number} weight of the product
-     */
-  get weight() {
-    return this._weight;
-  }
-  /**
-    * weight mutator
-    * @param {number} weight the new weight of the product
-    */
-  set weight(weight) {
-    this._weight = weight;
-  }
-  /**
-     * brandName accesoor
-     * @return {string} brand name
-     */
-  get brandName() {
-    return this.brandName;
-  }
-  /**
-  * brandName mutator
-  * @param {string} brandName the new brand name of the product
+  * serialNumber mutator
+  * @param {string} serialNumber the new serial number of the item
   */
-  set brandName(brandName) {
-    this._brandName = brandName;
+  set serialNumber(serialNumber) {
+    this._serialNumber = serialNumber;
   }
   /**
-     * model number accessor
-     * @return {string} the alphanumeric model number of the product
-     */
+   * modelNumber accessor
+   * @return {string} model number of the item
+   */
   get modelNumber() {
     return this._modelNumber;
   }
   /**
-    * modelNumber mutator
-    * @param {string} modelNumber the new model number of the product
-    */
+  * modelNumber mutator
+  * @param {string} modelNumber new model number of the item
+  */
   set modelNumber(modelNumber) {
     this._modelNumber = modelNumber;
   }
-
   /**
-   * Creates a clone of the item
-   * @return {InventoryItem} a clone ofhte item
+   * productDescription accessor (returns a reference to the object)
    */
+  get productDescription() {
+    return this._productDescription;
+  }
+  /**
+   * productDescription mutator
+   * @param {Object} productDescription reference to the new description
+   */
+   set productDescription(productDescription) {
+     this_.productDescription = productDescription;
+   }
   clone() {
     return new InventoryItem(
       this.id,
       this.serialNumber,
       this.modelNumber,
-      this.productDescription);
+      this.productDescription
+    );
   }
 }
 
