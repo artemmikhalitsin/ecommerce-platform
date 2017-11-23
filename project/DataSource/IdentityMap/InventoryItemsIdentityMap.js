@@ -61,7 +61,7 @@ class InventoryItemsIdentityMap {
 
   /**
      * Deletes items from the identity map by filtering them out
-     * @param {string[]} inventoryItemsToRemove a list of alpha-numberical
+     * @param {string[]} toRemove a list of alpha-numberical
      * model numbers for which the items are to be removed
      */
   delete(toRemove) {

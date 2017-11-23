@@ -280,9 +280,18 @@ class PurchaseController {
    * @param {Object} res
   */
   returnPurchaseTransaction(req, res) {
+    invariant: req.session.email != null, 'User is not logged in';
+    pre: {
+      this.returnCartList[req.session.email] != null,
+      'No items in the return cart';
+    }
+
     let user = req.session.email.toString();
-    let returnCart = Object.values(this.returnCartList[user].getCart());
+    let returnCart = [];
     let returns = [];
+    if (typeof(this.returnCartList[user]) != 'undefined') {
+      returnCart = Object.values(this.returnCartList[user].getCart());
+    }
     for (let i in Object.keys(returnCart)) {
       if (returnCart[i]) {
         returns.push({client: user,
@@ -293,7 +302,6 @@ class PurchaseController {
     }
     let transaction = [{client: user,
                         timestamp: new Date().toISOString()}];
-
     this.purchaseCollectionRepo.returnItems(returns);
     this.transactionRepo.save(transaction);
     this.deleteReturnCart(user);
@@ -310,16 +318,18 @@ class PurchaseController {
     pre: {
       Object.keys(this.purchaseCollectionRepo
         .get(req.session.email)).length > 0, 'User made no purchases';
-      this.purchaseCollectionRepo
-        .get(req.session.email)[req.body.serialNumber], 'Item does not exist';
-      typeof(this.returnCartList[req.session.email.toString()]
-      .getCart()[req.body.serialNumber]) == 'undefined', 'Item already in cart';
+      // this.purchaseCollectionRepo
+      // .get(req.session.email)[req.body.serialNumber], 'Item does not exist';
+      if (this.returnCartList[req.session.email]) {
+        typeof(this.returnCartList[req.session.email.toString()]
+        .getCart()[req.body.serialNumber]) == 'undefined',
+        'Item already in cart';
+      }
       if (this.returnCartList[req.session.email]) {
         Object.keys(this.returnCartList[req.session.email.toString()]
           .getCart()).length < 7, 'Cart has more than 7 items';
       }
     }
-
     let returnItem = req.body.serialNumber;
     let productNumber = req.body.modelNumber;
     let purchaseId = req.body.purchaseId;
@@ -327,7 +337,6 @@ class PurchaseController {
     if (!this.returnCartList[user]) {
       this.returnCartList[user] = new ReturnCart();
     }
-
     if (true) {
       this.returnCartList[user].addToReturnCart(returnItem,
                                   productNumber, purchaseId);
@@ -346,33 +355,30 @@ class PurchaseController {
     invariant: req.session.email != null, 'User is not logged in';
     pre: {
       this.returnCartList[req.session.email] != null,
-      'A return transaction has not been initiated!';
+        'A return transaction has not been initiated!';
     }
 
     let user = req.session.email.toString();
     let retItems = this.returnCartList[user].getCartSerialNumbers();
     for (let item = 0; item < retItems.length; item++) {
-      if (this.clientInventory[retItems[items]]) {
-        this.unlockItem(user, retItems[item]);
-        Timer.clearTimeout(this.clientInventory[retItems[item]].timeout);
-      }
+      this.returnCartList[user].removeFromCart(item);
     }
     delete this.returnCartList[user];
     res.status(200).send({success: 'Return transaction Succesfully canceled'});
     post: {
       this.returnCartList[req.session.email.toString()]==null,
-      'The user\'s shopping cart still exists; transaction is still active';
+        'The user\'s shopping cart still exists; transaction is still active';
     }
   }
 
   viewPurchaseCollection(req, res) {
+    invariant: req.session.email != null, 'User is not logged in';
     this.purchaseCollectionRepo.get(req.session.email).then(
       (result) => {
         res.json(result);
       }
     );
   }
-
 
   /**
    * Gets a complete list of products and serial numbers from
