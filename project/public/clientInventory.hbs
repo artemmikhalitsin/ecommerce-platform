@@ -26,58 +26,31 @@
 </head>
 
 <body ng-controller="ClientInventoryController">
-  <div ng-include="'includes/header.hbs'"></div>
+  <div ng-include="'includes/header.hbs'" ng-init="isAdmin = {{session.isAdmin}}; exists = {{session.exists}}"></div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+
+  <form action=""> Types <br>
+    <input type="checkbox" name="Type" value="Desktop">Desktop<br>
+    <input type="checkbox" name="Type" value="Laptop">Laptop <br>
+    <input type="checkbox" name="Type" value="Tablet">Tablet<br>
+    <input type="checkbox" name="Type" value="Laptop">monitor<br>
+  </form>
+
+  <form action=""> Brands<br>
+    <input type="checkbox" name="Brand" value="Poop">Poop<br>
+    <input type="checkbox" name="Brand" value="Scoop">Scoop <br>
+    <input type="checkbox" name="Brand" value="Flute">Flute<br>
+    <input type="checkbox" name="Brand" value="Nothing">Nothing 
+  </form>
 
 
-    <!-- Start your project here-->
-    <!-- Page content -->
-  </br>
-  <select ng-model="search">
-    <option value="Desktop">Desktop
-    <option value="Laptop">Laptop
-    <option value="Tablet">Tablet
-    <option value="Monitor">Monitor
-    <option value="all">View All
-  </select>
     <div class="container">
      <!-- Page features -->
-      <!--<fieldset class="form-group">
-    <legend>Preferences</legend>
-    <div class="form-check">
-      <label class="form-check-label">
-        <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-        Option 1
-      </label>
-    </div>
-    <div class="form-check">
-    <label class="form-check-label">
-        <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="option2">
-        Option 2
-      </label>
-    </div>
-    <div class="form-check">
-    <label class="form-check-label">
-        <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios3" value="option3">
-        Option 3
-      </label>
-    </div>
-  </fieldset>-->
-  <!--<label class="mr-sm-2" for="inlineFormCustomSelect">Preference</label>
-  <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect">
-    <option selected>Choose...</option>
-    <option value="1">Dell</option>
-    <option value="2">HP</option>
-    <option value="3">Acer</option>
-  </select>
 
-  <label class="mr-sm-2" for="inlineFormCustomSelect">Electronic Type</label>
-  <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect">
-    <option selected>Choose...</option>
-    <option value="1">Desktop</option>
-    <option value="2">Laptop</option>
-    <option value="3">Monitor</option>
-    <option value="4">Tablet</option>
-  </select></br></br></br>-->
       <div class="row">
         <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in itemsShown">
               <desktop-card ng-if="item.type==='Desktop'" desktop="item"></desktop-card>

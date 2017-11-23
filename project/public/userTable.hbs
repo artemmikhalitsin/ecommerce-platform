@@ -31,7 +31,7 @@
 </head>
 
 <body ng-app="">
-	<div ng-include="'includes/header.hbs'"></div>
+	<div ng-include="'includes/header.hbs'" ng-init="isAdmin = {{session.isAdmin}}; exists = {{session.exists}}"></div>
 
 	<!--div ng-include="'includes/sidebar.hbs'" id="left"></div-->
 	<!--div style="margin-left:10%"-->
