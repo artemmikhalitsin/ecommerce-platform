@@ -31,7 +31,9 @@ class Controller {
   deleteUser(req, res) {
     console.log('FUCK YOU TOO');
     console.log(req.session.email);
-     this.userRepo.delete(req.session.email);
+     this.userRepo.delete(req.session.email).then(() => {
+       console.log('account deleted');
+     });
   }
 
   /**
@@ -242,7 +244,7 @@ class Controller {
   */
 
   inventoryAction(req, res) {
-    console.log("In progress...");
+    console.log('In progress...');
     /*
     if (req.session.exists==true && req.session.isAdmin==true) {
       let request = req.body;
