@@ -33,6 +33,7 @@ class Controller {
     console.log(req.session.email);
      this.userRepo.delete(req.session.email).then(() => {
        console.log('account deleted');
+       res.redirect('/login');
      });
   }
 
