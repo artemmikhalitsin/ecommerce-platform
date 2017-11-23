@@ -23,6 +23,8 @@ const Desktop = require(rootPath + '/models/Desktop.js');
 const Laptop = require(rootPath + '/models/Laptop.js');
 const Monitor = require(rootPath + '/models/Monitor.js');
 
+// Forward declaration of the instance reference
+let _instance;
 /**
  * Repository for product descrptions
  * @author Ekaterina Ruhlin
@@ -36,7 +38,17 @@ class ProductDescriptionRepository {
   constructor() {
     this.uow = new UnitOfWork();
   }
-
+  /**
+   * Retrieves current instance of the repository, or if one doesnt
+   * exist, instantiates it
+   * @return {Object} a reference to the current instance of the repo
+   */
+  static instance() {
+    if (!_instance) {
+      _instance = new InventoryItemRepository();
+    }
+    return _instance;
+  }
   /**
    * Retrieves products from the identity map. If none are there,
    * retrieves the products from the TDG and adds them to the identity map

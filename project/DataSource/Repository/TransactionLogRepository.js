@@ -4,6 +4,8 @@ const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 const transactionLogTDG = require(rootPath +
   '/DataSource/TableDataGateway/TransactionLogTDG.js');
 
+// Forward declaration of singleton instance reference
+let _instance;
 /**
  * Repository for Inventory Items
  * @author Amanda Wai
@@ -16,7 +18,17 @@ class TransactionLogRepo {
   constructor() {
     this.uow = new UnitOfWork();
   }
-
+  /**
+   * Retrieves current instance of the repository, or if one doesnt
+   * exist, instantiates it
+   * @return {Object} a reference to the current instance of the repo
+   */
+  static instance() {
+    if (!_instance) {
+      _instance = new InventoryItemRepository();
+    }
+    return _instance;
+  }
   /**
    * Retrieves all items from the database table
    * @return {Promise<Object[]>} promise which resolves to the list of inventory

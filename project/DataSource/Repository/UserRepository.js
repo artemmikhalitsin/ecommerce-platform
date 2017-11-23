@@ -4,7 +4,8 @@ const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
 const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 
-
+// Forward declaration of singleton instance variable
+let _instance;
 /**
  * Repository for users
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
@@ -16,6 +17,17 @@ class UserRepository {
    */
   constructor() {
     this.uow = new UnitOfWork();
+  }
+  /**
+   * Retrieves current instance of the repository, or if one doesnt
+   * exist, instantiates it
+   * @return {Object} a reference to the current instance of the repo
+   */
+  static instance() {
+    if (!_instance) {
+      _instance = new InventoryItemRepository();
+    }
+    return _instance;
   }
   /**
    * Saves a user into the database

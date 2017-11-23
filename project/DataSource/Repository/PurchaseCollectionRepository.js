@@ -5,7 +5,8 @@ const inventoryItemsIM = require(rootPath +
   '/DataSource/IdentityMap/InventoryItemsIdentityMap.js').instance();
 const purchaseCollectionTDG = require(rootPath +
   '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
-
+// Forward declaration of singleton instance
+let _instance;
 /**
  * Repository for Inventory Items
  * @author Michael Li
@@ -17,6 +18,17 @@ class PurchaseCollectionRepo {
    */
   constructor() {
     this.uow = new UnitOfWork();
+  }
+  /**
+   * Retrieves current instance of the repository, or if one doesnt
+   * exist, instantiates it
+   * @return {Object} a reference to the current instance of the repo
+   */
+  static instance() {
+    if (!_instance) {
+      _instance = new InventoryItemRepository();
+    }
+    return _instance;
   }
   /**
    * Retrieves items from the identity map. If none are there,
