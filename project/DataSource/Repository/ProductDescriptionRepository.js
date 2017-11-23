@@ -238,6 +238,7 @@ class ProductDescriptionRepository {
    * removed
    * @param {Object[]} products a list of products against which the current
    * product list is to be compared
+   * @return {bool}
    */
   save(products) {
     let electronicsToAdd = [];

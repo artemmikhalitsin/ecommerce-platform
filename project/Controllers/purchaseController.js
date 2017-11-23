@@ -1,3 +1,4 @@
+const Timer = require('timers');
 const Promise = require('bluebird');
 const rootPath = require('app-root-dir').get();
 const PurchaseCollectionRepo = require(rootPath
@@ -29,7 +30,7 @@ class PurchaseController {
   }
   /**
    * Updates the Controller's list of current items
-   * @param {Object} newInventory Inventory items
+   * @param {Object} inventoryList new Inventory items
   */
   updateInventoryList(inventoryList) {
     inventoryList.forEach((serial, index) => {
@@ -41,7 +42,7 @@ class PurchaseController {
     // If item was deleted by an admin, the item list will be updated
     for (let serial in this.clientInventory) {
       if (!inventoryList.includes(serial)) {
-        clearTimeout(this.clientInventory[serial].timeout);
+        Timer.clearTimeout(this.clientInventory[serial].timeout);
         delete this.clientInventory[serial];
       }
     }
@@ -67,7 +68,7 @@ class PurchaseController {
     /* This particular contract library does not work with asynchronous
        calls. However, these are the postconditions:
     post: {
-       this.shoppingCartList[req.session.email]
+      this.shoppingCartList[req.session.email]
         .getCartSerialNumbers()
         .includes(req.body.serialNumber), 'Item was not added to the cart';
       this.clientInventory[req.body.serialNumber].locked,
@@ -120,7 +121,7 @@ class PurchaseController {
     let user = req.session.email;
     let item = req.body.serialNumber;
     if (this.clientInventory[item]) {
-      clearTimeout(this.clientInventory[item].timeout);
+      Timer.clearTimeout(this.clientInventory[item].timeout);
       this.unlockItem(user, item);
     } else {
       this.shoppingCartList[user].removeFromCart(item);
@@ -221,7 +222,7 @@ class PurchaseController {
       } else if (deletedItems.length === 0) {
         for (let i in Object.keys(cart)) {
           if (cart[i]) {
-              clearTimeout(this.clientInventory[cart[i].serial].timeout);
+              Timer.clearTimeout(this.clientInventory[cart[i].serial].timeout);
               purchases.push({client: user,
                                   modelNumber: cart[i].model,
                                   serialNumber: cart[i].serial,
@@ -259,7 +260,7 @@ class PurchaseController {
     for (let item = 0; item < cartItems.length; item++) {
       if (this.clientInventory[cartItems[item]]) {
         this.unlockItem(user, cartItems[item]);
-        clearTimeout(this.clientInventory[cartItems[item]].timeout);
+        Timer.clearTimeout(this.clientInventory[cartItems[item]].timeout);
       }
     }
     delete this.shoppingCartList[user];
@@ -279,9 +280,18 @@ class PurchaseController {
    * @param {Object} res
   */
   returnPurchaseTransaction(req, res) {
+    invariant: req.session.email != null, 'User is not logged in';
+    pre: {
+      this.returnCartList[req.session.email] != null,
+      'No items in the return cart';
+    }
+
     let user = req.session.email.toString();
-    let returnCart = Object.values(this.returnCartList[user].getCart());
+    let returnCart = [];
     let returns = [];
+    if (typeof(this.returnCartList[user]) != 'undefined') {
+      returnCart = Object.values(this.returnCartList[user].getCart());
+    }
     for (let i in Object.keys(returnCart)) {
       if (returnCart[i]) {
         returns.push({client: user,
@@ -292,7 +302,6 @@ class PurchaseController {
     }
     let transaction = [{client: user,
                         timestamp: new Date().toISOString()}];
-
     this.purchaseCollectionRepo.returnItems(returns);
     this.transactionRepo.save(transaction);
     this.deleteReturnCart(user);
@@ -306,7 +315,21 @@ class PurchaseController {
 
   addToReturnCart(req, res) {
     invariant: req.session.email != null, 'User is not logged in';
-
+    pre: {
+      Object.keys(this.purchaseCollectionRepo
+        .get(req.session.email)).length > 0, 'User made no purchases';
+      // this.purchaseCollectionRepo
+      // .get(req.session.email)[req.body.serialNumber], 'Item does not exist';
+      if (this.returnCartList[req.session.email]) {
+        typeof(this.returnCartList[req.session.email.toString()]
+        .getCart()[req.body.serialNumber]) == 'undefined',
+        'Item already in cart';
+      }
+      if (this.returnCartList[req.session.email]) {
+        Object.keys(this.returnCartList[req.session.email.toString()]
+          .getCart()).length < 7, 'Cart has more than 7 items';
+      }
+    }
     let returnItem = req.body.serialNumber;
     let productNumber = req.body.modelNumber;
     let purchaseId = req.body.purchaseId;
@@ -314,7 +337,6 @@ class PurchaseController {
     if (!this.returnCartList[user]) {
       this.returnCartList[user] = new ReturnCart();
     }
-
     if (true) {
       this.returnCartList[user].addToReturnCart(returnItem,
                                   productNumber, purchaseId);
@@ -323,17 +345,40 @@ class PurchaseController {
       res.status(500).send({error: 'item in cart'});
     }
     post: {
-
-      }
+      this.returnCartList[req.session.email]
+        .getCartSerialNumbers()
+        .includes(req.body.serialNumber), 'Item was not added';
     }
+  }
+
+  cancelReturnTransaction(req, res) {
+    invariant: req.session.email != null, 'User is not logged in';
+    pre: {
+      this.returnCartList[req.session.email] != null,
+        'A return transaction has not been initiated!';
+    }
+
+    let user = req.session.email.toString();
+    let retItems = this.returnCartList[user].getCartSerialNumbers();
+    for (let item = 0; item < retItems.length; item++) {
+      this.returnCartList[user].removeFromCart(item);
+    }
+    delete this.returnCartList[user];
+    res.status(200).send({success: 'Return transaction Succesfully canceled'});
+    post: {
+      this.returnCartList[req.session.email.toString()]==null,
+        'The user\'s shopping cart still exists; transaction is still active';
+    }
+  }
+
   viewPurchaseCollection(req, res) {
+    invariant: req.session.email != null, 'User is not logged in';
     this.purchaseCollectionRepo.get(req.session.email).then(
       (result) => {
         res.json(result);
       }
     );
   }
-
 
   /**
    * Gets a complete list of products and serial numbers from

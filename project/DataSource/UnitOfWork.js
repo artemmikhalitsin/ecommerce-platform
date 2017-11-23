@@ -1,4 +1,3 @@
-
 /* eslint-disable */
 // Eslint disabled for this file only until it is documented
 
@@ -57,10 +56,14 @@ class UnitOfWork {
   registerNewPurchase(object) {
     this.newPurchases = [];
     this.newPurchases.push(object);
+    this.newInventoryItems =[];
+    this.deletePurchases = [];
   }
   registerReturn(object){
     this.deletedPurchases = [];
     this.deletedPurchases.push(object);
+    this.deletedInventoryItems = [];
+    this.newPurchases = [];
   }
   registerDirty(object) {
     this.dirtyElements = [];

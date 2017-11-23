@@ -147,7 +147,7 @@ class Controller {
   }
 
   manageInventory(inventoryItems) {
-    let results = this.inventoryRepo.save(inventoryItems);
+    this.inventoryRepo.save(inventoryItems);
   }
 
   getProductDescription(req, res) {
@@ -167,6 +167,7 @@ class Controller {
     }).catch((err) => {
       console.log(err);
     });
+    console.log(productDescriptions);
   }
   getCatalog(req, res) {
     let query = url.parse(req.url, true).query;
@@ -184,6 +185,7 @@ class Controller {
       console.log('Success saving the Product descriptions!');
       this.getProductDescription(req, res);
     });
+    console.log(results);
   }
 
   /**

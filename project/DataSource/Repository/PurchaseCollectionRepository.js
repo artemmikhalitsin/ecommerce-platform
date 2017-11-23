@@ -105,7 +105,6 @@ class PurchaseCollectionRepo {
   returnItems(items) {
     let electronicsToDelete = items;
     let electronicsToAdd = items;
-
     this.uow.registerReturn(electronicsToDelete);
     this.uow.registerNewItem(electronicsToAdd);
     this.uow.commitAll();
