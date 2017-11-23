@@ -12,7 +12,7 @@ let _instance;
  * @author Michael Li
  * REVIEW: PLEASE MAKE SURE THE METHOD DESCRIPTIONS ARE CORRECT
  */
-class PurchaseCollectionRepo {
+class PurchaseCollectionRepository {
   /**
    * Constructor initializes the unit of work, identity map and the tdg
    */
@@ -26,7 +26,7 @@ class PurchaseCollectionRepo {
    */
   static instance() {
     if (!_instance) {
-      _instance = new InventoryItemRepository();
+      _instance = new PurchaseCollectionRepository();
     }
     return _instance;
   }
@@ -123,4 +123,4 @@ class PurchaseCollectionRepo {
     inventoryItemsIM.add(electronicsToAdd);
   }
 }
-module.exports = PurchaseCollectionRepo;
+module.exports = PurchaseCollectionRepository;

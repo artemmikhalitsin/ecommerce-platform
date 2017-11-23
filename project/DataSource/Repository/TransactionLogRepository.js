@@ -11,7 +11,7 @@ let _instance;
  * @author Amanda Wai
  * REVIEW: PLEASE MAKE SURE THE METHOD DESCRIPTIONS ARE CORRECT
  */
-class TransactionLogRepo {
+class TransactionLogRepository {
   /**
    * Constructor initializes the unit of work and tdg
    */
@@ -25,7 +25,7 @@ class TransactionLogRepo {
    */
   static instance() {
     if (!_instance) {
-      _instance = new InventoryItemRepository();
+      _instance = new TransactionLogRepository();
     }
     return _instance;
   }
@@ -47,4 +47,4 @@ class TransactionLogRepo {
     this.uow.commitAll();
   }
 }
-module.exports = TransactionLogRepo;
+module.exports = TransactionLogRepository;

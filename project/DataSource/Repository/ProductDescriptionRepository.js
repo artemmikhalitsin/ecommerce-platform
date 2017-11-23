@@ -45,7 +45,7 @@ class ProductDescriptionRepository {
    */
   static instance() {
     if (!_instance) {
-      _instance = new InventoryItemRepository();
+      _instance = new ProductDescriptionRepository();
     }
     return _instance;
   }

@@ -25,7 +25,7 @@ class UserRepository {
    */
   static instance() {
     if (!_instance) {
-      _instance = new InventoryItemRepository();
+      _instance = new UserRepository();
     }
     return _instance;
   }
