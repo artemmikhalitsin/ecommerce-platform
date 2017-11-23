@@ -3,6 +3,10 @@ const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
 const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
+const UsersIdentityMap = require(rootPath +
+  '/DataSource/IdentityMap/UsersIdentityMap.js');
+const UsersTDG = require(rootPath +
+  '/DataSource/TableDataGateway/UsersTDG.js');
 
 
 /**

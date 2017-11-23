@@ -72,7 +72,6 @@ class UnitOfWork {
     this.deletedPurchases = [];
     this.deletedPurchases.push(object);
   }
-
   registerDirty(object) {
     this.dirtyElements = [];
     this.dirtyElements.push(object);
