@@ -30,6 +30,10 @@ const purchaseTDG = require(rootPath +
   '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
 const TransactionLogTDG = require(rootPath +
   '/DataSource/TableDataGateway/TransactionLogTDG.js');
+  // THE NEXT LINE SHOULD BE DELETED
+const Monitor = require(rootPath +
+  '/models/Monitor.js');
+
 /**
  * Unit of Work implementation
  * @author Ekaterina Ruhlin
@@ -48,6 +52,9 @@ class UnitOfWork {
     this.newPurchases = [];
     this.deletedPurchases = [];
     this.transactionItems = [];
+    let monitor = new Monitor(10, 10, 10,
+                'nistilahkim', 10, 'Monitor', true);
+    //monitorsTDG.insert(monitor);
   }
   registerNew(object) {
     this.newElements = [];
