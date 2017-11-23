@@ -72,7 +72,7 @@ class UnitOfWork {
   registerReturn(object){
     this.deletedPurchases = [];
     this.deletedPurchases.push(object);
-    this.deletedElements = [];
+    this.deletedInventoryItems = [];
     this.newPurchases = [];
   }
   registerDirty(object) {

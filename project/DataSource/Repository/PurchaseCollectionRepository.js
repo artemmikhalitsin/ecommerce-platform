@@ -42,7 +42,7 @@ class PurchaseCollectionRepo {
 
   /**
    * Retrieves all items from the database table
-   * @param {string} user TODO: Not sure what this argument is doing here??
+   * @param {string} args TODO: Not sure what this argument is doing here??
    * @return {Promise<Object[]>} promise which resolves to the list of inventory
    * items in the database
    */
@@ -107,11 +107,10 @@ class PurchaseCollectionRepo {
   returnItems(items) {
     let electronicsToDelete = items;
     let electronicsToAdd = items;
-
     this.uow.registerReturn(electronicsToDelete);
     this.uow.registerNewItem(electronicsToAdd);
     this.uow.commitAll();
-    this.inventoryItemsIM.add(electronicsToAdd);
+    this.inventoryItemsIM.delete(electronicsToAdd);
   }
 }
 module.exports = PurchaseCollectionRepo;
