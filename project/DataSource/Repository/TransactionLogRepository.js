@@ -29,11 +29,7 @@ class TransactionLogRepository {
    */
   static instance() {
     if (!_instance) {
-<<<<<<< HEAD
       _instance = new TransactionLogRepository();
-=======
-      _instance = new TransactionLogRepo();
->>>>>>> 13199cafee02b9358cc7df4492963c57308aac37
     }
     return _instance;
   }
