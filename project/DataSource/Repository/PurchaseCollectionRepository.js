@@ -26,7 +26,7 @@ class PurchaseCollectionRepo {
    */
   static instance() {
     if (!_instance) {
-      _instance = new InventoryItemRepository();
+      _instance = new PurchaseCollectionRepo();
     }
     return _instance;
   }

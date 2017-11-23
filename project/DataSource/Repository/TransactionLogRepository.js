@@ -25,7 +25,7 @@ class TransactionLogRepo {
    */
   static instance() {
     if (!_instance) {
-      _instance = new InventoryItemRepository();
+      _instance = new TransactionLogRepo();
     }
     return _instance;
   }
