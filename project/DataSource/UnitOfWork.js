@@ -68,6 +68,8 @@ class UnitOfWork {
   registerNewPurchase(object) {
     this.newPurchases = [];
     this.newPurchases.push(object);
+    this.newInventoryItems =[];
+    this.deletePurchases = [];
   }
   registerReturn(object){
     this.deletedPurchases = [];
