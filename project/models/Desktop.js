@@ -8,7 +8,7 @@ const rootPath = require('app-root-dir').get();
 const Computer = require(rootPath + '/models/Computer.js');
 
 class Desktop extends Computer {
-  /*
+  /**
    * Given attributes of a desktop, constructs a new object
    * @param {string} processorType processor type
    * @param {number} ramSize size of ram

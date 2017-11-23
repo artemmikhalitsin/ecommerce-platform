@@ -31,7 +31,7 @@ class ProductDescriptionsTDG {
    * Retrieves all product descriptions from the database
    * @return {Promise<Object[]>} promise which resolves to the list containing
    * all products in the ProductDescription table
-   */ 
+   */
   getAll() {
     // let results = [];
     return connection('ProductDescription').select('*');

@@ -1,3 +1,8 @@
+/**
+ * Seeding the Computer table with some data
+ * @author Ajmer Singh Gadreh
+ */
+
 const computers = [
   {
     'processor_type': 'productivity',
