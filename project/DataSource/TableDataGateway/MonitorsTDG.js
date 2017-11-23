@@ -3,6 +3,10 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
+const productDescTDG = require(rootPath +
+  '/DataSource/TableDataGateway/ProductDescriptionsTDG');
+const Promise = require('bluebird');
+
 /**
  * Table Data Gateway for the Monitor table
  * @author Ekaterina Ruhlin
@@ -15,6 +19,19 @@ class MonitorsTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new monitor record in the database
      */
+
+    static insert(monitor) {
+      return connection.transaction((trx) => {
+        return productDescTDG.add(monitor)
+          .transacting(trx).then((model_number) => {
+              return connection.insert({
+              'model_number': monitor.modelNumber,
+              'display_size': monitor.displaySize,
+          }, 'id')
+          .into('Monitor');
+        });
+      });
+    }
     static add(monitor) {
         return connection.insert({
             'model_number': monitor.modelNumber,

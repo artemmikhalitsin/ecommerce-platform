@@ -27,22 +27,29 @@ class ProcessQueue {
   }
 
   runNext() {
-    if (!this.busy && this.processList.length > 0) {
-      this.busy = true;
-      this.run(this.processList.pop());
-      // console.log(this.processList);
-      this.busy = false;
-    }
-    // whether request is processed or not,
-    // run next if there is one and not busy
-    // else run it later
-    // to be noted that run next requests are only CREATED when sent to queue
-    if (this.processList.length > 0) {
-      if (this.busy) {
-        setTimeout(this.runNext(), 200);
-      } else {
-        this.runNext();
+    try {
+      if (!this.busy && this.processList.length > 0) {
+        this.busy = true;
+        this.run(this.processList.pop());
+        // console.log(this.processList);
+        this.busy = false;
       }
+      // whether request is processed or not,
+      // run next if there is one and not busy
+      // else run it later
+      // to be noted that run next requests are only CREATED when sent to queue
+      if (this.processList.length > 0) {
+        if (this.busy) {
+          setTimeout(() => {
+            this.runNext();
+          }, 200);
+        } else {
+          this.runNext();
+        }
+      }
+    } catch (e) {
+      console.log(e);
+      this.processList.pop();
     }
   }
 
