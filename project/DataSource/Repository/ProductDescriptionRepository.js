@@ -14,7 +14,6 @@ let MonitorsTDG = require(rootPath
   + '/DataSource/TableDataGateway/MonitorsTDG.js');
 let TabletsTDG = require(rootPath
   + '/DataSource/TableDataGateway/TabletsTDG.js');
-let ProductDescription = require(rootPath + '/models/ProductDescription.js');
 
 const Tablet = require(rootPath + '/models/Tablet.js');
 const Dimensions = require(rootPath + '/models/Dimensions.js');
@@ -70,7 +69,8 @@ class ProductDescriptionRepository {
             tablet.weight,
             tablet.brand_name,
             tablet.model_number,
-            tablet.type));
+            tablet.type,
+            tablet.is_available));
       });
     return result;
   }
@@ -92,7 +92,8 @@ class ProductDescriptionRepository {
           desktop.brand_name,
           desktop.model_number,
           desktop.comp_id,
-          desktop.type);
+          desktop.type,
+          desktop.is_available);
       result.push(d);
     });
     return result;
@@ -115,7 +116,8 @@ class ProductDescriptionRepository {
           laptop.weight,
           laptop.brand_name,
           laptop.model_number,
-          laptop.type));
+          laptop.type,
+          laptop.is_available));
     });
     return result;
   }
@@ -128,7 +130,8 @@ class ProductDescriptionRepository {
           monitor.weight,
           monitor.brand_name,
           monitor.model_number,
-          monitor.type));
+          monitor.type,
+          monitor.is_available));
     });
     return result;
   }
@@ -140,7 +143,8 @@ class ProductDescriptionRepository {
         description.weight,
         description.brand_name,
         description.model_number,
-        description.type
+        description.type,
+        description.is_available
         ));
     });
     return results;

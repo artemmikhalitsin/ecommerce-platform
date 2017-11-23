@@ -7,6 +7,7 @@ tabletForm.component('tabletForm', {
     $scope.tablet = {};
     $scope.submitTablet =() => {
       $scope.tablet.type = 'Tablet';
+      $scope.tablet.isAvailable = 1;
       $scope.$emit('newTablet', $scope.tablet);
       $scope.tablet = {};
     }

@@ -28,9 +28,9 @@ class Laptop extends Computer {
      */
     constructor(computerId, processorType, ramSize, numberCpuCores,
                 harddriveSize, displaySize, batteryInfo, os, touchscreen,
-                camera, price, weight, brandName, modelNumber, type) {
+                camera, price, weight, brandName, modelNumber, type, isAvailable) {
         super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
-          price, weight, brandName, modelNumber, type);
+          price, weight, brandName, modelNumber, type, isAvailable);
         this.displaySize = displaySize;
         this.batteryInfo = batteryInfo;
         this.os = os;
