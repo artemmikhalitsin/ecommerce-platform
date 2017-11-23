@@ -3,6 +3,7 @@
  * @extends {Computer}
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
  * ATTRIBUTE THIS TO YOURSELF
+ * @author Artem Mikhalitsin
  */
 const rootPath = require('app-root-dir').get();
 const Computer = require(rootPath + '/models/Computer.js');
@@ -130,7 +131,8 @@ class Tablet extends Computer {
           this.weight,
           this.brandName,
           this.modelNumber,
-          this.type);
+          this.type,
+          this.isAvailable);
     }
     frontendFriendlify() {
       return {

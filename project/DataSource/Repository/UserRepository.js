@@ -2,8 +2,9 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
-const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
-
+// Forward declaration of Unit of Work class required to resolve a
+// circular dependency
+let UnitOfWork;
 // Forward declaration of singleton instance variable
 let _instance;
 /**
@@ -16,6 +17,8 @@ class UserRepository {
    * Constructor initiates a new unit of work
    */
   constructor() {
+    // dependency injection delayed
+    UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
     this.uow = new UnitOfWork();
   }
   /**

@@ -1,9 +1,11 @@
 'use strict';
 const rootPath = require('app-root-dir').get();
-const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 const transactionLogTDG = require(rootPath +
   '/DataSource/TableDataGateway/TransactionLogTDG.js');
 
+// Forward declaration of Unit of Work class, required to resolve a
+// circular dependency
+let UnitOfWork;
 // Forward declaration of singleton instance reference
 let _instance;
 /**
@@ -16,6 +18,8 @@ class TransactionLogRepository {
    * Constructor initializes the unit of work and tdg
    */
   constructor() {
+    // dependency injection delayed
+    UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
     this.uow = new UnitOfWork();
   }
   /**

@@ -1,9 +1,6 @@
 'use strict';
 const rootPath = require('app-root-dir').get();
 const Promise = require('bluebird');
-const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
-const productDescTDG = require(rootPath
-  + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
 const DesktopsTDG = require(rootPath
   + '/DataSource/TableDataGateway/DesktopsTDG.js');
 const LaptopsTDG = require(rootPath
@@ -15,8 +12,10 @@ const TabletsTDG = require(rootPath
 // Retrieve instance of singleton identity map
 const productIMAP = require(rootPath
   + '/DataSource/IdentityMap/ProductDescriptionsIdentityMap.js').instance();
+// Forward declaration of Unit of Work class, required to resolve an issue
+// with circular dependency
+let UnitOfWork;
 
-const ProductDescription = require(rootPath + '/models/ProductDescription.js');
 const Tablet = require(rootPath + '/models/Tablet.js');
 const Dimensions = require(rootPath + '/models/Dimensions.js');
 const Desktop = require(rootPath + '/models/Desktop.js');
@@ -36,6 +35,8 @@ class ProductDescriptionRepository {
    * the inventory item identity map
    */
   constructor() {
+    // dependency injection delayed
+    UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
     this.uow = new UnitOfWork();
   }
   /**
@@ -50,103 +51,214 @@ class ProductDescriptionRepository {
     return _instance;
   }
   /**
-   * Retrieves products from the identity map. If none are there,
-   * retrieves the products from the TDG and adds them to the identity map
-   * @param {Object[]} tablets a list of Tablet table rows
-   * @return {Object[]} the complete list of product description objects
+   * Factory method. Determines what kind of product the specification defines
+   * and creates an appropriate domain-level object
+   * @param {Object} product specification of a product
+   * @return {Tablet|Laptop|Desktop|Monitor} a domain-level object corresponding
+   * to the product specification
    */
+  static makeProduct(product) {
+    switch (product.type) {
+      case 'Tablet':
+        return ProductDescriptionRepository.makeTablet(product);
+        break;
+      case 'Laptop':
+        return ProductDescriptionRepository.makeLaptop(product);
+        break;
+      case 'Desktop':
+        return ProductDescriptionRepository.makeDesktop(product);
+        break;
+      case 'Monitor':
+        return ProductDescriptionRepository.makeMonitor(product);
+        break;
+    }
+  }
+  /**
+   * Factory methods that creates tablets
+   * @param {Object} tablet specification of a tablet
+   * @return {Tablet} a tablet domain-level object
+   */
+  static makeTablet(tablet) {
+    return new Tablet(
+        tablet.comp_id,
+        tablet.processor_type,
+        tablet.ram_size,
+        tablet.number_cpu_cores,
+        tablet.harddrive_size,
+        tablet.display_size,
+        new Dimensions(
+            tablet.dimension_id,
+            tablet.depth,
+            tablet.height,
+            tablet.width),
+        tablet.battery_info,
+        tablet.os,
+        tablet.camera_info,
+        tablet.price,
+        tablet.weight,
+        tablet.brand_name,
+        tablet.model_number,
+        tablet.type);
+  }
+  /**
+   * Factory method that creates desktops
+   * @param {Object} desktop the specification of a desktop
+   * @return {Desktop} Desktop domain-level object corresponding to the spec
+   */
+  static makeDesktop(desktop) {
+    return new Desktop(
+        desktop.processor_type,
+        desktop.ram_size,
+        desktop.number_cpu_cores,
+        desktop.harddrive_size,
+        new Dimensions(
+            desktop.dimension_id,
+            desktop.depth,
+            desktop.height,
+            desktop.width),
+        desktop.price,
+        desktop.weight,
+        desktop.brand_name,
+        desktop.model_number,
+        desktop.comp_id,
+        desktop.type);
+  }
+  /**
+   * Factory method that creates laptops
+   * @param {Object} laptop the specification of a laptop
+   * @return {Laptop} Laptop domain-level object corresponding to the spec
+   */
+  static makeLaptop(laptop) {
+    return new Laptop(
+        laptop.comp_id,
+        laptop.processor_type,
+        laptop.ram_size,
+        laptop.number_cpu_cores,
+        laptop.harddrive_size,
+        laptop.display_size,
+        laptop.battery_info,
+        laptop.os,
+        laptop.touch_screen,
+        laptop.camera,
+        laptop.price,
+        laptop.weight,
+        laptop.brand_name,
+        laptop.model_number,
+        laptop.type);
+  }
+  /**
+   * Factory method that creates monitors
+   * @param {Object} monitor the specification of a monitor
+   * @return {Monitor} Monitor domain-level object corresponding to the spec
+   */
+  static makeMonitor(monitor) {
+    return new Monitor(
+        monitor.display_size,
+        monitor.price,
+        monitor.weight,
+        monitor.brand_name,
+        monitor.model_number,
+        monitor.type);
+  }
   mapToTablets(tablets) {
       return tablets.map(
         (tablet) => {
-          return new Tablet(
-              tablet.comp_id,
-              tablet.processor_type,
-              tablet.ram_size,
-              tablet.number_cpu_cores,
-              tablet.harddrive_size,
-              tablet.display_size,
-              new Dimensions(
-                  tablet.dimension_id,
-                  tablet.depth,
-                  tablet.height,
-                  tablet.width),
-              tablet.battery_info,
-              tablet.os,
-              tablet.camera_info,
-              tablet.price,
-              tablet.weight,
-              tablet.brand_name,
-              tablet.model_number,
-              tablet.type);
+          return ProductDescriptionRepository.makeTablet(tablet);
       });
   }
   mapToDesktops(desktops) {
       return desktops.map(
         (desktop) => {
-          return new Desktop(
-              desktop.processor_type,
-              desktop.ram_size,
-              desktop.number_cpu_cores,
-              desktop.harddrive_size,
-              new Dimensions(
-                  desktop.dimension_id,
-                  desktop.depth,
-                  desktop.height,
-                  desktop.width),
-              desktop.price,
-              desktop.weight,
-              desktop.brand_name,
-              desktop.model_number,
-              desktop.comp_id,
-              desktop.type);
-    });
+          return ProductDescriptionRepository.makeDesktop(desktop);
+    }, this);
   }
   mapToLaptops(laptops) {
     return laptops.map(
       (laptop) => {
-        return new Laptop(
-            laptop.comp_id,
-            laptop.processor_type,
-            laptop.ram_size,
-            laptop.number_cpu_cores,
-            laptop.harddrive_size,
-            laptop.display_size,
-            laptop.battery_info,
-            laptop.os,
-            laptop.touch_screen,
-            laptop.camera,
-            laptop.price,
-            laptop.weight,
-            laptop.brand_name,
-            laptop.model_number,
-            laptop.type);
-    });
+        return ProductDescriptionRepository.makeLaptop(laptop);
+    }, this);
   }
   mapToMonitors(monitors) {
     return monitors.map(
       (monitor) => {
-        return new Monitor(
-            monitor.display_size,
-            monitor.price,
-            monitor.weight,
-            monitor.brand_name,
-            monitor.model_number,
-            monitor.type);
+        return ProductDescriptionRepository.makeMonitor(monitor);
+    }, this);
+  }
+  /**
+   * Given a specification creates a product and registers it to the storage
+   * @param {Object} object a product specification
+   */
+  makeNew(object) {
+    let product = this.makeProduct(object);
+    if (productIMAP.get(product.modelNumber)) {
+      throw new Error(`Cannot create new product with model number
+        ${product.modelNumber}. A product with the same model number
+        already exists`);
+    } else {
+      productIMAP.add(product);
+      this.uow.registerNew(product);
+    }
+  }
+  /**
+   * Performs the insertion into the database
+   * @param {Product} product the product to be inserted
+   * @return {Promise<boolean>} resolve to true if successful
+   */
+  insert(product) {
+    return new Promise((resolve, reject) => {
+      // TODO: Implement this with the tdg call
+      console.log(`Inserting ${JSON.stringify(product)} into database`);
+      resolve(true);
     });
   }
-  mapToProducts(productDescriptions) {
-    let results = [];
-    productDescriptions.forEach(function(description) {
-      results.push(new ProductDescription(
-        description.price,
-        description.weight,
-        description.brand_name,
-        description.model_number,
-        description.type,
-        description.is_available
-        ));
+  /**
+   * Given a specification creates a product and updates an existing product
+   * to the new spec in storage
+   * @param {Object} object a product specification
+   */
+  set(object) {
+    let product = this.makeProduct(object);
+    let imapProduct = productIMAP.get(product.modelNumber);
+    if (!imapProduct) {
+      throw new Error(`Cannot update product with model number
+        ${product.modelNumber}. The product must first be loaded into memory
+        before it can be updated.`);
+    } else {
+      // Store a clean copy of the product, in case of rollback
+      this.uow.registerClean(imapProduct.clone());
+      productIMAP.update(product);
+      this.uow.registerDirty(product);
+    }
+  }
+  update(product) {
+    return new Promise((resolve, reject) => {
+      // TODO: Stuff that has to do with the tdg
+      console.log(`Updating ${JSON.stringify(product)} in database`);
+      resolve(true);
     });
-    return results;
+  }
+  /**
+   * Given a specification, deletes the specified object from storage
+   * @param {Object} object a product specification
+   */
+  erase(object) {
+    let product = this.makeProduct(object);
+    let imapProduct = productIMAP.get(product.modelNumber);
+    if (!imapProduct) {
+      throw new Error(`Cannot delete product with model number
+        ${product.modelNumber}. The product must first be loaded into memory
+        before it can be deleted`);
+    } else {
+      productIMAP.delete(product.modelNumber);
+      this.uow.registerDeleted(product);
+    }
+  }
+  delete(product) {
+    return new Promise((resolve, reject) => {
+      console.log(`Deleting ${JSON.stringify(product)} from database`);
+      productIMAP.delete([product.modelNumber]);
+      resolve(true);
+    });
   }
   /**
    * Retrieves all items in the catalog
@@ -158,7 +270,6 @@ class ProductDescriptionRepository {
         (resolve, reject) => {
           // Get the items in memory
           let imapProducts = productIMAP.getAll();
-          console.log(imapProducts);
           let imapModelNumbers = imapProducts.map(
             (product) => {
               return product.modelNumber;
@@ -182,7 +293,7 @@ class ProductDescriptionRepository {
               let dbProducts = [].concat(dbDesktops, dbTablets,
                                       dbLaptops, dbMonitors);
               // add the newly created products to the identity map
-              productIMAP.add(dbProducts);
+              dbProducts.forEach((product) => productIMAP.add(product));
               // finally, resolve the promise with a combined list of
               // objects from the tables and from the imap
               resolve(imapProducts.concat(dbProducts));
@@ -223,27 +334,8 @@ class ProductDescriptionRepository {
          resolve(imapProducts.concat(dbProducts));
        })
        .catch((err) => reject(err));
-   });
- }
-  /**
-   * Retrieves the product description from the identity map given a list of IDs
-   * @param {number[]} ids the list of ids of the products to be retrieved
-   * @return {Object[]} a list containing the product descriptions
-   */
-  getByIds(ids) {
-    let products = productIMAP.get(ids);
-    // REVIEW: This means that if we don't find all of the given ids, we
-    // will instead return all the products in the table? I believe this method
-    // requires rework - Artem
-    if (products.length <= 0 || products.length < ids.length) {
-      return productDescTDG.getAll().then((values)=>{
-              products = this.mapToProducts(values);
-              productIMAP.add(products);
-              return products;
-            });
-    }
+     });
   }
-
   /**
    * Given a list of products, compares to products currently in the inventory,
    * and sorts which are to be added, which to be updated and which to be

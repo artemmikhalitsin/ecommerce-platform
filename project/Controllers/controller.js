@@ -167,7 +167,6 @@ class Controller {
     }).catch((err) => {
       console.log(err);
     });
-    console.log(productDescriptions);
   }
   getCatalog(req, res) {
     let query = url.parse(req.url, true).query;

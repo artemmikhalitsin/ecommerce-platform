@@ -1,10 +1,12 @@
 'use strict';
 const rootPath = require('app-root-dir').get();
-const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 const inventoryItemsIM = require(rootPath +
   '/DataSource/IdentityMap/InventoryItemsIdentityMap.js').instance();
 const purchaseCollectionTDG = require(rootPath +
   '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
+// Forward declaration of Unit of Work class required to resolve a
+// circular dependency
+let UnitOfWork;
 // Forward declaration of singleton instance
 let _instance;
 /**
@@ -17,6 +19,8 @@ class PurchaseCollectionRepository {
    * Constructor initializes the unit of work, identity map and the tdg
    */
   constructor() {
+    // dependency injection delayed
+    UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
     this.uow = new UnitOfWork();
   }
   /**

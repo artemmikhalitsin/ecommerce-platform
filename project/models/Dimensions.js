@@ -3,6 +3,7 @@
  * @extends {Computer}
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
  * ATTRIBUTE THIS TO YOURSELF
+ * @author Artem Mikhalitsin
  */
 
 class Dimensions {

@@ -3,6 +3,7 @@
  * @extends {Computer}
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
  * ATTRIBUTE THIS TO YOURSELF
+ * @author Artem Mikhalitsin
  */
 const rootPath = require('app-root-dir').get();
 const Computer = require(rootPath + '/models/Computer.js');
@@ -59,7 +60,8 @@ class Desktop extends Computer {
           this.brandName,
           this.modelNumber,
           this.compId,
-          this.type);
+          this.type,
+          this.isAvailable);
     }
     /**
      * Creates a front-end friendly object

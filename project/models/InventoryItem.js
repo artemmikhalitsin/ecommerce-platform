@@ -1,6 +1,7 @@
 /**
  * Class containing info common to all products
  * @author Ekaterina Ruhlin
+ * @author Artem Mikhalitsin
  */
 // const rootPath = require('app-root-dir').get();
 // const Computer = require(rootPath + '/models/ProductDescription.js');

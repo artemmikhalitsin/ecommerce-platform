@@ -3,6 +3,7 @@
  * @extends {ProductDescription}
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
  * ATTRIBUTE THIS TO YOURSELF
+ * @author Artem Mikhalitsin
  */
 const rootPath = require('app-root-dir').get();
 const ProductDescription = require(rootPath + '/models/ProductDescription.js');
@@ -48,14 +49,14 @@ class Computer extends ProductDescription {
      * processorType accessor
      * @return {string} proccessor type
      */
-    get proccesorType() {
+    get processorType() {
       return this._processorType;
     }
     /**
     * processorType mutator
     * @param {string} processorType new processor type
     */
-    set proccesorType(processorType) {
+    set processorType(processorType) {
       this._processorType = processorType;
     }
     /**

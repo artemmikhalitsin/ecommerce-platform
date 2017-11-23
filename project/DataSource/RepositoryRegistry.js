@@ -1,4 +1,4 @@
-const rootPath = require('app-root-dir')
+const rootPath = require('app-root-dir').get();
 // Repositories
 const ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
@@ -26,6 +26,7 @@ class RepositoryRegistry {
   static getRepo(obj) {
     if (obj instanceof Tablet || obj instanceof Desktop ||
     obj instanceof Laptop || obj instanceof Monitor) {
+      console.log(`it's a product'`);
       return ProductDescriptionRepository.instance();
     }
     if (obj instanceof InventoryItem) {

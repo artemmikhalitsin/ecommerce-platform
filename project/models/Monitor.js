@@ -32,7 +32,8 @@ class Monitor extends ProductDescription {
           this.weight,
           this.brandName,
           this.modelNumber,
-          this.type);
+          this.type,
+          this.isAvailable);
     }
     frontendFriendlify() {
       return {

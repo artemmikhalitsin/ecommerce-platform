@@ -1,12 +1,14 @@
 'use strict';
 const rootPath = require('app-root-dir').get();
-const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
 const InventoryItem = require(rootPath + '/models/InventoryItem.js');
 const inventoryItemsIM = require(rootPath +
   '/DataSource/IdentityMap/InventoryItemsIdentityMap.js').instance();
 const inventoryTDG = require(rootPath +
   '/DataSource/TableDataGateway/InventoryItemsTDG.js');
 
+// Forward delaration of Unit of Work class, required to resolve a circular
+// dependency
+let UnitOfWork;
 // Forward declaration of instance reference
 let _instance;
 /**
@@ -19,6 +21,8 @@ class InventoryItemRepository {
    * Constructor initializes the unit of work
    */
   constructor() {
+    // dependency injection delayed
+    UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
     this.uow = new UnitOfWork();
   }
   /**
