@@ -36,7 +36,7 @@ const authRequests = [
 
 class Aspect {
   constructor() {
-     this.userRepo = new UserRepository();
+     this.userRepo = UserRepository.instance();
      this.activeUsers = [];
      this.processQueue = new ProcessQueue();
   }

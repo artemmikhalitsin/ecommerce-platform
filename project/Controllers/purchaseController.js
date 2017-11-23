@@ -20,10 +20,10 @@ const InventoryItemRepository = require(rootPath +
  */
 class PurchaseController {
   constructor() {
-    this.purchaseCollectionRepo = new PurchaseCollectionRepo();
-    this.transactionRepo = new TransactionLogRepository();
-    this.productDescriptionRepo = new ProductDescriptionRepository();
-    this.inventoryRepo = new InventoryItemRepository();
+    this.purchaseCollectionRepo = PurchaseCollectionRepo.instance();
+    this.transactionRepo = TransactionLogRepository.instance();
+    this.productDescriptionRepo = ProductDescriptionRepository.instance();
+    this.inventoryRepo = InventoryItemRepository.instance();
     this.clientInventory = {}; // key: serial, value: locked or not locked
     this.shoppingCartList = {}; // carts associated to users k:user, v: cart
     this.returnCartList = {}; // carts for returns.

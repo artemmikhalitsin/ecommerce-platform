@@ -15,12 +15,12 @@ const crypto = require('crypto');
 */
 class Controller {
   /**
-  * Constructor creates a new instanted of a user item and product repos
+  * Constructor gets references to Repositories
   */
   constructor() {
-    this.userRepo = new UserRepository();
-    this.inventoryRepo = new InventoryItemRepository();
-    this.productDescriptionRepo = new ProductDescriptionRepository();
+    this.userRepo = UserRepository.instance();
+    this.inventoryRepo = InventoryItemRepository.instance();
+    this.productDescriptionRepo = ProductDescriptionRepository.instance();
   }
 
   /**
