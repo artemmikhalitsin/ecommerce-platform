@@ -57,6 +57,29 @@ function remove(serialNumber, http) {
 
 }
 
+function countDown(serial) {
+  let sevenMinutesLater = new Date().setMinutes(new Date().getMinutes() + 7);
+  console.log('SETTING FINAL COUNTDOWN!');
+  // Update the count down every 1 second
+  let x = setInterval(() => {
+      let now = new Date().getTime();
+      let timeDiff = sevenMinutesLater - now;
+      let minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+      let seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+      // Output the result in an element with id="demo"
+      $('#timer_' + serial).html(minutes + 'm ' + seconds + 's');
+      // If the count down is over, write some text
+      if (timeDiff < 0) {
+          clearInterval(x);
+          $('#timer_' + serial).html('Item will be removed from the cart shortly...');
+          setInterval(() => {
+            $('#cart_' + serial).remove();
+          }, 3000);
+      }
+  }, 1000);
+}
+
+
 function addToShoppingCart(serialNumber,modelNumber, brandName, type, price, http, compile, scope) {
   http({
     method: 'POST',
@@ -70,11 +93,13 @@ function addToShoppingCart(serialNumber,modelNumber, brandName, type, price, htt
     +   `</div>`
     +   `<div>Model: ${modelNumber}</div>`
     +   `<div>Serial: ${serialNumber}</div>`
-    + `<button class="pull-right btn" ng-click="remove('${serialNumber}')">Remove From Cart</button>`
+    +   `<div>Time Left in Cart: <span id="timer_${serialNumber}"></span></div>`
+    + `<button class="pull-right btn" id="remove_${serialNumber}" ng-click="remove('${serialNumber}')">Remove From Cart</button>`
     + `</div>`;
     $('#shopping_cart').show();
     let el = document.getElementById('temp_cart');
     angular.element(el).append(compile(html)(scope));
+    countDown(serialNumber);
     window.alert(response.data.success);
     }, function errorCallback(response) {
         if (response.data.error == null) {
