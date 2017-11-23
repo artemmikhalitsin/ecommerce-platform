@@ -5,33 +5,6 @@ const rootPath = require('app-root-dir').get();
 const RepositoryRegistry = require(rootPath +
    '/DataSource/RepositoryRegistry.js')
 
-<<<<<<< HEAD
-=======
-const productDescTDG = require(rootPath +
-  '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
-const inventoryItemsTDG = require(rootPath +
-  '/DataSource/TableDataGateway/InventoryItemsTDG.js');
-const computersTDG = require(rootPath +
-  '/DataSource/TableDataGateway/ComputersTDG.js');
-const desktopsTDG = require(rootPath +
-  '/DataSource/TableDataGateway/DesktopsTDG.js');
-const dimensionsTDG = require(rootPath +
-  '/DataSource/TableDataGateway/DimensionsTDG.js');
-const laptopsTDG = require(rootPath +
-  '/DataSource/TableDataGateway/LaptopsTDG.js');
-const monitorsTDG = require(rootPath +
-  '/DataSource/TableDataGateway/MonitorsTDG.js');
-const tabletsTDG = require(rootPath +
-  '/DataSource/TableDataGateway/TabletsTDG.js');
-const purchaseTDG = require(rootPath +
-  '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
-const TransactionLogTDG = require(rootPath +
-  '/DataSource/TableDataGateway/TransactionLogTDG.js');
-  // THE NEXT LINE SHOULD BE DELETED
-const Monitor = require(rootPath +
-  '/models/Monitor.js');
-
->>>>>>> 13199cafee02b9358cc7df4492963c57308aac37
 /**
  * Unit of Work implementation
  * @author Ekaterina Ruhlin
@@ -47,22 +20,11 @@ class UnitOfWork {
     this.newElements = [];
     this.dirtyElements = [];
     this.deletedElements = [];
-<<<<<<< HEAD
 
-    // Items are reigsted here in case of rollback
+    // Elements are reigsted here in case of rollback
     this.inserted = [];
     this.cleanElements = [];
     this.deleted = [];
-=======
-    this.newInventoryItems = [];
-    this.deletedInventoryItems = [];
-    this.newPurchases = [];
-    this.deletedPurchases = [];
-    this.transactionItems = [];
-    let monitor = new Monitor(10, 10, 10,
-                'nistilahkim', 10, 'Monitor', true);
-    //monitorsTDG.insert(monitor);
->>>>>>> 13199cafee02b9358cc7df4492963c57308aac37
   }
 
   registerNew(object) {
