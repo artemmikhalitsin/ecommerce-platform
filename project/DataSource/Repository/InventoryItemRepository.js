@@ -1,24 +1,36 @@
 'use strict';
 const rootPath = require('app-root-dir').get();
 const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
-const InventoryItemsIdentityMap = require(rootPath +
-  '/DataSource/IdentityMap/InventoryItemsIdentityMap.js');
-const InventoryItemsTDG = require(rootPath +
-  '/DataSource/TableDataGateway/InventoryItemsTDG.js');
 const InventoryItem = require(rootPath + '/models/InventoryItem.js');
+const inventoryItemsIM = require(rootPath +
+  '/DataSource/IdentityMap/InventoryItemsIdentityMap.js').instance();
+const inventoryTDG = require(rootPath +
+  '/DataSource/TableDataGateway/InventoryItemsTDG.js');
+
+// Forward declaration of instance reference
+let _instance;
 /**
- * Repository for Inventory Items
+ * Repository for Inventory Items (Singleton)
  * @author Ekaterina Ruhlin
  * REVIEW: PLEASE MAKE SURE THE METHOD DESCRIPTIONS ARE CORRECT
  */
 class InventoryItemRepository {
   /**
-   * Constructor initializes the unit of work, identity map and the tdg
+   * Constructor initializes the unit of work
    */
   constructor() {
     this.uow = new UnitOfWork();
-    this.inventoryItemsIM = new InventoryItemsIdentityMap();
-    this.inventoryTDG = new InventoryItemsTDG();
+  }
+  /**
+   * Retrieves current instance of the repository, or if one doesnt
+   * exist, instantiates it
+   * @return {Object} a reference to the current instance of the repo
+   */
+  static instance() {
+    if (!_instance) {
+      _instance = new InventoryItemRepository();
+    }
+    return _instance;
   }
   /**
    * Retrieves items from the identity map. If none are there,
@@ -26,37 +38,61 @@ class InventoryItemRepository {
    * @return {Object[]} the complete list of inventory item objects
    */
   getAll() {
-    let context = this.inventoryItemsIM.getAll();
+    let context = inventoryItemsIM.getAll();
     if (context.length <= 0) {
-      context = this.inventoryTDG.select();
+      context = inventoryTDG.select();
 
       Promise.all([context]).then(
         (values) => {
           context = values[0];
         }
       );
-      this.inventoryItemsIM.add(context);
+      inventoryItemsIM.add(context);
     }
     return context;
   }
   getByModelNumbers(modelNumbers) {
-    let inventory = this.inventoryTDG.getByModelNumbers(modelNumbers);
-    console.log('The models numbers passed' + JSON.stringify(modelNumbers));
-    // let result = [];
-    return Promise.all([inventory]).then((values) => {
-      let result = [];
-          values[0].forEach(function(item) {
-            result.push(new InventoryItem(item.id, item.serial_number,
-              item.model_number, null));
-          });
-          this.inventoryItemsIM.add(result);
-          // console.log('the inventory items repo gives: '
-          //  + JSON.stringify(result));
-
-    return result;
-        }).catch((err) => {
-console.log(err);
-});
+    return new Promise((resolve, reject) => {
+      if (modelNumbers === undefined) {
+        reject(new TypeError('modelNumbers must be of type string[]'));
+      }
+      // No model numbers to get - do no additional computation
+      if (modelNumbers.length === 0) {
+        resolve([]);
+      }
+      let imapItems = inventoryItemsIM.get(modelNumbers);
+      let imapModelNumbers = imapItems.map((item) => item.getModelNumber());
+      // If all items found in identity map, resolve the promise
+      if (imapItems.length === modelNumbers.length) {
+        resolve(imapItems);
+      }
+      // Otherwise, find what items have to be retrieved from tables
+      let dbModelNumbers = modelNumbers.filter(
+        (modelNumber) => {
+          return !imapModelNumbers.includes(modelNumber);
+        }
+      );
+      console.log(dbModelNumbers);
+      // Now fetch those numbers fom the tables
+      inventoryTDG.getByModelNumbers(dbModelNumbers)
+      .then(
+        (items) => {
+          // Create objects from table rows
+          let dbItems = items.map(
+            (item) => {
+              return new InventoryItem(item.id, item.serial_number,
+                                       item.model_number, null);
+            }
+          );
+          // Add the newly retrieved objected to the identity map
+          inventoryItemsIM.add(dbItems);
+          resolve(imapItems.concat(dbItems));
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(err);
+        });
+      });
   }
   /**
    * Retrieves all items from the database table
@@ -76,14 +112,14 @@ console.log(err);
    * @return {Object[]} the list of inventory items in the system
    */
   getByIds(ids) {
-    let items = this.inventoryItemsIM.get(ids);
+    let items = inventoryItemsIM.get(ids);
     // REVIEW: This means that if we don't find all of the given ids, we
     // will instead return all the items in the table? I believe this method
     // requires rework - Artem
     if (items.length <= 0 || items.length < ids.length) {
       // REVIEW: Looks like this duplicates some functionality from getAll
       // Maybe this should be abstracted into a function? - Artem
-      let itemsFromTDG = this.inventoryTDG.select();
+      let itemsFromTDG = inventoryTDG.select();
           Promise.all([itemsFromTDG]).then(
             (values) => {
               items = values[0];
@@ -91,7 +127,7 @@ console.log(err);
           );
           // REVIEW: This function has a side effect, even though it is a get
           // function - is this intended functionality? - Artem
-          this.inventoryItemsIM.add(items);
+          inventoryItemsIM.add(items);
     }
     return items;
   }
@@ -120,7 +156,7 @@ console.log(err);
 
     if (modelNumbers.length > 0) {
       // Retrieve the items corresponding to given ids
-      let allInventoryItems = this.inventoryItemsIM
+      let allInventoryItems = inventoryItemsIM
                           .getByModelNumbers(modelNumbers);
 
       for (let i = 0; i < items.length; i++) {
@@ -139,7 +175,6 @@ console.log(err);
       }
       // Any item in inventory that don't appear in new list are to be removed
       electronicsToDelete = allInventoryItems.filter(function(item) {
-        console.log(item.model_number);
        items.forEach(function(element) {
          return element.serial_number.findIndex((e) =>
             e == item.serial_number) === -1;
@@ -151,7 +186,7 @@ console.log(err);
     this.uow.registerDeletedItem(electronicsToDelete);
 
     this.uow.commitAll();
-    this.inventoryItemsIM.add(electronicsToAdd);
+    inventoryItemsIM.add(electronicsToAdd);
   }
 }
 module.exports = InventoryItemRepository;
