@@ -12,18 +12,24 @@ const ProcessQueue = require(rootPath +
  */
 
 const authRequests = [
-  'inventoryAction',
   'getCatalog',
+  'getAllInventory',
   'manageProductCatalog',
+  'getProductDescription',
+  'registrationRequest',
+  'inventoryAction',
   'addToShoppingCart',
   'removeFromShoppingCart',
   'completePurchaseTransaction',
-  'viewShoppingCart',
   'cancelPurchaseTransaction',
   'addToReturnCart',
   'returnPurchaseTransaction',
   'viewPurchaseCollection',
+  'getProductInfo',
   'getClients',
+  'getProductDescription',
+  'cancelReturnTransaction',
+  'deleteClient',
 ];
 
 class Aspect {
@@ -39,7 +45,12 @@ class Aspect {
     return this.userRepo.authenticate(data).then((result) => {
       if (result.length <= 0 || result.length > 1) {
         console.log('Terminated by aspect. Invalid user/pass.');
-        req.session.destroy();
+        if (req.session.exists) {
+          req.session.destroy();
+        }
+        if (joinpoint) {
+          this.processQueue.anonReq(joinpoint);
+        }
       } else {
         req.session.exists=true;
         req.session.hash=data.password;
@@ -107,7 +118,7 @@ class Aspect {
       let res = joinpoint.args[1];
       if (!req.session.exists) {
         console.log('Caught by logout aspect, user not logged in');
-        return joinpoint.proceed();
+        this.processQueue.anonReq(joinpoint);
       } else {
         let data = {
             email: req.session.email,
@@ -126,7 +137,7 @@ class Aspect {
           this.activeUsers = this.activeUsers.filter((val) => {
               return val != null;
           });
-          return joinpoint.proceed();
+          this.processQueue.anonReq(joinpoint);
         });
       }
     });

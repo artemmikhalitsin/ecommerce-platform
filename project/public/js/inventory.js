@@ -1,48 +1,106 @@
-_commonProps = ["modelNumber", "brandName", "price", "weight",
-                "type", "serialNumbers"];
+_commonProps = ["modelNumber", "brand_name", "price", "weight",
+                "type", "serialNumbers", "computerId"];
 _requestJSON = {"deleteSerials":[], "addSerials":[]};
 
-
-// This is to check if there is symbols in what the client entered
-function validateValue(value){
-  let isAlphaNumeric = new RegExp(/^[a-zA-Z0-9]+/);
-  return isAlphaNumeric.test(value);
+/**
+ * Validating the serial number entered by the admin
+ * @author Ajmer Singh Gadreh
+ * @param serialNumber entered by the admin
+ * @return {Boolean}
+ */
+function validateSerialNumber(serialNumber){
+  let isAlphaNumeric = new RegExp(/\w/);
+  if (isAlphaNumeric.test(serialNumber) && serialNumber.length >= 10 && serialNumber.length <= 16) {
+    return true;
+  }
+  return false;
 }
 
+/**
+ * Collecting all the serial numbers to be added to the database
+ * @author Ajmer Singh Gadreh
+ * @return {Boolean}
+ */
 function getAllTextBoxes(){
-  let invalidModelIds = [];
+  let invalidModelIds = []; // storing the model number associated with the serial number that contains errors
+  let takenCareOf = false; // flag used to add multiple serial number associated with one model number
+
+  // Iterating over all the input fields of serial numbers to be added
   $('.add-item').each((i, obj) => {
-    //gets the modelnumber of each serial number to be added
+    let toAdd = new Object();
     let modelId = $(obj).parent().parent().parent().parent().attr('id');
-    let value = $(obj).val();
-    if (validateValue(value)){
-      let item = value+"@"+ modelId;
-      if (!_requestJSON.addSerials.includes(item)){
-        _requestJSON.addSerials.push(item);
+    let serialNumber = $(obj).val();
+
+    if (validateSerialNumber(serialNumber)){
+      for (let index in _requestJSON.addSerials) {
+        if (_requestJSON.addSerials.hasOwnProperty(index) && _requestJSON.addSerials[index].modelNumber === modelId) {
+          // adding the serial number to an existing model number in the array
+          _requestJSON.addSerials[index].serialNumbers.push(serialNumber);
+          takenCareOf = true;
+        }
       }
+
+      // The following if executes only if the model number does not already exist in the addSerials array
+      if (!takenCareOf) {
+        toAdd.modelNumber = modelId;
+        toAdd.serialNumbers = [];
+        toAdd.serialNumbers.push(serialNumber);
+        _requestJSON.addSerials.push(toAdd);
+      }
+      takenCareOf = false;
     } else {
       invalidModelIds.push(modelId);
     }
   });
+  //console.log(_requestJSON.addSerials);
   if (invalidModelIds.length === 0){
     return true;
   } else{
-    window.alert(`Serial Number at ${invalidModelIds.join(', ')} must be alphanumeric`);
+    window.alert(`Serial Number at ${invalidModelIds.join(', ')} must be alphanumeric and between 10 and 16 characters`);
     return false;
   }
 }
 
-// Delete serial number in the request JSON
+/**
+ * Collecting all the serial number to be deleted from the database
+ * @author Ajmer Singh Gadreh
+ * @param checkbox the checkbox next to the serial number to be deleted
+ */
 function deleteSerial(checkbox){
-  alreadyIn = _requestJSON.deleteSerials.includes(checkbox.id);
-  if (checkbox.checked && !alreadyIn){
-    _requestJSON.deleteSerials.push(checkbox.id);
-  }else if (!checkbox.checked && alreadyIn){
-    var index = _requestJSON.deleteSerials.indexOf(checkbox.id);
-    if (index > -1) {
-      _requestJSON.deleteSerials.splice(index, 1);
+  let takenCareOf = false;
+  let toBeDeleted = new Object();
+
+  for (let index in _requestJSON.deleteSerials) {
+    // Going to check if the model number has been already added to the deleteSerials array
+    if (_requestJSON.deleteSerials.hasOwnProperty(index) && _requestJSON.deleteSerials[index].modelNumber === checkbox.name) {
+      // if the checkbox is unckecked then we want to delete the serial number from the deleteSerials array otherwise add it
+      if (!checkbox.checked) {
+        if (_requestJSON.deleteSerials[index].serialNumbers.length == 1) {
+          // deleting the serial number and model number from the deleteSerials array
+          _requestJSON.deleteSerials.splice(index, 1);
+          takenCareOf = true;
+        } else {
+          // deleting only the serial number from the deleteSerials array
+          let position = _requestJSON.deleteSerials[index].serialNumbers.indexOf(checkbox.id);
+          _requestJSON.deleteSerials[index].serialNumbers.splice(position, 1);
+          takenCareOf = true;
+        }
+      } else {
+        // adding the serial number to an existing model number in the array
+        _requestJSON.deleteSerials[index].serialNumbers.push(checkbox.id);
+        takenCareOf = true;
+      }
     }
   }
+
+  // The following if executes only if the model number does not already exist in the deleteSerials array
+  if (!takenCareOf) {
+    toBeDeleted.modelNumber = checkbox.name;
+    toBeDeleted.serialNumbers = [];
+    toBeDeleted.serialNumbers.push(checkbox.id);
+    _requestJSON.deleteSerials.push(toBeDeleted);
+  }
+  //console.log("to be deleted: " + JSON.stringify(_requestJSON.deleteSerials));
 }
 
 function cancelAdd(row){
@@ -62,10 +120,17 @@ function addSerialRow(button){
   `);
 }
 
-// Function used to populate the child rows
+/**
+ * This function is used to populate the child rows
+ * It is triggered when the green plus sign is clicked
+ * @param data child rows data to be displayed
+ * @return html string containing child row data
+ */
 function formatChildRows( data ) {
   tableString = "";
   serialRows = "";
+
+  // for loop is used to display all the child rows data
   for (property in data) {
     if (data.hasOwnProperty(property) && !_commonProps.includes(property)) {
        tableString += `
@@ -79,6 +144,8 @@ function formatChildRows( data ) {
     }
   }
   var serialNumbers = data.serialNumbers;
+
+  // following if statement executes when there are no serial numbers
   if (serialNumbers < 1){
     serialRows += `<tr>
          <td colspan=2>
@@ -86,18 +153,42 @@ function formatChildRows( data ) {
          </td>
        </tr>`
   }
-  //for each existing serial number add a new row
+
+  let alreadyChecked = false;
+  //for each existing serial number add a new row with a checkbox beside it
   for (number in serialNumbers) {
-     serialRows += `
-      <tr>
-        <td>
-          ${serialNumbers[number]}
-        </td>
-        <td>
-          <input type="checkbox" id=${serialNumbers[number]}@${data["modelNumber"]} onchange='deleteSerial(this);'>
-        </td>
-      </tr>`;
+    if (_requestJSON.deleteSerials.length > 0) {
+      for (var index in _requestJSON.deleteSerials) {
+        if (_requestJSON.deleteSerials.hasOwnProperty(index) && _requestJSON.deleteSerials[index].serialNumbers.includes(serialNumbers[number])) {
+          alreadyChecked = true;
+        }
+      }
+    }
+
+    if (alreadyChecked) {
+      serialRows += `
+       <tr>
+         <td>
+           ${serialNumbers[number]}
+         </td>
+         <td>
+           <input type="checkbox" checked id=${serialNumbers[number]} name=${data["modelNumber"]} onchange='deleteSerial(this);'>
+         </td>
+       </tr>`;
+    } else {
+      serialRows += `
+       <tr>
+         <td>
+           ${serialNumbers[number]}
+         </td>
+         <td>
+           <input type="checkbox" id=${serialNumbers[number]} name=${data["modelNumber"]} onchange='deleteSerial(this);'>
+         </td>
+       </tr>`;
+    }
+    alreadyChecked = false;
   }
+
   //button to add more serial numbers
   serialRows += `
     <tr>
@@ -126,7 +217,10 @@ function formatChildRows( data ) {
   </div>`;
 }
 
-
+/**
+ * Populating the datatable with the data returned from the database
+ * @author Ajmer Singh Gadreh
+ */
 $(document).ready(function() {
     let inventory_table = $('#table_inventory').DataTable({
       data: data,
@@ -153,8 +247,6 @@ $(document).ready(function() {
             tr.removeClass('shown');
         } else {
             // Open this row
-            let rowData = row.data();
-            console.log("Printing type: ", rowData.type);
             row.child( formatChildRows(row.data()) ).show();
             tr.addClass('shown');
         }
@@ -163,7 +255,9 @@ $(document).ready(function() {
 });
 
 function submitData(){
-    if(getAllTextBoxes()){
+  if(getAllTextBoxes()){
+    // console.log("Going to call inventory actions");
+    // console.log(_requestJSON);
     $.ajax({
         url: '/inventoryAction',
         type: 'post',

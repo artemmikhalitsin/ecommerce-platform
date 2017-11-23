@@ -8,7 +8,7 @@ const rootPath = require('app-root-dir').get();
 const Computer = require(rootPath + '/models/Computer.js');
 
 class Desktop extends Computer {
-  /*
+  /**
    * Given attributes of a desktop, constructs a new object
    * @param {string} processorType processor type
    * @param {number} ramSize size of ram
@@ -24,9 +24,9 @@ class Desktop extends Computer {
    */
   constructor(processorType, ramSize, numberCpuCores, harddriveSize,
               dimensions, price, weight, brandName, modelNumber, computerId,
-              type) {
+              type, isAvailable) {
     super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
-          price, weight, brandName, modelNumber, type);
+          price, weight, brandName, modelNumber, type, isAvailable);
         this.dimensions = dimensions;
     }
     /**

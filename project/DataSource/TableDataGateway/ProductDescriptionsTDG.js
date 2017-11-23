@@ -23,6 +23,7 @@ class ProductDescriptionsTDG {
       'weight': productDescription.weight,
       'price': productDescription.price,
       'type': productDescription.type,
+      'is_available': productDescription.isAvailable,
     }, 'model_number').into('ProductDescription');
   }
 
@@ -72,6 +73,7 @@ class ProductDescriptionsTDG {
         'weight': productDescription.weight,
         'price': productDescription.price,
         'type': productDescription.type,
+        'is_available': productDescription.isAvailable,
       })
       .from('ProductDescription')
       .where({model_number: productDescription.modelNumber});
@@ -83,6 +85,7 @@ class ProductDescriptionsTDG {
    * @return {Promise<number>} a promise which resolves to the number of rows
    * affected
    */
+  // WE should not have that method.... can't delete product descriptions!
   delete(prodDescription) {
       console.log(productDescription);
       console.log('in productDescriptionTDG');

@@ -3,8 +3,8 @@ const ProductDescription = require(rootPath + '/models/ProductDescription.js');
 
 class Monitor extends ProductDescription {
     constructor(displaySize, price, weight,
-                brandName, modelNumber, type) {
-        super(price, weight, brandName, modelNumber, type);
+                brandName, modelNumber, type, isAvailable) {
+        super(price, weight, brandName, modelNumber, type, isAvailable);
         this.displaySize = displaySize;
     }
     getDisplaySize() {

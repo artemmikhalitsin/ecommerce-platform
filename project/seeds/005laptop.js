@@ -1,3 +1,7 @@
+/**
+ * Sedding the Laptop table with some data
+ * @author Ajmer Singh Gadreh
+ */
 const laptops = [
   {
     'model_number': '891507686-9',

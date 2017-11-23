@@ -7,6 +7,10 @@ const InventoryItemRepository = require(rootPath +
 const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
 
+const User = require(rootPath + '/models/User.js');
+
+let validator = require('validator');
+
 /**
 * Identity map of inventory items
 * @author Wai Lau, Amanda Wai
@@ -31,44 +35,106 @@ class Controller {
   }
 
   /**
-  * Processes a registration registrationRequest
-  * @param {Object} req Incoming HTTP request containing registration info
-  * @param {Object} res HTTP Response object to be sent back to user
-  */
+   * Validates the registration request sent by the user
+   * @author Ajmer Singh Gadreh
+   * @param {Object} userData it contains all the data sent from the user
+   * NOTE: Still in progress
+   */
+  validateRegistrationRequest(userData) {
+    let errors = [];
+
+    // Checking for empty data fields
+    Object.keys(userData).forEach((element) => {
+      let data = validator.trim(userData[element]);
+      if (validator.isEmpty(data)) {
+        errors.push('The ' + element + ' cannot be empty OR have only spaces');
+      }
+    });
+
+    // Validating the fields
+    if (errors.length == 0) {
+      let phone = validator.blacklist(userData['phone_number'], ' ( ) ');
+      let email = userData['email'];
+      let password = userData['password'];
+      let confirmPassword = userData['confirmPassword'];
+
+      // validating phone number
+      if (!validator.isMobilePhone(phone, 'en-CA')) {
+        errors.push('The phone number is invalid');
+      }
+
+      // checking email
+      if (!validator.isEmail(email)) {
+        errors.push('The email is invalid');
+      }
+
+      // Checking password length
+      if (!validator.isLength(password, {min: 6, max: 20})) {
+        errors.push('Password length is not between 6 and 20');
+      }
+
+      // Comparing password with confirmPassword
+      if (!validator.equals(password, confirmPassword)) {
+        errors.push('Confirmation of password failed');
+      }
+
+      // Checking white spaces in password
+      if (validator.contains(password, ' ')) {
+        errors.push('Password cannot contain spaces');
+      }
+    }
+
+    return errors;
+  }
+
+  /**
+   * Processes a registration registrationRequest
+   * @author Ajmer Singh Gadreh
+   * @param {Object} req Incoming HTTP request containing registration info
+   * @param {Object} res HTTP Response object to be sent back to user
+   */
   registrationRequest(req, res) {
+    let messages = [];
     let userData = req.body;
-    let password = userData['password'];
-    let confirmPassword = userData['confirmPassword'];
-    let hash = this.crypto.createHash('sha256');
-    let salted = userData['email'] + password + 'salt';
-    userData['password'] = hash.update(salted).digest('hex');
-    if (password != confirmPassword) {
-      console.log('password confirmation failed. try again...');
+    let errors = this.validateRegistrationRequest(userData);
+
+    if (errors.length > 0) {
+      // if it reaches here, then some validation failed. Send errors back
       res.redirect('/registration');
     } else {
-      delete userData['confirmPassword'];
-      let email = userData['email'];
-      this.userRepo.verifyEmail(email).then((result) => {
-        console.log(result);
+      this.userRepo.verifyEmail(userData['email']).then( (result) => {
         if (result.length == 0) {
-          console.log('adding new user');
-          userData['is_admin'] = false;
-          console.log(userData);
-          this.userRepo.save(userData).then((result) => {
+          let hash = this.crypto.createHash('sha256');
+          let salted = userData['email'] + userData['password'] + 'salt';
+          userData['password'] = hash.update(salted).digest('hex');
+
+          // creating a user object by using the provided data
+          let user = new User(
+            userData['first_name'], userData['last_name'],
+            userData['phone_number'], userData['email'],
+            userData['full_address'], userData['password'], false
+          );
+
+          // About to save the user into the database
+          this.userRepo.save(user).then( () => {
+            // the following message should be passed to login page
+            messages.push('Your account has been created! You can login now!');
             res.redirect('/login');
           })
           .catch( (err) => {
-            console.log('failed: ' + err);
+            // send the following error to the registration page
+            errors.push('Something bad happened while processing the request');
             res.redirect('/registration');
           });
         } else {
-          console.log('Email already exists');
+          // send the following error to the registration page
+          errors.push('The email is already taken! Please provide another one');
           res.redirect('/registration');
         }
       })
       .catch((err) => {
         console.log(err);
-        console.log('something bad happened');
+        console.log('something bad happened while processing the request');
       });
     }
   }
@@ -176,6 +242,8 @@ class Controller {
   */
 
   inventoryAction(req, res) {
+    console.log("In progress...");
+    /*
     if (req.session.exists==true && req.session.isAdmin==true) {
       let request = req.body;
       console.log(request.actions);
@@ -212,6 +280,7 @@ class Controller {
     } else {
       console.log('Not admin, fool!');
     }
+    */
   }
 
   /**
@@ -224,7 +293,7 @@ class Controller {
     if (req.session.exists) {
       res.redirect('/getAllInventoryItems');
     } else {
-      res.render('login', {error: 'Invalid username/password'});
+      res.render('login');
     }
   }
 

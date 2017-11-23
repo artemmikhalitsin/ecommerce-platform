@@ -7,6 +7,7 @@ monitorForm.component('monitorForm', {
     $scope.monitor = {};
     $scope.submitMonitor = () => {
       $scope.monitor.type = 'Monitor';
+      $scope.monitor.isAvailable = 1;
       $scope.$emit('newMonitor', $scope.monitor);
       $scope.monitor = {};
     }
