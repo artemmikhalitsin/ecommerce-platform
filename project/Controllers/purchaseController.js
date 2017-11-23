@@ -196,6 +196,8 @@ class PurchaseController {
   completePurchaseTransaction(req, res) {
     invariant: req.session.email != null, 'User is not logged in';
     pre: {
+      this.shoppingCartList[req.session.email] != null,
+      'User has nothing in their shopping cart';
       Object.keys(this.shoppingCartList[req.session.email]
         .getCart()).length > 0, 'User has an empty cart';
       Object.keys(this.shoppingCartList[req.session.email]
@@ -295,9 +297,9 @@ class PurchaseController {
     for (let i in Object.keys(returnCart)) {
       if (returnCart[i]) {
         returns.push({client: user,
-                            model_number: returnCart[i].model,
-                            serial_number: returnCart[i].serial,
-                            purchase_Id: returnCart[i].purchaseId});
+                            modelNumber: returnCart[i].model,
+                            serialNumber: returnCart[i].serial,
+                            purchaseId: returnCart[i].purchaseId});
       }
     }
     let transaction = [{client: user,

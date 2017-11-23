@@ -73,9 +73,6 @@ class PurchaseCollectionRepo {
    *
    */
   returnItems(items) {
-    this.uow.registerReturn(items);
-    this.uow.registerNewItem(items);
-    this.uow.commitAll();
     let electronicsToAdd = items.map(
       (item) => {
         return new InventoryItem(item.id, item.serialNumber,
@@ -88,6 +85,9 @@ class PurchaseCollectionRepo {
                                  item.modelNumber);
       }
     );
+    this.uow.registerReturn(electronicsToDelete);
+    this.uow.registerNewItem(electronicsToAdd);
+    this.uow.commitAll();
     this.inventoryItemsIM.add(electronicsToAdd);
     this.purchaseItemsIM.delete(electronicsToDelete);
   }

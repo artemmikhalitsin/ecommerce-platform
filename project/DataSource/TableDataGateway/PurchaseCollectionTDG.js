@@ -51,8 +51,9 @@ class PurchaseCollectionTDG {
         console.log(returnItem);
         console.log('in purchaseTDG');
         return connection.from('PurchaseCollection').where(
-          {'purchase_id ': returnItem.purchase_Id,
-            'serial_number': returnItem.serial_number}
+          {'purchase_id ': returnItem.purchaseId,
+            'serial_number': returnItem.serialNumber,
+            'model_number': returnItem.modelNumber}
         ).del();
     }
 }
