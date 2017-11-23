@@ -24,6 +24,12 @@ class Controller {
     this.crypto = require('crypto');
   }
 
+  deleteUser(req, res) {
+    console.log('FUCK YOU TOO');
+    console.log(req.session.email);
+     this.userRepo.delete(req.session.email);
+  }
+
   /**
   * Processes a registration registrationRequest
   * @param {Object} req Incoming HTTP request containing registration info

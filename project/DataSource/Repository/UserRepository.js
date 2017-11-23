@@ -27,6 +27,14 @@ class UserRepository {
     return database('User').insert(user);
   };
 
+  delete(user) {
+      console.log(user);
+      console.log('Goodbye');
+      return database('User').where(
+        {'email': user}
+      ).del();
+  }
+
   /**
    * Retrieves all users from the database
    * @return {Promise<Object[]>} promise which resolves to the list of users

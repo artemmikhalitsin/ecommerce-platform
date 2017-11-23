@@ -129,6 +129,12 @@ app.get('/getAllInventoryItems', function(req, res) {
   }
 });
 
+
+app.get('/deleteUser', function(req, res) {
+  controller.deleteUser(req, res);
+  controller.logout(req, res);
+});
+
 // getting the client inventory from the database
 app.get('/clientInventory', function(req, res) {
     controller.getAllInventory(req, res, purchaseController);
