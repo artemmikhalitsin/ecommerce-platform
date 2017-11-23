@@ -72,9 +72,6 @@ class InventoryItemRepository {
           );
           // Add the newly retrieved objected to the identity map
           inventoryItemsIM.add(dbItems);
-
-          console.log('the inventory items repo gives: '
-            + JSON.stringify(dbItems));
           resolve(imapItems.concat(dbItems));
         })
         .catch((err) => {

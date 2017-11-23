@@ -140,18 +140,18 @@ class Laptop extends Computer {
       return {
         // Product properties
         type: this.type,
-        model_number: this.modelNumber,
-        brand_name: this.brandName,
+        modelNumber: this.modelNumber,
+        brandName: this.brandName,
         price: this.price,
         weight: this.weight,
         // Computer properties
-        processor_type: this.processorType,
-        ram_size: this.ramSize,
-        number_cpu_cores: this.numberCpuCores,
+        processorType: this.processorType,
+        ramSize: this.ramSize,
+        numberCpuCores: this.numberCpuCores,
         harddrive_size: this.harddriveSize,
         // Laptop properties
-        display_size: this.displaySize,
-        battery_info: this.batteryInfo,
+        displaySize: this.displaySize,
+        batteryInfo: this.batteryInfo,
         os: this.os,
         touchscreen: this.touchscreen,
         camera: this.camera,

@@ -1,7 +1,4 @@
-const Promise = require('bluebird');
 const rootPath = require('app-root-dir').get();
-const InventoryItem = require(rootPath +
-  '/models/InventoryItem.js');
 const ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
 const InventoryItemRepository = require(rootPath +
@@ -78,9 +75,6 @@ class Controller {
    */
 
   getAllInventory(req, res, purchaseController) {
-    function combineByModelNumber(products, items) {
-
-    }
     let query = url.parse(req.url, true).query;
     let search = query.search;
     let inventory = [];
@@ -110,19 +104,19 @@ class Controller {
         () => {
           /* Now, combine products and inventory items and output everything
           in a front-end friendly format */
-          let inventorySerials = inventoryItems.map(
-            (item) => {
-              return item.serialNumber;
-            }
-          );
           inventory = products.map(
             // for each product, find it's inventory items, and produce a
             // front-end friendly object containing all the info
             (product) => {
-              // Get the serial numbers
-              let productSerials = inventoryItems.filter(
+              // Get the serial numbers which correspond to this product
+              let productItems = inventoryItems.filter(
                 (item) => {
-                  return item.serialNumber === product.serialNumber;
+                  return item.modelNumber === product.modelNumber;
+                }
+              );
+              let productSerials = productItems.map(
+                (item) => {
+                  return item.serialNumber;
                 }
               );
               // Produce a front-end friendly object

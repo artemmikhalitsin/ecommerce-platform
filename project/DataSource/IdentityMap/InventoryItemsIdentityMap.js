@@ -43,7 +43,7 @@ class InventoryItemsIdentityMap {
         if (!item) {
           return false;
         };
-        return modelNumbers.includes(item.serial_number);
+        return modelNumbers.includes(item.serialNumber);
       });
   }
 
@@ -55,7 +55,7 @@ class InventoryItemsIdentityMap {
     for (let i = 0; i < newInventoryItems.length; i++) {
       let item = newInventoryItems[i];
       // Add the item only if it doesn't already exist
-      if (!this.inventoryItems.includes(item.serial_number)) {
+      if (!this.inventoryItems.includes(item.serialNumber)) {
         this.inventoryItems.push(
           newInventoryItems[i].clone()
         );
@@ -70,7 +70,7 @@ class InventoryItemsIdentityMap {
      */
   delete(toRemove) {
     this.inventoryItems = this.inventoryItems.filter((item) => {
-      return !toRemove.includes(item.serial_number);
+      return !toRemove.includes(item.serialNumber);
     });
   }
 }

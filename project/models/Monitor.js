@@ -38,12 +38,12 @@ class Monitor extends ProductDescription {
       return {
         // Product properties
         type: this.type,
-        model_number: this.modelNumber,
-        brand_name: this.brandName,
+        modelNumber: this.modelNumber,
+        brandName: this.brandName,
         price: this.price,
         weight: this.weight,
         // Monitor properties
-        display_size: this.displaySize,
+        displaySize: this.displaySize,
       };
     }
 }

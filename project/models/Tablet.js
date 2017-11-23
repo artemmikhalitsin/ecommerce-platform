@@ -133,20 +133,20 @@ class Tablet extends Computer {
       return {
         // Product properties
         type: this.type,
-        model_number: this.modelNumber,
-        brand_name: this.brandName,
+        modelNumber: this.modelNumber,
+        brandName: this.brandName,
         price: this.price,
         weight: this.weight,
         // Computer properties
-        processor_type: this.processorType,
-        ram_size: this.ramSize,
-        number_cpu_cores: this.numberCpuCores,
-        harddrive_size: this.harddriveSize,
+        processorType: this.processorType,
+        ramSize: this.ramSize,
+        numberCpuCores: this.numberCpuCores,
+        harddriveSize: this.harddriveSize,
         // Tablet properties
         os: this.os,
-        camera_info: this.cameraInfo,
-        display_size: this.displaySize,
-        battery_info: this.batteryInfo,
+        cameraInfo: this.cameraInfo,
+        displaySize: this.displaySize,
+        batteryInfo: this.batteryInfo,
         dimensions: {
           height: this.dimensions.height,
           width: this.dimensions.width,
