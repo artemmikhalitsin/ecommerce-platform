@@ -38,7 +38,6 @@ class InventoryItemRepository {
     return context;
   }
   getByModelNumbers(modelNumbers) {
-<<<<<<< HEAD
     return new Promise((resolve, reject) => {
       if (modelNumbers === undefined) {
         reject(new TypeError('modelNumbers must be of type string[]'));
@@ -80,24 +79,6 @@ class InventoryItemRepository {
           reject(err);
         });
       });
-=======
-    let inventory = this.inventoryTDG.getByModelNumbers(modelNumbers);
-    console.log('The models numbers passed' + JSON.stringify(modelNumbers));
-    // let result = [];
-    return Promise.all([inventory]).then((values) => {
-      let result = [];
-          values[0].forEach(function(item) {
-            result.push(new InventoryItem(item.id, item.serial_number,
-              item.model_number, null));
-          });
-          console.log('the inventory items repo gives: '
-            + JSON.stringify(result));
-
-    return result;
-        }).catch((err) => {
-console.log(err);
-});
->>>>>>> aa89b55ed891cb0d659f2a624199bd8f0f547601
   }
   /**
    * Retrieves all items from the database table
