@@ -43,7 +43,7 @@ class InventoryItemsIdentityMap {
         if (!item) {
           return false;
         };
-        return modelNumbers.includes(item.serialNumber);
+        return modelNumbers.includes(item.modelNumber);
       });
   }
 
@@ -69,8 +69,9 @@ class InventoryItemsIdentityMap {
      * model numbers for which the items are to be removed
      */
   delete(toRemove) {
+    let itemsToRemove = toRemove.map((item) => item.serialNumber);
     this.inventoryItems = this.inventoryItems.filter((item) => {
-      return !toRemove.includes(item.serialNumber);
+      return !(itemsToRemove.includes(item.serialNumber));
     });
   }
 }

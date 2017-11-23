@@ -20,6 +20,7 @@ class InventoryItemRepository {
    */
   constructor() {
     this.uow = new UnitOfWork();
+    this.inventoryTDG = new inventoryTDG();
   }
   /**
    * Retrieves current instance of the repository, or if one doesnt
@@ -40,7 +41,7 @@ class InventoryItemRepository {
   getAll() {
     let context = inventoryItemsIM.getAll();
     if (context.length <= 0) {
-      context = inventoryTDG.select();
+      context = this.inventoryTDG.select();
 
       Promise.all([context]).then(
         (values) => {
@@ -61,7 +62,9 @@ class InventoryItemRepository {
         resolve([]);
       }
       let imapItems = inventoryItemsIM.get(modelNumbers);
-      let imapModelNumbers = imapItems.map((item) => item.getModelNumber());
+      let imapModelNumbers = imapItems.map((item) => {
+        return item.modelNumber;
+      });
       // If all items found in identity map, resolve the promise
       if (imapItems.length === modelNumbers.length) {
         resolve(imapItems);
@@ -74,7 +77,7 @@ class InventoryItemRepository {
       );
       console.log(dbModelNumbers);
       // Now fetch those numbers fom the tables
-      inventoryTDG.getByModelNumbers(dbModelNumbers)
+      this.inventoryTDG.getByModelNumbers(dbModelNumbers)
       .then(
         (items) => {
           // Create objects from table rows
@@ -119,7 +122,7 @@ class InventoryItemRepository {
     if (items.length <= 0 || items.length < ids.length) {
       // REVIEW: Looks like this duplicates some functionality from getAll
       // Maybe this should be abstracted into a function? - Artem
-      let itemsFromTDG = inventoryTDG.select();
+      let itemsFromTDG = this.inventoryTDG.select();
           Promise.all([itemsFromTDG]).then(
             (values) => {
               items = values[0];
@@ -152,41 +155,58 @@ class InventoryItemRepository {
     let electronicsToDelete = [];
 
     // Extracts the model numbers of given items
-    let modelNumbers = items.map((p) => p.model_number);
-
+    let modelNumbers = items.map((p) => p.modelNumber);
     if (modelNumbers.length > 0) {
       // Retrieve the items corresponding to given ids
       let allInventoryItems = inventoryItemsIM
-                          .getByModelNumbers(modelNumbers);
-
+                          .get(modelNumbers);
       for (let i = 0; i < items.length; i++) {
-        for (let j = 0; j < items[i].serial_number.length; j++) {
+        for (let j = 0; j < items[i].serialNumbers.length; j++) {
           if (allInventoryItems.findIndex(
-            (p) => p.serial_number == items[i].serial_number[j]) === -1
+            (p) => p.serialNumber == items[i].serialNumbers[j]) === -1
             && electronicsToAdd.findIndex(
-              (e) => e.serial_number == items[i].serial_number[j]
-              && e.model_number == items[i].model_number) === -1) {
+              (e) => e.serial_number == items[i].serialNumbers[j]
+              && e.model_number == items[i].modelNumber) === -1) {
               // Case: item is not in our inventory
               // and hasn't already been processed
-              electronicsToAdd.push({'serial_number': items[i].serial_number[j],
-                                      'model_number': items[i].model_number});
+              electronicsToAdd.push({'serialNumber': items[i].serialNumbers[j],
+                                      'modelNumber': items[i].modelNumber});
             }
         }
       }
       // Any item in inventory that don't appear in new list are to be removed
-      electronicsToDelete = allInventoryItems.filter(function(item) {
-       items.forEach(function(element) {
-         return element.serial_number.findIndex((e) =>
-            e == item.serial_number) === -1;
+      let toBeDeleted = false;
+      electronicsToDelete = allInventoryItems.filter((item) => {
+        toBeDeleted = false;
+       items.forEach((element) => {
+         console.log(element.serialNumbers.findIndex((e) =>
+            e == item.serialNumber) > -1);
+         toBeDeleted = element.serialNumbers.findIndex((e) =>
+            e == item.serialNumber) > -1 ? true : false;
         });
+        return toBeDeleted;
       });
     }
     // Process the new tasks
     this.uow.registerNewItem(electronicsToAdd);
     this.uow.registerDeletedItem(electronicsToDelete);
-
     this.uow.commitAll();
-    inventoryItemsIM.add(electronicsToAdd);
+    let addToIM = electronicsToAdd.map(
+      (item) => {
+        return new InventoryItem(1, item.serialNumber,
+                                 item.modelNumber, null);
+      }
+    );
+    let deleteFromIM = electronicsToDelete.map(
+      (item) => {
+        return new InventoryItem(1, item.serialNumber,
+                                 item.modelNumber, null);
+      }
+    );
+    inventoryItemsIM.add(addToIM);
+    inventoryItemsIM.delete(deleteFromIM);
+    console.log('new im');
+    console.log(inventoryItemsIM.getAll());
   }
 }
 module.exports = InventoryItemRepository;

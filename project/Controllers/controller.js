@@ -150,7 +150,6 @@ class Controller {
        return Promise.each(results, (product)=>{
         return this.inventoryRepo.getByModelNumbers([product.modelNumber])
           .then((values)=>{
-                  console.log('inventory item is ' + JSON.stringify(values));
                   product.serialNumbers = values.map((p) => p.serialNumber);
                   inventory.push(product);
                 });
@@ -251,7 +250,7 @@ class Controller {
       let addSerials = JSON.parse(req.body.addSerials);
       let deleteSerials = JSON.parse(req.body.deleteSerials);
       let allItems = addSerials.concat(deleteSerials);
-      // this.inventoryRepo.save(allItems);
+      this.inventoryRepo.save(allItems);
       res.status(200).send({success: 'Actions complete'});
     }
     /*

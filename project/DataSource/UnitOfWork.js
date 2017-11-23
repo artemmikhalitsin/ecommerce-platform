@@ -129,7 +129,7 @@ class UnitOfWork {
       let newItems;
       if(this.newInventoryItems[0] != null && this.newInventoryItems[0].length > 0){
         newItems = Promise.each(this.newInventoryItems[0], (electronic) => {
-          return this.inventoryItemsTDG.add(electronic.serial_number, electronic.model_number).transacting(trx).then(() => {
+          return this.inventoryItemsTDG.add(electronic.serialNumber, electronic.modelNumber).transacting(trx).then(() => {
                console.log('added inventory item');
          })
        });}
