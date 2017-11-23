@@ -26,11 +26,14 @@ class Tablet extends Computer {
      * @param {string} modelNumber model number
      * @param {string} type
      */
+     // REVIEW: constructor should not accept type - it should set
+     // the product type to 'Tablet' itself - Artem
     constructor(computerId, processorType, ramSize, numberCpuCores,
                 harddriveSize, displaySize, dimensions, batteryInfo, os,
-                cameraInfo, price, weight, brandName, modelNumber, type) {
+                cameraInfo, price, weight, brandName, modelNumber, type,
+                isAvailable) {
         super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
-              price, weight, brandName, modelNumber, type);
+              price, weight, brandName, modelNumber, type, isAvailable);
         this._displaySize = displaySize;
         this._dimensions = dimensions;
         this._batteryInfo = batteryInfo;

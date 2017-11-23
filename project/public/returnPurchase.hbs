@@ -26,14 +26,13 @@
     <title>Return Item Page</title>
     <!-- Font Awesome -->
     <script type="text/javascript">
-      let mock = JSON.parse('{{{items}}}');
+      // let mock = JSON.parse('{{{items}}}');
     </script>
 </head>
 
 <body ng-controller="returnPurchaseController">
   <div ng-include="'includes/header.hbs'"></div>
-
-  <div class="tablebox">
+  <div class="tablebox" style="margin-top: 5em;">
     <table>
       <thead>
         <tr>
@@ -47,7 +46,7 @@
         <td>{[{x.serial_number}]}</td>
         <td>{[{x.model_number}]}</td>
         <td>{[{x.purchase_id}]}</td>
-        <td><button ng-click="addToReturnCart(x.serial_number, x.model_number)">Return</button></td>
+        <td><button ng-click="addToReturnCart(x.serial_number, x.model_number, x.purchase_id)">Return</button></td>
       </tr>
     </table>
     <div class="wrapper">

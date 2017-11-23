@@ -25,12 +25,14 @@ class Laptop extends Computer {
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
      * @param {string} type
+     * @param {boolean} isAvailable availability of the product
      */
     constructor(computerId, processorType, ramSize, numberCpuCores,
                 harddriveSize, displaySize, batteryInfo, os, touchscreen,
-                camera, price, weight, brandName, modelNumber, type) {
+                camera, price, weight, brandName, modelNumber, type,
+                isAvailable) {
         super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
-          price, weight, brandName, modelNumber, type);
+          price, weight, brandName, modelNumber, type, isAvailable);
         this._displaySize = displaySize;
         this._batteryInfo = batteryInfo;
         this._os = os;

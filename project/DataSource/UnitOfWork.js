@@ -29,7 +29,8 @@ const tabletsTDG = require(rootPath +
   '/DataSource/TableDataGateway/TabletsTDG.js');
 const purchaseTDG = require(rootPath +
   '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
-
+const TransactionLogTDG = require(rootPath +
+  '/DataSource/TableDataGateway/TransactionLogTDG.js');
 /**
  * Unit of Work implementation
  * @author Ekaterina Ruhlin
@@ -47,6 +48,7 @@ class UnitOfWork {
     this.deletedInventoryItems = [];
     this.newPurchases = [];
     this.deletedPurchases = [];
+    this.transactionItems = [];
   }
   registerNew(object) {
     this.newElements = [];
@@ -56,12 +58,10 @@ class UnitOfWork {
     this.newPurchases = [];
     this.newPurchases.push(object);
   }
-
   registerReturn(object){
     this.deletedPurchases = [];
     this.deletedPurchases.push(object);
   }
-
   registerDirty(object) {
     this.dirtyElements = [];
     this.dirtyElements.push(object);
@@ -70,13 +70,17 @@ class UnitOfWork {
     this.deletedElements = [];
     this.deletedElements.push(object);
   }
-  registerNewItem(object){
+  registerNewItem(object) {
     this.newInventoryItems = [];
     this.newInventoryItems.push(object);
   }
-  registerDeletedItem(object){
+  registerDeletedItem(object) {
     this.deletedInventoryItems = [];
     this.deletedInventoryItems.push(object);
+  }
+  registerTransaction(object){
+    this.transactionItems = [];
+    this.transactionItems.push(object);
   }
   commitAll() {
 
@@ -135,6 +139,14 @@ class UnitOfWork {
          })
        });}
 
+       //add(log) transaction
+       let addedTransaction;
+       if(this.transactionItems[0] != null && this.transactionItems[0].length > 0){
+        addedTransaction = Promise.each(this.transactionItems[0], (transaction) => {
+         return this.transactionTDG.add(transaction).transacting(trx).then(() => {
+               console.log('added transaction');
+         })
+       });}
       //update products
       let updateditems;
       if(this.dirtyElements[0] && this.dirtyElements[0].length > 0){
@@ -281,7 +293,7 @@ class UnitOfWork {
       }
       //add
       );}
-      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems])
+      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems, addedTransaction, deletedPurchase])
         .then(trx.commit)
         .catch(trx.rollback);
     });

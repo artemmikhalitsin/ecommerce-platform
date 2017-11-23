@@ -11,12 +11,14 @@ class ProductDescription {
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
      * @param {string} type
+     * @param {boolean} isAvailable
      */
-    constructor(price, weight, brandName, modelNumber, type) {
+    constructor(price, weight, brandName, modelNumber, type, isAvailable) {
         this._price = price;
         this._weight = weight;
         this._brandName = brandName;
         this._modelNumber = modelNumber;
+        this._isAvailable = isAvailable;
         this._type = type;
     }
     /**
@@ -88,6 +90,20 @@ class ProductDescription {
     set modelNumber(modelNumber) {
       this._modelNumber = modelNumber;
     }
+    /**
+     * isAvailable accessor
+     * @return {boolean} availability of the product
+     */
+    get isAvailable() {
+      return this._isAvailable;
+    }
+    /**
+     * isAvailable mutator
+     * @param {boolean} isAvailable new availability status of the product
+     */
+     set isAvailable(isAvailable) {
+       this._isAvailable = isAvailable;
+     }
 }
 
 module.exports = ProductDescription;

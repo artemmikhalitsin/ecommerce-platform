@@ -130,7 +130,8 @@ class ProductDescriptionRepository {
         description.weight,
         description.brand_name,
         description.model_number,
-        description.type
+        description.type,
+        description.is_available
         ));
     });
     return results;
@@ -264,7 +265,6 @@ class ProductDescriptionRepository {
                 electronicsToAdd.push(products[i]);
               }
     }
-
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);
 

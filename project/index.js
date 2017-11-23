@@ -1,5 +1,3 @@
-// const stringy = require('stringy');
-
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
@@ -8,7 +6,7 @@ const rootPath = require('app-root-dir').get();
 const app = express();
 
 let bodyParser = require('body-parser');
-app.use( bodyParser.json() ); // to support JSON-encoded bodies
+app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
   extended: false,
 }));
@@ -22,7 +20,8 @@ let controller = new Controller();
 let purchaseController = new PurchaseController();
 // linter is wrong, aspect is enabled by the constructor
 let aspect = new Aspect();
-aspect.monitor(controller);
+aspect.watch(controller);
+aspect.watch(purchaseController);
 
 // allows use of static pages
 app.use(express.static(path.join(__dirname, 'public')));
@@ -52,8 +51,8 @@ app.get('/login', function(req, res) {
     console.log('already logged in, redirecting to inventory');
     res.redirect('/getAllInventoryItems');
   } else {
-  res.render('login');
-}
+    res.render('login');
+  }
 });
 
 // getting the registration page
@@ -98,10 +97,10 @@ app.get('/logout', function(req, res) {
 });
 
 app.get('/users', function(req, res) {
-  if (req.session.exists) {
+  if (req.session.exists && req.session.isAdmin) {
     res.render('userTable');
   } else {
-    res.redirect('/login');
+    res.redirect('/');
   }
 });
 
@@ -174,7 +173,7 @@ app.get('/api/viewPurchaseCollection', function(req, res) {
 });
 
 app.get('/api/getAllProducts', function(req, res) {
-  controller.getProductInfo(req, res);
+  controller.getProductInfo(req, res, purchaseController);
 });
 
 app.get('/api/getAllClients', function(req, res) {
@@ -182,5 +181,5 @@ app.get('/api/getAllClients', function(req, res) {
 });
 
 app.listen(8080, function() {
-  console.log('Example app listening on port 8080!');
+  console.log('RCS listening on 8080!');
 });
