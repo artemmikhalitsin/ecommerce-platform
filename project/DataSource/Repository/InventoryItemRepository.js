@@ -64,8 +64,12 @@ class InventoryItemRepository {
       if (modelNumbers.length === 0) {
         resolve([]);
       }
-      let imapItems = inventoryItemsIM.get(modelNumbers);
-      let imapModelNumbers = imapItems.map((item) => item.getModelNumber());
+      let imapItems = [];
+      modelNumbers.forEach(
+        (model) => {
+          imapItems.concat(inventoryItemsIM.getByModelNumber(model));
+        });
+      let imapModelNumbers = imapItems.map((item) => item.modelNumber);
       // If all items found in identity map, resolve the promise
       if (imapItems.length === modelNumbers.length) {
         resolve(imapItems);

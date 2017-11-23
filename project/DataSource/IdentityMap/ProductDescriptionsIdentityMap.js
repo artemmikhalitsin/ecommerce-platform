@@ -10,7 +10,6 @@ let _instance;
 class ProductDescriptionsIdentityMap {
   /**
      * Creates an product description identity map
-     * Loads all product descriptions from database into memory
      */
   constructor() {
     this.productDescriptions = [];
@@ -25,7 +24,7 @@ class ProductDescriptionsIdentityMap {
 
   /**
      * Gets all the products currently stored in the Identity map
-     * @return {Object[]} an array containing the products
+     * @return {Product[]} an array containing the products
      */
   getAll() {
     // Returns a copy of the array, so internal array can't be manipulated
@@ -35,7 +34,7 @@ class ProductDescriptionsIdentityMap {
   /**
      * Gets a product from the identity map
      * @param {string} modelNumber and alpha-numerical model number
-     * @return {Object} a product corresponding to the given model
+     * @return {Product} a product corresponding to the given model
      * numbers, if exists
      */
   get(modelNumber) {
@@ -46,7 +45,7 @@ class ProductDescriptionsIdentityMap {
 
   /**
      * Adds a new object into the identity map
-     * @param {Object[]} newProductDescription a list containing new products
+     * @param {Product} newProductDescription a product description
      */
   add(newProductDescription) {
     this.productDescriptions.push(newProductDescription);
@@ -54,7 +53,7 @@ class ProductDescriptionsIdentityMap {
 
   /**
      * Deletes an item from the identity map
-     * @param {string[]} toRemove a model number corresponding to the
+     * @param {string} toRemove a model number corresponding to the
      * item which is to be deleted
      * model numbers for which the description is to be removed
      */
