@@ -28,6 +28,15 @@ class Controller {
     this.crypto = require('crypto');
   }
 
+  deleteUser(req, res) {
+    console.log('FUCK YOU TOO');
+    console.log(req.session.email);
+     this.userRepo.delete(req.session.email).then(() => {
+       console.log('account deleted');
+       res.redirect('/login');
+     });
+  }
+
   /**
    * Validates the registration request sent by the user
    * @author Ajmer Singh Gadreh
@@ -91,7 +100,7 @@ class Controller {
     let messages = [];
     let userData = req.body;
     let errors = this.validateRegistrationRequest(userData);
-
+    console.log(errors);
     if (errors.length > 0) {
       // if it reaches here, then some validation failed. Send errors back
       res.redirect('/registration');
@@ -179,6 +188,7 @@ class Controller {
     this.inventoryRepo.save(inventoryItems);
   }
 
+
   getProductDescription(req, res) {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;
@@ -195,6 +205,7 @@ class Controller {
     });
     console.log(productDescriptions);
   }
+
   getCatalog(req, res) {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;
@@ -237,8 +248,6 @@ class Controller {
     req.session.destroy();
     res.redirect('/');
   }
-
-
   /**
   * Processes an inventory action initiated by the user
   * @param {Object} req HTTP request object containing action info
@@ -307,7 +316,6 @@ class Controller {
     }
   }
 
-
   getProductInfo(req, res) {
     let inventory = [];
     this.productDescriptionRepo.getAllWithIncludes()
@@ -329,7 +337,7 @@ class Controller {
   }
 
   getClients(req, res) {
-    this.userRepo.getAdmins().then((result) => {
+    this.userRepo.getClients().then((result) => {
       res.json(result);
     });
   }
