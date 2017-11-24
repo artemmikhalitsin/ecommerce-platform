@@ -378,6 +378,9 @@ class ProductDescriptionRepository {
 
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);
+    electronicsToAdd = electronicsToAdd.map((e) => {
+      return ProductDescriptionRepository.makeProduct(e);
+    });
     console.log(electronicsToAdd);
     console.log(electronicsToUpdate);
     return this.uow.commitAll().then((result) => {

@@ -58,6 +58,7 @@ class UnitOfWork {
 
   saveNew() {
     return new Promise((resolve, reject) => {
+      console.log(this.newNewElements);
       let insertions = this.newElements.map(
         (object) => {
           return RepositoryRegistry.getRepo(object).insert(object)
