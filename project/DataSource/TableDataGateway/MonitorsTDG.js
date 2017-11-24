@@ -22,10 +22,10 @@ class MonitorsTDG {
     static insert(monitor) {
       return connection.transaction((trx) => {
         return productDescTDG.add(monitor)
-          .transacting(trx).then((model_number) => {
+          .transacting(trx).then((modelNumber) => {
               return connection.insert({
-              'model_number': monitor.modelNumber,
-              'display_size': monitor.displaySize,
+              'modelNumber': monitor.modelNumber,
+              'displaySize': monitor.displaySize,
           }, 'id')
           .into('Monitor');
         });
@@ -34,23 +34,23 @@ class MonitorsTDG {
 
     static add(monitor) {
         return connection.insert({
-            'model_number': monitor.modelNumber,
-            'display_size': monitor.displaySize,
+            'modelNumber': monitor.modelNumber,
+            'displaySize': monitor.displaySize,
         }, 'id')
         .into('Monitor');
     }
 
     static getAll() {
         return connection('Monitor').select('*')
-          .join('ProductDescription', 'Monitor.model_number',
-                'ProductDescription.model_number');
+          .join('ProductDescription', 'Monitor.modelNumber',
+                'ProductDescription.modelNumber');
     }
 
     static getByModelNumbers(modelNumbers) {
         return connection('Monitor').select('*')
-          .whereIn('ProductDescription.model_number', modelNumbers)
-          .join('ProductDescription', 'Monitor.model_number',
-                'ProductDescription.model_number');
+          .whereIn('ProductDescription.modelNumber', modelNumbers)
+          .join('ProductDescription', 'Monitor.modelNumber',
+                'ProductDescription.modelNumber');
     }
     /**
      * Retrieves all monitor object rows except those listed in modelNumbers
@@ -60,9 +60,9 @@ class MonitorsTDG {
      */
     static getAllExcept(modelNumbers) {
         return connection('Monitor').select('*')
-          .whereNotIn('ProductDescription.model_number', modelNumbers)
-          .join('ProductDescription', 'Monitor.model_number',
-                'ProductDescription.model_number');
+          .whereNotIn('ProductDescription.modelNumber', modelNumbers)
+          .join('ProductDescription', 'Monitor.modelNumber',
+                'ProductDescription.modelNumber');
     }
     /**
      * Updates the specifications of a monitor in the database
@@ -73,9 +73,9 @@ class MonitorsTDG {
     static update(monitor) {
       // REVIEW: This was marked todo, is this still the case? - Artem
         return connection.update({
-          // 'model_number': monitor.modelNumber,
-          'display_size': monitor.displaySize,
-        }).from('Monitor').where({'model_number': monitor.modelNumber});
+          // 'modelNumber': monitor.modelNumber,
+          'displaySize': monitor.displaySize,
+        }).from('Monitor').where({'modelNumber': monitor.modelNumber});
     }
 }
 module.exports = MonitorsTDG;

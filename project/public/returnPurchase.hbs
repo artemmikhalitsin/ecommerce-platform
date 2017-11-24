@@ -43,10 +43,10 @@
         </tr>
       </thead>
       <tr ng-repeat='x in items'>
-        <td>{[{x.serial_number}]}</td>
-        <td>{[{x.model_number}]}</td>
-        <td>{[{x.purchase_id}]}</td>
-        <td><button ng-click="addToReturnCart(x.serial_number, x.model_number, x.purchase_id)">Return</button></td>
+        <td>{[{x.serialNumber}]}</td>
+        <td>{[{x.modelNumber}]}</td>
+        <td>{[{x.purchaseId}]}</td>
+        <td><button ng-click="addToReturnCart(x.serialNumber, x.modelNumber, x.purchaseId)">Return</button></td>
       </tr>
     </table>
     <div class="wrapper">

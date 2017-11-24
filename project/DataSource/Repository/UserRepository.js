@@ -57,7 +57,7 @@ class UserRepository {
    * in the database
    */
   getClients() {
-    return database('User').where('is_admin', 0).select('*');
+    return database('User').where('isAdmin', 0).select('*');
   }
 
   /**
@@ -66,7 +66,7 @@ class UserRepository {
    * in the database
    */
   getAdmins() {
-    return database('User').where('is_admin', 1).select('*');
+    return database('User').where('isAdmin', 1).select('*');
   }
 
   /**

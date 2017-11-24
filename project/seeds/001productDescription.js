@@ -1,83 +1,83 @@
 const productDescriptions = [
   {
-    "model_number": "913871307-1",
-    "brand_name": "HP",
+    "modelNumber": "913871307-1",
+    "brandName": "HP",
     "price": 74,
     "weight": 19,
     "type": "Desktop",
-    "is_available": false
+    "isAvailable": false
   },
   {
-    "model_number": "847616645-1",
-    "brand_name": "Dell",
+    "modelNumber": "847616645-1",
+    "brandName": "Dell",
     "price": 100,
     "weight": 34,
     "type": "Desktop",
-    "is_available": true
+    "isAvailable": true
   },
   {
-    "model_number": "141278542-1",
-    "brand_name": "Dell",
+    "modelNumber": "141278542-1",
+    "brandName": "Dell",
     "price": 35,
     "weight": 59,
     "type": "Monitor",
-    "is_available": true
+    "isAvailable": true
   },
   {
-    "model_number": "511703112-1",
-    "brand_name": "HP",
+    "modelNumber": "511703112-1",
+    "brandName": "HP",
     "price": 49,
     "weight": 87,
     "type": "Monitor",
-    "is_available": false
+    "isAvailable": false
   },
   {
-    "model_number": "425528356-7",
-    "brand_name": "Apple",
+    "modelNumber": "425528356-7",
+    "brandName": "Apple",
     "price": 27,
     "weight": 95,
     "type": "Tablet",
-    "is_available": false
+    "isAvailable": false
   },
   {
-    "model_number": "847042583-8",
-    "brand_name": "Samsung",
+    "modelNumber": "847042583-8",
+    "brandName": "Samsung",
     "price": 69,
     "weight": 45,
     "type": "Tablet",
-    "is_available": false
+    "isAvailable": false
   },
   {
-    "model_number": "891507686-9",
-    "brand_name": "Asus",
+    "modelNumber": "891507686-9",
+    "brandName": "Asus",
     "price": 18,
     "weight": 7,
     "type": "Laptop",
-    "is_available": false
+    "isAvailable": false
   },
   {
-    "model_number": "079057815-8",
-    "brand_name": "Acer",
+    "modelNumber": "079057815-8",
+    "brandName": "Acer",
     "price": 22,
     "weight": 97,
     "type": "Laptop",
-    "is_available": true
+    "isAvailable": true
   },
   {
-    "model_number": "471262598-8",
-    "brand_name": "Razer",
+    "modelNumber": "471262598-8",
+    "brandName": "Razer",
     "price": 75,
     "weight": 79,
     "type": "Laptop",
-    "is_available": false
+    "isAvailable": false
   },
   {
-    "model_number": "937548440-8",
-    "brand_name": "Acer",
+    "modelNumber": "937548440-8",
+    "brandName": "Acer",
     "price": 42,
     "weight": 4,
     "type": "Desktop",
-    "is_available": true
+    "isAvailable": true
   }
 ];
 

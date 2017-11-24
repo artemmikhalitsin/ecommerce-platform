@@ -21,7 +21,7 @@ class DimensionsTDG {
           'depth': dimension.depth,
           'height': dimension.height,
           'width': dimension.width,
-        }, 'dimension_id')
+        }, 'dimensionId')
         .into('Dimensions');
     }
 
@@ -40,7 +40,7 @@ class DimensionsTDG {
           'depth': dimension.depth,
           'height': dimension.height,
           'width': dimension.width,
-        }).from('Dimensions').where({dimension_id: dimension.id});
+        }).from('Dimensions').where({dimensionId: dimension.id});
     }
 }
 module.exports = DimensionsTDG;

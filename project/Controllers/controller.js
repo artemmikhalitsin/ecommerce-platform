@@ -45,7 +45,7 @@ class Controller {
         console.log(result);
         if (result.length == 0) {
           console.log('adding new user');
-          userData['is_admin'] = false;
+          userData['isAdmin'] = false;
           console.log(userData);
           this.userRepo.save(userData).then((result) => {
             res.redirect('/login');

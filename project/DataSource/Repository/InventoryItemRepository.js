@@ -88,8 +88,8 @@ class InventoryItemRepository {
           // Create objects from table rows
           let dbItems = items.map(
             (item) => {
-              return new InventoryItem(item.id, item.serial_number,
-                                       item.model_number, null);
+              return new InventoryItem(item.id, item.serialNumber,
+                                       item.modelNumber, null);
             }
           );
           // Add the newly retrieved objected to the identity map
@@ -160,7 +160,7 @@ class InventoryItemRepository {
     let electronicsToDelete = [];
 
     // Extracts the model numbers of given items
-    let modelNumbers = items.map((p) => p.model_number);
+    let modelNumbers = items.map((p) => p.modelNumber);
 
     if (modelNumbers.length > 0) {
       // Retrieve the items corresponding to given ids
@@ -168,24 +168,24 @@ class InventoryItemRepository {
                           .getByModelNumbers(modelNumbers);
 
       for (let i = 0; i < items.length; i++) {
-        for (let j = 0; j < items[i].serial_number.length; j++) {
+        for (let j = 0; j < items[i].serialNumber.length; j++) {
           if (allInventoryItems.findIndex(
-            (p) => p.serial_number == items[i].serial_number[j]) === -1
+            (p) => p.serialNumber == items[i].serialNumber[j]) === -1
             && electronicsToAdd.findIndex(
-              (e) => e.serial_number == items[i].serial_number[j]
-              && e.model_number == items[i].model_number) === -1) {
+              (e) => e.serialNumber == items[i].serialNumber[j]
+              && e.modelNumber == items[i].modelNumber) === -1) {
               // Case: item is not in our inventory
               // and hasn't already been processed
-              electronicsToAdd.push({'serial_number': items[i].serial_number[j],
-                                      'model_number': items[i].model_number});
+              electronicsToAdd.push({'serialNumber': items[i].serialNumber[j],
+                                      'modelNumber': items[i].modelNumber});
             }
         }
       }
       // Any item in inventory that don't appear in new list are to be removed
       electronicsToDelete = allInventoryItems.filter(function(item) {
        items.forEach(function(element) {
-         return element.serial_number.findIndex((e) =>
-            e == item.serial_number) === -1;
+         return element.serialNumber.findIndex((e) =>
+            e == item.serialNumber) === -1;
         });
       });
     }

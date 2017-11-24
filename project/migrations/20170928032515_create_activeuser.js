@@ -6,12 +6,12 @@ exports.up = function(knex, Promise) {
       throw new Error('Error creating table ' + tablename);
     } else {
       table.increments('id').unsigned().primary();
-      table.integer('user_id').unsigned().notNullable();
-      table.timestamp('logged_at').defaultTo(knex.fn.now());
-      table.foreign('user_id').references('User.id');
+      table.integer('userID').unsigned().notNullable();
+      table.timestamp('loggedAt').defaultTo(knex.fn.now());
+      table.foreign('userID').references('User.id');
       // NOTE: I added a foreign key not reflected in the DOM here (Artem)
-      // table.integer('purchase_id').unsigned().notNullable()
-      // table.foreign('purchase_id').references('Purchase.id')
+      // table.integer('purchaseId').unsigned().notNullable()
+      // table.foreign('purchaseId').references('Purchase.id')
     }
   });
 };

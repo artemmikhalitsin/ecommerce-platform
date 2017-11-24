@@ -1,10 +1,10 @@
 $( document ).ready( function () {
 	$( "#registrationForm" ).validate( {
 		rules: {
-			first_name: "required",
-			last_name: "required",
-			full_address: "required",
-      phone_number: {
+			firstName: "required",
+			lastName: "required",
+			fullAddress: "required",
+      phoneNumber: {
         required: true,
         digits: true,
         minlength: 10,
@@ -27,10 +27,10 @@ $( document ).ready( function () {
 			}
 		},
 		messages: {
-			first_name: "Please enter your firstname",
-			last_name: "Please enter your lastname",
-			full_address: "Please enter an address",
-      phone_number: {
+			firstName: "Please enter your firstname",
+			lastName: "Please enter your lastname",
+			fullAddress: "Please enter an address",
+      phoneNumber: {
         required: "Please enter your phone number",
         digits: "A phone number can only have digits",
         minlength: "A phone number needs exactly 10 digits",

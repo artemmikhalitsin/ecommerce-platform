@@ -15,11 +15,11 @@ function catalogController($scope) {
         dataType: 'json',
         success: function (response) {
           $scope.$apply(function(){
-              
+
           $scope.products = response.items;
           console.log($scope.products);
           });
-          
+
         },
         error: function (xhr) {
           $('#error-box').show();
@@ -44,6 +44,7 @@ function catalogController($scope) {
     $scope.products.push(tablet);
   });
   $scope.submit = function(){
+    console.log($scope.products);
     $.ajax({
       url:'/manageProductCatalog',
       type: 'post',
@@ -51,7 +52,7 @@ function catalogController($scope) {
       dataType: 'json',
       success: function(response){
         $scope.$apply(function(){
-          
+
         $scope.products = response.items;
         console.log("Successfully saved!");
       });

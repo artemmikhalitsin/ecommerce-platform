@@ -8,7 +8,7 @@ desktopEntry.component('desktopEntry', {
   templateUrl: '/inventory/product-entries/desktop-entry.html',
   controller: function($scope) {
     $scope.removeSerial = (index) => {
-      $scope.$ctrl.desktop.serial_numbers.splice(index,1);
+      $scope.$ctrl.desktop.serialNumbers.splice(index,1);
     }
     $scope.removeDesktopEntry =() =>{
       $scope.$emit('removeDesktop', $scope.$ctrl.index);

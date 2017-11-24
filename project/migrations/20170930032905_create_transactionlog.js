@@ -10,7 +10,7 @@ exports.up = function(knex, Promise) {
       throw new Error('Error creating table ' + tablename);
     } else {
       table.increments('id').unsigned().primary();
-      table.string('user_id').notNullable();
+      table.string('userID').notNullable();
       table.timestamp('timestamp').defaultTo(knex.fn.now());
     }
   });

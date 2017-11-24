@@ -18,13 +18,13 @@ class ProductDescriptionsTDG {
    */
   static add(productDescription) {
     return connection.insert({
-      'model_number': productDescription.modelNumber,
-      'brand_name': productDescription.brandName,
+      'modelNumber': productDescription.modelNumber,
+      'brandName': productDescription.brandName,
       'weight': productDescription.weight,
       'price': productDescription.price,
       'type': productDescription.type,
-      'is_available': productDescription.isAvailable,
-    }, 'model_number').into('ProductDescription');
+      'isAvailable': productDescription.isAvailable,
+    }, 'modelNumber').into('ProductDescription');
   }
 
   /**
@@ -39,12 +39,12 @@ class ProductDescriptionsTDG {
   static getByModelNumber(modelNumber) {
     return connection('ProductDescription')
       .select('*')
-      .where({model_number: modelNumber});
+      .where({modelNumber: modelNumber});
   }
 
   /*
     REVIEW: I believe select and selectById can be unified into a single method
-    with a signature select(model_numbers), where model_numbers is a list.
+    with a signature select(modelNumbers), where modelNumbers is a list.
     If the function is called with no arguments (select()) - retrieve all,
     otherwise, retrieve all corresponding to models in the list - Artem
   */
@@ -58,14 +58,14 @@ class ProductDescriptionsTDG {
   static update(productDescription) {
     return connection
       .update({
-        'brand_name': productDescription.brandName,
+        'brandName': productDescription.brandName,
         'weight': productDescription.weight,
         'price': productDescription.price,
         'type': productDescription.type,
-        'is_available': productDescription.isAvailable,
+        'isAvailable': productDescription.isAvailable,
       })
       .from('ProductDescription')
-      .where({model_number: productDescription.modelNumber});
+      .where({modelNumber: productDescription.modelNumber});
   }
   /**
    * Deletes an item from the inventory given an id
@@ -78,7 +78,7 @@ class ProductDescriptionsTDG {
       console.log(productDescription);
       console.log('in productDescriptionTDG');
       return connection.from('ProductDescription').where(
-        {'model_number': prodDescription.modelNumber}
+        {'modelNumber': prodDescription.modelNumber}
       ).del();
   }
 }

@@ -29,6 +29,7 @@ class UnitOfWork {
 
   registerNew(object) {
     this.newElements.push(object);
+    console.log(this.newElements);
   }
   registerClean(object) {
     this.cleanElements.push(object);
@@ -56,9 +57,11 @@ class UnitOfWork {
     });
   }
 
+
   saveNew() {
     return new Promise((resolve, reject) => {
-      console.log(this.newNewElements);
+      console.log('the new element lmao');
+      console.log(this.newElements);
       let insertions = this.newElements.map(
         (object) => {
           return RepositoryRegistry.getRepo(object).insert(object)

@@ -8,7 +8,7 @@ tabletEntry.component('tabletEntry', {
   templateUrl: '/inventory/product-entries/tablet-entry.html',
   controller: function($scope) {
     $scope.removeSerial = (index) => {
-      $scope.$ctrl.tablet.serial_numbers.splice(index,1);
+      $scope.$ctrl.tablet.serialNumbers.splice(index,1);
     }
     $scope.removeTabletEntry =() =>{
       $scope.$emit('removeTablet', $scope.$ctrl.index);

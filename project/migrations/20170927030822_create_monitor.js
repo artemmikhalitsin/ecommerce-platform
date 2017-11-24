@@ -6,12 +6,12 @@ exports.up = function(knex, Promise) {
       throw new Error('Error creating table ' + tablename);
     } else {
       table.increments('id').primary().notNullable().unsigned();
-      table.string('model_number').notNullable();
-      table.foreign('model_number').references('ProductDescription.model_number');
+      table.string('modelNumber').notNullable();
+      table.foreign('modelNumber').references('ProductDescription.modelNumber');
 
 
       // Monitor attributes
-      table.decimal('display_size').notNullable();
+      table.decimal('displaySize').notNullable();
     }
   });
 };

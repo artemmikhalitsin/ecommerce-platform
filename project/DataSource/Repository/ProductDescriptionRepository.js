@@ -60,6 +60,7 @@ class ProductDescriptionRepository {
    * to the product specification
    */
   static makeProduct(product) {
+    console.log(product);
     switch (product.type) {
       case 'Tablet':
         return ProductDescriptionRepository.makeTablet(product);
@@ -82,24 +83,24 @@ class ProductDescriptionRepository {
    */
   static makeTablet(tablet) {
     return new Tablet(
-        tablet.comp_id,
-        tablet.processor_type,
-        tablet.ram_size,
-        tablet.number_cpu_cores,
-        tablet.harddrive_size,
-        tablet.display_size,
+        tablet.compId,
+        tablet.processorType,
+        tablet.ramSize,
+        tablet.numberCpuCores,
+        tablet.hardDriveSize,
+        tablet.displaySize,
         new Dimensions(
-            tablet.dimension_id,
+            tablet.dimensionId,
             tablet.depth,
             tablet.height,
             tablet.width),
-        tablet.battery_info,
+        tablet.batteryInfo,
         tablet.os,
-        tablet.camera_info,
+        tablet.cameraInfo,
         tablet.price,
         tablet.weight,
-        tablet.brand_name,
-        tablet.model_number,
+        tablet.brandName,
+        tablet.modelNumber,
         tablet.type);
   }
   /**
@@ -109,20 +110,20 @@ class ProductDescriptionRepository {
    */
   static makeDesktop(desktop) {
     return new Desktop(
-        desktop.processor_type,
-        desktop.ram_size,
-        desktop.number_cpu_cores,
-        desktop.harddrive_size,
+        desktop.processorType,
+        desktop.ramSize,
+        desktop.numberCpuCores,
+        desktop.hardDriveSize,
         new Dimensions(
-            desktop.dimension_id,
+            desktop.dimensionId,
             desktop.depth,
             desktop.height,
             desktop.width),
         desktop.price,
         desktop.weight,
-        desktop.brand_name,
-        desktop.model_number,
-        desktop.comp_id,
+        desktop.brandName,
+        desktop.modelNumber,
+        desktop.compId,
         desktop.type);
   }
   /**
@@ -132,20 +133,20 @@ class ProductDescriptionRepository {
    */
   static makeLaptop(laptop) {
     return new Laptop(
-        laptop.comp_id,
-        laptop.processor_type,
-        laptop.ram_size,
-        laptop.number_cpu_cores,
-        laptop.harddrive_size,
-        laptop.display_size,
-        laptop.battery_info,
+        laptop.compId,
+        laptop.processorType,
+        laptop.ramSize,
+        laptop.numberCpuCores,
+        laptop.hardDriveSize,
+        laptop.displaySize,
+        laptop.batteryInfo,
         laptop.os,
-        laptop.touch_screen,
+        laptop.touchScreen,
         laptop.camera,
         laptop.price,
         laptop.weight,
-        laptop.brand_name,
-        laptop.model_number,
+        laptop.brandName,
+        laptop.modelNumber,
         laptop.type);
   }
   /**
@@ -155,11 +156,11 @@ class ProductDescriptionRepository {
    */
   static makeMonitor(monitor) {
     return new Monitor(
-        monitor.display_size,
+        monitor.displaySize,
         monitor.price,
         monitor.weight,
-        monitor.brand_name,
-        monitor.model_number,
+        monitor.brandName,
+        monitor.modelNumber,
         monitor.type);
   }
   mapToTablets(tablets) {
@@ -310,7 +311,7 @@ class ProductDescriptionRepository {
       if (!imapProducts) {
         imapProducts = [];
       }
-      let imapModelNumbers = imapProducts.map((item) => item.model_number);
+      let imapModelNumbers = imapProducts.map((item) => item.modelNumber);
       // products to retrieve from the tables are those which do not appear
       // in the identity map
       let dbModelNumbers = modelNumbers.filter(
@@ -352,7 +353,6 @@ class ProductDescriptionRepository {
   save(products) {
     let electronicsToAdd = [];
     let electronicsToUpdate = [];
-
     let productIds = products.map((p) => p.modelNumber);
     if (productIds.length > 0) {
       let context = [];
@@ -375,14 +375,11 @@ class ProductDescriptionRepository {
         electronicsToAdd.push(products[i]);
       }
     }
-
-    this.uow.registerNew(electronicsToAdd);
-    this.uow.registerDirty(electronicsToUpdate);
     electronicsToAdd = electronicsToAdd.map((e) => {
       return ProductDescriptionRepository.makeProduct(e);
     });
-    console.log(electronicsToAdd);
-    console.log(electronicsToUpdate);
+    this.uow.registerNew(electronicsToAdd);
+    this.uow.registerDirty(electronicsToUpdate);
     return this.uow.commitAll().then((result) => {
       productIMAP.add(electronicsToAdd);
       return true;

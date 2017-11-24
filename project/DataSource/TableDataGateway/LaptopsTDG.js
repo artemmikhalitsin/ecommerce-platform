@@ -21,28 +21,28 @@ class LaptopsTDG {
 
   static add(compId, laptop) {
     return connection.insert({
-      'comp_id': compId,
-      'model_number': laptop.modelNumber,
-      'display_size': laptop.displaySize,
-      'battery_info': laptop.batteryInfo,
+      'compId': compId,
+      'modelNumber': laptop.modelNumber,
+      'displaySize': laptop.displaySize,
+      'batteryInfo': laptop.batteryInfo,
       'os': laptop.os,
       'camera': laptop.camera,
-      'touch_screen': laptop.touchscreen,
+      'touchScreen': laptop.touchscreen,
     }, 'id')
     .into('Laptop');
   }
   static getAll() {
     return connection('Laptop').select('*')
-    .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
-    .join('ProductDescription', 'Laptop.model_number',
-    'ProductDescription.model_number');
+    .join('Computer', 'Laptop.compId', 'Computer.compId')
+    .join('ProductDescription', 'Laptop.modelNumber',
+    'ProductDescription.modelNumber');
   }
   static getByModelNumbers(modelNumbers) {
     return connection('Laptop').select('*')
-    .whereIn('ProductDescription.model_number', modelNumbers)
-    .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
-    .join('ProductDescription', 'Laptop.model_number',
-    'ProductDescription.model_number');
+    .whereIn('ProductDescription.modelNumber', modelNumbers)
+    .join('Computer', 'Laptop.compId', 'Computer.compId')
+    .join('ProductDescription', 'Laptop.modelNumber',
+    'ProductDescription.modelNumber');
   }
   /**
   * Retrieves all laptop object rows except those listed in modelNumbers
@@ -52,34 +52,34 @@ class LaptopsTDG {
   */
   static getAllExcept(modelNumbers) {
     return connection('Laptop').select('*')
-    .whereNotIn('ProductDescription.model_number', modelNumbers)
-    .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
-    .join('ProductDescription', 'Laptop.model_number',
-    'ProductDescription.model_number');
+    .whereNotIn('ProductDescription.modelNumber', modelNumbers)
+    .join('Computer', 'Laptop.compId', 'Computer.compId')
+    .join('ProductDescription', 'Laptop.modelNumber',
+    'ProductDescription.modelNumber');
   }
   /* getAll() {
   let result = [];
   return connection('Laptop').select('*')
-  .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
-  .join('ProductDescription', 'Laptop.model_number',
-  'ProductDescription.model_number')
+  .join('Computer', 'Laptop.compId', 'Computer.compId')
+  .join('ProductDescription', 'Laptop.modelNumber',
+  'ProductDescription.modelNumber')
   .then((laptops) => {
   laptops.forEach(function(laptop) {
   result.push(new Laptop(
-  laptop.comp_id,
-  laptop.processor_type,
-  laptop.ram_size,
-  laptop.number_cpu_cores,
-  laptop.harddrive_size,
-  laptop.display_size,
-  laptop.battery_info,
+  laptop.compId,
+  laptop.processorType,
+  laptop.ramSize,
+  laptop.numberCpuCores,
+  laptop.hardDriveSize,
+  laptop.displaySize,
+  laptop.batteryInfo,
   laptop.os,
-  laptop.touch_screen,
+  laptop.touchScreen,
   laptop.camera,
   laptop.price,
   laptop.weight,
-  laptop.brand_name,
-  laptop.model_number,
+  laptop.brandName,
+  laptop.modelNumber,
   laptop.type));
 });
 return result;
@@ -88,27 +88,27 @@ return result;
 /* getByModelNumbers(modelNumbers) {
 let result = [];
 return connection('Laptop').select('*')
-.whereIn('model_number', modelNumbers)
-.join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
-.join('ProductDescription', 'Laptop.model_number',
-'ProductDescription.model_number')
+.whereIn('modelNumber', modelNumbers)
+.join('Computer', 'Laptop.compId', 'Computer.compId')
+.join('ProductDescription', 'Laptop.modelNumber',
+'ProductDescription.modelNumber')
 .then((laptops) => {
 laptops.forEach(function(laptop) {
 result.push(new Laptop(
-laptop.comp_id,
-laptop.processor_type,
-laptop.ram_size,
-laptop.number_cpu_cores,
-laptop.harddrive_size,
-laptop.display_size,
-laptop.battery_info,
+laptop.compId,
+laptop.processorType,
+laptop.ramSize,
+laptop.numberCpuCores,
+laptop.hardDriveSize,
+laptop.displaySize,
+laptop.batteryInfo,
 laptop.os,
-laptop.touch_screen,
+laptop.touchScreen,
 laptop.camera,
 laptop.price,
 laptop.weight,
-laptop.brand_name,
-laptop.model_number,
+laptop.brandName,
+laptop.modelNumber,
 laptop.type));
 });
 return result;
@@ -126,14 +126,14 @@ return result;
 static update(compId, laptop) {
   // REVIEW: This was marked todo, is this still the case? - Artem
   return connection.update({
-    'comp_id': laptop.computerId,
-    // 'model_number': laptop.modelNumber,
-    'display_size': laptop.displaySize,
-    'battery_info': laptop.batteryInfo,
+    'compId': laptop.computerId,
+    // 'modelNumber': laptop.modelNumber,
+    'displaySize': laptop.displaySize,
+    'batteryInfo': laptop.batteryInfo,
     'os': laptop.os,
     'camera': laptop.camera,
-    'touch_screen': laptop.touchscreen,
-  }).from('Laptop').where({'model_number': laptop.modelNumber});
+    'touchScreen': laptop.touchscreen,
+  }).from('Laptop').where({'modelNumber': laptop.modelNumber});
 }
 }
 module.exports = LaptopsTDG;

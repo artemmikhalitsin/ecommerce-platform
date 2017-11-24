@@ -5,7 +5,7 @@ tabletForm.component('tabletForm', {
   templateUrl: '/catalog/product-forms/tablet-form.html',
   controller: function($scope) {
     $scope.tablet = {};
-    $scope.submitTablet =() => {
+    $scope.addTablet =() => {
       $scope.tablet.type = 'Tablet';
       $scope.tablet.isAvailable = 1;
       $scope.$emit('newTablet', $scope.tablet);
