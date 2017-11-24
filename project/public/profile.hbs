@@ -1,0 +1,44 @@
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Profile</title>
+
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+
+<!-- CSS styles (temporary because it will be moved to a CSS file) -->
+  <style>
+    td.details-control {
+        background: url('../images/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('../images/details_close.png') no-repeat center center;
+    }
+  </style>
+
+</head>
+
+<body ng-app="">
+	<div ng-include="'includes/header.hbs'" ng-init="isAdmin = {{session.isAdmin}}; exists = {{session.exists}}"></div>
+
+				<div class="text-center">
+					<h2>Hi {{session.email}} , Welcome to your DOOOOOMMMMMMM</h2>
+          <br>
+          <div class="form-group col-md-12">
+            <a href="deleteUser" class="btn btn-primary">Delete</a>
+          </div>
+          <h1> "Assumptions are the mother of all screw-ups" <img src="./images/ProOak.jpg" alt="Mou View"> </h1>
+
+
+
+	<div ng-include="'includes/footer.hbs'"></div>
+</body>
+</html>

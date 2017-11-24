@@ -1,3 +1,7 @@
+/**
+ * Seeding the Desktop table with some data
+ * @author Ajmer Singh Gadreh
+ */
 const desktops = [
   {
     "model_number": "913871307-1",

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html ng-app="returnPurchase" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap core CSS -->
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Material Design Bootstrap -->
+    <!-- <link href="css/mdb.min.css" rel="stylesheet"> -->
+    <!-- Your custom styles (optional) -->
+
+    <link href="css/ClientInventoryStyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/returnPage.css">
+    <!-- Angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js" type="text/javascript"></script>
+    <!-- inventory page module -->
+    <script src="returnPurchase.module.js" type="text/javascript"> </script>
+
+
+
+    <title>Return Item Page</title>
+    <!-- Font Awesome -->
+    <script type="text/javascript">
+      // let mock = JSON.parse('{{{items}}}');
+    </script>
+</head>
+
+<body ng-controller="returnPurchaseController">
+  <div ng-include="'includes/header.hbs'" ng-init="isAdmin = {{session.isAdmin}}; exists = {{session.exists}}"></div>
+  <div class="tablebox" style="margin-top: 5em;">
+    <table>
+      <thead>
+        <tr>
+          <th>Serial Number</th>
+          <th>Model Number</th>
+          <th>Purchase ID</th>
+          <th>Return</th>
+        </tr>
+      </thead>
+      <tr ng-repeat='x in items'>
+        <td>{[{x.serial_number}]}</td>
+        <td>{[{x.model_number}]}</td>
+        <td>{[{x.purchase_id}]}</td>
+        <td><button ng-click="addToReturnCart(x.serial_number, x.model_number, x.purchase_id)">Return</button></td>
+      </tr>
+    </table>
+    <div class="wrapper">
+      <button ng-click="returnPurchase()"class="button">Return All</button>
+      <button>Cancel Return</button>
+    </div>
+
+    <div ng-include="'includes/footer.hbs'"></div>
+</body>
+</html>

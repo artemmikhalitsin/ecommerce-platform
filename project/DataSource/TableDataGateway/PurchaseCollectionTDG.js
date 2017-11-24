@@ -32,10 +32,12 @@ class PurchaseCollectionTDG {
 
     /**
      * Gets all items from the Purchase Collection table
+     * @param {string} user
      * @return {Promise<Object[]>} a promise which resolves to an array of items
      */
-    select() {
-        return connection('PurchaseCollection').select('*');
+    select(user) {
+        return connection('PurchaseCollection').select('*')
+            .where({'user_id': user});
     }
 
     /**
@@ -46,8 +48,12 @@ class PurchaseCollectionTDG {
      * affected
      */
     delete(returnItem) {
+        console.log(returnItem);
+        console.log('in purchaseTDG');
         return connection.from('PurchaseCollection').where(
-          {'serial_number': returnItem.serial_number}
+          {'purchase_id ': returnItem.purchaseId,
+            'serial_number': returnItem.serialNumber,
+            'model_number': returnItem.modelNumber}
         ).del();
     }
 }

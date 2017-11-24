@@ -20,9 +20,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
   </head>
   <body ng-controller="CatalogController" >
-    <div ng-include="'/includes/header.hbs'"></div>
-    
-              
+    <div ng-include="'/includes/header.hbs'" ng-init="isAdmin = {{session.isAdmin}}; exists = {{session.exists}}"></div>
+
+
+
     <div class="container" ng-init="initCtatalog()">
       <header class="jumbotron my-4">
         <h1 class="display-4">Catalog</h1>
@@ -66,7 +67,7 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               </div>
             </div>
-      
+
           </div>
         </div>
       </div>
@@ -97,7 +98,9 @@
           </div>
         </div>
       </div>
-      <button ng-click="submit()">Submit</button>
+      <div class="text-center">
+        <button ng-click="submit()" class="btn btn-danger">Submit Changes</button>
+      </div>
     </div>
       <!-- Bootstrap core JavaScript -->
       <!--<script src="/js/jquery.min.js"></script>

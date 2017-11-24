@@ -1,3 +1,7 @@
+/**
+ * Sedding the Monitor table with some data
+ * @author Ajmer Singh Gadreh
+ */
 const monitors = [
   {
     'model_number': '141278542-1',

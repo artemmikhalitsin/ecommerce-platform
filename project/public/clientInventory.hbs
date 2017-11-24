@@ -26,66 +26,53 @@
 </head>
 
 <body ng-controller="ClientInventoryController">
-  <div ng-include="'includes/header.hbs'"></div>
-
-
-    <!-- Start your project here-->
-    <!-- Page content -->
-  </br>
-  <select ng-model="search">
-    <option value="Desktop">Desktop
-    <option value="Laptop">Laptop
-    <option value="Tablet">Tablet
-    <option value="Monitor">Monitor
-    <option value="all">View All
-  </select>
+  <div ng-include="'includes/header.hbs'" ng-init="isAdmin = {{session.isAdmin}}; exists = {{session.exists}}"></div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
     <div class="container">
-     <!-- Page features -->
-      <!--<fieldset class="form-group">
-    <legend>Preferences</legend>
-    <div class="form-check">
-      <label class="form-check-label">
-        <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-        Option 1
-      </label>
-    </div>
-    <div class="form-check">
-    <label class="form-check-label">
-        <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="option2">
-        Option 2
-      </label>
-    </div>
-    <div class="form-check">
-    <label class="form-check-label">
-        <input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios3" value="option3">
-        Option 3
-      </label>
-    </div>
-  </fieldset>-->
-  <!--<label class="mr-sm-2" for="inlineFormCustomSelect">Preference</label>
-  <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect">
-    <option selected>Choose...</option>
-    <option value="1">Dell</option>
-    <option value="2">HP</option>
-    <option value="3">Acer</option>
-  </select>
-
-  <label class="mr-sm-2" for="inlineFormCustomSelect">Electronic Type</label>
-  <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect">
-    <option selected>Choose...</option>
-    <option value="1">Desktop</option>
-    <option value="2">Laptop</option>
-    <option value="3">Monitor</option>
-    <option value="4">Tablet</option>
-  </select></br></br></br>-->
+      <label>Search: <input ng-model="searchText"></label>
       <div class="row">
-        <div class="col-lg-6 col-md-6 mb-4">
-          <ul id="temp_cart">
-          </ul>
-        </div>
+       <div class="col-lg-2 col-md-2">
+         <label>Product Type</label>
+         <ul>
+           <li>
+             <input type="checkbox" ng-click="includeType('Desktop')"> Desktop</input><br>
+             <input type="checkbox" ng-click="includeType('Laptop')" > Laptop</input><br>
+             <input type="checkbox" ng-click="includeType('Tablet')" > Tablet</input><br>
+             <input type="checkbox" ng-click="includeType('Monitor')"> Monitor</input><br>
+           </li>
+         </ul>
+       </div>
+       <div class="col-lg-3 col-md-3">
+         <label>Brand Name</label>
+         <ul>
+           <li>
+             <input type="checkbox" ng-click="includeBrandName('HP')"> HP</input><br>
+             <input type="checkbox" ng-click="includeBrandName('Dell')" > Dell</input><br>
+             <input type="checkbox" ng-click="includeBrandName('Apple')" > Apple</input><br>
+             <input type="checkbox" ng-click="includeBrandName('Samsung')"> Samsung</input><br>
+             <input type="checkbox" ng-click="includeBrandName('ASUS')"> ASUS</input><br>
+             <input type="checkbox" ng-click="includeBrandName('Razer')" > Razer</input><br>
+             <input type="checkbox" ng-click="includeBrandName('Acer')" > Acer</input><br>
+           </li>
+         </ul>
+       </div>
+       <div class="col-lg-4 col-md-4">
+         <label>Price</label>
+         <ul>
+           <li>
+             <input type="radio" name="priceFiltering" ng-click="sortBy('lowToHigh')"> Low to High</input><br>
+             <input type="radio" name="priceFiltering" ng-click="sortBy('highToLow')" > High to Low</input><br>
+           </li>
+         </ul>
+       </div>
       </div>
       <div class="row">
-        <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in itemsShown">
+       <!-- </form> -->
+        <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in itemsShown | filter:searchText | filter:typeFilter | filter:brandNameFilter | orderBy:priceFiltering:reverse">
               <desktop-card ng-if="item.type==='Desktop'" desktop="item"></desktop-card>
               <laptop-card ng-if="item.type==='Laptop'" laptop="item"></laptop-card>
               <tablet-card ng-if="item.type==='Tablet'" tablet="item"></tablet-card>
@@ -93,9 +80,15 @@
         </div>
       </div>
       <div class="row">
+        <div class="col-lg-6 col-md-6 mb-4">
+          <h2 id="shopping_cart" style="display: none;">Shopping Cart</h2>
+          <div class="list-group" id="temp_cart">
+          </div>
+        </div>
+      </div>
+      <div class="row">
         <button ng-click="purchase()">Purchase All</button>
         <button ng-click="cancelTransaction()">Cancel Transaction</button>
-
       </div>
       <!--/.row-->
     </div>

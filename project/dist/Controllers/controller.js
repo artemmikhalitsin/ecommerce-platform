@@ -44,9 +44,16 @@ var Controller = function () {
 
 
   _createClass(Controller, [{
-    key: 'registrationRequest',
-    value: function registrationRequest(req, res) {
-      var _this = this;
+    key: 'validateRegistrationRequest',
+    value: function validateRegistrationRequest(userData) {
+      var errors = [];
+      var errorMessage = void 0;
+      Object.keys(userData).forEach(function (element) {
+        if (userData[element] == "") {
+          errorMessage = "The " + element + " cannot be empty!";
+          errors.push(errorMessage);
+        }
+      });
 
       var userData = req.body;
       var password = userData['password'];
@@ -60,27 +67,42 @@ var Controller = function () {
       } else {
         delete userData['confirmPassword'];
         var email = userData['email'];
-        this.userRepo.verifyEmail(email).then(function (result) {
-          console.log(result);
-          if (result.length == 0) {
-            console.log('adding new user');
-            userData['is_admin'] = false;
-            console.log(userData);
-            _this.userRepo.save(userData).then(function (result) {
-              console.log('success: ' + result);
-              res.redirect('/login');
-            }).catch(function (err) {
-              console.log('failed: ' + err);
-              res.redirect('/registration');
-            });
-          } else {
-            console.log('Email already exists');
-            res.redirect('/registration');
+        var password = userData['password'];
+        var confirmPassword = userData['confirmPassword'];
+
+        // validating the phone number
+        // phone number regex \b\d{3}[-. ]?\d{3}[-. ]?\d{4}\b
+        if (!isNaN(phone)) {
+          console.log("is a number");
+          if (phone.length < 10 || phone.length > 10) {
+            console.log("less/more then 10 digits");
+            errors.push("The phone number should have exactly 10 digits");
           }
-        }).catch(function (err) {
-          console.log(err);
-          console.log('something bad happened');
-        });
+        } else {
+          errors.push("The phone number can only contain digits");
+          console.log("not a number");
+        }
+
+        // checking email (BAD)
+        if (email.includes("@")) {
+          console.log("email contains @ sign");
+        } else {
+          console.log("invalid email");
+        }
+
+        // Checking password
+        if (password.length < 6 || password.length > 20) {
+          console.log("Password is not between 6 and 20 characters");
+        } else {
+          if (password === confirmPassword) {
+            console.log("password matches");
+          } else {
+            console.log("password dont match");
+          }
+        }
+      } else {
+        console.log("there was at least one error. they are as follows");
+        console.log(errors);
       }
     }
 
@@ -92,12 +114,12 @@ var Controller = function () {
   }, {
     key: 'updateInventoryList',
     value: function updateInventoryList(newInventory) {
-      var _this2 = this;
+      var _this = this;
 
       newInventory.forEach(function (product, index) {
         product.serial_numbers.forEach(function (serialNumber, index) {
-          if (!_this2.clientInventory[serialNumber]) {
-            _this2.clientInventory[serialNumber] = {
+          if (!_this.clientInventory[serialNumber]) {
+            _this.clientInventory[serialNumber] = {
               locked: false,
               timeout: null };
           }
@@ -113,14 +135,14 @@ var Controller = function () {
   }, {
     key: 'addToShoppingCart',
     value: function addToShoppingCart(req, res) {
-      var _this3 = this;
+      var _this2 = this;
 
       var _checkPostcondition = function _checkPostcondition(it) {
         if (!_this3.shoppingCartList[req.session.email.toString()].getCartSerialNumbers().includes(req.body.serialNumber)) {
           throw new Error('Item was not added to the cart');
         }
 
-        if (!_this3.clientInventory[req.body.serialNumber].locked) {
+        if (!_this2.clientInventory[req.body.serialNumber].locked) {
           throw new Error('Item isn\'t locked');
         }
 
@@ -164,14 +186,14 @@ var Controller = function () {
   }, {
     key: 'removeFromShoppingCart',
     value: function removeFromShoppingCart(req, res) {
-      var _this4 = this;
+      var _this3 = this;
 
       var _checkPostcondition2 = function _checkPostcondition2(it) {
         if (!!_this4.shoppingCartList[req.session.email.toString()].getCartSerialNumbers().includes(req.body.serialNumber)) {
           throw new Error('Item was not removed from the cart');
         }
 
-        if (!!_this4.clientInventory[req.body.serialNumber].locked) {
+        if (!!_this3.clientInventory[req.body.serialNumber].locked) {
           throw new Error('Item is still locked');
         }
 
@@ -208,10 +230,10 @@ var Controller = function () {
   }, {
     key: 'unlockItem',
     value: function unlockItem(itemToUnlock) {
-      var _this5 = this;
+      var _this4 = this;
 
       var _checkPostcondition3 = function _checkPostcondition3(it) {
-        if (!!_this5.clientInventory[itemToUnlock].locked) {
+        if (!!_this4.clientInventory[itemToUnlock].locked) {
           throw new Error('Item is still locked');
         }
 
@@ -237,10 +259,10 @@ var Controller = function () {
   }, {
     key: 'lockItem',
     value: function lockItem(itemToLock) {
-      var _this6 = this;
+      var _this5 = this;
 
       var _checkPostcondition4 = function _checkPostcondition4(it) {
-        if (!(_this6.clientInventory[itemToLock].locked === true)) {
+        if (!(_this5.clientInventory[itemToLock].locked === true)) {
           throw new Error('Item was not successfully locked');
         }
 
@@ -283,7 +305,7 @@ var Controller = function () {
   }, {
     key: 'completePurchaseTransaction',
     value: function completePurchaseTransaction(req, res) {
-      var _this7 = this;
+      var _this6 = this;
 
       var _checkPostcondition5 = function _checkPostcondition5(it) {
         if (!(_this7.shoppingCartList[req.session.email.toString()] == null)) {
@@ -331,7 +353,7 @@ var Controller = function () {
   }, {
     key: 'cancelPurchaseTransaction',
     value: function cancelPurchaseTransaction(req, res) {
-      var _this8 = this;
+      var _this7 = this;
 
       var _checkPostcondition6 = function _checkPostcondition6(it) {
         if (!(_this8.shoppingCartList[req.session.email.toString()] == null)) {
@@ -396,18 +418,68 @@ var Controller = function () {
   }, {
     key: 'getAllInventory',
     value: function getAllInventory(req, res) {
-      var _this9 = this;
+      var _this8 = this;
 
       var query = this.url.parse(req.url, true).query;
       var search = query.search;
-      var prodDesc = this.inventoryRepo.getAllInventoryItems();
-      Promise.all([prodDesc]).then(function (values) {
-        var items = JSON.stringify(values[0]);
-        // items = JSON.stringify(toSave);
-        // console.log('Values: ', items);
-
+      var inventory = [];
+      var productDescriptions = this.productDescriptionRepo.getAllWithIncludes().then(function (results) {
+        console.log("all the products are: " + JSON.stringify(results));
+        return Promise.each(results, function (product) {
+          return _this8.inventoryRepo.getByModelNumbers([product.modelNumber]).then(function (values) {
+            console.log("inventory item is " + JSON.stringify(values));
+            product.serial_numbers = values.map(function (p) {
+              return p.serialNumber;
+            });
+            inventory.push(product);
+          });
+        });
+      }).then(function (val) {
+        console.log('Values: ', JSON.stringify(inventory));
         if (req.session.exists == true && req.session.isAdmin == true) {
-<<<<<<< HEAD
+          res.render('inventory', { items: JSON.stringify(inventory), search: search });
+        } else if (req.session.exists == true && req.session.isAdmin == false) {
+          _this8.updateInventoryList(inventory);
+          res.render('clientInventory', { items: JSON.stringify(inventory), search: search });
+        } else {
+          _this9.updateInventoryList(values[0]); // Populate shopping inventory list
+          res.render('clientInventory', { search: search });
+        }
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+  }, {
+    key: 'manageInventory',
+    value: function manageInventory(inventoryItems) {
+      var results = this.inventoryRepo.save(inventoryItems);
+    }
+  }, {
+    key: 'getProductDescription',
+    value: function getProductDescription(req, res) {
+      var query = this.url.parse(req.url, true).query;
+      var search = query.search;
+      var catalog = [];
+      var productDescriptions = this.productDescriptionRepo.getAllWithIncludes().then(function (results) {
+        console.log('Product Descriptions: ', JSON.stringify(results));
+        //res.render('catalog', {items: JSON.stringify(results), search: search});
+        if (req.session.exists == true && req.session.isAdmin == true) {
+          return res.send({ items: results, search: search });
+        }
+      }).catch(function (err) {
+        console.log(err);
+      });
+    }
+  }, {
+    key: 'getCatalog',
+    value: function getCatalog(req, res) {
+      var query = this.url.parse(req.url, true).query;
+      var search = query.search;
+      var catalog = [];
+      var productDescriptions = this.productDescriptionRepo.getAllWithIncludes().then(function (results) {
+        console.log('Product Descriptions: ', JSON.stringify(results));
+        //res.render('catalog', {items: JSON.stringify(results), search: search});
+        if (req.session.exists == true && req.session.isAdmin == true) {
           res.render('catalog', { items: JSON.stringify(results), search: search });
         } else if (req.session.exists == true && req.session.isAdmin == false) {
           //update descriptions?
@@ -415,30 +487,15 @@ var Controller = function () {
           res.render('/login');
         } else {
           res.render('/login');
-=======
-          res.render('inventory', { items: items, search: search });
-        } else {
-          _this9.updateInventoryList(values[0]); // Populate shopping inventory list
-          res.render('clientInventory', { search: search });
->>>>>>> 95e1c590353252448b759a74568ac2b4553fe071
         }
       }).catch(function (err) {
         console.log(err);
       });
     }
-<<<<<<< HEAD
   }, {
     key: 'manageProductCatalog',
     value: function manageProductCatalog(req, res) {
       var _this10 = this;
-=======
-
-    /**
-     * Processes an inventory action initiated by the user
-     * @param {Object} req HTTP request object containing action info
-     * @param {Object} res HTTP response object to be returned to the user
-     */
->>>>>>> 95e1c590353252448b759a74568ac2b4553fe071
 
       var productDescriptions = JSON.parse(req.body.productDescriptions);
       var results = this.productDescriptionRepo.save(productDescriptions).then(function (results) {

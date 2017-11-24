@@ -1,4 +1,3 @@
-
 /* eslint-disable */
 // Eslint disabled for this file only until it is documented
 
@@ -29,7 +28,8 @@ const TabletsTDG = require(rootPath +
   '/DataSource/TableDataGateway/TabletsTDG.js');
 const PurchaseCollectionTDG = require(rootPath +
   '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
-
+const TransactionLogTDG = require(rootPath +
+  '/DataSource/TableDataGateway/TransactionLogTDG.js');
 /**
  * Unit of Work implementation
  * @author Ekaterina Ruhlin
@@ -50,6 +50,7 @@ class UnitOfWork {
     this.monitorsTDG = new MonitorsTDG();
     this.tabletsTDG = new TabletsTDG();
     this.purchaseTDG = new PurchaseCollectionTDG();
+    this.transactionTDG = new TransactionLogTDG();
 
     this.dirtyElements = [];
     this.newElements = [];
@@ -58,6 +59,7 @@ class UnitOfWork {
     this.deletedInventoryItems = [];
     this.newPurchases = [];
     this.deletedPurchases = [];
+    this.transactionItems = [];
   }
   registerNew(object) {
     this.newElements = [];
@@ -66,13 +68,15 @@ class UnitOfWork {
   registerNewPurchase(object) {
     this.newPurchases = [];
     this.newPurchases.push(object);
+    this.newInventoryItems =[];
+    this.deletePurchases = [];
   }
-
   registerReturn(object){
     this.deletedPurchases = [];
     this.deletedPurchases.push(object);
+    this.deletedInventoryItems = [];
+    this.newPurchases = [];
   }
-
   registerDirty(object) {
     this.dirtyElements = [];
     this.dirtyElements.push(object);
@@ -81,13 +85,17 @@ class UnitOfWork {
     this.deletedElements = [];
     this.deletedElements.push(object);
   }
-  registerNewItem(object){
+  registerNewItem(object) {
     this.newInventoryItems = [];
     this.newInventoryItems.push(object);
   }
-  registerDeletedItem(object){
+  registerDeletedItem(object) {
     this.deletedInventoryItems = [];
     this.deletedInventoryItems.push(object);
+  }
+  registerTransaction(object){
+    this.transactionItems = [];
+    this.transactionItems.push(object);
   }
   commitAll() {
 
@@ -121,7 +129,7 @@ class UnitOfWork {
       let newItems;
       if(this.newInventoryItems[0] != null && this.newInventoryItems[0].length > 0){
         newItems = Promise.each(this.newInventoryItems[0], (electronic) => {
-          return this.inventoryItemsTDG.add(electronic.serial_number, electronic.model_number).transacting(trx).then(() => {
+          return this.inventoryItemsTDG.add(electronic.serialNumber, electronic.modelNumber).transacting(trx).then(() => {
                console.log('added inventory item');
          })
        });}
@@ -130,7 +138,7 @@ class UnitOfWork {
        let purchasedItems;
        if (this.newPurchases[0] != null && this.newPurchases[0].length > 0) {
          purchasedItems = Promise.each(this.newPurchases[0], (electronic) => {
-           return this.purchaseTDG.add(electronic.client, electronic.serial_number, electronic.model_number, electronic.purchase_Id)
+           return this.purchaseTDG.add(electronic.client, electronic.serialNumber, electronic.modelNumber, electronic.purchaseId)
                   .transacting(trx).then(() => {
                     console.log("Added purchased items");
                   })
@@ -140,12 +148,20 @@ class UnitOfWork {
        //remove purchase
        let deletedPurchase;
        if(this.deletedPurchases[0] != null && this.deletedPurchases[0].length > 0){
-        deletedPurchases = Promise.each(this.deletedPurchases[0], (electronic) => {
+        deletedPurchase = Promise.each(this.deletedPurchases[0], (electronic) => {
          return this.purchaseTDG.delete(electronic).transacting(trx).then(() => {
                console.log('deleted purchase item');
          })
        });}
 
+       //add(log) transaction
+       let addedTransaction;
+       if(this.transactionItems[0] != null && this.transactionItems[0].length > 0){
+        addedTransaction = Promise.each(this.transactionItems[0], (transaction) => {
+         return this.transactionTDG.add(transaction).transacting(trx).then(() => {
+               console.log('added transaction');
+         })
+       });}
       //update products
       let updateditems;
       if(this.dirtyElements[0] && this.dirtyElements[0].length > 0){
@@ -292,7 +308,7 @@ class UnitOfWork {
       }
       //add
       );}
-      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems])
+      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems, addedTransaction, deletedPurchase])
         .then(trx.commit)
         .catch(trx.rollback);
     });
@@ -425,4 +441,3 @@ class UnitOfWork {
   }
 }
 module.exports = UnitOfWork;
-

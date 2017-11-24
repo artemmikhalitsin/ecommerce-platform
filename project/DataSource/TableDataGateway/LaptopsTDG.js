@@ -3,7 +3,7 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
-const Laptop = require(rootPath + '/models/Laptop.js');
+// const Laptop = require(rootPath + '/models/Laptop.js');
 /**
  * Table Data Gateway for the Laptop table
  * @author Eaterina Ruhlin
@@ -30,8 +30,20 @@ class LaptopsTDG {
         }, 'id')
         .into('Laptop');
     }
-
     getAll() {
+        return connection('Laptop').select('*')
+          .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
+          .join('ProductDescription', 'Laptop.model_number',
+                'ProductDescription.model_number');
+    }
+    getByModelNumbers(modelNumbers) {
+        return connection('Laptop').select('*')
+          .whereIn('model_number', modelNumbers)
+          .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
+          .join('ProductDescription', 'Laptop.model_number',
+                'ProductDescription.model_number');
+    }
+    /* getAll() {
         let result = [];
         return connection('Laptop').select('*')
           .join('Computer', 'Laptop.comp_id', 'Computer.comp_id')
@@ -58,8 +70,8 @@ class LaptopsTDG {
               });
               return result;
           });
-    }
-    getByModelNumbers(modelNumbers) {
+    }*/
+    /* getByModelNumbers(modelNumbers) {
         let result = [];
         return connection('Laptop').select('*')
           .whereIn('model_number', modelNumbers)
@@ -87,7 +99,7 @@ class LaptopsTDG {
               });
               return result;
           });
-    }
+    }*/
 
     /**
      * Updates the specifications of a laptop in the database

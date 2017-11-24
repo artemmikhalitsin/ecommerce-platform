@@ -13,6 +13,7 @@
   <script type="text/javascript" src="/js/userTable.js"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
+
 <!-- CSS styles (temporary because it will be moved to a CSS file) -->
   <style>
     td.details-control {
@@ -23,11 +24,15 @@
         background: url('../images/details_close.png') no-repeat center center;
     }
   </style>
+	<script type="text/javascript">
+		//let data = JSON.parse('{{{items}}}');
 
+	</script>
 </head>
 
 <body ng-app="">
-	<div ng-include="'includes/header.hbs'"></div>
+	<div ng-include="'includes/header.hbs'" ng-init="isAdmin = {{session.isAdmin}}; exists = {{session.exists}}"></div>
+
 	<!--div ng-include="'includes/sidebar.hbs'" id="left"></div-->
 	<!--div style="margin-left:10%"-->
 				<div class="text-center">
@@ -36,20 +41,19 @@
 						<div class="card" style="height: auto; width: 30rem; background-color: #ffcccc;">
 					</div>
 				</div>
-			  <table id="table_inventory" class="table table-striped table-bordered" cellspacing="0" width="100%">
+			  <table id="table_users" class="table table-striped table-bordered" cellspacing="0" width="100%">
 			    <thead>
-			      <th></th>
-			      <th>Model Number</th>
-			      <th>Brand Name</th>
-			      <th>Price</th>
-			      <th>Weight</th>
-						<th>Type</th>
-			      <th>Availability</th>
+			      <th>ID</th>
+			      <th>Email</th>
+			      <th>First Name</th>
+			      <th>Last Name</th>
+						<!--<th>Password</th>-->
+			      <th>Address</th>
+						<th>Phone Number</th>
+						<!--<th>Admin</th>-->
 			    </thead>
 			  </table>
-		<div class="text-center">
-			<button type="button" onclick="submitData();" class="btn btn-danger">Submit Changes</button>
-		</div>
+
 	<div ng-include="'includes/footer.hbs'"></div>
 </body>
 </html>
