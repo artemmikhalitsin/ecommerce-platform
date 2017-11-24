@@ -16,6 +16,7 @@ function ClientInventoryController($scope, $http, $compile) {
       $scope.items = res.data;
       $scope.itemsShown = res.data;
       console.log($scope.itemsShown);
+      let allData = $scope.itemsShown;
       filterShown($scope.search)
 
       $scope.typeIncludes = [];
@@ -31,6 +32,7 @@ function ClientInventoryController($scope, $http, $compile) {
         }
       }
 
+      // filtering by product type
       $scope.typeFilter = function(item) {
         if ($scope.typeIncludes.length > 0) {
             if ($.inArray(item.type, $scope.typeIncludes) < 0)
@@ -50,6 +52,7 @@ function ClientInventoryController($scope, $http, $compile) {
         }
       }
 
+      // filtering by brand name
       $scope.brandNameFilter = function(item) {
         if ($scope.brandNameIncludes.length > 0) {
             if ($.inArray(item.brandName, $scope.brandNameIncludes) < 0)
@@ -59,7 +62,19 @@ function ClientInventoryController($scope, $http, $compile) {
         return item;
       }
 
-      //$scope.items.filter();
+      $scope.sortBy = function(propertyName) {
+        if (propertyName === 'lowToHigh') {
+          $scope.itemsShown = $scope.itemsShown.sort(function(a, b) {
+              return parseFloat(a.price) - parseFloat(b.price);
+          });
+        } else if (propertyName === 'highToLow') {
+          $scope.itemsShown = $scope.itemsShown.sort(function(a, b) {
+              return parseFloat(b.price) - parseFloat(a.price);
+          });
+        } else {
+          console.log("Nothing to order by");
+        }
+      };
     }
   )
   .catch(

@@ -35,7 +35,7 @@
     <div class="container">
       <label>Search: <input ng-model="searchText"></label>
       <div class="row">
-       <div class="col-lg-3 col-md-3">
+       <div class="col-lg-2 col-md-2">
          <label>Product Type</label>
          <ul>
            <li>
@@ -60,10 +60,19 @@
            </li>
          </ul>
        </div>
+       <div class="col-lg-4 col-md-4">
+         <label>Price</label>
+         <ul>
+           <li>
+             <input type="radio" name="priceFiltering" ng-click="sortBy('lowToHigh')"> Low to High</input><br>
+             <input type="radio" name="priceFiltering" ng-click="sortBy('highToLow')" > High to Low</input><br>
+           </li>
+         </ul>
+       </div>
       </div>
       <div class="row">
        <!-- </form> -->
-        <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in itemsShown | filter:searchText | filter:typeFilter | filter:brandNameFilter">
+        <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in itemsShown | filter:searchText | filter:typeFilter | filter:brandNameFilter | orderBy:priceFiltering:reverse">
               <desktop-card ng-if="item.type==='Desktop'" desktop="item"></desktop-card>
               <laptop-card ng-if="item.type==='Laptop'" laptop="item"></laptop-card>
               <tablet-card ng-if="item.type==='Tablet'" tablet="item"></tablet-card>
