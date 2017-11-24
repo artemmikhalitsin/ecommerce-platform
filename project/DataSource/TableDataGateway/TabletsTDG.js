@@ -3,8 +3,8 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
-const Tablet = require(rootPath + '/models/Tablet.js');
-const Dimensions = require(rootPath + '/models/Dimensions.js');
+// const Tablet = require(rootPath + '/models/Tablet.js');
+// const Dimensions = require(rootPath + '/models/Dimensions.js');
 
 /**
  * Table Data Gateway for the Tablet table
@@ -57,18 +57,18 @@ class TabletsTDG {
                           tablet.height,
                           tablet.width),
                           */
-                      tablet.battery_info,
-                      tablet.os,
-                      tablet.camera_info,
-                      tablet.price,
-                      tablet.weight,
-                      tablet.brand_name,
-                      tablet.model_number,
-                      tablet.type));
-              });
-              return result;
-          });
-    }*/
+    //                   tablet.battery_info,
+    //                   tablet.os,
+    //                   tablet.camera_info,
+    //                   tablet.price,
+    //                   tablet.weight,
+    //                   tablet.brand_name,
+    //                   tablet.model_number,
+    //                   tablet.type));
+    //           });
+    //           return result;
+    //       });
+    // }*/
     getAll() {
         return connection('Tablet').select('*')
           .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')

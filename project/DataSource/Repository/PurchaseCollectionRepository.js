@@ -42,7 +42,7 @@ class PurchaseCollectionRepo {
 
   /**
    * Retrieves all items from the database table
-   * @param {string} args TODO: Not sure what this argument is doing here??
+   * @param {string} user TODO: Not sure what this argument is doing here??
    * @return {Promise<Object[]>} promise which resolves to the list of inventory
    * items in the database
    */

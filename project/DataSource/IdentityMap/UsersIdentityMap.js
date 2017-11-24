@@ -36,6 +36,7 @@ class UsersIdentityMap {
 
   /**
    * Gets all users matching an email criteria
+   * @param {String} email
    * @return {Object[]} a list of users
    */
   getByEmail(email) {
@@ -46,6 +47,8 @@ class UsersIdentityMap {
 
   /**
    * Gets the first user matching the email and password criteria in the map
+   * @param {String} email
+   * @param {String} password
    * @return {Object} a user
    */
   getByEmailAndPassword(email, password) {
@@ -58,7 +61,7 @@ class UsersIdentityMap {
 
   /**
      * Adds new objects into the identity map
-     * @param {Object[]} newInventoryItems a list containing new items
+     * @param {Object[]} newUsers a list containing new items
      */
   add(newUsers) {
     for (let i = 0; i < newUsers.length; i++) {
@@ -71,7 +74,7 @@ class UsersIdentityMap {
 
   /**
    * Deletes users from the identity map, given a list of user specifications
-   * @param {Object[]} a list of users to be deleted
+   * @param {Object[]} deleteUsers list of users to be deleted
    */
   delete(deleteUsers) {
     this.users = this.users.filter(

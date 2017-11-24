@@ -29,7 +29,7 @@ class PurchaseController {
   }
   /**
    * Updates the Controller's list of current items
-   * @param {Object} newInventory Inventory items
+   * @param {Object} inventoryList Inventory items
   */
   updateInventoryList(inventoryList) {
     inventoryList.forEach((serial, index) => {

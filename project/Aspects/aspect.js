@@ -39,8 +39,16 @@ class Aspect {
      this.processQueue = new ProcessQueue();
   }
 
-  // if you do not pass joinpoint:
-  // validate session will not let caught function proceed after validation
+ /** Determines if a caught message should proceed or not 
+  * based on user at that time
+  * if you do not pass joinpoint:
+  * validate session will not let caught function proceed after validation
+  * @param {Object} req 
+  * @param {Object} res
+  * @param {Object} data user information when getting caught by aspect
+  * @param {jointpoint} joinpoint
+  * @return {function} proceed or not
+  */
   validateSession(req, res, data, joinpoint) {
     return this.userRepo.authenticate(data).then((result) => {
       if (result.length <= 0 || result.length > 1) {

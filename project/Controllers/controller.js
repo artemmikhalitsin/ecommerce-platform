@@ -78,7 +78,7 @@ class Controller {
     let query = this.url.parse(req.url, true).query;
     let search = query.search;
     let inventory = [];
-    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
+    this.productDescriptionRepo.getAllWithIncludes()
     .then((results)=>{
       // console.log('all the products are: ' + JSON.stringify(results));
       return Promise.each(results, (product)=>{
@@ -107,7 +107,7 @@ class Controller {
     }).catch((err) => {
       console.log(err);
     });
-    console.log(productDescriptions);
+    // console.log(productDescriptions);
   }
 
   manageInventory(inventoryItems) {

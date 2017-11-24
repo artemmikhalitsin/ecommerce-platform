@@ -44,6 +44,7 @@ class ProductDescriptionRepository {
   /**
    * Retrieves products from the identity map. If none are there,
    * retrieves the products from the TDG and adds them to the identity map
+   * @param {Object} tablets
    * @return {Object[]} the complete list of product description objects
    */
   mapToTablets(tablets) {
@@ -177,16 +178,20 @@ class ProductDescriptionRepository {
     });
   }
   getByModelNumbers(modelNumbers) {
-    let desktops = this.DesktopsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
+    let desktops = this.DesktopsTDG.getByModelNumbers(modelNumbers)
+      .then((descriptions) => {
       return desktops = this.mapToDesktops(descriptions);
     });
-    let laptops = this.LaptopsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
+    let laptops = this.LaptopsTDG.getByModelNumbers(modelNumbers)
+      .then((descriptions) => {
       return laptops = this.mapToLaptops(descriptions);
     });
-    let monitors = this.MonitorsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
+    let monitors = this.MonitorsTDG.getByModelNumbers(modelNumbers)
+      .then((descriptions) => {
       return monitors = this.mapToMonitors(descriptions);
     });
-    let tablets = this.TabletsTDG.getByModelNumbers(modelNumbers).then((descriptions) => {
+    let tablets = this.TabletsTDG.getByModelNumbers(modelNumbers)
+      .then((descriptions) => {
       return tablets = this.mapToTablets(descriptions);
     });
 
@@ -235,6 +240,7 @@ class ProductDescriptionRepository {
    * removed
    * @param {Object[]} products a list of products against which the current
    * product list is to be compared
+   * @return {promise}
    */
   save(products) {
     let electronicsToAdd = [];

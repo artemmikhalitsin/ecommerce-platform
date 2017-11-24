@@ -32,10 +32,12 @@ class PurchaseCollectionTDG {
 
     /**
      * Gets all items from the Purchase Collection table
+     * @param {String} user
      * @return {Promise<Object[]>} a promise which resolves to an array of items
      */
     select(user) {
-        return connection('PurchaseCollection').select('*').where({'user_id': user});
+        return connection('PurchaseCollection')
+            .select('*').where({'user_id': user});
     }
 
     /**
