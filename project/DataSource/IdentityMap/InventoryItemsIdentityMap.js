@@ -66,12 +66,12 @@ class InventoryItemsIdentityMap {
      * @param {string} toRemove an alpha-numeric serial number
      * corresponding to the item
      */
-     delete(toRemove) {
-       let index = this.inventoryItems.findIndex(
-         (elem) => elem.modelNumber === toRemove);
-       if (index > -1) {
-         this.inventoryItems.splice(index, 1);
-       }
+   delete(toRemove) {
+     let index = this.inventoryItems.findIndex(
+       (elem) => elem.modelNumber === toRemove);
+     if (index > -1) {
+       this.inventoryItems.splice(index, 1);
      }
+   }
 }
 module.exports = InventoryItemsIdentityMap;

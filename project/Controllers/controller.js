@@ -180,9 +180,7 @@ class Controller {
 
   manageProductCatalog(req, res) {
     let productDescriptions = JSON.parse(req.body.productDescriptions);
-    console.log('Descriptions recieved by the controller' +
-      (req.body.productDescriptions));
-    this.productDescriptionRepo.save(productDescriptions).then((results) => {
+    this.productDescriptionRepo.submit(productDescriptions).then((results) => {
       console.log('Success saving the Product descriptions!');
       this.getProductDescription(req, res);
     });
