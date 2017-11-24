@@ -20,7 +20,7 @@ const Dimensions = require(rootPath + '/models/Dimensions.js');
 const Desktop = require(rootPath + '/models/Desktop.js');
 const Laptop = require(rootPath + '/models/Laptop.js');
 const Monitor = require(rootPath + '/models/Monitor.js');
-
+const ProductDescription = require(rootPath + '/models/ProductDescription.js');
 /**
  * Repository for product descrptions
  * @author Ekaterina Ruhlin
@@ -245,7 +245,7 @@ class ProductDescriptionRepository {
    * removed
    * @param {Object[]} products a list of products against which the current
    * product list is to be compared
-   * @return {bool} 
+   * @return {bool}
    */
   save(products) {
     let electronicsToAdd = [];
