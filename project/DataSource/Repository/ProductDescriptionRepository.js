@@ -356,8 +356,6 @@ class ProductDescriptionRepository {
     let productIds = products.map((p) => p.modelNumber);
     if (productIds.length > 0) {
       let context = [];
-      console.log('hello');
-
     return this.getByModelNumbers(productIds).then((values) => {
     let allRecords = productIMAP.getAll();
     for (let i = 0; i < products.length; i++) {
@@ -377,9 +375,11 @@ class ProductDescriptionRepository {
         electronicsToAdd.push(products[i]);
       }
     }
+
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);
-
+    console.log(electronicsToAdd);
+    console.log(electronicsToUpdate);
     return this.uow.commitAll().then((result) => {
       productIMAP.add(electronicsToAdd);
       return true;
