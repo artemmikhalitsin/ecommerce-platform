@@ -29,6 +29,7 @@ class UnitOfWork {
 
   registerNew(object) {
     this.newElements.push(object);
+    console.log('register newwww');
     console.log(this.newElements);
   }
   registerClean(object) {
