@@ -17,6 +17,29 @@ function ClientInventoryController($scope, $http, $compile) {
       $scope.itemsShown = res.data;
       console.log($scope.itemsShown);
       filterShown($scope.search)
+
+      //console.log("Printing items: " + JSON.stringify($scope.items));
+
+      $scope.typeIncludes = [];
+      $scope.includeType = function(type) {
+        var i = $.inArray(type, $scope.typeIncludes);
+        if (i > -1) {
+            $scope.typeIncludes.splice(i, 1);
+        } else {
+            $scope.typeIncludes.push(type);
+        }
+      }
+
+      $scope.typeFilter = function(item) {
+        if ($scope.typeIncludes.length > 0) {
+            if ($.inArray(item.type, $scope.typeIncludes) < 0)
+                return;
+        }
+
+        return item;
+      }
+
+      //$scope.items.filter();
     }
   )
   .catch(
