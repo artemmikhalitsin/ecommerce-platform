@@ -11,7 +11,7 @@ adminInventory.controller('AdminController', function($scope) {
     processorType: 'r',
     ramSize: 1,
     numberCpuCores: 2,
-    hardDriveSize: 3,
+    harddriveSize: 3,
     dimensions: {depth: 1,
        height: 1,
        width: 1}
@@ -25,7 +25,7 @@ adminInventory.controller('AdminController', function($scope) {
     processorType: 'q',
     ramSize: 1,
     numberCpuCores: 2,
-    hardDriveSize: 3,
+    harddriveSize: 3,
     dimensions: {depth: 1,
        height: 1,
        width: 1}
@@ -39,7 +39,7 @@ adminInventory.controller('AdminController', function($scope) {
     processorType: 'n',
     ramSize: 1,
     numberCpuCores: 2,
-    hardDriveSize: 3,
+    harddriveSize: 3,
     dimensions: {depth: 1,
        height: 1,
        width: 1}

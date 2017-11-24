@@ -13,8 +13,8 @@ class ProductDescriptionsTDG {
   /**
    * Inserts a product description object into the ProductDescription table
    * @param {Object} productDescription the product specifications
-   * @return {Promise<number[]>} promise which resolves to the list containing
-   * the id of the new product record in the database
+   * @return {Promise<number>} promise which resolves to the
+   * model number of the new product record in the database
    */
   static add(productDescription) {
     return connection.insert({
@@ -24,7 +24,7 @@ class ProductDescriptionsTDG {
       'price': productDescription.price,
       'type': productDescription.type,
       'isAvailable': productDescription.isAvailable,
-    }, 'modelNumber').into('ProductDescription');
+    }, 'modelNumber').into('ProductDescription')
   }
 
   /**

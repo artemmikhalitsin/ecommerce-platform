@@ -11,7 +11,7 @@ exports.up = function(knex, Promise) {
       table.string('processorType').notNullable();
       table.integer('ramSize').unsigned().notNullable();
       table.integer('numberCpuCores').unsigned().notNullable();
-      table.integer('hardDriveSize').unsigned().notNullable();
+      table.integer('harddriveSize').unsigned().notNullable();
     }
   });
 };

@@ -60,6 +60,6 @@ class ProcessQueue {
       console.log(e);
       this.processList.pop();
     }
+  }
 }
-
 module.exports = ProcessQueue;

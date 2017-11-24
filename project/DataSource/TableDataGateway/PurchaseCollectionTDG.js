@@ -20,6 +20,8 @@ class PurchaseCollectionTDG {
      * @return {Promise<number[]>} a promise which resolves to an array
      * containing the id of the inserted item in the table
      */
+    // TODO: I'm not sure how purchases are structured, follow example in other
+    // TDGs to implement this - Artem
     static add(clientID, serialNumber, modelNumber, purchaseId) {
         return connection.insert({
             'userID': clientID,

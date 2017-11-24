@@ -53,6 +53,14 @@ class InventoryItemsIdentityMap {
     );
   }
 
+  update(updatedItem) {
+    let index = this.inventoryItems.findIndex((item) => {
+      return item.serialNumber === updatedItem.serialNumber;
+    });
+    // Update the identity map with a reference to the new description
+    this.inventoryItems[index] = updatedItem;
+  }
+
   /**
      * Adds a new object into the identity map
      * @param {InventoryItem} newInventoryItem an inventory item

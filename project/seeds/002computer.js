@@ -3,49 +3,49 @@ const computers = [
     'processorType': 'productivity',
     'ramSize': 8869,
     'numberCpuCores': 5,
-    'hardDriveSize': 620
+    'harddriveSize': 620
   },
   {
     'processorType': 'Re-contextualized',
     'ramSize': 4105,
     'numberCpuCores': 11,
-    'hardDriveSize': 1757
+    'harddriveSize': 1757
   },
   {
     'processorType': 'Robust',
     'ramSize': 3880,
     'numberCpuCores': 6,
-    'hardDriveSize': 900
+    'harddriveSize': 900
   },
   {
     'processorType': 'Self-enabling',
     'ramSize': 5382,
     'numberCpuCores': 7,
-    'hardDriveSize': 982
+    'harddriveSize': 982
   },
   {
     'processorType': 'Adaptive',
     'ramSize': 8727,
     'numberCpuCores': 6,
-    'hardDriveSize': 1806
+    'harddriveSize': 1806
   },
   {
     'processorType': 'multi-state',
     'ramSize': 5213,
     'numberCpuCores': 4,
-    'hardDriveSize': 1232
+    'harddriveSize': 1232
   },
   {
     'processorType': 'reciprocal',
     'ramSize': 4266,
     'numberCpuCores': 9,
-    'hardDriveSize': 1129
+    'harddriveSize': 1129
   },
   {
     'processorType': 'discrete',
     'ramSize': 4690,
     'numberCpuCores': 11,
-    'hardDriveSize': 849
+    'harddriveSize': 849
   }
 ];
 

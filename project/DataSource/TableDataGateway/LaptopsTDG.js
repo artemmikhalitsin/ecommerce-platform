@@ -3,7 +3,10 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
-// const Laptop = require(rootPath + '/models/Laptop.js');
+const ProductDescriptionsTDG = require(rootPath +
+  '/DataSource/TableDataGateway/ProductDescriptionsTDG');
+const ComputersTDG = require(rootPath +
+  '/DataSource/TableDataGateway/ComputersTDG');
 /**
 * Table Data Gateway for the Laptop table
 * @author Ekaterina Ruhlin
@@ -12,24 +15,27 @@ const connection = require('knex')(configuration);
 class LaptopsTDG {
   /**
   * Inserts a laptop object into the Laptop table
-  * @param {number} compId the id of the Computer portion specification in
-  * the Computer table
-  * @param {Object} laptop the product specifications of a laptop
-  * @return {Promise<number[]>} promise which resolves to the list containing
+  * @param {Laptop} laptop the product specifications of a laptop
+  * @return {Promise<number>} promise which resolves to
   * the id of the new laptop record in the database
   */
-
-  static add(compId, laptop) {
-    return connection.insert({
-      'compId': compId,
-      'modelNumber': laptop.modelNumber,
-      'displaySize': laptop.displaySize,
-      'batteryInfo': laptop.batteryInfo,
-      'os': laptop.os,
-      'camera': laptop.camera,
-      'touchScreen': laptop.touchscreen,
-    }, 'id')
-    .into('Laptop');
+  static add(laptop) {
+    let productInsertion = ProductDescriptionsTDG.add(laptop);
+    let computerInsertion = ComputersTDG.add(laptop);
+    return Promise.all([productInsertion, computerInsertion])
+    .then(
+      (result) => {
+        return connection.insert({
+          'modelNumber': parseInt(result[0]),
+          'compId': parseInt(result[1]),
+          'displaySize': laptop.displaySize,
+          'batteryInfo': laptop.batteryInfo,
+          'os': laptop.os,
+          'camera': laptop.camera,
+          'touchScreen': laptop.touchscreen,
+        }, 'id')
+        .into('Laptop');
+      });
   }
   static getAll() {
     return connection('Laptop').select('*')
@@ -70,7 +76,7 @@ class LaptopsTDG {
   laptop.processorType,
   laptop.ramSize,
   laptop.numberCpuCores,
-  laptop.hardDriveSize,
+  laptop.harddriveSize,
   laptop.displaySize,
   laptop.batteryInfo,
   laptop.os,
@@ -99,7 +105,7 @@ laptop.compId,
 laptop.processorType,
 laptop.ramSize,
 laptop.numberCpuCores,
-laptop.hardDriveSize,
+laptop.harddriveSize,
 laptop.displaySize,
 laptop.batteryInfo,
 laptop.os,

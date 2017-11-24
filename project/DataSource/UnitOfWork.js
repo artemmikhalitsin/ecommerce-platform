@@ -29,8 +29,6 @@ class UnitOfWork {
 
   registerNew(object) {
     this.newElements.push(object);
-    console.log('register newwww');
-    console.log(this.newElements);
   }
   registerClean(object) {
     this.cleanElements.push(object);
@@ -43,12 +41,13 @@ class UnitOfWork {
     this.deletedElements.push(object);
   }
 
-  commitAll() {
+  commit() {
     return this.saveNew()
     .then(() => this.updateDirty())
     .then(() => this.eraseDeleted())
     .catch((err) => {
       // If something went wrong - we rollback
+      console.log((err));
       return this.rollback()
       .then(() => {
         // Now re-throw the error to notify whatever was using the uow
@@ -61,8 +60,6 @@ class UnitOfWork {
 
   saveNew() {
     return new Promise((resolve, reject) => {
-      console.log('the new element lmao');
-      console.log(this.newElements);
       let insertions = this.newElements.map(
         (object) => {
           return RepositoryRegistry.getRepo(object).insert(object)
@@ -79,8 +76,6 @@ class UnitOfWork {
     return new Promise((resolve, reject) => {
       let updates = this.dirtyElements.map(
         (object) => {
-          // First fetch the 'clean object'
-
           return RepositoryRegistry.getRepo(object).update(object)
         });
       Promise.all(updates)
@@ -108,11 +103,12 @@ class UnitOfWork {
   }
 
   rollback() {
+    console.log(`uow rollback`);
     return new Promise((resolve, reject) => {
       // Reverse the operations
       this.newElements = this.deleted;
       this.dirtyElements = this.cleanElements;
-      this.deletedElements = this.new;
+      this.deletedElements = this.inserted;
       return this.saveNew()
       .then(() => this.updateDirty())
       .then(() => this.eraseDeleted())

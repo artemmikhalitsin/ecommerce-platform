@@ -3,7 +3,7 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
-const productDescTDG = require(rootPath +
+const ProductDescriptionsTDG = require(rootPath +
   '/DataSource/TableDataGateway/ProductDescriptionsTDG');
 
 /**
@@ -19,25 +19,19 @@ class MonitorsTDG {
      * the id of the new monitor record in the database
      */
 
-    static insert(monitor) {
-      return connection.transaction((trx) => {
-        return productDescTDG.add(monitor)
-          .transacting(trx).then((modelNumber) => {
-              return connection.insert({
+    static add(monitor) {
+      return ProductDescriptionsTDG.add(monitor)
+      .then(
+        (modelNumber) => {
+          return connection.insert({
               'modelNumber': monitor.modelNumber,
               'displaySize': monitor.displaySize,
           }, 'id')
           .into('Monitor');
-        });
+      })
+      .then( (id) => {
+        console.log(`monitor id is then ${id}`);
       });
-    }
-
-    static add(monitor) {
-        return connection.insert({
-            'modelNumber': monitor.modelNumber,
-            'displaySize': monitor.displaySize,
-        }, 'id')
-        .into('Monitor');
     }
 
     static getAll() {

@@ -3,12 +3,12 @@ require('babel-register');
 module.exports = {
 
   development: {
-    client: 'mysql',
+    client: 'pg',
     connection: {
          host: 'localhost',
-         user: 'root',
+         user: 'postgres',
          password: '343docker',
-         database: '343DB',
+         database: 'db343',
     },
     pool: {
       min: 2,
@@ -20,12 +20,12 @@ module.exports = {
   },
 
   staging: {
-    client: 'mysql',
+    client: 'pg',
     connection: {
          host: 'localhost',
-         user: 'root',
+         user: 'postgres',
          password: '343docker',
-         database: '343DB',
+         database: 'db343',
     },
     pool: {
       min: 2,
@@ -37,12 +37,12 @@ module.exports = {
   },
 
   production: {
-    client: 'mysql',
+    client: 'pg',
     connection: {
          host: 'localhost',
-         user: 'root',
+         user: 'postgres',
          password: '343docker',
-         database: '343DB',
+         database: 'db343',
     },
     pool: {
       min: 2,

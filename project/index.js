@@ -4,6 +4,13 @@ const hbs = require('express-handlebars');
 const session = require('express-session');
 const rootPath = require('app-root-dir').get();
 const app = express();
+// Set the postgres driver to fetch decimals as strings
+const pg = require('pg');
+pg.types.setTypeParser(1700, parseFloat);
+pg.types.setTypeParser(20, parseInt);
+pg.types.setTypeParser(21, parseInt);
+pg.types.setTypeParser(22, parseInt);
+pg.types.setTypeParser(23, parseInt);
 
 let bodyParser = require('body-parser');
 app.use(bodyParser.json()); // to support JSON-encoded bodies

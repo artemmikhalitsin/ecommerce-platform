@@ -12,8 +12,8 @@ class TransactionLogTDG {
     /**
      * Adds a new transaction into the table
      * @param {Object} transaction The client's email
-     * @return {Promise<number[]>} a promise which resolves to an array
-     * containing the id of the inserted item in the table
+     * @return {Promise<number>} a promise which resolves to the id of the
+     * inserted item in the table
      */
     static add(transaction) {
         return connection.insert({
@@ -25,10 +25,10 @@ class TransactionLogTDG {
 
     /**
      * Gets all items from the TransactionLogTDG table
-     * @param {String} user clients userID 
+     * @param {String} user clients userID
      * @return {Promise<Object[]>} a promise which resolves to an array of items
      */
-    select(user) {
+    static select(user) {
         return connection('TransactionLog').select('*')
             .where({'userID': user});
     }

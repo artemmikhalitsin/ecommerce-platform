@@ -26,7 +26,6 @@ class RepositoryRegistry {
   static getRepo(obj) {
     if (obj instanceof Tablet || obj instanceof Desktop ||
     obj instanceof Laptop || obj instanceof Monitor) {
-      console.log(`it's a product'`);
       return ProductDescriptionRepository.instance();
     }
     if (obj instanceof InventoryItem) {

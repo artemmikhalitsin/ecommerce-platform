@@ -43,6 +43,14 @@ class ProductDescriptionsIdentityMap {
     });
   }
 
+  update(updatedDescription) {
+    let index = this.productDescriptions.findIndex((item) => {
+      return item.modelNumber === updatedDescription.modelNumber;
+    });
+    // Update the identity map with a reference to the new description
+    this.productDescriptions[index] = updatedDescription;
+  }
+
   /**
      * Adds a new object into the identity map
      * @param {Product} newProductDescription a product description

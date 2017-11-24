@@ -9,8 +9,6 @@ const MonitorsTDG = require(rootPath
   + '/DataSource/TableDataGateway/MonitorsTDG.js');
 const TabletsTDG = require(rootPath
   + '/DataSource/TableDataGateway/TabletsTDG.js');
-const ProductDescriptionsTDG = require(rootPath
-  + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
 // Retrieve instance of singleton identity map
 const productIMAP = require(rootPath
   + '/DataSource/IdentityMap/ProductDescriptionsIdentityMap.js').instance();
@@ -60,7 +58,6 @@ class ProductDescriptionRepository {
    * to the product specification
    */
   static makeProduct(product) {
-    console.log(product);
     switch (product.type) {
       case 'Tablet':
         return ProductDescriptionRepository.makeTablet(product);
@@ -87,13 +84,13 @@ class ProductDescriptionRepository {
         tablet.processorType,
         tablet.ramSize,
         tablet.numberCpuCores,
-        tablet.hardDriveSize,
+        tablet.harddriveSize,
         tablet.displaySize,
         new Dimensions(
-            tablet.dimensionId,
-            tablet.depth,
-            tablet.height,
-            tablet.width),
+            tablet.dimensions.id,
+            tablet.dimensions.depth,
+            tablet.dimensions.height,
+            tablet.dimensions.width),
         tablet.batteryInfo,
         tablet.os,
         tablet.cameraInfo,
@@ -113,12 +110,12 @@ class ProductDescriptionRepository {
         desktop.processorType,
         desktop.ramSize,
         desktop.numberCpuCores,
-        desktop.hardDriveSize,
+        desktop.harddriveSize,
         new Dimensions(
-            desktop.dimensionId,
-            desktop.depth,
-            desktop.height,
-            desktop.width),
+            desktop.dimensions.id,
+            desktop.dimensions.depth,
+            desktop.dimensions.height,
+            desktop.dimensions.width),
         desktop.price,
         desktop.weight,
         desktop.brandName,
@@ -137,7 +134,7 @@ class ProductDescriptionRepository {
         laptop.processorType,
         laptop.ramSize,
         laptop.numberCpuCores,
-        laptop.hardDriveSize,
+        laptop.harddriveSize,
         laptop.displaySize,
         laptop.batteryInfo,
         laptop.os,
@@ -192,7 +189,7 @@ class ProductDescriptionRepository {
    * @param {Object} object a product specification
    */
   makeNew(object) {
-    let product = this.makeProduct(object);
+    let product = ProductDescriptionRepository.makeProduct(object);
     if (productIMAP.get(product.modelNumber)) {
       throw new Error(`Cannot create new product with model number
         ${product.modelNumber}. A product with the same model number
@@ -203,16 +200,26 @@ class ProductDescriptionRepository {
     }
   }
   /**
-   * Performs the insertion into the database
+   * Performs the insertion into the database via tdg
    * @param {Product} product the product to be inserted
    * @return {Promise<boolean>} resolve to true if successful
    */
   insert(product) {
-    return new Promise((resolve, reject) => {
-      // TODO: Implement this with the tdg call
-      console.log(`Inserting ${JSON.stringify(product)} into database`);
-      resolve(true);
-    });
+    console.log(`Inserting product: ${JSON.stringify(product)}`);
+    switch (product.type) {
+      case 'Laptop':
+        return LaptopsTDG.add(product);
+        break;
+      case 'Desktop':
+        return DesktopsTDG.add(product);
+        break;
+      case 'Tablet':
+        return TabletsTDG.add(product);
+        break;
+      case 'Monitor':
+        return MonitorsTDG.add(product);
+        break;
+    }
   }
   /**
    * Given a specification creates a product and updates an existing product
@@ -220,7 +227,7 @@ class ProductDescriptionRepository {
    * @param {Object} object a product specification
    */
   set(object) {
-    let product = this.makeProduct(object);
+    let product = ProductDescriptionRepository.makeProduct(object);
     let imapProduct = productIMAP.get(product.modelNumber);
     if (!imapProduct) {
       throw new Error(`Cannot update product with model number
@@ -236,7 +243,7 @@ class ProductDescriptionRepository {
   update(product) {
     return new Promise((resolve, reject) => {
       // TODO: Stuff that has to do with the tdg
-      console.log(`Updating ${JSON.stringify(product)} in database`);
+      // console.log(`Updating ${JSON.stringify(product)} in database`);
       resolve(true);
     });
   }
@@ -245,7 +252,7 @@ class ProductDescriptionRepository {
    * @param {Object} object a product specification
    */
   erase(object) {
-    let product = this.makeProduct(object);
+    let product = ProductDescriptionRepository.makeProduct(object);
     let imapProduct = productIMAP.get(product.modelNumber);
     if (!imapProduct) {
       throw new Error(`Cannot delete product with model number
@@ -258,8 +265,8 @@ class ProductDescriptionRepository {
   }
   delete(product) {
     return new Promise((resolve, reject) => {
-      console.log(`Deleting ${JSON.stringify(product)} from database`);
-      productIMAP.delete([product.modelNumber]);
+      // console.log(`Deleting ${JSON.stringify(product)} from database`);
+      productIMAP.delete(product.modelNumber);
       resolve(true);
     });
   }
@@ -350,42 +357,53 @@ class ProductDescriptionRepository {
    * product list is to be compared
    * @return {bool}
    */
-  save(products) {
-    let electronicsToAdd = [];
-    let electronicsToUpdate = [];
-    let productIds = products.map((p) => p.modelNumber);
-    if (productIds.length > 0) {
-      let context = [];
-    return this.getByModelNumbers(productIds).then((values) => {
-    let allRecords = productIMAP.getAll();
-    for (let i = 0; i < products.length; i++) {
-      if (context.findIndex(
-        (p) => p.modelNumber == products[i].modelNumber) !== -1
-          && electronicsToUpdate.findIndex(
-        (e) => e.modelNumber == products[i].modelNumber) === -1) {
-        // Case: the product exists in our list of products
-        // and hasn't already been processed
-        electronicsToUpdate.push(products[i]);
-      } else if (allRecords.findIndex(
-        (p) => p.modelNumber == products[i].modelNumber) === -1
-              && electronicsToAdd.findIndex(
-        (e) => e.modelNumber == products[i].modelNumber) === -1) {
-        // Case: the product doesn't exist in our list of products
-        // and hasn't already been processed
-        electronicsToAdd.push(products[i]);
-      }
-    }
-    electronicsToAdd = electronicsToAdd.map((e) => {
-      return ProductDescriptionRepository.makeProduct(e);
+  save(input) {
+    // Convert input into domain-level objects
+    input = input.map((item) => ProductDescriptionRepository.makeProduct(item));
+    return new Promise((resolve, reject) => {
+      // First fetch current state of catalog
+      this.getAll()
+      .then(
+        // Then, compare current catalog against the input
+        (catalog) => {
+          let catalogModelNumbers = catalog.map((item) => item.modelNumber);
+          let inputModelNumbers = input.map((item) => item.modelNumber);
+          // New products are those that aren't already in catalog
+          let newProducts = input.filter(
+            (item) => !catalogModelNumbers.includes(item.modelNumber)
+          );
+          // Deleted items are those that appear in the catalog, but not
+          // in the input
+          let deletedProducts = catalog.filter(
+            (item) => !inputModelNumbers.includes(item.modelNumber)
+          );
+          let newModels = newProducts.map((item) => item.modelNumber);
+          let deletedModels = deletedProducts.map((item) => item.modelNumber);
+          // Potential changed are the rest
+          let updatedProducts = input.filter(
+            (item) => {
+              return !(newModels.includes(item.modelNumber) ||
+                       deletedModels.includes(item.modelNumber));
+            });
+          // Now commit these to a unit of work
+          newProducts.forEach(
+            (product) => this.makeNew(product)
+          );
+          updatedProducts.forEach(
+            (product) => this.set(product)
+          );
+          deletedModels.forEach(
+            (product) => this.erase(product)
+          );
+          return this.uow.commit();
+        })
+        .then(
+          () => resolve(true)
+        )
+        .catch(
+          (err) => reject(err)
+        );
     });
-    this.uow.registerNew(electronicsToAdd);
-    this.uow.registerDirty(electronicsToUpdate);
-    return this.uow.commitAll().then((result) => {
-      productIMAP.add(electronicsToAdd);
-      return true;
-      });
-    });
-  }
   }
 }
 

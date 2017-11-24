@@ -15,8 +15,8 @@ class InventoryItemsTDG {
      * Adds a new item into the table
      * @param {string} serialNumber The unique serial number of the item
      * @param {string} modelNumber The model number to associate the serial to
-     * @return {Promise<number[]>} a promise which resolves to an array
-     * containing the id of the inserted item in the table
+     * @return {Promise<number[]>} a promise which resolves to the id of the
+     * inserted item in the table
      */
     static add(serialNumber, modelNumber) {
         return connection.insert({

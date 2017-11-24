@@ -12,15 +12,15 @@ const connection = require('knex')(configuration);
 class DimensionsTDG {
     /**
      * Inserts a computer object into the Computer table
-     * @param {Object} dimension the dimensions of an object
+     * @param {Object} dimensions the dimensions of an object
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new dimension record in the database
      */
-    static add(dimension) {
+    static add(dimensions) {
         return connection.insert({
-          'depth': dimension.depth,
-          'height': dimension.height,
-          'width': dimension.width,
+          'depth': dimensions.depth,
+          'height': dimensions.height,
+          'width': dimensions.width,
         }, 'dimensionId')
         .into('Dimensions');
     }
