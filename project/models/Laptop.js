@@ -152,7 +152,7 @@ class Laptop extends Computer {
         processorType: this.processorType,
         ramSize: this.ramSize,
         numberCpuCores: this.numberCpuCores,
-        harddrive_size: this.harddriveSize,
+        hardDriveSize: this.harddriveSize,
         // Laptop properties
         displaySize: this.displaySize,
         batteryInfo: this.batteryInfo,

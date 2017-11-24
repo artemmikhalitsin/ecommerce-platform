@@ -11,15 +11,15 @@
       </div>
       <div class='col'>
         <div class="card-body">
-          <label class="control-label">Display size: {[{ $ctrl.monitor.display_size}]} </label><br />
+          <label class="control-label">Display size: {[{ $ctrl.monitor.displaySize}]} </label><br />
         </div>
       </div>
       <div class='col'>
         <div class="card-body">
-          <div ng-show="$ctrl.monitor.serial_numbers.length > 0">
+          <div ng-show="$ctrl.monitor.serialNumbers.length > 0">
             <p>Serial numbers</p>
             <ul>
-              <li ng-repeat="serial in $ctrl.monitor.serial_numbers track by $index">
+              <li ng-repeat="serial in $ctrl.monitor.serialNumbers track by $index">
                 {[{ serial }]}  <button ng-click="removeSerial($index)">X</button>
               </li>
             </ul>

@@ -295,8 +295,8 @@ class PurchaseController {
     for (let i in Object.keys(returnCart)) {
       if (returnCart[i]) {
         returns.push({client: user,
-                            model_number: returnCart[i].model,
-                            serial_number: returnCart[i].serial,
+                            modelNumber: returnCart[i].model,
+                            serialNumber: returnCart[i].serial,
                             purchase_Id: returnCart[i].purchaseId});
       }
     }

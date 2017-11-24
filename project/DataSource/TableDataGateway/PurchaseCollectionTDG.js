@@ -22,10 +22,10 @@ class PurchaseCollectionTDG {
      */
     static add(clientID, serialNumber, modelNumber, purchaseId) {
         return connection.insert({
-            'user_id': clientID,
-            'serial_number': serialNumber,
-            'model_number': modelNumber,
-            'purchase_id': purchaseId,
+            'userID': clientID,
+            'serialNumber': serialNumber,
+            'modelNumber': modelNumber,
+            'purchaseId': purchaseId,
           }, 'id')
         .into('PurchaseCollection');
     }
@@ -38,7 +38,7 @@ class PurchaseCollectionTDG {
     static select(user) {
         return connection('PurchaseCollection')
           .select('*')
-          .where({'user_id': user});
+          .where({'userID': user});
     }
 
     /**
@@ -52,8 +52,8 @@ class PurchaseCollectionTDG {
         console.log(returnItem);
         console.log('in purchaseTDG');
         return connection.from('PurchaseCollection').where(
-          {'purchase_id ': returnItem.purchase_Id,
-            'serial_number': returnItem.serial_number}
+          {'purchaseId ': returnItem.purchase_Id,
+            'serialNumber': returnItem.serialNumber}
         ).del();
     }
 }

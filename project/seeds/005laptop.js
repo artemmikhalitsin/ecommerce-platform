@@ -1,29 +1,29 @@
 const laptops = [
   {
-    'model_number': '891507686-9',
-    'comp_id': 4,
-    'display_size': 67,
-    'battery_info': 'integer a nibh',
+    'modelNumber': '891507686-9',
+    'compId': 4,
+    'displaySize': 67,
+    'batteryInfo': 'integer a nibh',
     'os': 'elit proin',
-    'touch_screen': false,
+    'touchScreen': false,
     'camera': true
   },
   {
-    'model_number': '079057815-8',
-    'comp_id': 5,
-    'display_size': 65,
-    'battery_info': 'integer fwsd frdgt',
+    'modelNumber': '079057815-8',
+    'compId': 5,
+    'displaySize': 65,
+    'batteryInfo': 'integer fwsd frdgt',
     'os': 'elit ksthvd wrycnd',
-    'touch_screen': false,
+    'touchScreen': false,
     'camera': true
   },
   {
-    'model_number': '471262598-8',
-    'comp_id': 6,
-    'display_size': 70,
-    'battery_info': 'integer b sdfrg iskfe',
+    'modelNumber': '471262598-8',
+    'compId': 6,
+    'displaySize': 70,
+    'batteryInfo': 'integer b sdfrg iskfe',
     'os': 'elits rdwfr gtde',
-    'touch_screen': true,
+    'touchScreen': true,
     'camera': true
   }
 ];

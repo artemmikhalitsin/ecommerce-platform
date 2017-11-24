@@ -57,7 +57,7 @@ class Aspect {
         req.session.exists=true;
         req.session.hash=data.password;
         req.session.email=data.email;
-        req.session.isAdmin = result[0].is_admin == 1;
+        req.session.isAdmin = result[0].isAdmin == 1;
         let userExists = false;
         this.activeUsers.forEach((usr) => {
           if (usr.getEmail() == req.session.email) {

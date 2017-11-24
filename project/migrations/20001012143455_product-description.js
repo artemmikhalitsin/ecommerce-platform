@@ -5,14 +5,14 @@ exports.up = function(knex, Promise) {
     if (!table) {
       throw new Error('Error creating table ' + tablename);
     } else {
-      table.string('model_number').primary().notNullable();
+      table.string('modelNumber').primary().notNullable();
 
       // Product attributes
-      table.string('brand_name').notNullable();
+      table.string('brandName').notNullable();
       table.decimal('price').notNullable();
       table.decimal('weight').notNullable();
       table.string('type').notNullable();
-      table.boolean('is_available').defaultTo(true);
+      table.boolean('isAvailable').defaultTo(true);
     }
   });
 };

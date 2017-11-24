@@ -20,8 +20,8 @@ class InventoryItemsTDG {
      */
     static add(serialNumber, modelNumber) {
         return connection.insert({
-            'serial_number': serialNumber,
-            'model_number': modelNumber,
+            'serialNumber': serialNumber,
+            'modelNumber': modelNumber,
           }, 'id')
         .into('Inventory');
     }
@@ -35,7 +35,7 @@ class InventoryItemsTDG {
     }
     static getByModelNumbers(modelNumbers) {
         return connection('Inventory').select('*')
-          .whereIn('model_number', modelNumbers);
+          .whereIn('modelNumber', modelNumbers);
     }
     // update is not in current requirements for inventory items
     /* update(inventoryItems){
@@ -50,8 +50,8 @@ class InventoryItemsTDG {
      */
     static delete(inventoryItem) {
         return connection.from('Inventory').where(
-          {'serial_number': inventoryItem.serialNumber,
-           'model_number': inventoryItem.modelNumber}
+          {'serialNumber': inventoryItem.serialNumber,
+           'modelNumber': inventoryItem.modelNumber}
         ).del();
     }
 }

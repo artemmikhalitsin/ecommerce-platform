@@ -1,51 +1,51 @@
 const computers = [
   {
-    'processor_type': 'productivity',
-    'ram_size': 8869,
-    'number_cpu_cores': 5,
-    'harddrive_size': 620
+    'processorType': 'productivity',
+    'ramSize': 8869,
+    'numberCpuCores': 5,
+    'hardDriveSize': 620
   },
   {
-    'processor_type': 'Re-contextualized',
-    'ram_size': 4105,
-    'number_cpu_cores': 11,
-    'harddrive_size': 1757
+    'processorType': 'Re-contextualized',
+    'ramSize': 4105,
+    'numberCpuCores': 11,
+    'hardDriveSize': 1757
   },
   {
-    'processor_type': 'Robust',
-    'ram_size': 3880,
-    'number_cpu_cores': 6,
-    'harddrive_size': 900
+    'processorType': 'Robust',
+    'ramSize': 3880,
+    'numberCpuCores': 6,
+    'hardDriveSize': 900
   },
   {
-    'processor_type': 'Self-enabling',
-    'ram_size': 5382,
-    'number_cpu_cores': 7,
-    'harddrive_size': 982
+    'processorType': 'Self-enabling',
+    'ramSize': 5382,
+    'numberCpuCores': 7,
+    'hardDriveSize': 982
   },
   {
-    'processor_type': 'Adaptive',
-    'ram_size': 8727,
-    'number_cpu_cores': 6,
-    'harddrive_size': 1806
+    'processorType': 'Adaptive',
+    'ramSize': 8727,
+    'numberCpuCores': 6,
+    'hardDriveSize': 1806
   },
   {
-    'processor_type': 'multi-state',
-    'ram_size': 5213,
-    'number_cpu_cores': 4,
-    'harddrive_size': 1232
+    'processorType': 'multi-state',
+    'ramSize': 5213,
+    'numberCpuCores': 4,
+    'hardDriveSize': 1232
   },
   {
-    'processor_type': 'reciprocal',
-    'ram_size': 4266,
-    'number_cpu_cores': 9,
-    'harddrive_size': 1129
+    'processorType': 'reciprocal',
+    'ramSize': 4266,
+    'numberCpuCores': 9,
+    'hardDriveSize': 1129
   },
   {
-    'processor_type': 'discrete',
-    'ram_size': 4690,
-    'number_cpu_cores': 11,
-    'harddrive_size': 849
+    'processorType': 'discrete',
+    'ramSize': 4690,
+    'numberCpuCores': 11,
+    'hardDriveSize': 849
   }
 ];
 

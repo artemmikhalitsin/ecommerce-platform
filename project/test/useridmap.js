@@ -4,20 +4,20 @@ imap = require(rootDir
 
 objects = [
   {
-    first_name: 'wai',
-    last_name: 'wai',
-    phone_number: '22',
+    firstName: 'wai',
+    lastName: 'wai',
+    phoneNumber: '22',
     email: 'qwer@qwer.ca',
     password: 'qwer',
-    full_address: '1234 qwer',
+    fullAddress: '1234 qwer',
   },
   {
-    first_name: 'amanda',
-    last_name: 'amanda',
-    phone_number: '234435',
+    firstName: 'amanda',
+    lastName: 'amanda',
+    phoneNumber: '234435',
     email: 'hello@hello.ca',
     password: 'hello',
-    full_address: '0987 qhellower',
+    fullAddress: '0987 qhellower',
   },
 ];
 

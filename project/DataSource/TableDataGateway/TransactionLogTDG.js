@@ -17,7 +17,7 @@ class TransactionLogTDG {
      */
     static add(transaction) {
         return connection.insert({
-            'user_id': transaction.client,
+            'userID': transaction.client,
             'timestamp': transaction.timestamp,
           }, 'id')
         .into('TransactionLog');
@@ -25,12 +25,12 @@ class TransactionLogTDG {
 
     /**
      * Gets all items from the TransactionLogTDG table
-     * @param {String} user clients user_id 
+     * @param {String} user clients userID 
      * @return {Promise<Object[]>} a promise which resolves to an array of items
      */
     select(user) {
         return connection('TransactionLog').select('*')
-            .where({'user_id': user});
+            .where({'userID': user});
     }
 
 
