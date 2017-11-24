@@ -13,6 +13,26 @@ let TransactionTDG = require(rootDir +'/DataSource/TableDataGateway/TransactionL
 
 let assert = chai.assert;
 let expect = require('chai').expect;
+const environment = process.env.NODE_ENV || 'development';
+const rootPath = require('app-root-dir').get();
+const Promise = require('bluebird');
+const config  = require(rootDir +'/jsconfig.json');
+const configuration = require(rootPath + '/knexfile')[environment];
+const connection = require('knex')(configuration);
+
+const before = (t) => {
+    console.log('before');
+    const tmp = {};
+    const p = new Promise( (resolve, reject) => tmp.resolve = resolve );
+    knex.transaction( tx => { t.tx = tx; tmp.resolve() } ).catch( () => {} );
+    return p;
+}
+var knex = require('knex');
+var mockDb = require('mock-knex');
+var db = knex({
+    client: 'sqlite',
+
+mockDb.mock(db);
 
 /**
  * Testing Unit of Work register functions
@@ -36,7 +56,7 @@ let computer2 =
     'comp_id':12
 };
 
-let desktops = [
+let list = [
 {
     "model_number": "913871307-1",
     "comp_id": 1,
@@ -93,12 +113,13 @@ describe('DesktopsTDG', function() {
     done();
 });
   });
-  describe('#update()', function() {
-  it('should update the specifications '+
-  'of a computer in the database', function(done) {
-      const newcomp = new ComputerTDG();
-      let test = newcomp.update(computer2);
-      expect(test).to.not.be.empty;
+  describe('#getAll()', function() {
+  it('should retrieve the specifications '+
+  'of a desktop in the database', function(done) {
+    const newdesktop = new DesktopTDG();
+      newdesktop.add(1, 3, updateDesktop);
+      let test = newdesktop.getAll();
+      expect(test).to.have.deep.members(list);
       done();
   });
   });

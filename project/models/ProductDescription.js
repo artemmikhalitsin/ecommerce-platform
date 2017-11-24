@@ -1,7 +1,6 @@
 /**
  * Class containing info common to all products
- * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
- * ATTRIBUTE THIS TO YOURSELF
+ * @author Catherine Van
  */
 class ProductDescription {
     /*
