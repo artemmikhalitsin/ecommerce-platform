@@ -32,27 +32,38 @@
   <br>
   <br>
   <br>
-
-  <form action=""> Types <br>
-    <input type="checkbox" name="Type" value="Desktop">Desktop<br>
-    <input type="checkbox" name="Type" value="Laptop">Laptop <br>
-    <input type="checkbox" name="Type" value="Tablet">Tablet<br>
-    <input type="checkbox" name="Type" value="Laptop">monitor<br>
-  </form>
-
-  <form action=""> Brands<br>
-    <input type="checkbox" name="Brand" value="Poop">Poop<br>
-    <input type="checkbox" name="Brand" value="Scoop">Scoop <br>
-    <input type="checkbox" name="Brand" value="Flute">Flute<br>
-    <input type="checkbox" name="Brand" value="Nothing">Nothing
-  </form>
-
-
     <div class="container">
-     <!-- Page features -->
-
+      <label>Search: <input ng-model="searchText"></label>
       <div class="row">
-        <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in itemsShown">
+       <div class="col-lg-3 col-md-3">
+         <label>Product Type</label>
+         <ul>
+           <li>
+             <input type="checkbox" ng-click="includeType('Desktop')"> Desktop</input><br>
+             <input type="checkbox" ng-click="includeType('Laptop')" > Laptop</input><br>
+             <input type="checkbox" ng-click="includeType('Tablet')" > Tablet</input><br>
+             <input type="checkbox" ng-click="includeType('Monitor')"> Monitor</input><br>
+           </li>
+         </ul>
+       </div>
+       <div class="col-lg-3 col-md-3">
+         <label>Brand Name</label>
+         <ul>
+           <li>
+             <input type="checkbox" ng-click="includeBrandName('HP')"> HP</input><br>
+             <input type="checkbox" ng-click="includeBrandName('Dell')" > Dell</input><br>
+             <input type="checkbox" ng-click="includeBrandName('Apple')" > Apple</input><br>
+             <input type="checkbox" ng-click="includeBrandName('Samsung')"> Samsung</input><br>
+             <input type="checkbox" ng-click="includeBrandName('ASUS')"> ASUS</input><br>
+             <input type="checkbox" ng-click="includeBrandName('Razer')" > Razer</input><br>
+             <input type="checkbox" ng-click="includeBrandName('Acer')" > Acer</input><br>
+           </li>
+         </ul>
+       </div>
+      </div>
+      <div class="row">
+       <!-- </form> -->
+        <div class="col-lg-6 col-md-6 mb-4" ng-repeat="item in itemsShown | filter:searchText | filter:typeFilter | filter:brandNameFilter">
               <desktop-card ng-if="item.type==='Desktop'" desktop="item"></desktop-card>
               <laptop-card ng-if="item.type==='Laptop'" laptop="item"></laptop-card>
               <tablet-card ng-if="item.type==='Tablet'" tablet="item"></tablet-card>
