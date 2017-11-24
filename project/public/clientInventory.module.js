@@ -18,9 +18,10 @@ function ClientInventoryController($scope, $http, $compile) {
       console.log($scope.itemsShown);
       filterShown($scope.search)
 
-      //console.log("Printing items: " + JSON.stringify($scope.items));
-
       $scope.typeIncludes = [];
+      $scope.brandNameIncludes = [];
+
+      // filtering by product type
       $scope.includeType = function(type) {
         var i = $.inArray(type, $scope.typeIncludes);
         if (i > -1) {
@@ -33,6 +34,25 @@ function ClientInventoryController($scope, $http, $compile) {
       $scope.typeFilter = function(item) {
         if ($scope.typeIncludes.length > 0) {
             if ($.inArray(item.type, $scope.typeIncludes) < 0)
+                return;
+        }
+
+        return item;
+      }
+
+      // filtering by brand name
+      $scope.includeBrandName = function(type) {
+        var i = $.inArray(type, $scope.brandNameIncludes);
+        if (i > -1) {
+            $scope.brandNameIncludes.splice(i, 1);
+        } else {
+            $scope.brandNameIncludes.push(type);
+        }
+      }
+
+      $scope.brandNameFilter = function(item) {
+        if ($scope.brandNameIncludes.length > 0) {
+            if ($.inArray(item.brandName, $scope.brandNameIncludes) < 0)
                 return;
         }
 
