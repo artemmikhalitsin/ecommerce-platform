@@ -1,8 +1,8 @@
-var productCard = angular.module('productCard', [])
-var desktopCard = angular.module('desktopCard', [])
-var laptopCard = angular.module('laptopCard', [])
-var tabletCard = angular.module('tabletCard', [])
-var monitorCard = angular.module('monitorCard', [])
+let productCard = angular.module('productCard', []);
+let desktopCard = angular.module('desktopCard', []);
+let laptopCard = angular.module('laptopCard', []);
+let tabletCard = angular.module('tabletCard', []);
+let monitorCard = angular.module('monitorCard', []);
 
 function productCardController($scope) {
 }
@@ -13,7 +13,7 @@ function desktopCardController($scope, $http, $compile) {
   }
   $scope.remove = (index) => {
     remove(index, $http);
-  }
+  };
 }
 function laptopCardController($scope, $http, $compile) {
   rotateCard($scope);
@@ -22,7 +22,7 @@ function laptopCardController($scope, $http, $compile) {
   }
   $scope.remove = (index) => {
     remove(index, $http);
-  }
+  };
 }
 function tabletCardController($scope, $http, $compile) {
   rotateCard($scope);
@@ -31,7 +31,7 @@ function tabletCardController($scope, $http, $compile) {
   }
   $scope.remove = (index) => {
     remove(index, $http);
-  }
+  };
 }
 function monitorCardController($scope, $http, $compile) {
   rotateCard($scope);
@@ -40,7 +40,7 @@ function monitorCardController($scope, $http, $compile) {
   }
   $scope.remove = (index) => {
     remove(index, $http);
-  }
+  };
 }
 
 function remove(serialNumber, http) {
@@ -51,10 +51,10 @@ function remove(serialNumber, http) {
     data: {serialNumber: serialNumber},
   }).then(function successCallback(response) {
       $('#cart_' + serialNumber).remove();
+      window.alert('Removed successfully');
     }, function errorCallback(response) {
       window.alert('Cannot remove item!');
   });
-
 }
 
 function addToShoppingCart(serialNumber,modelNumber, brandName, type, price, http, compile, scope) {
@@ -63,6 +63,13 @@ function addToShoppingCart(serialNumber,modelNumber, brandName, type, price, htt
     url: '/addToCart',
     data: {serialNumber: serialNumber, modelNumber: modelNumber},
   }).then(function successCallback(response) {
+    let html=`<li id="cart_${serialNumber}">${serialNumber}<button ng-click="remove('${serialNumber}')">X</button></li>`;
+    let el = document.getElementById('temp_cart');
+    angular.element(el).append(compile(html)(scope));
+    window.alert('Added to shopping cart');
+    }, function errorCallback(response) {
+      window.alert('Not added to shopping cart');
+  });
     var html=`<div class="list-group-item list-group-item-action flex-column align-items-start" id="cart_${serialNumber}">`
     +  `<div class="d-flex w-100 justify-content-between">`
     +   `<h3 class="mb-1">${brandName} ${type}</h3>`
@@ -90,51 +97,51 @@ function rotateCard($scope) {
 
   $scope.rotate = () => {
     $scope.rotated = !$scope.rotated;
-  }
+  };
 }
 
-//Component data
+// Component data
 productCard.component('productCard', {
   templateUrl: '/clientInventory/productCard.html',
   controller: productCardController,
   bindings: {
-  product: '<'
-  }
-})
+  product: '<',
+  },
+});
 
 desktopCard.component('desktopCard', {
   templateUrl: '/clientInventory/desktopCard.html',
   controller: desktopCardController,
   bindings: {
-    desktop: '<'
-  }
-})
+    desktop: '<',
+  },
+});
 
 desktopCard.component('laptopCard', {
   templateUrl: '/clientInventory/laptopCard.html',
   controller: laptopCardController,
   bindings: {
-    laptop: '<'
-  }
-})
+    laptop: '<',
+  },
+});
 
 desktopCard.component('tabletCard', {
   templateUrl: '/clientInventory/tabletCard.html',
   controller: tabletCardController,
   bindings: {
-    tablet: '<'
-  }
-})
+    tablet: '<',
+  },
+});
 
 desktopCard.component('monitorCard', {
   templateUrl: '/clientInventory/monitorCard.html',
   controller: monitorCardController,
   bindings: {
-    monitor: '<'
-  }
-})
+    monitor: '<',
+  },
+});
 
-//Set different delimiters to prevent clashing with handlebars
+// Set different delimiters to prevent clashing with handlebars
 productCard.config(function($interpolateProvider) {
   $interpolateProvider.startSymbol('{[{');
   $interpolateProvider.endSymbol('}]}');

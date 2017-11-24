@@ -11,13 +11,25 @@
       </div>
       <div class='col'>
         <div class="card-body">
-          <label class="control-label">Processor Type: {[{ $ctrl.desktop.processor_type}]} </label><br />
-          <label class="control-label">RAM Size: {[{ $ctrl.desktop.ram_size}]} </label><br />
-          <label class="control-label"># of CPU cores: {[{ $ctrl.desktop.number_cpu_cores}]} </label><br />
-          <label class="control-label">Harddrive size: {[{ $ctrl.desktop.harddrive_size}]} </label><br />
+          <label class="control-label">Processor Type: {[{ $ctrl.desktop.processorType}]} </label><br />
+          <label class="control-label">RAM Size: {[{ $ctrl.desktop.ramSize}]} </label><br />
+          <label class="control-label"># of CPU cores: {[{ $ctrl.desktop.numberCpuCores}]} </label><br />
+          <label class="control-label">Harddrive size: {[{ $ctrl.desktop.hardDriveSize}]} </label><br />
           <label class="control-label">Height (cm): {[{ $ctrl.desktop.dimensions.height}]} </label><br />
           <label class="control-label">Width (cm): {[{ $ctrl.desktop.dimensions.width}]} </label><br />
           <label class="control-label">Depth (cm): {[{ $ctrl.desktop.dimensions.depth}]} </label><br />
+        </div>
+      </div>
+      <div class='col'>
+        <div class="card-body">
+          <div ng-show="$ctrl.desktop.serialNumbers.length > 0">
+            <p>Serial numbers</p>
+            <ul>
+              <li ng-repeat="serial in $ctrl.desktop.serialNumbers track by $index">
+                {[{ serial }]}  <button ng-click="removeSerial($index)">X</button>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

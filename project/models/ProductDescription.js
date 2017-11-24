@@ -1,6 +1,8 @@
 /**
  * Class containing info common to all products
- * @author Catherine Van
+ * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
+ * ATTRIBUTE THIS TO YOURSELF
+ * @authour Artem Mikhalitsin
  */
 class ProductDescription {
     /*
@@ -10,72 +12,99 @@ class ProductDescription {
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
      * @param {string} type
+     * @param {boolean} isAvailable
      */
-    constructor(price, weight, brandName, modelNumber, type) {
-        this.price = price;
-        this.weight = weight;
-        this.brandName = brandName;
-        this.modelNumber = modelNumber;
-        this.type = type;
+    constructor(price, weight, brandName, modelNumber, type, isAvailable) {
+        this._price = price;
+        this._weight = weight;
+        this._brandName = brandName;
+        this._modelNumber = modelNumber;
+        this._isAvailable = isAvailable;
+        this._type = type;
     }
-
+    /**
+     * type accessor
+     * @return {string} the type of the object
+     */
+     get type() {
+       return this._type;
+     }
+     /**
+      * type mutator. object's type should not be changed as it is determined
+      * during construction, so this method does nothing.
+      * @param {string} type ignored
+      */
+      set type(type) {/* an object's type shouldn't be changed */}
     /**
      * price accessor
      * @return {number} price of the product
      */
-    getPrice() {
-      return this.price;
+    get price() {
+      return this._price;
+    }
+    /**
+    * price mutator
+    * @param {number} price the new price of the product
+    */
+    set price(price) {
+      this._price = price;
     }
     /**
      * weight accessor
      * @return {number} weight of the product
      */
-    getWeight() {
-       return this.weight;
+    get weight() {
+       return this._weight;
+    }
+    /**
+    * weight mutator
+    * @param {number} weight the new weight of the product
+    */
+    set weight(weight) {
+      this._weight = weight;
     }
     /**
      * brandName accesoor
      * @return {string} brand name
      */
-    getBrandName() {
-      return this.brandName;
+    get brandName() {
+      return this._brandName;
+    }
+    /**
+    * brandName mutator
+    * @param {string} brandName the new brand name of the product
+    */
+    set brandName(brandName) {
+      this._brandName = brandName;
     }
     /**
      * model number accessor
      * @return {string} the alphanumeric model number of the product
      */
-    getModelNumber() {
-      return this.modelNumber;
-    }
-
-    /**
-     * price mutator
-     * @param {number} price the new price of the product
-     */
-    setPrice(price) {
-      this.price = price;
+    get modelNumber() {
+      return this._modelNumber;
     }
     /**
-     * weight mutator
-     * @param {number} weight the new weight of the product
-     */
-    setWeight(weight) {
-      this.weight = weight;
+    * modelNumber mutator
+    * @param {string} modelNumber the new model number of the product
+    */
+    set modelNumber(modelNumber) {
+      this._modelNumber = modelNumber;
     }
     /**
-     * brandName mutator
-     * @param {string} brandName the new brand name of the product
+     * isAvailable accessor
+     * @return {boolean} availability of the product
      */
-    setBrandName(brandName) {
-      this.brandName = brandName;
+    get isAvailable() {
+      return this._isAvailable;
     }
     /**
-     * modelNumber mutator
-     * @param {string} modelNumber the new model number of the product
+     * isAvailable mutator
+     * @param {boolean} isAvailable new availability status of the product
      */
-    setModelNumber(modelNumber) {
-      this.modelNumber = modelNumber;
-    }
+     set isAvailable(isAvailable) {
+       this._isAvailable = isAvailable;
+     }
 }
 
 module.exports = ProductDescription;

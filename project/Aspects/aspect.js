@@ -5,6 +5,8 @@ const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
 const ProcessQueue = require(rootPath +
   '/Aspects/processQueue.js');
+const ActiveUser = require(rootPath +
+  '/Aspects/activeUser.js');
 
 /**
  * Aspect that manages authentication
@@ -12,39 +14,58 @@ const ProcessQueue = require(rootPath +
  */
 
 const authRequests = [
-  'inventoryAction',
   'getCatalog',
+  'getAllInventory',
   'manageProductCatalog',
+  'getProductDescription',
+  'registrationRequest',
+  'inventoryAction',
   'addToShoppingCart',
   'removeFromShoppingCart',
   'completePurchaseTransaction',
-  'viewShoppingCart',
   'cancelPurchaseTransaction',
   'addToReturnCart',
   'returnPurchaseTransaction',
   'viewPurchaseCollection',
+  'getProductInfo',
   'getClients',
+  'getProductDescription',
+  'cancelReturnTransaction',
+  'deleteClient',
 ];
 
 class Aspect {
   constructor() {
-     this.userRepo = new UserRepository();
+     this.userRepo = UserRepository.instance();
      this.activeUsers = [];
      this.processQueue = new ProcessQueue();
   }
 
-  // if you do not pass joinpoint:
-  // validate session will not let caught function proceed after validation
+ /** Determines if a caught message should proceed or not 
+  * based on user at that time
+  * if you do not pass joinpoint:
+  * validate session will not let caught function proceed after validation
+  * @param {Object} req 
+  * @param {Object} res
+  * @param {Object} data user information when getting caught by aspect
+  * @param {jointpoint} joinpoint
+  * @return {function} proceed or not
+  */
   validateSession(req, res, data, joinpoint) {
     return this.userRepo.authenticate(data).then((result) => {
       if (result.length <= 0 || result.length > 1) {
         console.log('Terminated by aspect. Invalid user/pass.');
-        req.session.destroy();
+        if (req.session.exists) {
+          req.session.destroy();
+        }
+        if (joinpoint) {
+          this.processQueue.anonReq(joinpoint);
+        }
       } else {
         req.session.exists=true;
         req.session.hash=data.password;
         req.session.email=data.email;
-        req.session.isAdmin = result[0].is_admin == 1;
+        req.session.isAdmin = result[0].isAdmin == 1;
         let userExists = false;
         this.activeUsers.forEach((usr) => {
           if (usr.getEmail() == req.session.email) {
@@ -107,7 +128,7 @@ class Aspect {
       let res = joinpoint.args[1];
       if (!req.session.exists) {
         console.log('Caught by logout aspect, user not logged in');
-        return joinpoint.proceed();
+        this.processQueue.anonReq(joinpoint);
       } else {
         let data = {
             email: req.session.email,
@@ -126,33 +147,10 @@ class Aspect {
           this.activeUsers = this.activeUsers.filter((val) => {
               return val != null;
           });
-          return joinpoint.proceed();
+          this.processQueue.anonReq(joinpoint);
         });
       }
     });
-  }
-}
-
-class ActiveUser {
-  constructor(email, lastRequest) {
-    this.email = email;
-    this.lastRequest = lastRequest;
-  }
-
-  getEmail() {
-    return this.email;
-  }
-
-  timeStamp() {
-    this.lastRequest = new Date().getTime();
-  }
-
-  isInactive() { // set to 20min
-    if (new Date().getTime() > this.lastRequest + 20*60*1000) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }
 

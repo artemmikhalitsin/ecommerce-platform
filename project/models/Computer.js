@@ -1,7 +1,9 @@
 /**
  * Class representing a computer
  * @extends {ProductDescription}
- * @author Catherine Van
+ * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
+ * ATTRIBUTE THIS TO YOURSELF
+ * @author Artem Mikhalitsin
  */
 const rootPath = require('app-root-dir').get();
 const ProductDescription = require(rootPath + '/models/ProductDescription.js');
@@ -21,69 +23,83 @@ class Computer extends ProductDescription {
      * @param {string} type
      */
     constructor(id, processorType, ramSize, numberCpuCores,
-                harddriveSize, price, weight, brandName, modelNumber, type) {
-      super(price, weight, brandName, modelNumber, type);
-      this.computerId = id;
-      this.processorType = processorType;
-      this.ramSize = ramSize;
-      this.numberCpuCores = numberCpuCores;
-      this.harddriveSize = harddriveSize;
+                harddriveSize, price, weight, brandName, modelNumber, type,
+                isAvailable) {
+      super(price, weight, brandName, modelNumber, type, isAvailable);
+      this._computerId = id;
+      this._processorType = processorType;
+      this._ramSize = ramSize;
+      this._numberCpuCores = numberCpuCores;
+      this._harddriveSize = harddriveSize;
     }
+    /**
+     * computerId accessor
+     * @return {number} id of the computer
+     */
+     get compId() {
+       return this._computerId;
+     }
+     /**
+      * computerId mutator. Ids are immutable, so this method does nothing
+      * and exists only for interfacing purposes
+      * @param {number} compId ignored
+      */
+    set compId(compId) {/* ids are immutable */}
     /**
      * processorType accessor
      * @return {string} proccessor type
      */
-    getProcessorType() {
-      return this.processorType;
+    get processorType() {
+      return this._processorType;
+    }
+    /**
+    * processorType mutator
+    * @param {string} processorType new processor type
+    */
+    set processorType(processorType) {
+      this._processorType = processorType;
     }
     /**
      * ramSize accessor
      * @return {number} ram size
      */
-    getRamSize() {
-       return this.ramSize;
+    get ramSize() {
+       return this._ramSize;
+    }
+    /**
+    * ramSize mutator
+    * @param {number} ramSize new size of ram
+    */
+    set ramSize(ramSize) {
+      this._ramSize = ramSize;
     }
     /**
      * numberCpuCores accessor
      * @return {number} number of cpu cores
      */
-    getNumberCpuCores() {
-      return this.numberCpuCores;
+    get numberCpuCores() {
+      return this._numberCpuCores;
+    }
+    /**
+    * numberCpuCores mutator
+    * @param {number} numberCpuCores new number of cores
+    */
+    set numberCpuCores(numberCpuCores) {
+      this._numberCpuCores = numberCpuCores;
     }
     /**
      * harddriveSize accessor
      * @return {number} size of hard drive
      */
-    getHarddriveSize() {
-      return this.harddriveSize;
-    }
-    /**
-     * processorType mutator
-     * @param {string} processorType new processor type
-     */
-    setProcessorType(processorType) {
-      this.processorType = processorType;
-    }
-    /**
-     * ramSize mutator
-     * @param {number} ramSize new size of ram
-     */
-    setRamSize(ramSize) {
-      this.ramSize = ramSize;
-    }
-    /**
-     * numberCpuCores mutator
-     * @param {number} numberCpuCores new number of cores
-     */
-    setNumberCpuCores(numberCpuCores) {
-      this.numberCpuCores = numberCpuCores;
+    get harddriveSize() {
+      return this._harddriveSize;
     }
     /**
      * harddriveSize mutator
      * @param {number} harddriveSize new size of hard drive
      */
-    setHarddriveSize(harddriveSize) {
-      this.harddriveSize = harddriveSize;
+    set harddriveSize(harddriveSize) {
+      this._harddriveSize = harddriveSize;
     }
 }
 

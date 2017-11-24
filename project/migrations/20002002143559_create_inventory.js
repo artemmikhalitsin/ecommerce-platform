@@ -6,10 +6,10 @@ exports.up = function(knex, Promise) {
       throw new Error('Error creating table ' + tablename);
     } else {
       table.increments('id').unsigned().primary();
-      table.string('serial_number').notNullable().unique();
-      table.string('model_number').notNullable();
-      table.foreign('model_number')
-        .references('ProductDescription.model_number');
+      table.string('serialNumber').notNullable().unique();
+      table.string('modelNumber').notNullable();
+      table.foreign('modelNumber')
+        .references('ProductDescription.modelNumber');
     }
   });
 };

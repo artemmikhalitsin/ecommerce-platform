@@ -1,21 +1,21 @@
 const tablets = [
   {
-    'model_number': '425528356-7',
-    'comp_id': 7,
-    'dimension_id': 4,
-    'display_size': 25,
-    'battery_info': 'regional',
+    'modelNumber': '425528356-7',
+    'compId': 7,
+    'dimensionId': 4,
+    'displaySize': 25,
+    'batteryInfo': 'regional',
     'os': 'Graphic Interface',
-    'camera_info': 'tellus nulla ut'
+    'cameraInfo': 'tellus nulla ut'
   },
   {
-    'model_number': '847042583-8',
-    'comp_id': 8,
-    'dimension_id': 5,
-    'display_size': 24,
-    'battery_info': 'dedicated',
+    'modelNumber': '847042583-8',
+    'compId': 8,
+    'dimensionId': 5,
+    'displaySize': 24,
+    'batteryInfo': 'dedicated',
     'os': 'Extended',
-    'camera_info': 'nulla ultrices aliquet maecenas'
+    'cameraInfo': 'nulla ultrices aliquet maecenas'
   }
 ];
 

@@ -3,8 +3,8 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
-const Tablet = require(rootPath + '/models/Tablet.js');
-const Dimensions = require(rootPath + '/models/Dimensions.js');
+// const Tablet = require(rootPath + '/models/Tablet.js');
+// const Dimensions = require(rootPath + '/models/Dimensions.js');
 
 /**
  * Table Data Gateway for the Tablet table
@@ -22,99 +22,114 @@ class TabletsTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new tablet record in the database
      */
-    add(compId, dimensionsId, tablet) {
+    static add(compId, dimensionsId, tablet) {
         return connection.insert({
-            'comp_id': compId,
-            'model_number': tablet.modelNumber,
-            'dimension_id': dimensionsId,
-            'display_size': tablet.displaySize,
-            'battery_info': tablet.batteryInfo,
+            'compId': compId,
+            'modelNumber': tablet.modelNumber,
+            'dimensionId': dimensionsId,
+            'displaySize': tablet.displaySize,
+            'batteryInfo': tablet.batteryInfo,
             'os': tablet.os,
-            'camera_info': tablet.cameraInfo,
+            'cameraInfo': tablet.cameraInfo,
         }, 'id')
         .into('Tablet');
     }
     /* getAll() {
         let result = [];
         return connection('Tablet').select('*')
-          .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
-          .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Tablet.model_number',
-            'ProductDescription.model_number')
+          .join('Computer', 'Tablet.compId', 'Computer.compId')
+          .join('Dimensions', 'Tablet.dimensionId', 'Dimensions.dimensionId')
+          .join('ProductDescription', 'Tablet.modelNumber',
+            'ProductDescription.modelNumber')
           .then((tablets) => {
               tablets.forEach(function(tablet) {
                   result.push(new Tablet(
-                      tablet.comp_id,
-                      tablet.processor_type,
-                      tablet.ram_size,
-                      tablet.number_cpu_cores,
-                      tablet.harddrive_size,
-                      tablet.display_size,
+                      tablet.compId,
+                      tablet.processorType,
+                      tablet.ramSize,
+                      tablet.numberCpuCores,
+                      tablet.hardDriveSize,
+                      tablet.displaySize,
                       new Dimensions(
-                          tablet.dimension_id,
+                          tablet.dimensionId,
                           tablet.depth,
                           tablet.height,
                           tablet.width),
-                      tablet.battery_info,
-                      tablet.os,
-                      tablet.camera_info,
-                      tablet.price,
-                      tablet.weight,
-                      tablet.brand_name,
-                      tablet.model_number,
-                      tablet.type));
-              });
-              return result;
-          });
-    }*/
+                          */
+    //                   tablet.battery_info,
+    //                   tablet.os,
+    //                   tablet.camera_info,
+    //                   tablet.price,
+    //                   tablet.weight,
+    //                   tablet.brand_name,
+    //                   tablet.model_number,
+    //                   tablet.type));
+    //           });
+    //           return result;
+    //       });
+    // }*/
     getAll() {
         return connection('Tablet').select('*')
-          .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
-          .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Tablet.model_number',
-            'ProductDescription.model_number');
+          .join('Computer', 'Tablet.compId', 'Computer.compId')
+          .join('Dimensions', 'Tablet.dimensionId', 'Dimensions.dimensionId')
+          .join('ProductDescription', 'Tablet.modelNumber',
+            'ProductDescription.modelNumber');
     }
     /* getByModelNumber(modelNumbers) {
         let result = [];
         return connection('Tablet').select('*')
-          .whereIn('model_number', modelNumbers)
-          .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
-          .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Tablet.model_number',
-            'ProductDescription.model_number')
+          .whereIn('modelNumber', modelNumbers)
+          .join('Computer', 'Tablet.compId', 'Computer.compId')
+          .join('Dimensions', 'Tablet.dimensionId', 'Dimensions.dimensionId')
+          .join('ProductDescription', 'Tablet.modelNumber',
+            'ProductDescription.modelNumber')
           .then((tablets) => {
               tablets.forEach(function(tablet) {
                   result.push(new Tablet(
-                      tablet.comp_id,
-                      tablet.processor_type,
-                      tablet.ram_size,
-                      tablet.number_cpu_cores,
-                      tablet.harddrive_size,
-                      tablet.display_size,
+                      tablet.compId,
+                      tablet.processorType,
+                      tablet.ramSize,
+                      tablet.numberCpuCores,
+                      tablet.hardDriveSize,
+                      tablet.displaySize,
                       new Dimensions(
-                          tablet.dimension_id,
+                          tablet.dimensionId,
                           tablet.depth,
                           tablet.height,
                           tablet.width),
-                      tablet.battery_info,
+                      tablet.batteryInfo,
                       tablet.os,
-                      tablet.camera_info,
+                      tablet.cameraInfo,
                       tablet.price,
                       tablet.weight,
-                      tablet.brand_name,
-                      tablet.model_number,
+                      tablet.brandName,
+                      tablet.modelNumber,
                       tablet.type));
               });
               return result;
           });
     }*/
-    getByModelNumber(modelNumbers) {
+    static getByModelNumbers(modelNumbers) {
         return connection('Tablet').select('*')
-          .whereIn('model_number', modelNumbers)
-          .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')
-          .join('Dimensions', 'Tablet.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Tablet.model_number',
-            'ProductDescription.model_number');
+          .whereIn('ProductDescription.modelNumber', modelNumbers)
+          .join('Computer', 'Tablet.compId', 'Computer.compId')
+          .join('Dimensions', 'Tablet.dimensionId', 'Dimensions.dimensionId')
+          .join('ProductDescription', 'Tablet.modelNumber',
+            'ProductDescription.modelNumber');
+    }
+    /**
+     * Retrieves all tablet object rows except those listed in modelNumbers
+     * @param {string[]} modelNumbers a list of model numbers
+     * @return {Promise<Object[]>} resolves to the list of objects matching
+     * the query
+     */
+    static getAllExcept(modelNumbers) {
+        return connection('Tablet').select('*')
+          .whereNotIn('ProductDescription.modelNumber', modelNumbers)
+          .join('Computer', 'Tablet.compId', 'Computer.compId')
+          .join('Dimensions', 'Tablet.dimensionId', 'Dimensions.dimensionId')
+          .join('ProductDescription', 'Tablet.modelNumber',
+            'ProductDescription.modelNumber');
     }
     /**
      * Updates the specifications of a tablet in the database
@@ -126,15 +141,15 @@ class TabletsTDG {
      * @return {Promise<number>} promise which resolves to the number of
      * rows affected
      */
-    update(compId, dimensionsId, tablet) {
+    static update(compId, dimensionsId, tablet) {
         return connection.update({
-          'comp_id': tablet.computerId,
-          'dimension_id': tablet.dimensions.id,
-          'display_size': tablet.displaySize,
-          'battery_info': tablet.batteryInfo,
+          'compId': tablet.computerId,
+          'dimensionId': tablet.dimensions.id,
+          'displaySize': tablet.displaySize,
+          'batteryInfo': tablet.batteryInfo,
           'os': tablet.os,
-          'camera_info': tablet.cameraInfo,
-        }).from('Tablet').where({'model_number': tablet.modelNumber});
+          'cameraInfo': tablet.cameraInfo,
+        }).from('Tablet').where({'modelNumber': tablet.modelNumber});
     }
 }
 module.exports = TabletsTDG;

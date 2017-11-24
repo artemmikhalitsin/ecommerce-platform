@@ -1,5 +1,5 @@
-Map status after adding objects: [{"first_name":"wai","last_name":"wai","phone_number":"22","email":"qwer@qwer.ca","password":"qwer","full_address":"1234 qwer"},{"first_name":"amanda","last_name":"amanda","phone_number":"234435","email":"hello@hello.ca","password":"hello","full_address":"0987 qhellower"}]
-User fetched by hello@hello.ca (should be just amanda): [{"first_name":"amanda","last_name":"amanda","phone_number":"234435","email":"hello@hello.ca","password":"hello","full_address":"0987 qhellower"}]
-User fetched by hello@hello.ca and password hello(should be just amanda): {"first_name":"amanda","last_name":"amanda","phone_number":"234435","email":"hello@hello.ca","password":"hello","full_address":"0987 qhellower"}
+Map status after adding objects: [{"firstName":"wai","lastName":"wai","phoneNumber":"22","email":"qwer@qwer.ca","password":"qwer","fullAddress":"1234 qwer"},{"firstName":"amanda","lastName":"amanda","phoneNumber":"234435","email":"hello@hello.ca","password":"hello","fullAddress":"0987 qhellower"}]
+User fetched by hello@hello.ca (should be just amanda): [{"firstName":"amanda","lastName":"amanda","phoneNumber":"234435","email":"hello@hello.ca","password":"hello","fullAddress":"0987 qhellower"}]
+User fetched by hello@hello.ca and password hello(should be just amanda): {"firstName":"amanda","lastName":"amanda","phoneNumber":"234435","email":"hello@hello.ca","password":"hello","fullAddress":"0987 qhellower"}
 User fetched by hello@hello.ca and password goodbye (should be no results): undefined
-Map status after deleting wai: [{"first_name":"amanda","last_name":"amanda","phone_number":"234435","email":"hello@hello.ca","password":"hello","full_address":"0987 qhellower"}]
+Map status after deleting wai: [{"firstName":"amanda","lastName":"amanda","phoneNumber":"234435","email":"hello@hello.ca","password":"hello","fullAddress":"0987 qhellower"}]

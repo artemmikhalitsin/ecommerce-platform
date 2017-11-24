@@ -13,18 +13,16 @@ function catalogController($scope) {
         url: '/getProductDescription',
         type: 'get',
         dataType: 'json',
-        success: function (response) {
-          $scope.$apply(function(){
-              
+        success: function(response) {
+          $scope.$apply(function() {
           $scope.products = response.items;
           console.log($scope.products);
           });
-          
         },
-        error: function (xhr) {
+        error: function(xhr) {
           $('#error-box').show();
           $('#error-message').html(xhr.responseJSON.error);
-        }
+        },
     });
   };
   $scope.$on('newDesktop', function(event, desktop){
@@ -44,23 +42,24 @@ function catalogController($scope) {
     $scope.products.push(tablet);
   });
   $scope.submit = function(){
+    console.log($scope.products);
     $.ajax({
-      url:'/manageProductCatalog',
+      url: '/manageProductCatalog',
       type: 'post',
       data: {"productDescriptions":JSON.stringify($scope.products)},
       dataType: 'json',
       success: function(response){
         $scope.$apply(function(){
-          
+
         $scope.products = response.items;
         console.log("Successfully saved!");
       });
       },
-      error: function(error){
+      error: function(error) {
         $('#error-box').show();
         $('#error-message').html(error);
         console.log(error);
-      }
+      },
     });
   };
 }

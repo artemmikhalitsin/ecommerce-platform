@@ -5,13 +5,13 @@ exports.up = function(knex, Promise) {
     if (!table) {
       throw new Error('Error creating table ' + tablename);
     } else {
-      table.increments('comp_id').primary().notNullable().unsigned();
-//      table.dropForeign('productdescription_id', productdescription_id);
+      table.increments('compId').primary().notNullable().unsigned();
+//      table.dropForeign('productdescriptionId', productdescriptionId);
       // Computer attributes
-      table.string('processor_type').notNullable();
-      table.integer('ram_size').unsigned().notNullable();
-      table.integer('number_cpu_cores').unsigned().notNullable();
-      table.integer('harddrive_size').unsigned().notNullable();
+      table.string('processorType').notNullable();
+      table.integer('ramSize').unsigned().notNullable();
+      table.integer('numberCpuCores').unsigned().notNullable();
+      table.integer('hardDriveSize').unsigned().notNullable();
     }
   });
 };

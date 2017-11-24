@@ -1,7 +1,9 @@
 /**
  * Class representing a Desktop
  * @extends {Computer}
- * @author Catherine Van
+ * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
+ * ATTRIBUTE THIS TO YOURSELF
+ * @author Artem Mikhalitsin
  */
 const rootPath = require('app-root-dir').get();
 const Computer = require(rootPath + '/models/Computer.js');
@@ -23,24 +25,69 @@ class Desktop extends Computer {
    */
   constructor(processorType, ramSize, numberCpuCores, harddriveSize,
               dimensions, price, weight, brandName, modelNumber, computerId,
-              type) {
+              type, isAvailable) {
     super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
-          price, weight, brandName, modelNumber, type);
-        this.dimensions = dimensions;
+          price, weight, brandName, modelNumber, type, isAvailable);
+        this._dimensions = dimensions;
     }
     /**
      * dimensions accessor
      * @return {Object} dimensions of the desktop
      */
-    getDimensions() {
-      return this.dimensions;
+    get dimensions() {
+      return this._dimensions.clone();
     }
     /**
      * dimensions mutator
      * @param {Object} dimensions new dimensions of the desktop
      */
-    setDimensions(dimensions) {
-      this.dimensions = dimensions;
+    set dimensions(dimensions) {
+      this._dimensions = dimensions.clone();
+    }
+    /**
+     * Creates a clone of the objects
+     * @return {Desktop} a clone of the object
+     */
+    clone() {
+      return new Desktop(
+          this.processorType,
+          this.ramSize,
+          this.numberCpuCores,
+          this.harddriveSize,
+          this.dimensions,
+          this.price,
+          this.weight,
+          this.brandName,
+          this.modelNumber,
+          this.compId,
+          this.type,
+          this.isAvailable);
+    }
+    /**
+     * Creates a front-end friendly object
+     * @return {Object} an object describing the desktop
+     * that can be sent to the front-end
+     */
+    frontendFriendlify() {
+      return {
+        // Product properties
+        type: this.type,
+        modelNumber: this.modelNumber,
+        brandName: this.brandName,
+        price: this.price,
+        weight: this.weight,
+        // Computer properties
+        processorType: this.processorType,
+        ramSize: this.ramSize,
+        numberCpuCores: this.numberCpuCores,
+        harddriveSize: this.harddriveSize,
+        // Dimensions
+        dimensions: {
+          height: this.dimensions.height,
+          width: this.dimensions.width,
+          depth: this.dimensions.depth,
+        },
+      };
     }
 }
 

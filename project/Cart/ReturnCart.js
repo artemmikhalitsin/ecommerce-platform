@@ -5,40 +5,38 @@
  */
 class ReturnCart {
     constructor() {
-      this.returnCartItems = {}; // The key is a serial id
+      this._returnCartItems = {}; // Keys are serial numbers
     }
 
     getCart() {
-      return this.returnCartItems;
+      return Object.assign({}, this._returnCartItems);
     }
 
     getCartSerialNumbers() {
-      return Object.keys(this.returnCartItems);
+      return Object.keys(this._returnCartItems);
     }
 
-    addToReturnCart(item, modelNumber, purchaseId) {
-      if (!this.returnCartItems[item]) {
-        this.returnCartItems[item] = {
+    addToReturnCart(serialNumber, modelNumber) {
+      if (!this._returnCartItems[serialNumber]) {
+        this._returnCartItems[serialNumber] = {
                               model: modelNumber,
-                              serial: item,
-                              purchaseId: purchaseId,
+                              serial: serialNumber,
                               };
       }
       post: {
-        Object.keys(this.returnCartItems).includes(item),
+        Object.keys(this._returnCartItems).includes(serialNumber),
           'Item was not added to cart';
       }
       return item;
     }
-
-    removeFromCart(item) {
+    removeFromCart(serialNumber) {
       pre: {
-          Object.keys(this.returnCartItems).length > 0;
+          Object.keys(this._returnCartItems).length > 0;
         }
-        delete this.returnCartItems[item];
+        delete this._returnCartItems[serialNumber];
         return item;
       post: {
-          !Object.keys(this.returnCartItems).includes(item),
+          !Object.keys(this._returnCartItems).includes(serialNumber),
             'Item was not removed from the cart';
       }
     }

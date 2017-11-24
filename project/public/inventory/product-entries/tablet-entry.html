@@ -11,16 +11,28 @@
       </div>
       <div class='col'>
         <div class="card-body">
-          <label class="control-label">Display Size: {[{ $ctrl.tablet.display_size}]} </label><br />
-          <label class="control-label">Processor Type: {[{ $ctrl.tablet.processor_type}]} </label><br />
-          <label class="control-label">RAM Size: {[{ $ctrl.tablet.ram_size}]} </label><br />
-          <label class="control-label"># of CPU cores: {[{ $ctrl.tablet.number_cpu_cores}]} </label><br />
-          <label class="control-label">Harddrive size: {[{ $ctrl.tablet.harddrive_size}]} </label><br />
-          <label class="control-label">Battery Info: {[{ $ctrl.tablet.battery_info}]} </label><br />
-          <label class="control-label">Camera Info: {[{ $ctrl.tablet.camera_info}]} </label><br />
+          <label class="control-label">Display Size: {[{ $ctrl.tablet.displaySize}]} </label><br />
+          <label class="control-label">Processor Type: {[{ $ctrl.tablet.processorType}]} </label><br />
+          <label class="control-label">RAM Size: {[{ $ctrl.tablet.ramSize}]} </label><br />
+          <label class="control-label"># of CPU cores: {[{ $ctrl.tablet.numberCpuCores}]} </label><br />
+          <label class="control-label">Harddrive size: {[{ $ctrl.tablet.hardDriveSize}]} </label><br />
+          <label class="control-label">Battery Info: {[{ $ctrl.tablet.batteryInfo}]} </label><br />
+          <label class="control-label">Camera Info: {[{ $ctrl.tablet.cameraInfo}]} </label><br />
           <label class="control-label">Height (cm): {[{ $ctrl.tablet.height}]} </label><br />
           <label class="control-label">Width (cm): {[{ $ctrl.tablet.width}]} </label><br />
           <label class="control-label">Depth (cm): {[{ $ctrl.tablet.depth}]} </label><br />
+        </div>
+      </div>
+      <div class='col'>
+        <div class="card-body">
+          <div ng-show="$ctrl.tablet.serialNumbers.length > 0">
+            <p>Serial numbers</p>
+            <ul>
+              <li ng-repeat="serial in $ctrl.tablet.serialNumbers track by $index">
+                {[{ serial }]}  <button ng-click="removeSerial($index)">X</button>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

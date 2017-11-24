@@ -109,9 +109,11 @@ app.get('/users', function(req, res) {
 app.get('/getAllInventoryItems', function(req, res) {
   if (req.session.exists) {
     controller.getAllInventory(req, res, purchaseController);
+    console.log(res.items);
   } else {
     console.log('login error');
     controller.getAllInventory(req, res, null);
+    console.log('res: ' + res.items);
   }
 });
 

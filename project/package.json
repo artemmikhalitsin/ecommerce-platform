@@ -14,8 +14,7 @@
     ]
   },
   "scripts": {
-    "sourceType": "module",
-    "test": "mocha",
+    "test": "mocha test",
     "dev": "docker run -v $(pwd):/usr/src/project -p 8080:8080 -it 343docker/express",
     "make-migration": "knex migrate:make",
     "migrate": "knex migrate:latest",
@@ -56,10 +55,10 @@
     "knex": "^0.13.0",
     "meld": "^1.3.2",
     "mocha": "^4.0.1",
-    "mock-knex": "^0.4.0",
     "mysql": "^2.14.1",
     "nodemon": "^1.12.1",
     "rimraf": "^2.6.2",
+    "sinon": "^4.1.2",
     "stringy": "0.1.0"
   },
   "dependencies": {
@@ -67,6 +66,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "body-parser": "^1.18.2",
+    "chai": "^4.1.2",
     "concurrently": "^3.5.0",
     "esdoc-standard-plugin": "^1.0.0",
     "express-session": "^1.15.6"

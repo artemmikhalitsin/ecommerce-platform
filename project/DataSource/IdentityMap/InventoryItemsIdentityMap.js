@@ -24,50 +24,54 @@ class InventoryItemsIdentityMap {
 
   /**
      * Gets all the items currently stored in the Identity map
-     * @return {Object[]} an array containing the items
+     * @return {InventoryItem[]} an array containing the items
      */
   getAll() {
-    return this.inventoryItems;
+    // Returns a copy of the array, so internal array can't be manipulated
+    return Array.from(this.inventoryItems);
   }
 
   /**
-     * Gets a list of items matching given model numbers
-     * @param {string[]} modelNumbers a list of alpha-numberical model numbers
-     * @return {Object[]} a list of items corresponding to the given model
-     * numbers
+     * Gets an item matching given serial number
+     * @param {string} serialNumber an alpha-numberical serial number
+     * @return {InventoryItem} the item corresponding to the given serial
      */
-  get(modelNumbers) {
-    // Filters to only items whos model number appears in the given list
-    return this.inventoryItems.filter((item) => {
-      return modelNumbers.includes(item.serial_number);
-    });
+  get(serialNumber) {
+      return this.inventoryItems.find(
+        (item) => {
+          return item.serialNumber === serialNumber;
+        });
+  }
+  /**
+   * Gets a list of items corresponding to a model number
+   * @param {string} modelNumber an alpha-numerical model number
+   * @return {InventoryItem[]} the items corresponding to the modell number
+   */
+  getByModelNumber(modelNumber) {
+    return this.inventoryItems.filter(
+      (item) => item.modelNumber === modelNumber
+    );
   }
 
   /**
-     * Adds new objects into the identity map
-     * @param {Object[]} newInventoryItems a list containing new items
+     * Adds a new object into the identity map
+     * @param {InventoryItem} newInventoryItem an inventory item
      */
-  add(newInventoryItems) {
-    for (let i = 0; i < newInventoryItems.length; i++) {
-      let item = newInventoryItems[i];
-      // Add the item only if it doesn't already exist
-      if (!this.inventoryItems.includes(item.serial_number)) {
-        this.inventoryItems.push(
-          Object.assign({}, newInventoryItems[i])
-        );
-      }
-    }
+  add(newInventoryItem) {
+        this.inventoryItems.push(newInventoryItem);
   }
 
   /**
-     * Deletes items from the identity map by filtering them out
-     * @param {string[]} inventoryItemsToRemove a list of alpha-numberical
-     * model numbers for which the items are to be removed
+     * Deletes an item from the identity map
+     * @param {string} toRemove an alpha-numeric serial number
+     * corresponding to the item
      */
-  delete(toRemove) {
-    this.inventoryItems = this.inventoryItems.filter((item) => {
-      return !toRemove.includes(item.serial_number);
-    });
-  }
+     delete(toRemove) {
+       let index = this.inventoryItems.findIndex(
+         (elem) => elem.modelNumber === toRemove);
+       if (index > -1) {
+         this.inventoryItems.splice(index, 1);
+       }
+     }
 }
 module.exports = InventoryItemsIdentityMap;

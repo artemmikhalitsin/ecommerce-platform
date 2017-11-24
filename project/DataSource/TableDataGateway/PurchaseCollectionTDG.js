@@ -20,22 +20,25 @@ class PurchaseCollectionTDG {
      * @return {Promise<number[]>} a promise which resolves to an array
      * containing the id of the inserted item in the table
      */
-    add(clientID, serialNumber, modelNumber, purchaseId) {
+    static add(clientID, serialNumber, modelNumber, purchaseId) {
         return connection.insert({
-            'user_id': clientID,
-            'serial_number': serialNumber,
-            'model_number': modelNumber,
-            'purchase_id': purchaseId,
+            'userID': clientID,
+            'serialNumber': serialNumber,
+            'modelNumber': modelNumber,
+            'purchaseId': purchaseId,
           }, 'id')
         .into('PurchaseCollection');
     }
 
     /**
      * Gets all items from the Purchase Collection table
+     * @param {number} user the id of the user to be fetched
      * @return {Promise<Object[]>} a promise which resolves to an array of items
      */
-    select(user) {
-        return connection('PurchaseCollection').select('*').where({'user_id': user});
+    static select(user) {
+        return connection('PurchaseCollection')
+          .select('*')
+          .where({'userID': user});
     }
 
     /**
@@ -45,12 +48,12 @@ class PurchaseCollectionTDG {
      * @return {Promise<number>} a promise which resolves to the number of rows
      * affected
      */
-    delete(returnItem) {
+    static delete(returnItem) {
         console.log(returnItem);
         console.log('in purchaseTDG');
         return connection.from('PurchaseCollection').where(
-          {'purchase_id ': returnItem.purchase_Id,
-            'serial_number': returnItem.serial_number}
+          {'purchaseId ': returnItem.purchase_Id,
+            'serialNumber': returnItem.serialNumber}
         ).del();
     }
 }

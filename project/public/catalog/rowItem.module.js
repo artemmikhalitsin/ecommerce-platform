@@ -1,9 +1,9 @@
-var rowItem = angular.module('rowItem', []);
+let rowItem = angular.module('rowItem', []);
 
 rowItem.component('rowItem', {
-bindings:{
+bindings: {
   product: '<',
-  index: '='
+  index: '=',
 },
 templateUrl: '/catalog/rowItem.html',
 
@@ -18,17 +18,25 @@ controller: function($scope) {
     $scope.showMore = false;
   },
   $scope.saveDescription = () =>{
-    $scope.$emit('updateDescription', $scope.$ctrl.product, $scope.$ctrl.index)
+    $scope.$emit('updateDescription', $scope.$ctrl.product, $scope.$ctrl.index);
     $scope.editMode = false;
-  }
+  };
 
-  $scope.isLaptop = () => { return $scope.$ctrl.product.type === 'Laptop' }
-  $scope.isDesktop = () => { return $scope.$ctrl.product.type === 'Desktop' }
-  $scope.isTablet = () => { return $scope.$ctrl.product.type === 'Tablet' }
-  $scope.isMonitor = () => { return $scope.$ctrl.product.type === 'Monitor' }
-}
+  $scope.isLaptop = () => {
+ return $scope.$ctrl.product.type === 'Laptop';
+};
+  $scope.isDesktop = () => {
+ return $scope.$ctrl.product.type === 'Desktop';
+};
+  $scope.isTablet = () => {
+ return $scope.$ctrl.product.type === 'Tablet';
+};
+  $scope.isMonitor = () => {
+ return $scope.$ctrl.product.type === 'Monitor';
+};
+},
 
-})
+});
 
 rowItem.config(function($interpolateProvider) {
   $interpolateProvider.startSymbol('{[{');
