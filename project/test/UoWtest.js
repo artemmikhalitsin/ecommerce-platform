@@ -24,7 +24,7 @@ const UoW = require(rootPath + '/DataSource/UnitOfWork.js');
 
 /**
  * Testing Unit of Work register functions
- */
+ */ /*
 describe('uow basic test', function() {
   ()=>timeout(5000);
   before(function() {
@@ -42,7 +42,7 @@ describe('uow basic test', function() {
 
 /**
  * Testing Unit of Work commitAll function
- */
+ *//*
 describe('uow commits the correct functions the correct number of times;'
   +' done without database',
   function() {

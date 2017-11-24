@@ -32,19 +32,18 @@ describe('Inventory Unit Testing', function() {
     +'be able to retrieve them', function() {
         iiim.add(list);
         expect(iiim.getAll()).to.have.deep.members(list);
-        console.log(iiim.getAll());
     });
 
     it('be able to retrieve a specific item by its model number', function() {
         const modNumList = 'app';
-        iiim.add(list);
-        expect(iiim.get(modNumList)).to.have.all
-        .property('serialNumber', 'app');
+        (iiim.get(modNumList)).every((item) => expect(item).to.have
+        .property('serialNumber', 'app'));
     });
 
     it('be able to delete specific items by their model number', function() {
         const modNumList = 'app';
-        iiim.add(list);
-        expect(iiim.delete(modNumList)).to.not.have.keys(modNumList);
+        iiim.delete(modNumList);
+        (iiim.getAll()).every((item) => expect(item).to.not.have
+        .property('serialNumber', 'app'));
     });
 });

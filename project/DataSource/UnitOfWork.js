@@ -1,4 +1,3 @@
-
 /* eslint-disable */
 // Eslint disabled for this file only until it is documented
 
@@ -97,7 +96,7 @@ class UnitOfWork {
   commitAll() {
 
     let electronics = [];
-    return connection.transaction((trx) => {
+   if(true) {
       /*
       console.log('Electronics new Elements: ');
       console.log(this.newElements[0]);
@@ -305,14 +304,15 @@ class UnitOfWork {
       }
       //add
       );}
-      Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems, addedTransaction, deletedPurchase])
-        .then(trx.commit)
-        .catch(trx.rollback);
-    });
+      // Promise.props([newItems, purchasedItems, deletedItems, updateditems, addeditems, addedTransaction, deletedPurchase])
+      //   .then(trx.commit)
+      //   .catch(trx.rollback);
+      return Promise;
+    }
   }
 
   // TODO: DELETE
- /* getAllInventoryItems() {
+  getAllInventoryItems() {
     return new Promise((resolve, reject) => {
       let desktops = this.getAllDesktops();
       let laptops = this.getAllLaptops();
@@ -349,7 +349,7 @@ class UnitOfWork {
       }))
       .catch((err) => reject(err));
     });
-  }*/
+  }
 
   // this function is getting all the model numbers from all the products
   getAllModelNumbers(products) {
