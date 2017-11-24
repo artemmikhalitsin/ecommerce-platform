@@ -22,46 +22,59 @@ class DesktopsTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new desktop record in the database
      */
-    add(compId, dimensionsId, desktop) {
+    static add(compId, dimensionsId, desktop) {
         return connection.insert({
-            'comp_id': compId,
-            'model_number': desktop.modelNumber,
-            'dimension_id': dimensionsId,
+            'compId': compId,
+            'modelNumber': desktop.modelNumber,
+            'dimensionId': dimensionsId,
         }, 'id')
         .into('Desktop');
     }
-    getAll() {
+    static getAll() {
         return connection('Desktop').select('*')
-          .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
-          .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Desktop.model_number',
-                'ProductDescription.model_number');
+          .join('Computer', 'Desktop.compId', 'Computer.compId')
+          .join('Dimensions', 'Desktop.dimensionId', 'Dimensions.dimensionId')
+          .join('ProductDescription', 'Desktop.modelNumber',
+                'ProductDescription.modelNumber');
     }
-    getByModelNumbers(modelNumbers) {
+    static getByModelNumbers(modelNumbers) {
         return connection('Desktop').select('*')
-          .whereIn('model_number', modelNumbers)
-          .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
-          .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Desktop.model_number',
-                'ProductDescription.model_number');
+          .whereIn('ProductDescription.modelNumber', modelNumbers)
+          .join('Computer', 'Desktop.compId', 'Computer.compId')
+          .join('Dimensions', 'Desktop.dimensionId', 'Dimensions.dimensionId')
+          .join('ProductDescription', 'Desktop.modelNumber',
+                'ProductDescription.modelNumber');
+    }
+    /**
+     * Retrieves all desktop object rows except those listed in modelNumbers
+     * @param {string[]} modelNumbers a list of model numbers
+     * @return {Promise<Object[]>} resolves to the list of objects matching
+     * the query
+     */
+    static getAllExcept(modelNumbers) {
+      return connection('Desktop').select('*')
+        .whereNotIn('ProductDescription.modelNumber', modelNumbers)
+        .join('Computer', 'Desktop.compId', 'Computer.compId')
+        .join('Dimensions', 'Desktop.dimensionId', 'Dimensions.dimensionId')
+        .join('ProductDescription', 'Desktop.modelNumber',
+              'ProductDescription.modelNumber');
     }
     /* getAll() {
         let result = [];
         return connection('Desktop').select('*')
-          .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
-          .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Desktop.model_number',
-                'ProductDescription.model_number')
+          .join('Computer', 'Desktop.compId', 'Computer.compId')
+          .join('Dimensions', 'Desktop.dimensionId', 'Dimensions.dimensionId')
+          .join('ProductDescription', 'Desktop.modelNumber',
+                'ProductDescription.modelNumber')
           .then((desktops) => {
               desktops.forEach(function(desktop) {
                   let d = new Desktop(
-                      desktop.processor_type,
-                      desktop.ram_size,
-                      desktop.number_cpu_cores,
-                      desktop.harddrive_size,
-                      /*
+                      desktop.processorType,
+                      desktop.ramSize,
+                      desktop.numberCpuCores,
+                      desktop.hardDriveSize,
                       new Dimensions(
-                          desktop.dimension_id,
+                          desktop.dimensionId,
                           desktop.depth,
                           desktop.height,
                           desktop.width),
@@ -80,28 +93,28 @@ class DesktopsTDG {
     /* getByModelNumbers(modelNumbers) {
         let result = [];
         return connection('Desktop').select('*')
-          .whereIn('model_number', modelNumbers)
-          .join('Computer', 'Desktop.comp_id', 'Computer.comp_id')
-          .join('Dimensions', 'Desktop.dimension_id', 'Dimensions.dimension_id')
-          .join('ProductDescription', 'Desktop.model_number',
-                'ProductDescription.model_number')
+          .whereIn('modelNumber', modelNumbers)
+          .join('Computer', 'Desktop.compId', 'Computer.compId')
+          .join('Dimensions', 'Desktop.dimensionId', 'Dimensions.dimensionId')
+          .join('ProductDescription', 'Desktop.modelNumber',
+                'ProductDescription.modelNumber')
           .then((desktops) => {
               desktops.forEach(function(desktop) {
                   result.push(new Desktop(
-                      desktop.processor_type,
-                      desktop.ram_size,
-                      desktop.number_cpu_cores,
-                      desktop.harddrive_size,
+                      desktop.processorType,
+                      desktop.ramSize,
+                      desktop.numberCpuCores,
+                      desktop.hardDriveSize,
                       new Dimensions(
-                          desktop.dimension_id,
+                          desktop.dimensionId,
                           desktop.depth,
                           desktop.height,
                           desktop.width),
                       desktop.price,
                       desktop.weight,
-                      desktop.brand_name,
-                      desktop.model_number,
-                      desktop.comp_id,
+                      desktop.brandName,
+                      desktop.modelNumber,
+                      desktop.compId,
                       desktop.type));
           });
           return result;
@@ -117,12 +130,12 @@ class DesktopsTDG {
      * @return {Promise<number>} promise which resolves to the number of
      * rows affected
      */
-    update(compId, dimensionsId, desktop) {
+    static update(compId, dimensionsId, desktop) {
         return connection.update({
-         'comp_id': desktop.computerId,
-         'model_number': desktop.modelNumber,
-         'dimension_id': desktop.dimensions.id,
-      }).from('Desktop').where({'model_number': desktop.modelNumber});
+         'compId': desktop.computerId,
+         'modelNumber': desktop.modelNumber,
+         'dimensionId': desktop.dimensions.id,
+      }).from('Desktop').where({'modelNumber': desktop.modelNumber});
     }
 }
 module.exports = DesktopsTDG;

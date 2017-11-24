@@ -3,6 +3,7 @@
  * @extends {Computer}
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS PLEASE
  * ATTRIBUTE THIS TO YOURSELF
+ * @author Artem Mikhalitsin
  */
 const rootPath = require('app-root-dir').get();
 const Computer = require(rootPath + '/models/Computer.js');
@@ -25,88 +26,140 @@ class Laptop extends Computer {
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
      * @param {string} type
+     * @param {boolean} isAvailable availability of the product
      */
     constructor(computerId, processorType, ramSize, numberCpuCores,
                 harddriveSize, displaySize, batteryInfo, os, touchscreen,
-                camera, price, weight, brandName, modelNumber, type) {
+                camera, price, weight, brandName, modelNumber, type,
+                isAvailable) {
         super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
-          price, weight, brandName, modelNumber, type);
-        this.displaySize = displaySize;
-        this.batteryInfo = batteryInfo;
-        this.os = os;
-        this.touchscreen = touchscreen;
-        this.camera = camera;
+          price, weight, brandName, modelNumber, type, isAvailable);
+        this._displaySize = displaySize;
+        this._batteryInfo = batteryInfo;
+        this._os = os;
+        this._touchscreen = touchscreen;
+        this._camera = camera;
     }
 
     /**
      * displaySize accessor
      * @return {number} size of the display
      */
-    getDisplaySize() {
-      return this.displaySize;
+    get displaySize() {
+      return this._displaySize;
+    }
+    /**
+    * displaySize mutator
+    * @param {number} displaySize new size of the display
+    */
+    set displaySize(displaySize) {
+      this._displaySize = displaySize;
     }
     /**
      * touchscreen accessor
      * @return {boolean} true if laptop has a touschreen, otherwise false
      */
-    getTouchscreen() {
-       return this.touchscreen;
+    get touchscreen() {
+       return this._touchscreen;
+    }
+    /**
+    * touchscreen mutator
+    * @param {boolean} touchscreen new value for touchscreen
+    */
+    set touchscreen(touchscreen) {
+      this._touchscreen = touchscreen;
     }
     /**
     * camera accessor
     * @return {boolean} true if laptop has a camera, otherwise false
     */
-    getCamera() {
-      return this.camera;
+    get camera() {
+      return this._camera;
+    }
+    /**
+    * camera mutator
+    * @param {boolean} camera new value for camera
+    */
+    set camera(camera) {
+      this._camera = camera;
     }
     /**
      * batteryInfo accessor
      * @return {string} battery info
      */
-    getBatteryInfo() {
-      return this.batteryInfo;
+    get batteryInfo() {
+      return this._batteryInfo;
+    }
+    /**
+    * batteryInfo mutator
+    * @param {string} batteryInfo new info about the battery
+    */
+    set batteryInfo(batteryInfo) {
+      this._batteryInfo = batteryInfo;
     }
     /**
      * os accessor
      * @return {string} type of os
      */
-    getOs() {
-      return this.os;
-    }
-    /**
-     * displaySize mutator
-     * @param {number} displaySize new size of the display
-     */
-    setDisplaySize(displaySize) {
-      this.displaySize = displaySize;
-    }
-    /**
-     * touchscreen mutator
-     * @param {boolean} touchscreen new value for touchscreen
-     */
-    setTouchscreen(touchscreen) {
-      this.touchscreen = touchscreen;
-    }
-    /**
-     * camera mutator
-     * @param {boolean} camera new value for camera
-     */
-    setCamera(camera) {
-      this.camera = camera;
-    }
-    /**
-     * batteryInfo mutator
-     * @param {string} batteryInfo new info about the battery
-     */
-    setBatteryInfo(batteryInfo) {
-      this.batteryInfo = batteryInfo;
+    get os() {
+      return this._os;
     }
     /**
      * os mutator
      * @param {string} os new type of os
      */
-    setOs(os) {
-      this.os = os;
+    set os(os) {
+      this._os = os;
+    }
+
+    /**
+     * Creates a conse of the object
+     * @return {Laptop} a copy of the object
+     */
+    clone() {
+      return new Laptop(
+          this.compId,
+          this.processorType,
+          this.ramSize,
+          this.numberCpuCores,
+          this.harddriveSize,
+          this.displaySize,
+          this.batteryInfo,
+          this.os,
+          this.touchScreen,
+          this.camera,
+          this.price,
+          this.weight,
+          this.brandName,
+          this.modelNumber,
+          this.type,
+          this.isAvailable);
+    }
+    /**
+     * Creates a front-end friendly object
+     * @return {Object} an object describing the desktop
+     * that can be sent to the front-end
+     */
+    frontendFriendlify() {
+      return {
+        // Product properties
+        type: this.type,
+        modelNumber: this.modelNumber,
+        brandName: this.brandName,
+        price: this.price,
+        weight: this.weight,
+        // Computer properties
+        processorType: this.processorType,
+        ramSize: this.ramSize,
+        numberCpuCores: this.numberCpuCores,
+        hardDriveSize: this.harddriveSize,
+        // Laptop properties
+        displaySize: this.displaySize,
+        batteryInfo: this.batteryInfo,
+        os: this.os,
+        touchscreen: this.touchscreen,
+        camera: this.camera,
+      };
     }
 }
 

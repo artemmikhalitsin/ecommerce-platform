@@ -10,7 +10,6 @@ let _instance;
 class ProductDescriptionsIdentityMap {
   /**
      * Creates an product description identity map
-     * Loads all product descriptions from database into memory
      */
   constructor() {
     this.productDescriptions = [];
@@ -25,73 +24,45 @@ class ProductDescriptionsIdentityMap {
 
   /**
      * Gets all the products currently stored in the Identity map
-     * @return {Object[]} an array containing the products
+     * @return {Product[]} an array containing the products
      */
-
-     // TODO modify to only retrieve available descriptions
   getAll() {
-    return this.productDescriptions;
+    // Returns a copy of the array, so internal array can't be manipulated
+    return Array.from(this.productDescriptions);
   }
 
   /**
-     * Gets a list of products matching given model numbers
-     * @param {string[]} modelNumbers a list of alpha-numberical model numbers
-     * @return {Object[]} a list of products corresponding to the given model
-     * numbers
+     * Gets a product from the identity map
+     * @param {string} modelNumber and alpha-numerical model number
+     * @return {Product} a product corresponding to the given model
+     * numbers, if exists
      */
-  get(modelNumbers) {
-    return this.productDescriptions.filter((item) => {
-      return modelNumbers.includes(item.modelNumber);
+  get(modelNumber) {
+    return this.productDescriptions.find((item) => {
+      return item.modelNumber === modelNumber;
     });
   }
 
   /**
-     * Adds new objects into the identity map
-     * @param {Object[]} newProductDescriptions a list containing new products
+     * Adds a new object into the identity map
+     * @param {Product} newProductDescription a product description
      */
-  add(newProductDescriptions) {
-    for (let i = 0; i < newProductDescriptions.length; i++) {
-      let item = newProductDescriptions[i];
-      if (!this.productDescriptions.includes(item.modelNumber)) {
-        this.productDescriptions.push(
-          // Push a copy of the object
-          Object.assign({}, newProductDescriptions[i])
-        );
-      }
-    }
+  add(newProductDescription) {
+    this.productDescriptions.push(newProductDescription);
   }
 
   /**
-   * Updates a single item in the identity map
-   * @param {Object[]} updatedProductDescriptions list of objects, 
-   * each specifying new descriptions of products
-   */
-  update(updatedProductDescriptions) {
-    for (let i = 0; i< updatedProductDescriptions.length; i++) {
-      let newDescription = updatedProductDescriptions[i];
-      let index = this.productDescriptions.findIndex(
-        (product) => {
-          // Get the index of the model_number
-          return product.modelNumber == newDescription.modelNumber;
-        }
-      );
-
-      // If model number exists in the map, replace the description with
-      // a copy of the new one
-      if (index > -1) {
-        this.productDescriptions[index] = Object.assign({}, newDescription);
-      }
-    }
-  }
-  /**
-     * Deletes items from the identity map by filtering them out
-     * @param {string[]} toRemove a list of alpha-numberical
+     * Deletes an item from the identity map
+     * @param {string} toRemove a model number corresponding to the
+     * item which is to be deleted
      * model numbers for which the description is to be removed
      */
   delete(toRemove) {
-    this.productDescriptions = this.productDescriptions.filter((item) => {
-      return !toRemove.includes(item.modelNumber);
-    });
+    let index = this.productDescriptions.findIndex(
+      (elem) => elem.modelNumber === toRemove);
+    if (index > -1) {
+      this.productDescriptions.splice(index, 1);
+    }
   }
 }
 module.exports = ProductDescriptionsIdentityMap;

@@ -8,13 +8,13 @@ $(document).ready(function() {
       columns: [
           {'data': 'id'},
           {'data': 'email'},
-          {'data': 'first_name'},
-          {'data': 'last_name'},
+          {'data': 'firstName'},
+          {'data': 'lastName'},
           //{'data': 'password'},
-          {'data': 'full_address'},
-          {'data': 'phone_number'},
+          {'data': 'fullAddress'},
+          {'data': 'phoneNumber'},
         /*  {
-            'data': 'is_admin',
+            'data': 'isAdmin',
             render: function(data, type, row) {
               return data ? 'yes' : 'no';
             }

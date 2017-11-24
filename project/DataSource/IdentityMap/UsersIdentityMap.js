@@ -37,7 +37,7 @@ class UsersIdentityMap {
   /**
    * Gets all users matching an email criteria
    * @param {String} email
-   * @return {Object[]} a list of users
+   * @return {Object[]}  a list of users
    */
   getByEmail(email) {
     return this.users.filter((user) => {
@@ -61,7 +61,8 @@ class UsersIdentityMap {
 
   /**
      * Adds new objects into the identity map
-     * @param {Object[]} newUsers a list containing new items
+     * @param {Object[]} newUsers
+     * @param {Object[]} newInventoryItems a list containing new items
      */
   add(newUsers) {
     for (let i = 0; i < newUsers.length; i++) {
@@ -74,7 +75,8 @@ class UsersIdentityMap {
 
   /**
    * Deletes users from the identity map, given a list of user specifications
-   * @param {Object[]} deleteUsers list of users to be deleted
+   * @param {Object[]} deleteUsers
+   * @param {Object[]} a list of users to be deleted
    */
   delete(deleteUsers) {
     this.users = this.users.filter(

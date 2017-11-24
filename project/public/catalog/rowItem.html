@@ -23,6 +23,11 @@
       <label  class="control-label">Weight:	&nbsp;</label>
       <span ng-show='!editMode'>{[{$ctrl.product.weight}]}</span>
       <input ng-show='editMode' type="text" class="form-control" ng-model="$ctrl.product.weight"></input>
+      <div>
+        <label  class="control-label">Is Available?	&nbsp;</label>
+        <span ng-show='!editMode'>{[{$ctrl.product.isAvailable}]}</span>
+        <input ng-show='editMode' type="checkbox" class="form-control" ng-model="$ctrl.product.isAvailable" ng-true-value="1" ng-false-value="0"></input>
+      </div>
       <div ng-show="isDesktop() || isLaptop() || isTablet()">
         <label class="control-label">Processor Type: 	&nbsp;</label>
         <span ng-show='!editMode'>{[{$ctrl.product.processorType}]}</span>

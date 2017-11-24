@@ -2,15 +2,15 @@
 // imap = require(rootPath
 //   + '/DataSource/IdentityMap/ProductDescriptionsIdentityMap.js').instance();
 
-// let amanda = {
-//   model_number: '12345',
-//   name: 'amanda',
-// };
+let amanda = {
+  modelNumber: '12345',
+  name: 'amanda',
+};
 
-// let wai = {
-//   model_number: '123',
-//   name: 'wai',
-// };
+let wai = {
+  modelNumber: '123',
+  name: 'wai',
+};
 
 // console.log('Initiating product description identity map test.');
 

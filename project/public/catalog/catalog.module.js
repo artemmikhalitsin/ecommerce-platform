@@ -42,6 +42,7 @@ function catalogController($scope) {
     $scope.products.push(tablet);
   });
   $scope.submit = function(){
+    console.log($scope.products);
     $.ajax({
       url: '/manageProductCatalog',
       type: 'post',

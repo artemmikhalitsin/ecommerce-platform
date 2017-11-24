@@ -8,8 +8,8 @@ monitorEntry.component('monitorEntry', {
   templateUrl: '/inventory/product-entries/monitor-entry.html',
   controller: function($scope) {
     $scope.removeSerial = (index) => {
-      $scope.$ctrl.monitor.serial_numbers.splice(index, 1);
-    };
+      $scope.$ctrl.monitor.serialNumbers.splice(index,1);
+    }
     $scope.removeMonitorEntry =() =>{
       $scope.$emit('removeMonitor', $scope.$ctrl.index);
     };

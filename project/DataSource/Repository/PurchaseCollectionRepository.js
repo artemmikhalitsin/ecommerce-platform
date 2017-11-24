@@ -1,24 +1,38 @@
 'use strict';
 const rootPath = require('app-root-dir').get();
-const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
-const InventoryItemsIdentityMap = require(rootPath +
-  '/DataSource/IdentityMap/InventoryItemsIdentityMap.js');
-const PurchaseCollectionTDG = require(rootPath +
+const inventoryItemsIM = require(rootPath +
+  '/DataSource/IdentityMap/InventoryItemsIdentityMap.js').instance();
+const purchaseCollectionTDG = require(rootPath +
   '/DataSource/TableDataGateway/PurchaseCollectionTDG.js');
-
+// Forward declaration of Unit of Work class required to resolve a
+// circular dependency
+let UnitOfWork;
+// Forward declaration of singleton instance
+let _instance;
 /**
  * Repository for Inventory Items
  * @author Michael Li
  * REVIEW: PLEASE MAKE SURE THE METHOD DESCRIPTIONS ARE CORRECT
  */
-class PurchaseCollectionRepo {
+class PurchaseCollectionRepository {
   /**
    * Constructor initializes the unit of work, identity map and the tdg
    */
   constructor() {
+    // dependency injection delayed
+    UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
     this.uow = new UnitOfWork();
-    this.inventoryItemsIM = new InventoryItemsIdentityMap();
-    this.purchaseColectionTDG = new PurchaseCollectionTDG();
+  }
+  /**
+   * Retrieves current instance of the repository, or if one doesnt
+   * exist, instantiates it
+   * @return {Object} a reference to the current instance of the repo
+   */
+  static instance() {
+    if (!_instance) {
+      _instance = new PurchaseCollectionRepository();
+    }
+    return _instance;
   }
   /**
    * Retrieves items from the identity map. If none are there,
@@ -26,16 +40,16 @@ class PurchaseCollectionRepo {
    * @return {Object[]} the complete list of inventory item objects
    */
   getAll() {
-    let context = this.inventoryItemsIM.getAll();
+    let context = inventoryItemsIM.getAll();
     if (context.length <= 0) {
-      context = this.inventoryTDG.select();
+      context = inventoryTDG.select();
 
       Promise.all([context]).then(
         (values) => {
           context = values[0];
         }
       );
-      this.inventoryItemsIM.add(context);
+      inventoryItemsIM.add(context);
     }
     return context;
   }
@@ -47,7 +61,7 @@ class PurchaseCollectionRepo {
    * items in the database
    */
    get(user) {
-     return this.purchaseCollectionTDG.select(user);
+     return purchaseCollectionTDG.select(user);
    }
 
   /**
@@ -58,14 +72,14 @@ class PurchaseCollectionRepo {
    * @return {Object[]} the list of inventory items in the system
    */
   getByIds(ids) {
-    let items = this.inventoryItemsIM.get(ids);
+    let items = inventoryItemsIM.get(ids);
     // REVIEW: This means that if we don't find all of the given ids, we
     // will instead return all the items in the table? I believe this method
     // requires rework - Artem
     if (items.length <= 0 || items.length < ids.length) {
       // REVIEW: Looks like this duplicates some functionality from getAll
       // Maybe this should be abstracted into a function? - Artem
-      let itemsFromTDG = this.inventoryTDG.select();
+      let itemsFromTDG = inventoryTDG.select();
           Promise.all([itemsFromTDG]).then(
             (values) => {
               items = values[0];
@@ -73,7 +87,7 @@ class PurchaseCollectionRepo {
           );
           // REVIEW: This function has a side effect, even though it is a get
           // function - is this intended functionality? - Artem
-          this.inventoryItemsIM.add(items);
+          inventoryItemsIM.add(items);
     }
     return items;
   }
@@ -101,17 +115,16 @@ class PurchaseCollectionRepo {
     this.uow.registerDeletedItem(electronicsToDelete);
     this.uow.registerNewPurchase(electronicsToAdd);
     this.uow.commitAll();
-    this.inventoryItemsIM.add(electronicsToAdd);
+    // inventoryItemsIM.add(electronicsToAdd);
   }
 
   returnItems(items) {
     let electronicsToDelete = items;
     let electronicsToAdd = items;
-
     this.uow.registerReturn(electronicsToDelete);
     this.uow.registerNewItem(electronicsToAdd);
     this.uow.commitAll();
-    this.inventoryItemsIM.add(electronicsToAdd);
+    inventoryItemsIM.add(electronicsToAdd);
   }
 }
-module.exports = PurchaseCollectionRepo;
+module.exports = PurchaseCollectionRepository;

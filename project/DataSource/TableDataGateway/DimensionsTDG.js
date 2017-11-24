@@ -16,16 +16,16 @@ class DimensionsTDG {
      * @return {Promise<number[]>} promise which resolves to the list containing
      * the id of the new dimension record in the database
      */
-    add(dimension) {
+    static add(dimension) {
         return connection.insert({
           'depth': dimension.depth,
           'height': dimension.height,
           'width': dimension.width,
-        }, 'dimension_id')
+        }, 'dimensionId')
         .into('Dimensions');
     }
 
-    select() {
+    static select() {
         // TODO
     }
 
@@ -35,12 +35,12 @@ class DimensionsTDG {
      * @return {Promise<number>} promise which resolves to the number of
      * rows affected
      */
-    update(dimension) {
+    static update(dimension) {
         return connection.update({
           'depth': dimension.depth,
           'height': dimension.height,
           'width': dimension.width,
-        }).from('Dimensions').where({dimension_id: dimension.id});
+        }).from('Dimensions').where({dimensionId: dimension.id});
     }
 }
 module.exports = DimensionsTDG;

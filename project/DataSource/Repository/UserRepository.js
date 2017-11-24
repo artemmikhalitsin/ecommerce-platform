@@ -2,9 +2,11 @@ const environment = process.env.NODE_ENV || 'development';
 const rootPath = require('app-root-dir').get();
 const configuration = require(rootPath + '/knexfile')[environment];
 const database = require('knex')(configuration);
-const UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
-
-
+// Forward declaration of Unit of Work class required to resolve a
+// circular dependency
+let UnitOfWork;
+// Forward declaration of singleton instance variable
+let _instance;
 /**
  * Repository for users
  * @author TODO: IF YOU'RE THE AUTHOR OF THIS CLASS, ATTRIBUTE IT TO YOURSELF
@@ -15,7 +17,20 @@ class UserRepository {
    * Constructor initiates a new unit of work
    */
   constructor() {
+    // dependency injection delayed
+    UnitOfWork = require(rootPath + '/DataSource/UnitOfWork.js');
     this.uow = new UnitOfWork();
+  }
+  /**
+   * Retrieves current instance of the repository, or if one doesnt
+   * exist, instantiates it
+   * @return {Object} a reference to the current instance of the repo
+   */
+  static instance() {
+    if (!_instance) {
+      _instance = new UserRepository();
+    }
+    return _instance;
   }
   /**
    * Saves a user into the database
@@ -42,7 +57,7 @@ class UserRepository {
    * in the database
    */
   getClients() {
-    return database('User').where('is_admin', 0).select('*');
+    return database('User').where('isAdmin', 0).select('*');
   }
 
   /**
@@ -51,7 +66,7 @@ class UserRepository {
    * in the database
    */
   getAdmins() {
-    return database('User').where('is_admin', 1).select('*');
+    return database('User').where('isAdmin', 1).select('*');
   }
 
   /**

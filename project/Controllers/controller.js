@@ -1,4 +1,3 @@
-const Promise = require('bluebird');
 const rootPath = require('app-root-dir').get();
 const ProductDescriptionRepository = require(rootPath +
   '/DataSource/Repository/ProductDescriptionRepository.js');
@@ -6,6 +5,8 @@ const InventoryItemRepository = require(rootPath +
   '/DataSource/Repository/InventoryItemRepository.js');
 const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
+const url = require('url');
+const crypto = require('crypto');
 
 /**
 * Identity map of inventory items
@@ -14,14 +15,12 @@ const UserRepository = require(rootPath +
 */
 class Controller {
   /**
-  * Constructor creates a new instanted of a user item and product repos
+  * Constructor gets references to Repositories
   */
   constructor() {
-    this.userRepo = new UserRepository();
-    this.inventoryRepo = new InventoryItemRepository();
-    this.productDescriptionRepo = new ProductDescriptionRepository();
-    this.url = require('url');
-    this.crypto = require('crypto');
+    this.userRepo = UserRepository.instance();
+    this.inventoryRepo = InventoryItemRepository.instance();
+    this.productDescriptionRepo = ProductDescriptionRepository.instance();
   }
 
   /**
@@ -33,7 +32,7 @@ class Controller {
     let userData = req.body;
     let password = userData['password'];
     let confirmPassword = userData['confirmPassword'];
-    let hash = this.crypto.createHash('sha256');
+    let hash = crypto.createHash('sha256');
     let salted = userData['email'] + password + 'salt';
     userData['password'] = hash.update(salted).digest('hex');
     if (password != confirmPassword) {
@@ -46,7 +45,7 @@ class Controller {
         console.log(result);
         if (result.length == 0) {
           console.log('adding new user');
-          userData['is_admin'] = false;
+          userData['isAdmin'] = false;
           console.log(userData);
           this.userRepo.save(userData).then((result) => {
             res.redirect('/login');
@@ -75,55 +74,93 @@ class Controller {
   */
 
   getAllInventory(req, res, purchaseController) {
-    let query = this.url.parse(req.url, true).query;
+    let query = url.parse(req.url, true).query;
     let search = query.search;
     let inventory = [];
-    this.productDescriptionRepo.getAllWithIncludes()
-    .then((results)=>{
-      // console.log('all the products are: ' + JSON.stringify(results));
-      return Promise.each(results, (product)=>{
-        return this.inventoryRepo.getByModelNumbers([product.modelNumber])
-          .then((values)=>{
-          // console.log('inventory item is ' + JSON.stringify(values));
-          product.serialNumbers = values.map((p) => p.serialNumber);
-          inventory.push(product);
-        });
-      });
-    }).then((val)=>{
-      // console.log('Values: ', JSON.stringify(inventory));
-      if (req.session.exists==true && req.session.isAdmin==true) {
-        res.render('inventory',
-          {items: JSON.stringify(inventory), search: search});
-      } else if (req.session.exists==true && req.session.isAdmin==false) {
-        if (purchaseController) {
-          purchaseController.getLatestInventory();
+    let products = [];
+    let inventoryItems = [];
+    // Get all items from the product description repo
+    this.productDescriptionRepo.getAll()
+    .then(
+      (result) => {
+        // Store the result for future use
+        products = result;
+        // Get a list of the model numbers
+        let modelNumbers = products.map(
+          (product) => {
+            return product.modelNumber;
+          });
+        // Retrieve the associated inventory items (async)
+        return this.inventoryRepo.getByModelNumbers(modelNumbers);
+      })
+      .then(
+        (result) => {
+          // Store the inventory items for future use
+          inventoryItems = result;
+          return inventoryItems;
         }
-        res.render('clientInventory',
-          {items: JSON.stringify(inventory), search: search});
-      } else {
-        res.render('clientInventory',
-          {items: JSON.stringify(inventory), search: search});
-      }
-    }).catch((err) => {
-      console.log(err);
-    });
-    // console.log(productDescriptions);
+      ).then(
+        () => {
+          /* Now, combine products and inventory items and output everything
+          in a front-end friendly format */
+          inventory = products.map(
+            // for each product, find it's inventory items, and produce a
+            // front-end friendly object containing all the info
+            (product) => {
+              // Get the serial numbers which correspond to this product
+              let productItems = inventoryItems.filter(
+                (item) => {
+                  return item.modelNumber === product.modelNumber;
+                }
+              );
+              let productSerials = productItems.map(
+                (item) => {
+                  return item.serialNumber;
+                }
+              );
+              // Produce a front-end friendly object
+              let result = product.frontendFriendlify();
+              result.serialNumbers = productSerials;
+              // Add the product to the array
+              return result;
+            });
+            // Pass the list of front-end friendly objects to next step
+            return inventory;
+        }
+      )
+      .then(
+        (inventory) => {
+          if (req.session.exists==true && req.session.isAdmin==true) {
+            res.render('inventory', {items: JSON.stringify(inventory), search: search});
+          } else if (req.session.exists==true && req.session.isAdmin==false) {
+            if (purchaseController) {
+              purchaseController.updateInventoryList(inventory);
+            }
+            res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
+          } else {
+            res.render('clientInventory', {items: JSON.stringify(inventory), search: search});
+          }
+      })
+      .catch((err) => {
+          console.log(err);
+      });
   }
 
   manageInventory(inventoryItems) {
-    let results = this.inventoryRepo.save(inventoryItems);
-    console.log(results);
+    this.inventoryRepo.save(inventoryItems);
   }
 
   getProductDescription(req, res) {
-    let query = this.url.parse(req.url, true).query;
+    let query = url.parse(req.url, true).query;
     let search = query.search;
-    // let catalog = [];
-    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
+    this.productDescriptionRepo.getAll()
     .then((results)=>{
-      // console.log('Product Descriptions: ', JSON.stringify(results));
-      // res.render('catalog', {items: JSON.stringify(results),
-      // search: search});
+      // Map to frontend friendly objects
+      results = results.map(
+        (product) => {
+          return product.frontendFriendlify();
+        }
+      );
       if (req.session.exists==true && req.session.isAdmin==true) {
         return res.send({items: results, search: search});
       }
@@ -193,29 +230,20 @@ class Controller {
     console.log(productDescriptions);
   }
   getCatalog(req, res) {
-    let query = this.url.parse(req.url, true).query;
+    let query = url.parse(req.url, true).query;
     let search = query.search;
-    // let catalog = [];
-    let productDescriptions = this.productDescriptionRepo.getAllWithIncludes()
-    .then((results)=>{
-        // res.render('catalog',
-        // {items: JSON.stringify(results), search: search});
-      if (req.session.exists==true && req.session.isAdmin==true) {
-        res.render('catalog', {items: JSON.stringify(results), search: search});
-      } else if (req.session.exists==true && req.session.isAdmin==false) {
-        res.redirect('/login');
+      if (req.session.exists && req.session.isAdmin) {
+        res.render('catalog', {search: search});
       } else {
         res.redirect('/login');
       }
-    }).catch((err) => {
-      console.log(err);
-    });
-    console.log(productDescriptions);
   }
+
   manageProductCatalog(req, res) {
     let productDescriptions = JSON.parse(req.body.productDescriptions);
-    let results = this.productDescriptionRepo.save(productDescriptions)
-      .then((results) => {
+    console.log('Descriptions recieved by the controller' +
+      (req.body.productDescriptions));
+    this.productDescriptionRepo.save(productDescriptions).then((results) => {
       console.log('Success saving the Product descriptions!');
       this.getProductDescription(req, res);
     });

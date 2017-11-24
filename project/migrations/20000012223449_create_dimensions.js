@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
     if (!table) {
       throw new Error('Error creating table ' + tablename);
     } else {
-      table.increments('dimension_id').primary().notNullable().unsigned();
+      table.increments('dimensionId').primary().notNullable().unsigned();
 
       // Dimension attributes
       table.decimal('depth').notNullable();

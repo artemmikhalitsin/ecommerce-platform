@@ -5,6 +5,8 @@ const UserRepository = require(rootPath +
   '/DataSource/Repository/UserRepository.js');
 const ProcessQueue = require(rootPath +
   '/Aspects/processQueue.js');
+const ActiveUser = require(rootPath +
+  '/Aspects/activeUser.js');
 
 /**
  * Aspect that manages authentication
@@ -34,7 +36,7 @@ const authRequests = [
 
 class Aspect {
   constructor() {
-     this.userRepo = new UserRepository();
+     this.userRepo = UserRepository.instance();
      this.activeUsers = [];
      this.processQueue = new ProcessQueue();
   }
@@ -63,7 +65,7 @@ class Aspect {
         req.session.exists=true;
         req.session.hash=data.password;
         req.session.email=data.email;
-        req.session.isAdmin = result[0].is_admin == 1;
+        req.session.isAdmin = result[0].isAdmin == 1;
         let userExists = false;
         this.activeUsers.forEach((usr) => {
           if (usr.getEmail() == req.session.email) {
@@ -149,29 +151,6 @@ class Aspect {
         });
       }
     });
-  }
-}
-
-class ActiveUser {
-  constructor(email, lastRequest) {
-    this.email = email;
-    this.lastRequest = lastRequest;
-  }
-
-  getEmail() {
-    return this.email;
-  }
-
-  timeStamp() {
-    this.lastRequest = new Date().getTime();
-  }
-
-  isInactive() { // set to 20min
-    if (new Date().getTime() > this.lastRequest + 20*60*1000) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }
 
