@@ -37,15 +37,15 @@ class InventoryItemsIdentityMap {
      * @return {InventoryItem} the item corresponding to the given serial
      */
   get(serialNumber) {
-    return this.inventoryItems.find(
-      (item) => {
-        return item.serialNumber === serialNumber;
-      });
+      return this.inventoryItems.find(
+        (item) => {
+          return item.serialNumber === serialNumber;
+        });
   }
   /**
    * Gets a list of items corresponding to a model number
    * @param {string} modelNumber an alpha-numerical model number
-   * @return {InventoryItem[]} the items corresponding to the serial number
+   * @return {InventoryItem[]} the items corresponding to the modell number
    */
   getByModelNumber(modelNumber) {
     return this.inventoryItems.filter(
