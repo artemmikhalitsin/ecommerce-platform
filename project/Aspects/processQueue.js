@@ -1,3 +1,8 @@
+/**
+ * used by aspect to manage synchronize requests
+ * @author Wai Lau
+ */
+
 class ProcessQueue {
   constructor() {
     this.processList = [];
@@ -39,7 +44,9 @@ class ProcessQueue {
     // to be noted that run next requests are only CREATED when sent to queue
     if (this.processList.length > 0) {
       if (this.busy) {
-        setTimeout(this.runNext(), 200);
+        setTimeout(() => {
+          this.runNext();
+        }, 200);
       } else {
         this.runNext();
       }
@@ -47,7 +54,12 @@ class ProcessQueue {
   }
 
   run(joinpoint) {
-    return joinpoint.proceed();
+    try {
+      return joinpoint.proceed();
+    } catch (e) {
+      console.log(e);
+      this.processList.pop();
+    }
   }
 }
 
