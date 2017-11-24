@@ -5,7 +5,6 @@ const configuration = require(rootPath + '/knexfile')[environment];
 const connection = require('knex')(configuration);
 const productDescTDG = require(rootPath +
   '/DataSource/TableDataGateway/ProductDescriptionsTDG');
-const Promise = require('bluebird');
 
 /**
  * Table Data Gateway for the Monitor table
@@ -32,6 +31,7 @@ class MonitorsTDG {
         });
       });
     }
+
     static add(monitor) {
         return connection.insert({
             'model_number': monitor.modelNumber,
@@ -39,12 +39,14 @@ class MonitorsTDG {
         }, 'id')
         .into('Monitor');
     }
+
     static getAll() {
         return connection('Monitor').select('*')
           .join('ProductDescription', 'Monitor.model_number',
                 'ProductDescription.model_number');
     }
-    static getAllByModelNumber(modelNumbers) {
+
+    static getByModelNumbers(modelNumbers) {
         return connection('Monitor').select('*')
           .whereIn('ProductDescription.model_number', modelNumbers)
           .join('ProductDescription', 'Monitor.model_number',

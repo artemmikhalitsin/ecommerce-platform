@@ -9,6 +9,8 @@ const MonitorsTDG = require(rootPath
   + '/DataSource/TableDataGateway/MonitorsTDG.js');
 const TabletsTDG = require(rootPath
   + '/DataSource/TableDataGateway/TabletsTDG.js');
+const ProductDescriptionsTDG = require(rootPath
+  + '/DataSource/TableDataGateway/ProductDescriptionsTDG.js');
 // Retrieve instance of singleton identity map
 const productIMAP = require(rootPath
   + '/DataSource/IdentityMap/ProductDescriptionsIdentityMap.js').instance();
@@ -305,6 +307,9 @@ class ProductDescriptionRepository {
   getByModelNumbers(modelNumbers) {
     return new Promise((resolve, reject) => {
       let imapProducts = productIMAP.get(modelNumbers);
+      if (!imapProducts) {
+        imapProducts = [];
+      }
       let imapModelNumbers = imapProducts.map((item) => item.model_number);
       // products to retrieve from the tables are those which do not appear
       // in the identity map
@@ -351,24 +356,26 @@ class ProductDescriptionRepository {
     let productIds = products.map((p) => p.modelNumber);
     if (productIds.length > 0) {
       let context = [];
-    return this.getByIds(productIds).then((values) => {
+      console.log('hello');
+
+    return this.getByModelNumbers(productIds).then((values) => {
     let allRecords = productIMAP.getAll();
     for (let i = 0; i < products.length; i++) {
       if (context.findIndex(
         (p) => p.modelNumber == products[i].modelNumber) !== -1
           && electronicsToUpdate.findIndex(
-            (e) => e.modelNumber == products[i].modelNumber) === -1) {
-            // Case: the product exists in our list of products
-            // and hasn't already been processed
-            electronicsToUpdate.push(products[i]);
+        (e) => e.modelNumber == products[i].modelNumber) === -1) {
+        // Case: the product exists in our list of products
+        // and hasn't already been processed
+        electronicsToUpdate.push(products[i]);
       } else if (allRecords.findIndex(
         (p) => p.modelNumber == products[i].modelNumber) === -1
               && electronicsToAdd.findIndex(
-                (e) => e.modelNumber == products[i].modelNumber) === -1) {
-                // Case: the product doesn't exist in our list of products
-                // and hasn't already been processed
-                electronicsToAdd.push(products[i]);
-              }
+        (e) => e.modelNumber == products[i].modelNumber) === -1) {
+        // Case: the product doesn't exist in our list of products
+        // and hasn't already been processed
+        electronicsToAdd.push(products[i]);
+      }
     }
     this.uow.registerNew(electronicsToAdd);
     this.uow.registerDirty(electronicsToUpdate);

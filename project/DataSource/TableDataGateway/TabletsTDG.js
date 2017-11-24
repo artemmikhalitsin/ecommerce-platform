@@ -108,7 +108,7 @@ class TabletsTDG {
               return result;
           });
     }*/
-    static getByModelNumber(modelNumbers) {
+    static getByModelNumbers(modelNumbers) {
         return connection('Tablet').select('*')
           .whereIn('ProductDescription.model_number', modelNumbers)
           .join('Computer', 'Tablet.comp_id', 'Computer.comp_id')

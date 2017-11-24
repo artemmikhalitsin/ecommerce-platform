@@ -35,6 +35,7 @@ class ProductDescriptionsTDG {
   static getAll() {
     return connection('ProductDescription').select('*');
   }
+
   static getByModelNumber(modelNumber) {
     return connection('ProductDescription')
       .select('*')
@@ -47,16 +48,6 @@ class ProductDescriptionsTDG {
     If the function is called with no arguments (select()) - retrieve all,
     otherwise, retrieve all corresponding to models in the list - Artem
   */
-  /**
-   * Retrieves a product associated with the specified model number
-   * @param {string} modelNumber the model number of the product
-   * @return {Promise<Object[]>} promise which resolves to the list containing
-   * the product associated to the specified model number
-   */
-  static selectById(modelNumber) {
-    return connection('ProductDescription')
-                .where({model_number: modelNumber}).select('*');
-  }
 
   /** .
    * Updates the product specifications

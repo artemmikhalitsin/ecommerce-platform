@@ -1,3 +1,8 @@
+/**
+ * used by aspect to manage synchronize requests
+ * @author Wai Lau
+ */
+
 class ProcessQueue {
   constructor() {
     this.processList = [];

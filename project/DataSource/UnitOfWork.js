@@ -41,7 +41,7 @@ class UnitOfWork {
     this.deletedElements.push(object);
   }
 
-  commit() {
+  commitAll() {
     return this.saveNew()
     .then(() => this.updateDirty())
     .then(() => this.eraseDeleted())

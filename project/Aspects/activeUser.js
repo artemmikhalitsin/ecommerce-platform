@@ -1,3 +1,8 @@
+/**
+ * used by aspect to manage active clients
+ * @author Daniel Isakov
+ */
+
 class ActiveUser {
   constructor(email, lastRequest) {
     this.email = email;

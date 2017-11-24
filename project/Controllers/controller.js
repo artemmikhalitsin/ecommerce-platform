@@ -143,7 +143,7 @@ class Controller {
       })
       .catch((err) => {
           console.log(err);
-        });
+      });
   }
 
   manageInventory(inventoryItems) {
@@ -177,14 +177,15 @@ class Controller {
         res.redirect('/login');
       }
   }
+
   manageProductCatalog(req, res) {
     let productDescriptions = JSON.parse(req.body.productDescriptions);
-    console.log('Descriptions recieved by the controller' + (req.body.productDescriptions));
+    console.log('Descriptions recieved by the controller' +
+      (req.body.productDescriptions));
     this.productDescriptionRepo.save(productDescriptions).then((results) => {
       console.log('Success saving the Product descriptions!');
       this.getProductDescription(req, res);
     });
-    console.log(results);
   }
 
   /**
