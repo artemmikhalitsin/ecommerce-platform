@@ -41,7 +41,7 @@ class ProductDescriptionsIdentityMap {
      */
   get(modelNumbers) {
     return this.productDescriptions.filter((item) => {
-      return modelNumbers.includes(item.model_number);
+      return modelNumbers.includes(item.modelNumber);
     });
   }
 
@@ -52,7 +52,7 @@ class ProductDescriptionsIdentityMap {
   add(newProductDescriptions) {
     for (let i = 0; i < newProductDescriptions.length; i++) {
       let item = newProductDescriptions[i];
-      if (!this.productDescriptions.includes(item.model_number)) {
+      if (!this.productDescriptions.includes(item.modelNumber)) {
         this.productDescriptions.push(
           // Push a copy of the object
           Object.assign({}, newProductDescriptions[i])
@@ -72,7 +72,7 @@ class ProductDescriptionsIdentityMap {
       let index = this.productDescriptions.findIndex(
         (product) => {
           // Get the index of the model_number
-          return product.model_number == newDescription.model_number;
+          return product.modelNumber == newDescription.modelNumber;
         }
       );
 
@@ -89,8 +89,8 @@ class ProductDescriptionsIdentityMap {
      * model numbers for which the description is to be removed
      */
   delete(toRemove) {
-    this.productDescription = this.productDescription.filter((item) => {
-      return !toRemove.includes(item.model_number);
+    this.productDescriptions = this.productDescriptions.filter((item) => {
+      return !toRemove.includes(item.modelNumber);
     });
   }
 }
