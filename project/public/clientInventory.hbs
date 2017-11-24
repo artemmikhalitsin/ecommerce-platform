@@ -26,7 +26,7 @@
 </head>
 
 <body ng-controller="ClientInventoryController">
-  <div ng-include="'includes/header.hbs'"></div>
+  <div ng-include="'includes/header.hbs'" ng-init="isAdmin = {{session.isAdmin}}; exists = {{session.exists}}"></div>
   <br>
   <br>
   <br>
