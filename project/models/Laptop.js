@@ -24,17 +24,6 @@ class Laptop extends Computer {
      * @param {string} weight weight
      * @param {string} brandName brand name
      * @param {string} modelNumber model number
-<<<<<<< HEAD
-     * @param {string} type product type
-     */
-    constructor(computerId, processorType, ramSize,
-                numberCpuCores, harddriveSize,
-                displaySize, batteryInfo, os, touchscreen, camera, price,
-                weight, brandName, modelNumber, type) {
-        super(computerId, processorType, ramSize,
-              numberCpuCores, harddriveSize, price,
-              weight, brandName, modelNumber, type);
-=======
      * @param {string} type
      */
     constructor(computerId, processorType, ramSize, numberCpuCores,
@@ -42,7 +31,6 @@ class Laptop extends Computer {
                 camera, price, weight, brandName, modelNumber, type) {
         super(computerId, processorType, ramSize, numberCpuCores, harddriveSize,
           price, weight, brandName, modelNumber, type);
->>>>>>> b77e2577262d59ed57c73274fba2bd4e32e7ecca
         this.displaySize = displaySize;
         this.batteryInfo = batteryInfo;
         this.os = os;

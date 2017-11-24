@@ -44,18 +44,13 @@ class InventoryItemRepository {
     // console.log('The models numbers passed' + JSON.stringify(modelNumbers));
     let result = [];
     return Promise.all([inventory]).then((values) => {
-<<<<<<< HEAD
-          result = values[0];
-          console.log('the inventory items repo gives: ' +
-          JSON.stringify(result));
-=======
       let result = [];
           values[0].forEach(function(item) {
-            result.push(new InventoryItem(item.id, item.serial_number, item.model_number, null));
+            result.push(new InventoryItem(item.id,
+              item.serial_number, item.model_number, null));
           });
           console.log('the inventory items repo gives: '
             + JSON.stringify(result));
->>>>>>> b77e2577262d59ed57c73274fba2bd4e32e7ecca
 
     return result;
         }).catch((err) => {

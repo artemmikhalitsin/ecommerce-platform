@@ -14,6 +14,7 @@
     ]
   },
   "scripts": {
+    "sourceType": "module",
     "test": "mocha",
     "dev": "docker run -v $(pwd):/usr/src/project -p 8080:8080 -it 343docker/express",
     "make-migration": "knex migrate:make",
@@ -24,18 +25,10 @@
     "lint": "node_modules/eslint/bin/eslint.js .",
     "lint-fix": "node_modules/eslint/bin/eslint.js . --fix",
     "make-docs": "node_modules/.bin/esdoc",
-<<<<<<< HEAD
-    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore knexfile.js,./public,./seeds,./test,./migrations,./DataSource,./node_modules,./npm-debug.log --copy-files",
-<<<<<<< HEAD
-    "start": "node node_modules/concurrently/src/main.js -c \"bgRed, bgBlue\" -n \"Express,ESLint\"  \"npm run build && nodemon index.js --exec babel-node --presets es2015 --plugins contracts transform-object-rest-spread\" \"nodemon -L node_modules/eslint/bin/eslint.js .\""
-=======
-=======
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore knexfile.js,./Aspects,./models,./public,./seeds,./test,./migrations,./DataSource,./node_modules,./npm-debug.log --copy-files",
->>>>>>> b77e2577262d59ed57c73274fba2bd4e32e7ecca
     "start": "node node_modules/concurrently/src/main.js -c \"bgRed,bgBlue\" -n \"Express,ESLint\" \"nodemon -L --exec npm run server\" \"nodemon -L --exec npm run lint-fix\"",
     "babel-watch": "./node_modules/babel-watch/babel-watch.js index.js",
     "server": " ./node_modules/babel-cli/bin/babel-node.js index.js"
->>>>>>> 12fb1fe8a0ebd34490efcbc5e3910e15bce0dd1d
   },
   "keywords": [],
   "author": "",
